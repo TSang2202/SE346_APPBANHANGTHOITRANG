@@ -9,10 +9,10 @@ import {
   View,
   Image,
 } from 'react-native';
-import CUSTOM_COLOR from '../.././constants/colors.js';
-import FONT_FAMILY from '../.././constants/fonts.js';
-import {IMG_PexelsPhotobyRioKuncoro} from '../.././assets/images/index.js';
-import {IC_Line} from '../.././assets/icons/index.js';
+import CUSTOM_COLOR from '../constants/colors.js';
+import FONT_FAMILY from '../constants/fonts.js';
+import {IMG_PexelsPhotobyRioKuncoro} from '../assets/images/index.js';
+import {IC_Line} from '../assets/icons/index.js';
 
 import {
   Colors,
