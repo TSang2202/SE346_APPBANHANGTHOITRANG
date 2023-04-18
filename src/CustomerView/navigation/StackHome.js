@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import DetailProduct from '../screens/DetailProduct';
 import HomeScreenCustomer from '../screens/HomeScreenCustomer';
 import SearchingScreen from '../screens/SearchingScreen';
+import ShoppingCartScreen from '../screens/ShoppingCartScreen';
 import TrendingScreen from '../screens/TrendingScreen';
 
 
@@ -22,7 +23,7 @@ function StackHome()
             <Stack.Screen name= 'DetailProduct' component={DetailProduct} />
             <Stack.Screen name= 'Trending' component={TrendingScreen} />
             <Stack.Screen name= 'Searching' component={SearchingScreen} />
-
+            <Stack.Screen name= 'ShoppingCard' component={ShoppingCartScreen} />
 
         </Stack.Navigator>
 
