@@ -33,6 +33,13 @@ const WelcomeUser = props => {
   );
 };
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    backgroundColor: CUSTOM_COLOR.ChathamsBlue,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  },
 });
 export default WelcomeUser;
