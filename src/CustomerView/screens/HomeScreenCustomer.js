@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, TouchableWithoutFeedback } from "react-native";
 import { IC_ShoppingCart } from "../assets/icons";
-import { IM_GiayNam, IM_MauAo, IM_PhuKien, IM_SaleImage, IM_ThoiTrangNam, IM_ThoiTrangNu } from "../../assets/images";
+import { IM_GiayNam, IM_MauAo, IM_PhuKien, IM_SaleImage, IM_ThoiTrangNam, IM_ThoiTrangNu } from "../assets/images";
 import Categories from "../components/Categories";
 import ProductCard from "../components/ProductCard";
 import SearchInput from "../components/SearchInput";
@@ -106,7 +106,7 @@ function HomeScreenCustomer({navigation}) {
             
               renderItem = {({item}) => 
                 <TouchableOpacity style = {{}}
-                  onPress = {() =>{navigation.navigate('DetailProduct')}}
+                  onPress = {() =>{navigation.navigate('DetailProduct', {item})}}
                 >
                   <ProductCard
                   source = {item.image}

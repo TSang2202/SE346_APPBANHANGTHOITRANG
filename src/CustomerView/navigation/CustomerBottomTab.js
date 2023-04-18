@@ -16,7 +16,7 @@ import AccountScreen from "../screens/AccountScreen";
 const TabBottom = createBottomTabNavigator()
 
 
-function CustomerScreen() {
+function CustomerBottomTab() {
 
     return (
       <NavigationContainer>
@@ -164,4 +164,4 @@ function CustomerScreen() {
 
 
   
-export default CustomerScreen
+export default CustomerBottomTab
