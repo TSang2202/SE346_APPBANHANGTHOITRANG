@@ -13,9 +13,9 @@ const SearchInput = (props: any) =>{
       padding: 10,
       borderRadius: 20,
       height: 40,
-      width: 320,
+      //width: 320,
       backgroundColor: CUSTOM_COLOR.Mercury,
-      margin: 10
+      ...props.style
         }}>
       <Image
         style = {{
@@ -28,6 +28,7 @@ const SearchInput = (props: any) =>{
       />
       <TextInput style = {{width: '70%', height: 30, borderWidth: 0, padding:5}}
         placeholder = {props.placeholder}
+        onChangeText = {props.onChangeText}
       />
       
     </View>

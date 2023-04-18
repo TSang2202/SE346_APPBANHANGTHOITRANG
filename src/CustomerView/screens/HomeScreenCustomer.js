@@ -67,6 +67,10 @@ function HomeScreenCustomer({navigation}) {
           <View style = {{flexDirection: 'row'}}>
               <SearchInput
                 placeholder = 'Search product'
+                style = {{
+                  width: 320, 
+                  margin: 10
+                }}
               />
               <View style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
                 alignItems: 'center',
@@ -95,7 +99,11 @@ function HomeScreenCustomer({navigation}) {
           
           <View style={{flexDirection: "row", justifyContent: 'space-between'}}>
              <Text style = {styles.textView}>Trending now</Text>
-             <TouchableOpacity><Text style={{margin:20}}>See all</Text></TouchableOpacity>
+             <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Trending')
+              }}
+              ><Text style={{margin:20}}>See all</Text></TouchableOpacity>
           </View>
           
           <View style ={{height: 140}}>
@@ -157,7 +165,8 @@ function HomeScreenCustomer({navigation}) {
 
 const styles = StyleSheet.create({
   textView:{
-    margin: 15,
+    marginHorizontal: 15,
+    marginVertical: 10,
     fontWeight: 'bold',
     color: CUSTOM_COLOR.Black,
     fontSize: 20
