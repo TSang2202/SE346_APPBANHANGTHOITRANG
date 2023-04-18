@@ -6,6 +6,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 
 class FacebookButton extends React.Component {
   render() {
+    const {navigation} = this.props;
     return (
       <>
         <View style={styles.container}>
