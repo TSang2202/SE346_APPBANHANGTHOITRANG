@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image } from "react-native";
+import { StyleSheet, Text, TextInput, View, Image, TouchableWithoutFeedback } from "react-native";
 import { SearchIcon } from "../assets/icons/index.js";
 import CUSTOM_COLOR from "../constants/colors";
 
@@ -29,6 +29,7 @@ const SearchInput = (props: any) =>{
       <TextInput style = {{width: '70%', height: 30, borderWidth: 0, padding:5}}
         placeholder = {props.placeholder}
         onChangeText = {props.onChangeText}
+        onPressIn = {props.onPressIn}
       />
       
     </View>
