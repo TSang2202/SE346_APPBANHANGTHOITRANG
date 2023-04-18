@@ -6,3 +6,8 @@ export {default as IMG_Pngtreetwittersocialmediaroundicon_87048231} from './Sign
 export {default as IMG_Facebook} from './SignIn/Facebook.png';
 export {default as IMG_google1} from './SignIn/google1.png';
 export {default as IMG_PexelsPhotobyJeysTubianosa} from './WellcomeUser/PexelsPhotobyJeysTubianosa.png';
+export {default as IMG_emojione_fireworks} from './Congratulation/emojione_fireworks.png';
+export {default as IMG_mditickcircle} from './Done/mditickcircle.png';
+export {default as IMG_image1} from './Intro/image1.png';
+export {default as IMG_PexelsPhotobyMarleneLeppanen} from './WellcomeUser/PexelsPhotobyMarleneLeppanen.png';
+export {default as IMG_PexelsPhotobyRAULREYNOSO} from './WellcomeUser/PexelsPhotobyRAULREYNOSO.png';
