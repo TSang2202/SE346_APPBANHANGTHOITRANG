@@ -75,17 +75,21 @@ function HomeScreenCustomer({navigation}) {
                   navigation.navigate('Searching')
                 }}
               />
-              <View style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
+              <TouchableOpacity style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
                 alignItems: 'center',
                 justifyContent: 'center', 
                 margin: 10, 
                 padding: 8,
                 borderRadius: 10
-                }}>
+                }}
+                onPress = {() => {
+                  navigation.navigate('ShoppingCard')
+                }}
+                >
                 <Image 
                   source={IC_ShoppingCart}
                 />
-              </View>
+              </TouchableOpacity>
 
               
               
