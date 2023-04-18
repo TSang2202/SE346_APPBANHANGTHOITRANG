@@ -71,6 +71,9 @@ function HomeScreenCustomer({navigation}) {
                   width: 320, 
                   margin: 10
                 }}
+                onPressIn = {() =>{
+                  navigation.navigate('Searching')
+                }}
               />
               <View style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
                 alignItems: 'center',
