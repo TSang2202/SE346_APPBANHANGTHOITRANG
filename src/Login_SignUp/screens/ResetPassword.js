@@ -13,7 +13,7 @@ const ResetPassword = props => {
     const [status, setStatus] = useState('');
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderWithBack onPress={() => navigation.navigate('SignIn')}></HeaderWithBack>
+            <HeaderWithBack onPress={() => navigation.navigate('ForgotPassword')}></HeaderWithBack>
             <View style={[styles.topContainer, styles.unitContainer]}>
                 <HeaderTitlle title="Reset Password"></HeaderTitlle>
                 <HederContent content="Your dentify has been vertified"></HederContent>
