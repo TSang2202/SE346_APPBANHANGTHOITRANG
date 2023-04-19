@@ -1,2 +1,10 @@
 // export {default as tên icon} from 'đường dẫn';
-
+export {default as settingicon } from '../icons/OverView/setting.png'
+export {default as messenger } from '../icons/OverView/Messenger.png'
+export {default as notification} from '../icons/OverView/notification.png'
+export {default as chat} from '../icons/OverView/chat.png'
+export {default as order} from '../icons/OverView/order.png'
+export {default as promotion} from '../icons/OverView/promotion.png'
+export {default as product} from '../icons/OverView/product.png'
+export {default as user} from '../icons/OverView/user.png'
+export {default as report} from '../icons/OverView/report.png'
