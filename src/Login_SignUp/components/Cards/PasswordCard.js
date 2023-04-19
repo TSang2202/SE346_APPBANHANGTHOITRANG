@@ -15,7 +15,7 @@ const PasswordCard = props => {
         <View style={{flex: 5}}>
           <TextInput style={styles.textinputStyle}
             placeholder={props.txtInput}
-            placeholderTextColor='CUSTOM_COLOR.Black'
+            // placeholderTextColor='CUSTOM_COLOR.Black'
             secureTextEntry
             autoCorrect={false}/>
         </View>

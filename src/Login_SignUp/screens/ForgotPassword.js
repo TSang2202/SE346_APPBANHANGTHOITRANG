@@ -2,104 +2,74 @@ import React, {useState} from 'react';
 import {StyleSheet, SafeAreaView, View, Text} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
-import TextInputCrad from '../components/Cards/TextInputCard.js';
-import CustomButton from '../components/Buttons/CustomButton.js';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
+import HeaderTitlle from '../components/Header/HeaderTitlle.js';
+import HederContent from '../components/Header/HederContent.js';
+import TextInputCard from '../components/Cards/TextInputCard.js';
+import CustomButton from '../components/Buttons/CustomButton.js';
 
 const ForgotPassword = props => {
     const {navigation} = props;
     const [status, setStatus] = useState('');
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.headerContainer}>
-                <HeaderWithBack onPress={() => navigation.navigate('SignIn')}></HeaderWithBack>
+            <HeaderWithBack onPress={() => navigation.navigate('SignIn')}></HeaderWithBack>
+            <View style={[styles.topContainer, styles.unitContainer]}>
+                <HeaderTitlle title="Forgot Password"></HeaderTitlle>
+                <HederContent content="Fill some Personal Information"></HederContent>
             </View>
 
-            <View style={styles.textView}>
-                <Text style={styles.topText}>
-                    Forgot Password
-                </Text>
-                <Text style={[styles.botText, {fontFamily: FONT_FAMILY.Light}]}>
-                    Fill some Personal Information
-                </Text>
+            <View style={[styles.centerContainer, styles.unitContainer]}>
+                <TextInputCard 
+                    title="Enter your account phone number"
+                    txtInput="033333333"/>
             </View>
 
-            <View style ={styles.textInput}>
-                <TextInputCrad
-                title="Enter your account phone number"
-                textInput="033333333"
-                />
+            <View style={[styles.botContainer, styles.unitContainer]}>
+                <View style={{flex: 1, alignItems: 'center'}}>
+                    <HederContent content="I lost my phone and I cant receive the code"></HederContent>
+                    <Text style={styles.italicText}>
+                        Help center
+                    </Text>                   
+                </View>
+                <View style={{flex: 1}}>
+                    <CustomButton
+                        type="primary"
+                        text="Continue"
+                        onPress={() => navigation.navigate('SmartOTP')}
+                    />                
+                </View>
             </View>
-
-            <View style={styles.botTextView}>
-                <Text style={[styles.botText, {fontFamily: FONT_FAMILY.Light}]}>
-                    I lost my phone and I can’t receive the code
-                </Text>
-                <Text style={[styles.botText, {fontFamily: FONT_FAMILY.MediumItalic, fontStyle: 'italic'}]}>
-                    Help center
-                </Text>
-            </View>
-
-          <View style={styles.containerBot}>
-              <View style={styles.button}>
-                  <CustomButton
-                      type="primary"
-                      text="Continue"
-                      onPress={() => navigation.navigate('SmartOTP')}
-                  />
-              </View>
-          </View>
-        </SafeAreaView>
+           </SafeAreaView>
     );
 };
 const styles = StyleSheet.create({
 container: {
     flex: 1,
+    backgroundColor: CUSTOM_COLOR.White,
 },
-headerContainer: {
-    width: '100%',
-    height: '10%',
-    top: '2%',
-},
-textView: {
-    width: '93%',
-    height: '15%',
-    left: '7%',
+unitContainer: {
+    width: '80%',
+    marginHorizontal: '10%',
     justifyContent: 'center',
 },
-topText: {
-    fontFamily: FONT_FAMILY.SemiBold,
-    fontSize: 30,
-    fontWeight: 700,
-    color: CUSTOM_COLOR.Black,
+topContainer: {
+    height: '15%',
+    top: '1%',
 },
-botText: {
-    fontSize: 15,
-    color: CUSTOM_COLOR.Black,
-},
-textInput: {
-    width: '86%',
-    height: '13%',
-    marginHorizontal: '7%',
+centerContainer: {
+    height: '16%',
     top: '7%',
 },
-botTextView: {
-    width: '100%',
-    height: '10%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    bottom: '-35%',
+botContainer: {
+    height: '15%',
+    bottom: '-36%',
 },
-containerBot: {
-    width: '100%',
-    height: '8%',
-    bottom: '-35%',
-    alignItems: 'center',
-    justifyContent: 'center',
-},
-button: {
-    width: '100%',
-    height: '100%',
+italicText: {
+    fontFamily: FONT_FAMILY.MediumItalic, 
+    fontSize: 15, 
+    color: CUSTOM_COLOR.Black, 
+    fontStyle: 'italic'
 },
 });
 export default ForgotPassword;
