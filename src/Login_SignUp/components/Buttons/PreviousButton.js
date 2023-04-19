@@ -9,7 +9,8 @@ class PreviousButton extends React.Component {
       <>
         <View style={styles.container}>
           <TouchableOpacity onPress={this.props.onPress}>
-            <Image source={IC_previous} />
+            <Image source={IC_previous} 
+            style={{resizeMode: 'contain'}}/>
           </TouchableOpacity>
         </View>
       </>
@@ -21,9 +22,9 @@ export default PreviousButton;
 
 const styles = StyleSheet.create({
   container: {
-    height: '70%',
-    width: '12%',
-    borderRadius: 38,
+    height: '100%',
+    width: '100%',
+    borderRadius: 50,
     borderWidth: 1,
     borderColor: CUSTOM_COLOR.Black,
     justifyContent: 'center',

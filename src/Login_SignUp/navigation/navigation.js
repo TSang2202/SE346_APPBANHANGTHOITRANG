@@ -15,7 +15,7 @@ const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="ForgotPassword"
+      initialRouteName="ResetPassword"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Congratulation" component={Congratulation} />
       <Stack.Screen name="Done" component={Done} />
