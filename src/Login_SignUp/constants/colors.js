@@ -9,6 +9,7 @@ const CUSTOM_COLOR = {
   Carnation: '#F55353',
   MineShaft: '#272727',
   FlushOrange: '#FF8400',
+  Mercury: '#E9E9E9',
 };
 
 export default CUSTOM_COLOR;

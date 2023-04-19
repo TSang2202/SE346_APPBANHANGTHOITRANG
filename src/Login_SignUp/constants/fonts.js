@@ -6,6 +6,8 @@ const FONT_FAMILY = {
     Bold: Montserrat + 'Bold',
     Medium: Montserrat + 'Medium',
     Semibold: Montserrat + 'Semibold',
+    Light: Montserrat + 'Light',
+    MediumItalic: Montserrat + 'MediumItalic',
     Regular: Monoton + 'Regular',
 };
 
