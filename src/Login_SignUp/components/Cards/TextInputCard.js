@@ -12,9 +12,7 @@ const TextInputCard = props => {
         </Text>
       </View> 
 
-      <View style={{flex: 1}} />
-
-      <View style={{flex: 3}}>
+      <View style={{flex: 3, borderRadius: 20, backgroundColor: CUSTOM_COLOR.Mercury}}>
         <TextInput
           style={styles.txtInput}
           placeholder={props.textInput}
@@ -25,24 +23,23 @@ const TextInputCard = props => {
 };
 const styles = StyleSheet.create({
   container: {
-    width: '90%',
-    height: '15%',
-    margin: '5%',
+    width: '100%',
+    height: '100%',
+    // margin: '5%',
     flexDirection: 'column',
-    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'red',
   },
   topText: {
     fontSize: 16,
     fontFamily: FONT_FAMILY.Medium,
-    color: CUSTOM_COLOR.White,
+    color: CUSTOM_COLOR.Black,
+    left: '4%',
   },
   txtInput: {
     fontSize: 16,
-    fontFamily: FONT_FAMILY.Medium,
-    color: CUSTOM_COLOR.White,
-    borderRadius: 20,
+    fontFamily: FONT_FAMILY.Semibold,
+    color: CUSTOM_COLOR.Black,
+    left: '4%',
   },
 });
 export default TextInputCard;
