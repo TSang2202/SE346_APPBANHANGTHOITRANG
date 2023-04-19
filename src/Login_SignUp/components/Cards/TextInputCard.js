@@ -3,33 +3,35 @@ import {View, StyleSheet, Text, TextInput} from 'react-native';
 import CUSTOM_COLOR from '../../constants/colors.js';
 import FONT_FAMILY from '../../constants/fonts.js';
 
-const TextInputCard = () => {
+const TextInputCard = props => {
   return (
     <View style={styles.container}>
       <View style={{flex: 2}}>
         <Text style={styles.topText}>
-              {this.props.text}
+          {props.title}
         </Text>
-      </View>
+      </View> 
 
-      <View style={{flex: 1}}>
-      </View>
+      <View style={{flex: 1}} />
 
       <View style={{flex: 3}}>
-        <TextInput style={styles.txtInput}>
-          placeholder= {this.props.textInput}
-        </TextInput>
+        <TextInput
+          style={styles.txtInput}
+          placeholder={props.textInput}
+        />
       </View>
-
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     width: '90%',
-    height: '10%',
+    height: '15%',
+    margin: '5%',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'red',
   },
   topText: {
     fontSize: 16,
