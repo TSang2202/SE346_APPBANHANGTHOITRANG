@@ -1,8 +1,8 @@
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import React from 'react';
-import CUSTOM_COLOR from '../../constants/colors';
-import scale from '../../constants/responsive';
-import FONT_FAMILY from '../../constants/fonts';
+import CUSTOM_COLOR from '../../constants/colors.js';
+import scale from '../../constants/responsive.js';
+import FONT_FAMILY from '../../constants/fonts.js';
 
 class CustomButton extends React.Component {
   render() {
