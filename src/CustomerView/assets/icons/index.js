@@ -11,3 +11,5 @@ export {default as IC_StartFull} from '../icons/starfull.png'
 export {default as IC_StartCorner} from '../icons/starcorner.png'
 export {default as IC_Down} from '../icons/down.png'
 export {default as IC_Delete} from '../icons/delete.png'
+export {default as IC_Chat} from '../icons/chat.png'
+
