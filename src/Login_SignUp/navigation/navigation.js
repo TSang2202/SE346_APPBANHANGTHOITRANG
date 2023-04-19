@@ -15,15 +15,15 @@ const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="Done"
+      initialRouteName="Congratulation"
       screenOptions={{headerShown: false}}>
-      {/* <Stack.Screen name="Congratulation" component={Congratulation} /> */}
-      <Stack.Screen name="Done" component={Done} />
-      {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="Congratulation" component={Congratulation} />
+      {/* <Stack.Screen name="Done" component={Done} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="Intro" component={Intro} />
-      <Stack.Screen name="ResetPassword" component={ResetPassword} /> */}
+      <Stack.Screen name="ResetPassword" component={ResetPassword} />
       <Stack.Screen name="SignIn" component={SignIn} />
-      {/* <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SmartOTP" component={SmartOTP} />
       <Stack.Screen name="WelcomeUser" component={WelcomeUser} /> */}
     </Stack.Navigator>
