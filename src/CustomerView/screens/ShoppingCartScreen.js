@@ -85,13 +85,7 @@ function ShoppingCartScreen({navigation}) {
                 }}>Shopping Cart</Text>
             </View>
 
-            {/* <ProductCheckOut
-                source = {data.source}
-                title = {data.title}
-                type = {data.type}
-                number = {data.number}
-                price = {data.price}
-            /> */}
+        
 
             <FlatList
                 style ={{
@@ -169,6 +163,7 @@ function ShoppingCartScreen({navigation}) {
                 <Button
                     title = 'CHECK OUT'
                     color = {CUSTOM_COLOR.FlushOrange}
+                    onPress = {() => navigation.navigate('Checkout')}
                 />
              </View>
 

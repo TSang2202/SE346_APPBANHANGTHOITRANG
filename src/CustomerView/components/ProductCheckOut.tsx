@@ -12,7 +12,11 @@ const ProductCheckOut = (props: any) =>{
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        backgroundColor: CUSTOM_COLOR.White, 
+        padding: 5,
+        borderRadius: 20,
+        ...props.style
     }}>
         <TouchableOpacity style ={{
             width: 20,
