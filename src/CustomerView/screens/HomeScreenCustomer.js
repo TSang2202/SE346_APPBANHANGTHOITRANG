@@ -83,7 +83,7 @@ function HomeScreenCustomer({navigation}) {
                 borderRadius: 10
                 }}
                 onPress = {() => {
-                  //navigation.navigate('ShoppingCard')
+                  //navigation.navigate('Chat')
                 }}
                 >
                 <Image 
