@@ -9,14 +9,15 @@ import {
 import {StyleSheet, SafeAreaView, View, Text, Image} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
-import {CustomButton} from '../components/Buttons/CustomButton.js';
 import {IMG_emojione_fireworks} from '../assets/images/index.js';
+import CustomButton from '../components/Buttons/CustomButton.js';
 
 const Congratulation = props => {
 const {navigation} = props;
 const [status, setStatus] = useState('');
 return (
     <SafeAreaView style={styles.container}>
+        
         <View style={styles.containerCenter}>
             <Image
                 source={IMG_emojione_fireworks}
@@ -34,12 +35,13 @@ return (
         </View>
 
         <View style={styles.containerBot}>
-            {/* <CustomButton>
-                type="primary"
-                text="Continue"
-                onPress={() => navigation.navigate('Done')}
-            </CustomButton> */}
-            <Text> Chèn button sau</Text>
+            <View style={styles.button}>
+                <CustomButton
+                    type="primary"
+                    text="Continue"
+                    onPress={() => navigation.navigate('SignIn')}
+                />
+            </View>
         </View>
     </SafeAreaView>
 );
@@ -74,12 +76,15 @@ botText: {
     color: CUSTOM_COLOR.Black,
 },
 containerBot: {
-    backgroundColor: 'red',
     width: '100%',
     height: '10%',
     bottom: '-40%',
     alignItems: 'center',
     justifyContent: 'center',
+},
+button: {
+    width: '100%',
+    height: '100%',
 },
 }); 
 export default Congratulation;

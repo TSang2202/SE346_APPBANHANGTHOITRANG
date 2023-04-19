@@ -1,7 +1,6 @@
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import CUSTOM_COLOR from '../../constants/colors.js';
-import scale from '../../constants/responsive.js';
 import FONT_FAMILY from '../../constants/fonts.js';
 
 class CustomButton extends React.Component {
@@ -45,11 +44,11 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: scale(275),
-    height: scale(56, 'height'),
+    width: '50%',
+    height: '90%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: scale(16),
+    borderRadius: 63,
     alignSelf: 'center',
   },
 
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
 
   textButton: {
     fontFamily: FONT_FAMILY.Semibold,
-    fontSize: scale(16),
+    fontSize: 20,
   },
 
   textButtonPrimary: {
