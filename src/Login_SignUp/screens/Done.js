@@ -9,8 +9,8 @@ import {
 import {StyleSheet, SafeAreaView, View, Text, Image} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
-import {CustomButton} from '../components/Buttons/CustomButton.js';
 import {IMG_mditickcircle} from '../assets/images/index.js';
+import CustomButton from '../components/Buttons/CustomButton.js';
 
 const Done = props => {
 const {navigation} = props;
@@ -34,12 +34,13 @@ return (
         </View>
 
         <View style={styles.containerBot}>
-            {/* <CustomButton>
-                type="primary"
-                text="Continue"
-                onPress={() => navigation.navigate('Done')}
-            </CustomButton> */}
-            <Text> Chèn button sau</Text>
+            <View style={styles.button}>
+                <CustomButton
+                    type="primary"
+                    text="Continue"
+                    onPress={() => navigation.navigate('SignIn')}
+                />
+            </View>
         </View>
     </SafeAreaView>
 );
@@ -74,12 +75,15 @@ botText: {
     color: CUSTOM_COLOR.Black,
 },
 containerBot: {
-    backgroundColor: 'red',
     width: '100%',
     height: '10%',
     bottom: '-40%',
     alignItems: 'center',
     justifyContent: 'center',
+},
+button: {
+    width: '100%',
+    height: '100%',
 },
 }); 
 export default Done;
