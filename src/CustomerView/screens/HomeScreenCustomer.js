@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, TouchableWithoutFeedback } from "react-native";
-import { IC_ShoppingCart } from "../assets/icons";
+import { IC_Chat, IC_ShoppingCart } from "../assets/icons";
 import { IM_GiayNam, IM_MauAo, IM_PhuKien, IM_SaleImage, IM_ThoiTrangNam, IM_ThoiTrangNu } from "../assets/images";
 import Categories from "../components/Categories";
 import ProductCard from "../components/ProductCard";
@@ -68,7 +68,7 @@ function HomeScreenCustomer({navigation}) {
               <SearchInput
                 placeholder = 'Search product'
                 style = {{
-                  width: 320, 
+                  width: 290, 
                   margin: 10
                 }}
                 onPressIn = {() =>{
@@ -78,7 +78,24 @@ function HomeScreenCustomer({navigation}) {
               <TouchableOpacity style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
                 alignItems: 'center',
                 justifyContent: 'center', 
-                margin: 10, 
+                marginVertical: 10, 
+                padding: 8,
+                borderRadius: 10
+                }}
+                onPress = {() => {
+                  //navigation.navigate('ShoppingCard')
+                }}
+                >
+                <Image 
+                  source={IC_Chat}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
+                alignItems: 'center',
+                justifyContent: 'center', 
+                marginVertical: 10, 
+                marginHorizontal: 10,
                 padding: 8,
                 borderRadius: 10
                 }}
