@@ -12,4 +12,4 @@ export {default as IC_StartCorner} from '../icons/starcorner.png'
 export {default as IC_Down} from '../icons/down.png'
 export {default as IC_Delete} from '../icons/delete.png'
 export {default as IC_Chat} from '../icons/chat.png'
-
+export {default as IC_Heart3X} from '../icons/heart3x.png'
