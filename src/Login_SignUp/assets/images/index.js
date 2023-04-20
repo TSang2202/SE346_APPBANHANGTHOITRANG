@@ -11,3 +11,4 @@ export {default as IMG_mditickcircle} from './Done/mditickcircle.png';
 export {default as IMG_image1} from './Intro/image1.png';
 export {default as IMG_PexelsPhotobyMarleneLeppanen} from './WellcomeUser/PexelsPhotobyMarleneLeppanen.png';
 export {default as IMG_PexelsPhotobyRAULREYNOSO} from './WellcomeUser/PexelsPhotobyRAULREYNOSO.png';
+export {default as IMG_Rectangle182} from './Rectangle182.png'
