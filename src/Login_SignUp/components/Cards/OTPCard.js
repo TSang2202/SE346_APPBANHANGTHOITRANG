@@ -47,7 +47,7 @@ txtInput: {
     color: CUSTOM_COLOR.White,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: CUSTOM_COLOR.Carnation,
+    backgroundColor: CUSTOM_COLOR.White,
     width: '100%',
     height: '100%',
     borderRadius: 15,
