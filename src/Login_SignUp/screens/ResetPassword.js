@@ -9,7 +9,7 @@ import PasswordCard from '../components/Cards/PasswordCard.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
 
 const ResetPassword = props => {
-    const {navigation} = props;
+    const {navigation} = props;3
     const [status, setStatus] = useState('');
     return (
         <SafeAreaView style={styles.container}>
