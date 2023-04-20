@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import {
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   ImageBackground,
   View,
   Image,
@@ -13,14 +11,6 @@ import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
 import {IMG_PexelsPhotobyRioKuncoro} from '../assets/images/index.js';
 import {IC_Line} from '../assets/icons/index.js';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
 const Intro = props => {
   const {navigation} = props;
