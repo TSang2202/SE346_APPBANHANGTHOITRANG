@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, View, ScrollView, StatusBar, ImageBackground} from 'react-native';
+import {StyleSheet, SafeAreaView, View, CheckBox, ScrollView, StatusBar, ImageBackground} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
@@ -8,6 +8,7 @@ import TextInputCard from '../components/Cards/TextInputCard.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
 import { IMG_Rectangle182 } from '../assets/images/index.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
+import HederContent from '../components/Header/HederContent.js';
 
 const SignUp = props => {
     const {navigation} = props;
@@ -20,7 +21,7 @@ const SignUp = props => {
                     <HeaderTitlle title="Sign Up"></HeaderTitlle>
                 </View>
 
-                <View style={[styles.bodyContainer, styles.unitContainer, {backgroundColor: 'red'}]}>
+                <View style={[styles.bodyContainer, styles.unitContainer]}>
                     <View style={{flex: 1}}>
                         <TextInputCard
                             title="Full name*"
@@ -56,7 +57,16 @@ const SignUp = props => {
                             title="Confirm Password"
                             txtInput="********" />
                     </View>
+                </View>
 
+                <View style={[styles.checkContainer, styles.unitContainer]}>
+                    <View >
+
+                    </View>
+                    <CheckBox
+                        value={isSelected}
+                        style={styles.checkbox} />
+                    <HederContent content="I agree with this"></HederContent>
                 </View>
             </ImageBackground>
         </SafeAreaView>
@@ -72,18 +82,15 @@ unitContainer: {
     justifyContent: 'center',
 },
 topContainer: {
-    height: '10%',
+    height: '7%',
 },
 bodyContainer: {
     height: '70%',
 },
-// scrollViewContainer: {
-//     flex: 1,
-//     backgroundColor: 'red',
-// },
-// textViewContainer: {
-//     width: '100%',
-//     height: '20%',
-// }
+checkContainer: {
+    height: '5%',
+    backgroundColor: 'red',
+    flexDirection: 'row',
+}
 });
 export default SignUp;
