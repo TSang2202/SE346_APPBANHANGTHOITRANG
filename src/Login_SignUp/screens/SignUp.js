@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, View, ScrollView, StatusBar, ImageBackground} from 'react-native';
-import CUSTOM_COLOR from '../constants/colors.js';
-import FONT_FAMILY from '../constants/fonts.js';
+import {StyleSheet, SafeAreaView, View, ImageBackground} from 'react-native';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';

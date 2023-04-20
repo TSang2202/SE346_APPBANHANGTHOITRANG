@@ -1,11 +1,4 @@
 import React, {useState} from 'react';
-import {
-    Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 import {StyleSheet, SafeAreaView, View, Text, Image} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
