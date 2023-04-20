@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, View, CheckBox, ScrollView, StatusBar, ImageBackground} from 'react-native';
+import {StyleSheet, SafeAreaView, View, ScrollView, StatusBar, ImageBackground} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
@@ -9,10 +9,12 @@ import CustomButton from '../components/Buttons/CustomButton.js';
 import { IMG_Rectangle182 } from '../assets/images/index.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
 import HederContent from '../components/Header/HederContent.js';
+import CheckBox from '@react-native-community/checkbox';
 
 const SignUp = props => {
     const {navigation} = props;
     const [status, setStatus] = useState('');
+    const [toggleCheckBox, setToggleCheckBox] = useState(false);
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={IMG_Rectangle182} resizeMode="cover" style={styles.container}>
@@ -20,7 +22,6 @@ const SignUp = props => {
                 <View style={[styles.topContainer, styles.unitContainer]}>
                     <HeaderTitlle title="Sign Up"></HeaderTitlle>
                 </View>
-
                 <View style={[styles.bodyContainer, styles.unitContainer]}>
                     <View style={{flex: 1}}>
                         <TextInputCard
@@ -43,7 +44,7 @@ const SignUp = props => {
                     <View style={{flex: 1}}>
                         <TextInputCard
                             title="Day of birth"
-                            txtInput="01/001/2003" />
+                            txtInput="01/01/2003" />
                     </View>
 
                     <View style={{flex: 1}}>
@@ -60,13 +61,30 @@ const SignUp = props => {
                 </View>
 
                 <View style={[styles.checkContainer, styles.unitContainer]}>
-                    <View >
-
+                    <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
+                        <CheckBox
+                            disabled={false}
+                            value={toggleCheckBox}
+                            onValueChange={(newValue) => setToggleCheckBox(newValue)}/>
                     </View>
-                    <CheckBox
-                        value={isSelected}
-                        style={styles.checkbox} />
-                    <HederContent content="I agree with this"></HederContent>
+
+                    <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
+                        <HederContent content="I agree with this "></HederContent>                        
+                    </View>
+
+                    <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
+                        <HederContent content="Policy"/>
+                    </View>
+                </View>
+
+                <View style={styles.containerBot}>
+                    <View style={styles.button}>
+                        <CustomButton
+                            type="primary"
+                            text="Sign up now"
+                            onPress={() => navigation.navigate('SmartOTP')}
+                        />
+                    </View>
                 </View>
             </ImageBackground>
         </SafeAreaView>
@@ -88,9 +106,22 @@ bodyContainer: {
     height: '70%',
 },
 checkContainer: {
-    height: '5%',
-    backgroundColor: 'red',
+    height: '4%',
     flexDirection: 'row',
-}
+},
+checkbox: {
+    alignSelf: 'center',
+},
+containerBot: {
+    width: '100%',
+    height: '7%',
+    bottom: '-1%',
+    alignItems: 'center',
+    justifyContent: 'center',
+},
+button: {
+    width: '80%',
+    height: '100%',
+},
 });
 export default SignUp;
