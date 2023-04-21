@@ -92,19 +92,21 @@ function CheckoutScreen({navigation}) {
               <Image source={IC_CheckGreen}/>
             </View>
 
-            <View style = {{
+            <TouchableOpacity style = {{
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
               marginHorizontal: 20,
               marginVertical: 10
-            }}>
+            }}
+              onPress = {() => navigation.navigate('DeliveryAddress')}
+            >
               <Text style = {{
                 fontSize: 18,
                 fontWeight: 'bold'
               }}>Delivery Address</Text>
               <Image source={IC_Next}/>
-            </View>
+            </TouchableOpacity>
 
 
             <View style = {{

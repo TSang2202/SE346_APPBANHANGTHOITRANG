@@ -13,7 +13,8 @@ const CUSTOM_COLOR = {
   BackgroundText: '#31313180',
   Alto: '#DEDEDE',
   Sunglow: '#FFCD29', 
-  Sunshade: '#FF9B2F'
+  Sunshade: '#FF9B2F',
+  Whisper: '#F5F6FA'
 };
 
 export default CUSTOM_COLOR;
