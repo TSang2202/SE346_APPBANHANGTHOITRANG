@@ -50,16 +50,13 @@ function CustomerBottomTab() {
                             source={IC_Home}
                             resizeMode = 'stretch'
                             style = {{
-                                width: 20,
-                                height: 20,
+                                width: 25,
+                                height: 25,
                                 tintColor: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
                             }}
                     
                         />
-                            <Text style = {{
-                                fontSize: focused ? 14 : 12,
-                                color: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
-                            }}>Home</Text>
+                           
                         </View>
                 )
                    
@@ -76,16 +73,13 @@ function CustomerBottomTab() {
                             source={IC_Bell}
                             resizeMode = 'stretch'
                             style = {{
-                                width: 20,
-                                height: 20,
+                                width: 25,
+                                height: 25,
                                 tintColor: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
                             }}
                     
                         />
-                            <Text style = {{
-                                fontSize: focused ? 14 : 12,
-                                color: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
-                            }}>Notification</Text>
+                            
                         </View>
                 )
                    
@@ -105,16 +99,13 @@ function CustomerBottomTab() {
                             source={IC_Heart}
                             resizeMode = 'stretch'
                             style = {{
-                                width: 20,
-                                height: 20,
+                                width: 25,
+                                height: 25,
                                 tintColor: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
                             }}
                     
                         />
-                            <Text style = {{
-                                fontSize: focused ? 14 : 12,
-                                color: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
-                            }}>Follow</Text>
+                          
                         </View>
                 )
                    
@@ -133,16 +124,13 @@ function CustomerBottomTab() {
                                 source={IC_User}
                                 resizeMode = 'stretch'
                                 style = {{
-                                    width: 20,
-                                    height: 20,
+                                    width: 25,
+                                    height: 25,
                                     tintColor: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
                                 }}
                         
                             />
-                                <Text style = {{
-                                    fontSize: focused ? 14 : 12,
-                                    color: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
-                                }}>Account</Text>
+                               
                             </View>
                     )
                        

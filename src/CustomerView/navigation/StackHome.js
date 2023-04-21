@@ -1,5 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import CheckoutScreen from '../screens/CheckoutScreen';
+import DeliveryAddressScreen from '../screens/DeliveryAddressScreen';
 import DetailProduct from '../screens/DetailProduct';
 import HomeScreenCustomer from '../screens/HomeScreenCustomer';
 import SearchingScreen from '../screens/SearchingScreen';
@@ -26,6 +27,7 @@ function StackHome()
             <Stack.Screen name= 'Searching' component={SearchingScreen} />
             <Stack.Screen name= 'ShoppingCard' component={ShoppingCartScreen} />
             <Stack.Screen name= 'Checkout' component={CheckoutScreen} />
+            <Stack.Screen name= 'DeliveryAddress' component={DeliveryAddressScreen} />
 
         </Stack.Navigator>
 
