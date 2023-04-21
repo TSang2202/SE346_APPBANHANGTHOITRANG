@@ -114,7 +114,9 @@ function CheckoutScreen({navigation}) {
               alignItems: 'center',
              justifyContent: 'space-between',
              marginHorizontal: 20
-            }}>
+            }}
+                
+            >
 
               <View style = {{
                 flexDirection: 'row',
@@ -135,19 +137,21 @@ function CheckoutScreen({navigation}) {
               <Image source={IC_CheckGrey}/>
             </View>
 
-            <View style = {{
+            <TouchableOpacity style = {{
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
               marginHorizontal: 20,
               marginVertical: 10
-            }}>
+            }}
+                onPress = {() => navigation.navigate('PaymentMethod')}
+            >
               <Text style = {{
                 fontSize: 18,
                 fontWeight: 'bold'
               }}>Payment Method</Text>
               <Image source={IC_Next}/>
-            </View>
+            </TouchableOpacity>
 
             <View style = {{
               flexDirection: 'row',

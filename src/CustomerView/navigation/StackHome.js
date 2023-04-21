@@ -3,6 +3,7 @@ import CheckoutScreen from '../screens/CheckoutScreen';
 import DeliveryAddressScreen from '../screens/DeliveryAddressScreen';
 import DetailProduct from '../screens/DetailProduct';
 import HomeScreenCustomer from '../screens/HomeScreenCustomer';
+import PaymentMethodScreen from '../screens/PaymentMethodScreen';
 import SearchingScreen from '../screens/SearchingScreen';
 import ShoppingCartScreen from '../screens/ShoppingCartScreen';
 import TrendingScreen from '../screens/TrendingScreen';
@@ -28,6 +29,7 @@ function StackHome()
             <Stack.Screen name= 'ShoppingCard' component={ShoppingCartScreen} />
             <Stack.Screen name= 'Checkout' component={CheckoutScreen} />
             <Stack.Screen name= 'DeliveryAddress' component={DeliveryAddressScreen} />
+            <Stack.Screen name= 'PaymentMethod' component={PaymentMethodScreen} />
 
         </Stack.Navigator>
 
