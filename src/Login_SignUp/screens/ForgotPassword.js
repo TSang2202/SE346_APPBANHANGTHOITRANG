@@ -69,7 +69,7 @@ italicText: {
     fontFamily: FONT_FAMILY.MediumItalic, 
     fontSize: 15, 
     color: CUSTOM_COLOR.Black, 
-    fontStyle: 'italic'
+    fontStyle: 'italic',
 },
 });
 export default ForgotPassword;

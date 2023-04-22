@@ -5,7 +5,6 @@ import CustomButton from '../components/Buttons/CustomButton.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
-import {IMG_Facebook, IMG_google1, IMG_twitter} from '../assets/images/index.js';
 import HederContent from '../components/Header/HederContent.js';
 
 const SignIn = props => {

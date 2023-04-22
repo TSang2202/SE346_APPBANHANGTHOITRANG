@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, ImageBackground, View, Text, TouchableOpacity, Image} from 'react-native';
+import {SafeAreaView, StyleSheet, ImageBackground, View, Text, Image} from 'react-native';
 import CUSTOM_COLOR from '../../constants/colors.js';
 import FONT_FAMILY from '../../constants/fonts.js';
 import CustomButton from '../Buttons/CustomButton.js';
@@ -51,21 +51,6 @@ return (
             onPress={props.onPress}
           />                
         </View>
-
-        {/* <View style={styles.botText}>
-          <View style={{flex: 5, justifyContent: 'center', alignItems: 'flex-end'}}>
-            <Text style={styles.contentStyle}>
-              Don't you have an account ? 
-            </Text>
-          </View>
-          <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
-              <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-                <Text style={styles.contentStyle}>
-                  Sign in
-                </Text>
-              </TouchableOpacity>
-          </View>
-        </View> */}
       </View>
     </ImageBackground>
   </SafeAreaView>
@@ -120,13 +105,5 @@ buttonContainer: {
   justifyContent: 'center',
   left: '-40%',
 },
-botText: {
-  width: '90%',
-  height: '10%',
-  backgroundColor: 'red',
-  marginHorizontal: '5%',
-  flexDirection: 'row',
-  top: '5%',
-}
 });
 export default WellcomeCard;

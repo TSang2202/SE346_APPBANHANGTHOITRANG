@@ -123,7 +123,6 @@ buttonContainer: {
 botText: {
   width: '90%',
   height: '10%',
-//   backgroundColor: 'red',
   marginHorizontal: '5%',
   flexDirection: 'row',
   top: '9%',
