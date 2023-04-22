@@ -11,6 +11,33 @@ import Product from '../../StaffView/components/Product';
 import ItemList from '../components/ItemList';
 import { IM_Giay1,IM_Giay2,IM_Giay3,IM_Giay4 } from '../assets/images/index.js';
 import Size from '../constants/size.js';
+import { backto } from '../assets/icons/index.js';
+const datasdetail = [
+  {
+    id: '1',
+    source: IM_Giay1,
+    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
+    price: 399999
+  },
+  {
+    id: '2',
+    source: IM_Giay2,
+    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
+    price: 399999
+  },
+  {
+    id: '3',
+    source: IM_Giay3,
+    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
+    price: 399999
+  },
+  {
+    id: '4',
+    source: IM_Giay4,
+    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
+    price: 399999
+  },
+]
 const datas = [
   {
       id: '1',
@@ -86,7 +113,7 @@ function ViewShop1({navigation}){
   const [product, setproduct] = useState(true)
   if(product == true && detail == false){
   return (
-    <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
+    <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
     <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
     <Search
       placeholder = 'Search in the Shop'
@@ -251,7 +278,7 @@ function ViewShop1({navigation}){
     else{
       if(product == false && detail == false){
       return(
-        <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
+        <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White,width: '100%', height: '100%'}}>
         <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
         <Search
           placeholder = 'Search in the Shop'
@@ -302,7 +329,7 @@ function ViewShop1({navigation}){
       }
       else{
           return(
-            <SafeAreaView>
+            <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
             <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
             <Search
               placeholder = 'Search in the Shop'
@@ -316,12 +343,35 @@ function ViewShop1({navigation}){
             <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
             >FAUGET</Text>
             </View>
-            <View style = {{width: '100%', height: '20'}}>
-            <TouchableOpacity>
+            <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 20}}>
+            <TouchableOpacity 
+            onPress={()=> setdetail(false)}
+            style = {{width: 17, height: 17, marginLeft: 18, marginTop: 5}}>
               <Image
-                  
+                  resizeMode='contain'
+                  source={backto}
+                  style={{width:'100%',height:'100%'}}
                ></Image>
             </TouchableOpacity>
+            <Text style = {{color: CUSTOM_COLOR.Black, fontSize: 18, marginLeft: 10}}>List Item/ {ListItem[0].namelist}</Text>
+            </View>
+            <View>
+               <FlatList
+                    data={datasdetail}
+                    keyExtractor={item => item.id}
+                    renderItem = {({item}) => {
+                        return(
+                                <Product
+                                    onPress={() => navigation.navigate('ViewShop2')}
+                                    source = {item.source}
+                                    title = {item.title}
+                                    price = {item.price}
+                                />
+                           //</View> </TouchableOpacity>
+                        )
+                    }}
+                    //numColumns={2}
+                />
             </View>
             </SafeAreaView>
             )
