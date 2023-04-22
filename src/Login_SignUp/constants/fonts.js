@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 const Montserrat = 'Montserrat-';
 const Monoton = 'Monoton-';
 
