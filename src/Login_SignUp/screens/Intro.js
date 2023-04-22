@@ -16,7 +16,7 @@ const Intro = props => {
   const {navigation} = props;
   const [status, setStatus] = useState('');
   return (
-    <SafeAreaView style={styles.container}>
+<SafeAreaView style={styles.container}>
         <ImageBackground source={IMG_PexelsPhotobyRioKuncoro} resizeMode="cover" style={styles.image}>
         <>
         <View style={styles.containeTop}>
@@ -24,7 +24,7 @@ const Intro = props => {
             <Image
                 source={IC_Line}
                 style={{width: '100%', height: '10%', top: '10%'}}
-              />
+            />
             <Text style={styles.baseText}>
               FAUGET
             </Text>
@@ -34,7 +34,7 @@ const Intro = props => {
             <View style={styles.flexbot}>
               <Image
               source={IC_Line}
-              style={{width: '100%', height: '10%', top: '10%'}}
+              style={{width: '100%', height: '10%'}}
               />
             </View>
 
@@ -47,11 +47,10 @@ const Intro = props => {
             <View style={styles.flexbot}>
               <Image
               source={IC_Line}
-              style={{width: '100%', height: '10%', top: '10%'}}
+              style={{width: '100%', height: '10%'}}
               />
             </View>
           </View>        
-
         </View>
         </>
 
@@ -78,8 +77,8 @@ const styles = StyleSheet.create({
   },
   containeTop: {
     width: '90%',
-    height: '10%',
-    top: '-15%',
+    height: '25%',
+    top: '-17%',
     marginHorizontal: '5%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -88,17 +87,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center',
     width: '100%',
-    height: '100%',
+    height: '70%',
   },
   baseText: {
-    fontSize: 60,
+    fontSize: 85,
     fontWeight: 'bold',
     fontFamily: FONT_FAMILY.Regular,
     color: CUSTOM_COLOR.White,
   },
   viewBot: {
     width: '100%',
-    height: '40%',
+    height: '20%',
     flexDirection: 'row',
   },
   flexbot:{
@@ -114,14 +113,14 @@ const styles = StyleSheet.create({
   containeBottom: {
     width: '90%',
     height: '10%',
-    bottom: '-30%',
+    bottom: '-28%',
     marginHorizontal: '5%',
     justifyContent: 'center',
     alignItems: 'center',    
   },
   botText: 
   {
-    fontSize: 16,
+    fontSize: 20,
     fontFamily: FONT_FAMILY.Medium,
     color: CUSTOM_COLOR.White,
   }
