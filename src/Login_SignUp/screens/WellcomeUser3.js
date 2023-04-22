@@ -20,9 +20,8 @@ return (
             onPress={() => navigation.navigate('SignUp')}
             onPress1={() => navigation.navigate('SignIn')}  
         />
-
     </SafeAreaView>
-);
+    );
 };
 const styles = StyleSheet.create({
 container: {

@@ -16,7 +16,7 @@ const SignUp = props => {
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={IMG_Rectangle182} resizeMode="cover" style={styles.container}>
-                <HeaderWithBack onPress={() => navigation.navigate('SignIn')}></HeaderWithBack>
+                <HeaderWithBack onPress={() => navigation.navigate('WellcomeUser3')}></HeaderWithBack>
                 <View style={[styles.topContainer, styles.unitContainer]}>
                     <HeaderTitlle title="Sign Up"></HeaderTitlle>
                 </View>
@@ -99,9 +99,12 @@ unitContainer: {
 },
 topContainer: {
     height: '7%',
+    top: '1%',
+    left: '3%',
 },
 bodyContainer: {
-    height: '70%',
+    height: '72%',
+    top: '1%',
 },
 checkContainer: {
     height: '4%',

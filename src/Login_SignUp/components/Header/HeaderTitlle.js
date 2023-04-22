@@ -18,6 +18,7 @@ titleView: {
     fontFamily: FONT_FAMILY.Semibold,
     fontSize: 30,
     color: CUSTOM_COLOR.Black,
+    fontWeight: 'bold',
 },
 });
 export default HeaderTitlle;
