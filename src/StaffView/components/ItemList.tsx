@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View ,Image, TouchableOpacity} from 'react-native'
 import React from 'react'
 import CUSTOM_COLOR from '../constants/colors'
+import { back } from '../assets/icons'
 const ItemList = (props: any) => {
   return (
     <View style = {{marginTop: 9,flexDirection: 'row', width: '100%',height: 70, elevation: 3,
@@ -8,13 +9,17 @@ const ItemList = (props: any) => {
       <Image
         resizeMode='contain'
         source={props.source} 
-        style = {{height: 65, width: 65, marginLeft: 20}}
+        style ={{height: 65, width: 65, marginLeft: 20}}
       ></Image>
-        <View style = {{flexDirection: 'column', marginTop: 10, marginLeft: 30}}>
+      <View style = {{flexDirection: 'column', marginTop: 10, marginLeft: 30}}>
             <Text style = {{color: CUSTOM_COLOR.Black}}>{props.namelist}</Text>
             <Text style = {{marginTop: 5, fontStyle: 'italic'}}>{props.numberitem} Product</Text>
         </View>
-        <Text style = {{marginTop: 17,marginLeft: 130, fontWeight: 'bold'}}>></Text>
+      <Image
+        resizeMode='contain'
+        source={back}
+        style={{marginTop: 23,marginLeft: 130,width:10, height:10}}>
+      </Image>
     </View>
   )
 }
