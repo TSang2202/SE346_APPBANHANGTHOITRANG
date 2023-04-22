@@ -4,11 +4,13 @@ import React from 'react'
 import { useState } from 'react';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
-import SearchInput from '../../CustomerView/components/SearchInput';
+import Search from '../components/Search';
 import scale from '../constants/responsive.js';
 import { Acount } from './OverView.js';
 import Product from '../../StaffView/components/Product';
+import ItemList from '../components/ItemList';
 import { IM_Giay1,IM_Giay2,IM_Giay3,IM_Giay4 } from '../assets/images/index.js';
+import Size from '../constants/size.js';
 const datas = [
   {
       id: '1',
@@ -51,22 +53,32 @@ export const ListItem = [
   {
     id: '1',
     namelist: 'Limited Edition 2023',
-    numberitem: '4'
+    numberitem: '4',
+    avartar: IM_Giay2
   },
   {
     id: '2',
     namelist: 'Limited Edition 2023',
-    numberitem: '4'
+    numberitem: '4',
+    avartar: IM_Giay2
   },
   {
-    id: '2',
+    id: '3',
     namelist: 'Limited Edition 2023',
-    numberitem: '4'
+    numberitem: '4',
+    avartar: IM_Giay2
   },
   {
-    id: '2',
+    id: '4',
     namelist: 'Limited Edition 2023',
-    numberitem: '4'
+    numberitem: '4',
+    avartar: IM_Giay2
+  },
+  {
+    id: '5',
+    namelist: 'Limited Edition 2023',
+    numberitem: '4',
+    avartar: IM_Giay2
   }
 ]
 function ViewShop1({navigation}){
@@ -75,10 +87,10 @@ function ViewShop1({navigation}){
   return (
     <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
     <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
-    <SearchInput
+    <Search
       placeholder = 'Search in the Shop'
       style = {{width: '80%', height: '50%', backgroundColor: CUSTOM_COLOR.White}}
-    ></SearchInput>
+    ></Search>
     <Image
       style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
       source={{uri: Acount.avartar}}
@@ -93,7 +105,7 @@ function ViewShop1({navigation}){
     </TouchableOpacity>
     <TouchableOpacity 
     onPress={()=> setproduct(false)}
-    style = {{width: '50%', height: '100%', alignItems: 'center'}}>
+    style = {{width: '50%', height: '100%', alignItems: 'center', color: CUSTOM_COLOR.Black}}>
     <Text style = {{marginTop: 5, fontSize: 20}}>List Item</Text>
     </TouchableOpacity>
   </View>
@@ -211,21 +223,23 @@ function ViewShop1({navigation}){
       </View>
     <View>
                 <FlatList
+                     nestedScrollEnabled={true}
                     data={datas}
                     renderItem = {({item}) => {
                         return(
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('ViewShop2')}
-                                style = {{
-                                flexDirection: 'row',
+                            //<TouchableOpacity
+                              //  onPress={() => navigation.navigate('ViewShop2')}
+                                //style = {{
+                                //flexDirection: 'row',
                                 //justifyContent: 'space-around'
-                            }}>
+                           // }}>
                                 <Product
+                                    onPress={() => navigation.navigate('ViewShop2')}
                                     source = {item.source}
                                     title = {item.title}
                                     price = {item.price}
                                 />
-                            </TouchableOpacity>
+                           //</View> </TouchableOpacity>
                         )
                     }}
                     numColumns = {2}
@@ -237,10 +251,10 @@ function ViewShop1({navigation}){
       return(
         <SafeAreaView>
         <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
-        <SearchInput
+        <Search
           placeholder = 'Search in the Shop'
           style = {{width: '80%', height: '50%', backgroundColor: CUSTOM_COLOR.White}}
-        ></SearchInput>
+        ></Search>
         <Image
           style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
           source={{uri: Acount.avartar}}
@@ -253,13 +267,34 @@ function ViewShop1({navigation}){
             <TouchableOpacity 
              onPress={()=> setproduct(true)}
             style = {{width: '50%',height:'100%',alignItems: 'center'}}>
-            <Text style = {{marginTop: 5,  fontSize: 20 }}>Product</Text>
+            <Text style = {{marginTop: 5,  fontSize: 20, color: CUSTOM_COLOR.Black }}>Product</Text>
             </TouchableOpacity>
             <TouchableOpacity 
             style = {{width: '50%', height: '100%',borderBottomWidth: 2, borderColor: CUSTOM_COLOR.Red, alignItems: 'center'}}>
             <Text style = {{marginTop: 5,color: CUSTOM_COLOR.DarkOrange, fontSize: 20}}>List Item</Text>
             </TouchableOpacity>
        </View>
+       <View>
+                <FlatList
+                    data={ListItem}
+                    renderItem = {({item}) => {
+                        return(
+                            <TouchableOpacity
+                                //onPress={() => navigation.navigate('ViewShop2')}
+                                style = {{
+                                flexDirection: 'row',
+                                //justifyContent: 'space-around'
+                            }}>
+                                <ItemList
+                                source = {item.avartar}
+                                namelist = {item.namelist}
+                                numberitem = {item.numberitem}
+                                ></ItemList>
+                            </TouchableOpacity>
+                        )
+                    }}
+                />
+    </View>
         </SafeAreaView>
       )
     }

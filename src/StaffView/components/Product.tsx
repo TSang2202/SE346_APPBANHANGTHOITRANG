@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Size from '../constants/size'
 const Product = (props: any) => {
@@ -9,7 +9,7 @@ const Product = (props: any) => {
             marginHorizontal: 30,
             marginVertical: 5
         }} >
-    
+        <TouchableOpacity onPress={props.onPress}>
          <Image source={props.source}
             resizeMode='contain'
             style = {{
@@ -18,6 +18,7 @@ const Product = (props: any) => {
                 borderRadius: 20
                 
             }}/>
+            </TouchableOpacity>
          <Text style ={{
             fontWeight: 'bold',
             marginVertical: 4
