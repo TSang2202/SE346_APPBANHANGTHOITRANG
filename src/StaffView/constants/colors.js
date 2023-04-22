@@ -14,7 +14,8 @@ const CUSTOM_COLOR = {
   LightGray: '#DDDDDD',
   SlateGray: '#9FB6CD',
   Theme: '#996699',
-  LavenderBlush: '#CDC1C5'
+  LavenderBlush: '#CDC1C5',
+  DarkOrange: '#CD6600'
 };
 
 export default CUSTOM_COLOR;

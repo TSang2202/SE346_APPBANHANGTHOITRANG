@@ -41,7 +41,7 @@ const Order = [
 ]
 function OverView ({navigation}) {
   return (
-    <SafeAreaView style = {{flexDirection: 'column'}}>
+    <SafeAreaView style = {{flexDirection: 'column', backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
     <View style = {{width: '100%',height: '12%', flexDirection: 'row'}}>
       <TouchableOpacity style = {styles.settingicon} onPress = {() => {navigation.navigate('Setting')}}>
       <Image 
@@ -116,7 +116,7 @@ function OverView ({navigation}) {
     </View>
     <View style = {{width:'100%',height:'2%',backgroundColor: CUSTOM_COLOR.SlateGray}}>
     </View>
-    <View style = {{flexDirection: 'column', width: '100%',height:'40%'}}>
+    <View style = {{flexDirection: 'column', width: '100%', height: '40%'}}>
       <View style = {{flexDirection: 'row',width: '100%', height: '30%', marginTop: '7%'}}>
       <Button 
         source={product}
@@ -150,7 +150,7 @@ function OverView ({navigation}) {
         onPress= {()=> navigation.navigate('User')}
       ></Button>
       </View>
-      <View style = {{flexDirection: 'row', width: '100%', height: '10%'}}>
+      <View style = {{flexDirection: 'row', width: '100%'}}>
       <Text style = {{color: CUSTOM_COLOR.Black, marginTop: '-3%', marginLeft: '6%'}}>Finances Report</Text>
       <Text style = {{color: CUSTOM_COLOR.Black, marginTop: '-3%', marginLeft: '10%'}}>Messenger</Text>
       <Text style = {{color: CUSTOM_COLOR.Black, marginTop: '-3%', marginLeft: '13%'}}>Manage User</Text>
