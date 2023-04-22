@@ -60,7 +60,7 @@ return (
           </View>
           <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
               <TouchableOpacity  onPress={props.onPress1}>
-                <Text style={styles.botContentStyle}>
+                <Text style={[styles.botContentStyle, {fontWeight: 'bold'}]}>
                   Sign in
                 </Text>
               </TouchableOpacity>
