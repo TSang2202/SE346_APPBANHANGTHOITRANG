@@ -82,8 +82,9 @@ export const ListItem = [
   }
 ]
 function ViewShop1({navigation}){
+  const [detail ,setdetail] = useState(false)
   const [product, setproduct] = useState(true)
-  if(product == true){
+  if(product == true && detail == false){
   return (
     <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
     <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
@@ -248,8 +249,9 @@ function ViewShop1({navigation}){
     </SafeAreaView>
     )}
     else{
+      if(product == false && detail == false){
       return(
-        <SafeAreaView>
+        <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
         <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
         <Search
           placeholder = 'Search in the Shop'
@@ -280,7 +282,7 @@ function ViewShop1({navigation}){
                     renderItem = {({item}) => {
                         return(
                             <TouchableOpacity
-                                //onPress={() => navigation.navigate('ViewShop2')}
+                                onPress={() => setdetail(true) }
                                 style = {{
                                 flexDirection: 'row',
                                 //justifyContent: 'space-around'
@@ -297,6 +299,33 @@ function ViewShop1({navigation}){
     </View>
         </SafeAreaView>
       )
+      }
+      else{
+          return(
+            <SafeAreaView>
+            <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
+            <Search
+              placeholder = 'Search in the Shop'
+              style = {{width: '80%', height: '50%', backgroundColor: CUSTOM_COLOR.White}}
+            ></Search>
+            <Image
+              style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
+              source={{uri: Acount.avartar}}
+              resizeMode='contain'
+            ></Image>
+            <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
+            >FAUGET</Text>
+            </View>
+            <View style = {{width: '100%', height: '20'}}>
+            <TouchableOpacity>
+              <Image
+                  
+               ></Image>
+            </TouchableOpacity>
+            </View>
+            </SafeAreaView>
+            )
+      }
     }
 }
 export default ViewShop1
