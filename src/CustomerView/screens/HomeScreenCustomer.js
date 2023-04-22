@@ -62,7 +62,7 @@ function HomeScreenCustomer({navigation}) {
  
 
     return (
-      <ScrollView style = {{flex: 1}}>
+      <ScrollView style = {{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
 
           <View style = {{flexDirection: 'row'}}>
               <SearchInput

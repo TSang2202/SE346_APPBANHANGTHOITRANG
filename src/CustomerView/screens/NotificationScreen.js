@@ -91,6 +91,7 @@ function NotificationScreen({navigation}) {
     return (
       <View style = {{
         flex: 1,
+        backgroundColor: CUSTOM_COLOR.White
       }}>
 
             <View style ={{
