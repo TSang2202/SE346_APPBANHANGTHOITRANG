@@ -1,11 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
-import { IC_Back, IC_Banking, IC_HandMoney, IC_Location, IC_Momo, IC_MyLocation } from "../assets/icons";
+import { IC_Back, IC_Bank, IC_Banking, IC_HandMoney, IC_Location, IC_Momo, IC_MyLocation } from "../assets/icons";
 import Button from "../components/Button";
 import InputData from "../components/InputData";
 import CUSTOM_COLOR from "../constants/colors";
 
-function PaymentMethodScreen({navigation}) {
+function PaymentCardScreen({navigation}) {
 
  
 
@@ -38,46 +38,63 @@ function PaymentMethodScreen({navigation}) {
                     fontSize: 20,
                     color: CUSTOM_COLOR.Black, 
                     fontWeight: 'bold'
-                }}>Payment method</Text>
+                }}>Payment</Text>
             </View>
 
-
-            <View style ={styles.viewMethod}>
-                <TouchableOpacity style = {styles.radBtn}>
-
-                </TouchableOpacity>
-                <Image 
-                    style = {styles.image}
-                    source = {IC_Momo}
+            <View>
+                <Image style ={{
+                    width: 130,
+                    height: 65,
+                    marginVertical: '5%',
+                    marginHorizontal: '10%'
+                }}
+                source ={IC_Bank}
+                resizeMode = 'stretch'
                 />
-                <Text style = {styles.text}>MOMO Wallet</Text>
             </View>
 
-
-            <View style ={styles.viewMethod}>
-                <TouchableOpacity style = {styles.radBtn}>
-
-                </TouchableOpacity>
-                <Image 
-                    style = {styles.image}
-                    source = {IC_HandMoney}
+            <View style = {{
+                flexDirection: 'row',
+                justifyContent: 'center'
+            }}>
+                <InputData
+                    title = 'Card Owner'
+                    width = '85%'
+                    placeholder  = 'Mr Sang'
                 />
-                <Text style = {styles.text}>Cash payment</Text>
             </View>
-            
 
-
-            <View style ={styles.viewMethod}>
-                <TouchableOpacity style = {styles.radBtn}>
-
-                </TouchableOpacity>
-                <Image 
-                    style = {styles.image}
-                    source = {IC_Banking}
+            <View style = {{
+                flexDirection: 'row',
+                justifyContent: 'center'
+            }}>
+                <InputData
+                    title = 'Card Number'
+                    width = '85%'
+                    placeholder  = '5254 7634 4568 3457'
                 />
-                <Text style = {styles.text}>Online banking</Text>
             </View>
            
+            <View style ={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%'
+            }}>
+                <InputData
+                    
+                    title = 'EXP'
+                    width = '40%'
+                    placeholder = '24/24'
+                />
+                <InputData
+                    
+                    title = 'CVV'
+                    width = '40%'
+                    placeholder = '7763'
+                />
+            </View>
+
             <View style ={{
                 position: 'absolute',
                 top: '82%',
@@ -90,13 +107,12 @@ function PaymentMethodScreen({navigation}) {
                     justifyContent: 'center'
                 }}>
                     <Button 
-                        title = 'Continue'
+                        title = 'Add card'
                         color = {CUSTOM_COLOR.FlushOrange}
-                        onPress = {() => navigation.navigate('PaymentCard')}
+                        onPress = {() => navigation.navigate('PaymentMethod')}
                     />
                 </View>
             </View>
-            
             
       </View>
       
@@ -139,4 +155,4 @@ const styles = StyleSheet.create({
 
 })
   
-export default PaymentMethodScreen
+export default PaymentCardScreen
