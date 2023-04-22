@@ -5,13 +5,17 @@ import { createNavigationContainerRef } from '@react-navigation/native'
 import { settingicon, messenger,notification,report,product,promotion,order,chat,user } from '../../StaffView/assets/icons/index.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import ViewShop1 from './ViewShop1.js';
-import StackNavigator from '../navigation/navigation.js';
 import Button from '../../StaffView/components/Button';
 import ViewNow from '../../StaffView/components/ViewNow';
-const Acount = {
+export const Acount = {
   name:'Nguyen Trung Tinh',
   avartar:'https://icdn.dantri.com.vn/thumb_w/660/2021/09/24/lucasweibo-1632498824939.jpeg',
-  id:'21520115'
+  id:'21520115',
+  address: 'Binh Tan, Ho Chi Minh',
+  phone: '0704408389',
+  sex: 'male',
+  day: '16/12/2003',
+  background: 'https://c4.wallpaperflare.com/wallpaper/815/737/246/abstract-1920x1200-nature-wallpaper-preview.jpg'
 }
 const Order = [
   {

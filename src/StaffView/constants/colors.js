@@ -12,7 +12,9 @@ const CUSTOM_COLOR = {
   Sliver: '#C0C0C0',
   Red: '#FF0000',
   LightGray: '#DDDDDD',
-  SlateGray: '#9FB6CD'
+  SlateGray: '#9FB6CD',
+  Theme: '#996699',
+  LavenderBlush: '#CDC1C5'
 };
 
 export default CUSTOM_COLOR;

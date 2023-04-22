@@ -1,13 +1,11 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import MainNavigator from './src/Login_SignUp/navigation/navigation.js';
+import StackNavigator from './src/StaffView/navigation/navigation';
 import type {PropsWithChildren} from 'react';
 
 function App(): JSX.Element {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
-      <MainNavigator></MainNavigator>
-    </SafeAreaView>
+    <StackNavigator></StackNavigator>
   );}
 
 const styles = StyleSheet.create({
