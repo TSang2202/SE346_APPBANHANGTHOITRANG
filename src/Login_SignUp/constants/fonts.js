@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 const Montserrat = 'Montserrat-';
-const Monoton = 'Monoton-Regular';
+const Monoton = 'Monoton-';
 
 const FONT_FAMILY = {
     Bold: Montserrat + 'Bold',
@@ -8,7 +8,7 @@ const FONT_FAMILY = {
     Semibold: Montserrat + 'Semibold',
     Light: Montserrat + 'Light',
     MediumItalic: Montserrat + 'MediumItalic',
-    // Regular: Monoton + 'Regular',
+    Regular: Monoton + 'Regular',
 };
 
 export default FONT_FAMILY;
