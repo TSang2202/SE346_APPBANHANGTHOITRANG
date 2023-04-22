@@ -9,13 +9,15 @@ import ResetPassword from '../screens/ResetPassword.js';
 import SignIn from '../screens/SignIn.js';
 import SignUp from '../screens/SignUp.js';
 import SmartOTP from '../screens/SmartOTP.js';
-import WelcomeUser from '../screens/WelcomeUser.js';
+import WellcomeUser1 from '../screens/WellcomeUser1.js';
+import WellcomeUser2 from '../screens/WellcomeUser2.js';
+import WellcomeUser3 from '../screens/WellcomeUser3.js';
 
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="WelcomeUser"
+      initialRouteName="WellcomeUser1"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Congratulation" component={Congratulation} />
       <Stack.Screen name="Done" component={Done} />
@@ -25,7 +27,9 @@ function StackNavigator() {
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SmartOTP" component={SmartOTP} />
-      <Stack.Screen name="WelcomeUser" component={WelcomeUser} />
+      <Stack.Screen name="WellcomeUser1" component={WellcomeUser1} />
+      <Stack.Screen name="WellcomeUser2" component={WellcomeUser2} />
+      <Stack.Screen name="WellcomeUser3" component={WellcomeUser3} />
     </Stack.Navigator>
   );
 }

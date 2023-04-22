@@ -4,7 +4,7 @@ import CUSTOM_COLOR from '../../constants/colors.js';
 import FONT_FAMILY from '../../constants/fonts.js';
 import CustomButton from '../Buttons/CustomButton.js';
 
-const WellcomeCard = props => {
+const WellcomeCardEnd = props => {
 const {navigation} = props;
 const [status, setStatus] = useState('');
 return (
@@ -52,20 +52,20 @@ return (
           />                
         </View>
 
-        {/* <View style={styles.botText}>
+        <View style={styles.botText}>
           <View style={{flex: 5, justifyContent: 'center', alignItems: 'flex-end'}}>
-            <Text style={styles.contentStyle}>
-              Don't you have an account ? 
+            <Text style={styles.botContentStyle}>
+                Already have an account?    
             </Text>
           </View>
           <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
-              <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-                <Text style={styles.contentStyle}>
+              <TouchableOpacity  onPress={props.onPress1}>
+                <Text style={styles.botContentStyle}>
                   Sign in
                 </Text>
               </TouchableOpacity>
           </View>
-        </View> */}
+        </View>
       </View>
     </ImageBackground>
   </SafeAreaView>
@@ -123,10 +123,15 @@ buttonContainer: {
 botText: {
   width: '90%',
   height: '10%',
-  backgroundColor: 'red',
+//   backgroundColor: 'red',
   marginHorizontal: '5%',
   flexDirection: 'row',
-  top: '5%',
-}
+  top: '9%',
+},
+botContentStyle: {
+    fontSize: 15,
+    fontFamily: FONT_FAMILY.Light,
+    color: CUSTOM_COLOR.Black,
+},
 });
-export default WellcomeCard;
+export default WellcomeCardEnd;
