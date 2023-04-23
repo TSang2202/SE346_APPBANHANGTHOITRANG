@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
-import {NavigationContainer} from '@react-navigation/native'
+import {getFocusedRouteNameFromRoute, NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 
 import { IC_Bell, IC_Heart, IC_Home, IC_User,} from "../assets/icons";
@@ -41,8 +41,10 @@ function CustomerBottomTab() {
            
         
         >
-            <TabBottom.Screen  name = 'StackHome' component={StackHome} options = {{
+            <TabBottom.Screen  name = 'StackHome' component={StackHome} options = {({route}) => ({
+
                 tabBarLabel: 'Home',
+                tabBarStyle: {display: getTabBarVisibility(route)},
                 tabBarIcon: ({focused}) =>{
                     return( 
                         <View style ={{alignItems: 'center', justifyContent: 'center'}}>
@@ -56,13 +58,14 @@ function CustomerBottomTab() {
                             }}
                     
                         />
-                           
+                        
                         </View>
                 )
-                   
+                
                     
                 }
-            }}/>
+
+            })}/>
 
             <TabBottom.Screen name = 'Notification' component={NotificationScreen} options = {{
                 tabBarLabel: 'Notification',
@@ -150,6 +153,13 @@ function CustomerBottomTab() {
   }
 
 
+const getTabBarVisibility = (route) =>{
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed'
 
+    if (routeName == 'HomeScreen'){
+        return 'flex'
+    } 
+    return 'none'
+}
   
 export default CustomerBottomTab

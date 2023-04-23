@@ -1,4 +1,5 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import ChatScreen from '../screens/ChatScreen';
 import CheckoutScreen from '../screens/CheckoutScreen';
 import DeliveryAddressScreen from '../screens/DeliveryAddressScreen';
 import DetailProduct from '../screens/DetailProduct';
@@ -32,6 +33,7 @@ function StackHome()
             <Stack.Screen name= 'DeliveryAddress' component={DeliveryAddressScreen} />
             <Stack.Screen name= 'PaymentMethod' component={PaymentMethodScreen} />
             <Stack.Screen name= 'PaymentCard' component={PaymentCardScreen} />
+            <Stack.Screen name= 'Chat' component={ChatScreen} />
 
         </Stack.Navigator>
 
