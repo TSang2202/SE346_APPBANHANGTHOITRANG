@@ -15,7 +15,8 @@ const CUSTOM_COLOR = {
   Sunglow: '#FFCD29', 
   Sunshade: '#FF9B2F',
   Whisper: '#F5F6FA',
-  Yellow: '#FFF500'
+  Yellow: '#FFF500',
+  Gallery: '#F0F0F0'
 };
 
 export default CUSTOM_COLOR;
