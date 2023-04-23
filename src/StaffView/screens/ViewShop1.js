@@ -357,8 +357,10 @@ function ViewShop1({navigation}){
             </View>
             <View>
                <FlatList
+                    horizontal={false} 
                     data={datasdetail}
-                    keyExtractor={item => item.id}
+                    numColumns={2}
+                    key={2}
                     renderItem = {({item}) => {
                         return(
                                 <Product
@@ -370,7 +372,6 @@ function ViewShop1({navigation}){
                            //</View> </TouchableOpacity>
                         )
                     }}
-                    //numColumns={2}
                 />
             </View>
             </SafeAreaView>
