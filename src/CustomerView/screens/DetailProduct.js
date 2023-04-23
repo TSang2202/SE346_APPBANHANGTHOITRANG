@@ -1,3 +1,4 @@
+
 import React, {useState} from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -16,9 +17,14 @@ function DetailProduct({navigation, route}) {
     const [chooseStyle, setChooseStyle] = useState(false)
 
     return (
-      <View style = {styles.container}>
+      <View style = {{
+        ...styles.container,
+        
+      }}>
+            
 
-          <View style = {{flexDirection: 'row',   justifyContent: 'space-between'}}>
+        
+          <View style = {{flexDirection: 'row',   justifyContent: 'space-between', }}>
 
             <View style ={{flexDirection: "row", alignItems: 'center',}}>
                 <TouchableOpacity onPress={() => {
@@ -319,6 +325,8 @@ function DetailProduct({navigation, route}) {
                 title = 'BUY NOW'
             />
         </View>
+
+      
 
         {chooseStyle ? 
 
