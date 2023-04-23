@@ -14,7 +14,8 @@ const CUSTOM_COLOR = {
   Alto: '#DEDEDE',
   Sunglow: '#FFCD29', 
   Sunshade: '#FF9B2F',
-  Whisper: '#F5F6FA'
+  Whisper: '#F5F6FA',
+  Yellow: '#FFF500'
 };
 
 export default CUSTOM_COLOR;
