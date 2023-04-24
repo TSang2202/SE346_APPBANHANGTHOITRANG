@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, T
 import { IC_Back } from "../assets/icons";
 import { IM_AnhGiay1, IM_AnhGiay2, IM_AnhGiay3, IM_AnhGiay4 } from "../assets/images";
 import Message from "../components/Message";
+import Notify from "../components/Notify";
 import CUSTOM_COLOR from "../constants/colors";
 
 
@@ -169,7 +170,7 @@ function NotificationScreen({navigation}) {
               renderItem = {({item}) => {
                 return(
                   <TouchableOpacity>
-                    <Message
+                    <Notify
                       source = {item.source}
                       title = {item.title}
                       content = {item.content}
