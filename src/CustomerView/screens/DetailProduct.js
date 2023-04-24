@@ -8,6 +8,7 @@ import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
 import { IC_Back, IC_Cancle, IC_Down, IC_Heart, IC_ShoppingCart, IC_StartCorner, IC_StartFull } from "../assets/icons";
 import { IM_MauAo } from "../assets/images";
 import Button from "../components/Button";
+import StarRating from "../components/StarRating";
 import CUSTOM_COLOR from "../constants/colors";
 
 
@@ -109,9 +110,13 @@ function DetailProduct({navigation, route}) {
           <View style = {{
             flexDirection: 'row', 
             marginVertical: 20,
-            marginHorizontal: 40
+            marginHorizontal: 40,
+            alignItems: 'center'
           }}>
-                <Text>Star Rating</Text>
+                <StarRating
+                    nums = {5}
+                    fill = {2}
+                />
                 <TouchableOpacity>
                     <Text style = {{
                         marginHorizontal: 40,
