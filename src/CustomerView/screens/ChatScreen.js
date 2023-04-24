@@ -2,7 +2,77 @@ import React, {useEffect} from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView } from "react-native";
 import { IC_Attachment, IC_Back, IC_Camera, IC_Emo } from "../assets/icons";
 import { IM_AnhGiay2 } from "../assets/images";
+import Message from "../components/Message";
 import CUSTOM_COLOR from "../constants/colors";
+
+const data = [
+    {
+        id: '1',
+        isRight: true,
+        content: 'Ê mày',
+        time: '11:30'
+    },
+    {
+        id: '2',
+        isRight: false,
+        content: 'Sao đó?',
+        time: '11:30'
+    },
+    {
+        id: '3',
+        isRight: true,
+        content: 'Tao ghét thằng Tính quá m ơi',
+        time: '11:30'
+    },
+    {
+        id: '4',
+        isRight: false,
+        content: 'Ừ tao cũng ghét nó lắm',
+        time: '11:30'
+    },
+    {
+        id: '5',
+        isRight: true,
+        content: 'Má nó mập lắm mày ơi',
+        time: '11:30'
+    },
+    {
+        id: '6',
+        isRight: false,
+        content: 'Chứ gì nữa, cái mặt nọng không à',
+        time: '11:30'
+    },
+    {
+        id: '7',
+        isRight: true,
+        content: 'Cái tật ham ăn ham uống là phải vậy rồi, thấy thương ghê',
+        time: '11:30'
+    },
+    {
+        id: '9',
+        isRight: false,
+        content: 'Cái tật ham ăn ham uống là phải vậy rồi, thấy thương ghê',
+        time: '11:30'
+    },
+    {
+        id: '10',
+        isRight: false,
+        content: 'Cái tật ham ăn ham uống là phải vậy rồi, thấy thương ghê',
+        time: '11:30'
+    },
+    {
+        id: '11',
+        isRight: false,
+        content: 'Cái tật ham ăn ham uống là phải vậy rồi, thấy thương ghê',
+        time: '11:30'
+    },
+    {
+        id: '12',
+        isRight: false,
+        content: 'Cái tật ham ăn ham uống là phải vậy rồi, thấy thương ghê',
+        time: '11:30'
+    },
+]
 
 function ChatScreen({navigation}) {
     
@@ -54,6 +124,13 @@ function ChatScreen({navigation}) {
             <ScrollView style ={{
                 backgroundColor: CUSTOM_COLOR.Gallery
             }}>
+                {data.map((message, index) =>(
+                    <Message
+                        content = {message.content}
+                        time = {message.time}
+                        isRight = {message.isRight}
+                    />
+                ))}
 
             </ScrollView>
 
