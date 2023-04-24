@@ -1,48 +1,45 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Image } from "react-native";
+import CUSTOM_COLOR from "../constants/colors";
+import CustomerBottomTab from "../navigation/CustomerBottomTab";
 
 
 const Message = (props: any) =>{
 
   return(
-    <View style = {{
-        flexDirection: 'row',
-        alignItems: 'center'
-    }}>
-      
-      <Image source={props.source}
-        style = {{
-            width: 50,
-            height: 50,
-            borderRadius: 30,
-            margin: 10,
-            
-        }}
-      />
-      
-      <View style ={{
-        width:'75%'
-      }}>
+     <View style ={{
+        paddingVertical: 10,
+       
+     }}>
         <View style ={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%'
+            backgroundColor: props.isRight ? CUSTOM_COLOR.ChathamsBlue : CUSTOM_COLOR.White,
+            maxWidth: '80%',
+            alignSelf: props.isRight ? 'flex-end' : 'flex-start',
+            borderRadius: 15,
+            paddingHorizontal: 10,
+            marginHorizontal: 10,
+            paddingVertical: 7,
+            borderTopRightRadius: props.isRight ? 1 : 15,
+            borderTopLeftRadius: props.isRight ? 15 : 1,
+            alignItems: 'center'
         }}>
-            <Text style = {{
-                fontSize: 17,
-                fontWeight: 'bold'
-            }}>{props.title}</Text>
-            <Text style = {{
-                
-               
-            }}>{props.time}</Text>
+          <Text style ={{
+              color: props.isRight ? CUSTOM_COLOR.White : CUSTOM_COLOR.Black,
+              fontSize: 15,
+              maxWidth: '80%'
+          }}>{props.content}</Text>
+
+          <Text style ={{
+              fontSize: 10,
+              alignSelf: 'flex-end',
+              marginLeft: 5,
+              color: props.isRight ? CUSTOM_COLOR.White : CUSTOM_COLOR.Black,
+              
+          }}>{props.time}</Text>
+
         </View>
-        
-        <Text>{props.content}</Text>
-      </View>
-      
-    </View>
+     </View>
   )
    
 };
