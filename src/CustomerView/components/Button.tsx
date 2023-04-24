@@ -9,12 +9,12 @@ const Button = (props: any) =>{
     <TouchableOpacity style ={{
         alignItems: 'center', 
         justifyContent: 'center', 
-        borderRadius: 20,
+        borderRadius: 25,
         backgroundColor: props.color,
         paddingHorizontal: 20,
         paddingVertical: 8,
         marginHorizontal: 10,
-        width: 150,
+        minWidth: 150,
         ...props.style
         
     }}
@@ -23,7 +23,8 @@ const Button = (props: any) =>{
 
         <Text style = {{
             color: CUSTOM_COLOR.White,
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            fontSize: 17
         }}>{props.title}</Text>
        
     </TouchableOpacity>

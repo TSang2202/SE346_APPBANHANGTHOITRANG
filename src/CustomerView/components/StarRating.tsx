@@ -7,6 +7,7 @@ import CUSTOM_COLOR from "../constants/colors";
 
 const StarRating = (props: any) =>{
 
+
     const star = []
 
     for (let x = 1; x <= props.nums; x++)
