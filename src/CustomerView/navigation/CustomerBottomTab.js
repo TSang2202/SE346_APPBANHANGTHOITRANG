@@ -156,7 +156,7 @@ function CustomerBottomTab() {
 const getTabBarVisibility = (route) =>{
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed'
 
-    if (routeName == 'HomeScreen'){
+    if (routeName == 'HomeScreen' || routeName == 'Feed'){
         return 'flex'
     } 
     return 'none'

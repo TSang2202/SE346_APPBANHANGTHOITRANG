@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView } from "react-native";
-import { IC_Back } from "../assets/icons";
+import { IC_Attachment, IC_Back, IC_Camera, IC_Emo } from "../assets/icons";
 import { IM_AnhGiay2 } from "../assets/images";
 import CUSTOM_COLOR from "../constants/colors";
 
@@ -56,6 +56,70 @@ function ChatScreen({navigation}) {
             }}>
 
             </ScrollView>
+
+            <View style ={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                
+                backgroundColor: CUSTOM_COLOR.Gallery
+
+            }}>
+
+                <View style = {{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: CUSTOM_COLOR.White,
+                    paddingHorizontal: '2%',
+                    borderRadius: 25,
+                    marginHorizontal: '3%',
+                    marginVertical: '2%',
+                    width: '80%'
+                }}>
+
+                    <Image
+                        style = {{
+                            width: 20,
+                            height: 20,
+                            marginHorizontal: '2%'
+                        }}
+                        source = {IC_Emo}
+                    />
+
+                    <TextInput
+                        placeholder= 'Hello, I have a problem'
+                        style ={{
+                            width: '70%'
+                        }}
+                    />
+
+                    <Image
+                        style = {{
+                            width: 10,
+                            height: 20,
+                            marginHorizontal: '2%'
+                        }}
+                        resizeMode = 'stretch'
+                        source = {IC_Attachment}
+                    />
+                    <Image
+                        style = {{
+                            width: 22,
+                            height: 20,
+                            marginLeft: '2%'
+                        }}
+                        source = {IC_Camera}
+                    />
+                </View>
+
+                <View style ={{
+                    height: 45,
+                    width: 45,
+                    borderRadius: 30,
+                    backgroundColor: CUSTOM_COLOR.ChathamsBlue
+                }}>
+                    
+                </View>
+            </View>
 
            
           

@@ -16,7 +16,8 @@ const CUSTOM_COLOR = {
   Sunshade: '#FF9B2F',
   Whisper: '#F5F6FA',
   Yellow: '#FFF500',
-  Gallery: '#F0F0F0'
+  Gallery: '#F0F0F0',
+  ChathamsBlue: '#143F6B'
 };
 
 export default CUSTOM_COLOR;
