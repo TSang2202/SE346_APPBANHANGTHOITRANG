@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { IC_Back, IC_Cancle, IC_Review, } from "../assets/icons";
+import { IC_Add, IC_Back, IC_Cancle, IC_Review, } from "../assets/icons";
 import { IM_AnhGiay1, IM_AnhGiay2 } from "../assets/images";
+import Button from "../components/Button";
 import Review from "../components/Review";
 import StarRating from "../components/StarRating";
 
@@ -63,6 +64,7 @@ const data = [
 function ReviewScreen({navigation}) {
 
     const [addReview, setAddReview] = useState(false)
+    
 
     return(
         <View style = {{
@@ -131,7 +133,9 @@ function ReviewScreen({navigation}) {
                         borderRadius: 20,
                         paddingHorizontal: 15,
                         paddingVertical: 8
-                    }}>
+                    }}
+                        onPress = {() => setAddReview(true)}
+                    >
                         <Image source={IC_Review}/>
                         <Text style ={{
                             fontSize: 15,
@@ -167,10 +171,12 @@ function ReviewScreen({navigation}) {
                 ))}
             </ScrollView>
 
+            {addReview ? 
+
             <View style ={{
                 position: 'absolute',
                 width: '80%',
-                height: '50%',
+                height: 350,
                 backgroundColor: CUSTOM_COLOR.White,
                 borderWidth: 1,
                 borderRadius: 20,
@@ -185,19 +191,118 @@ function ReviewScreen({navigation}) {
                     marginHorizontal: '3%',
                     marginTop: '2%'
                 }}>
-                    <Image source={IC_Cancle}
+                    <TouchableOpacity
+                        onPress={() => setAddReview(false)}
+                    >
+                        <Image source={IC_Cancle}
+                            style ={{
+                                width: 20,
+                                height: 20
+                            }}
+                        />
+
+                    </TouchableOpacity>
+                </View>
+
+                <View style ={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginHorizontal: '5%'
+                }}> 
+                    <Image source={IM_AnhGiay1}
+                        style = {{
+                            width: 45,
+                            height: 45,
+                            borderRadius: 30,
+        
+                        }}
+                    />
+                    <Text style= {{
+                        fontSize: 17,
+                        marginHorizontal: '3%',
+                        fontWeight: 'bold',
+                        color: CUSTOM_COLOR.Black
+                    }}>Sang Thach</Text>
+                </View>
+
+                <View style ={{
+                    ...styles.flexRow,
+                    marginHorizontal: '5%',
+                    marginVertical: '3%'
+                }}>
+                    <Text style ={{
+                        fontSize: 17,
+                        marginRight: '5%'
+                    }}>Rating</Text>
+                    <StarRating
+                        nums ={5}
+                        fill ={4}
+                    />
+                </View>
+
+                <View style = {{
+                    width: '90%',
+                    height: '30%',
+                    backgroundColor: CUSTOM_COLOR.Gallery,
+                    alignSelf: 'center',
+                    borderRadius: 20
+                }}>
+                    <TextInput
+                        placeholder= 'Write something...'
+                        multiline
+                        numberOfLines={1}
                         style ={{
-                            width: 20,
-                            height: 20
+                            paddingHorizontal: 10
+                        }}
+                        
+                    />
+                </View>
+
+                <View style = {{
+                    ...styles.flexRow,
+                    marginVertical: 10,
+                    marginHorizontal: 10
+                }}>
+                    <TouchableOpacity>
+                        <Image source={IC_Add}
+                            style = {{
+                                width: 45,
+                                height: 45,
+                                marginRight: 10 
+                            }}
+                        />
+
+                    </TouchableOpacity>
+
+                    <Text>Upload your image or video</Text>
+
+                </View>
+
+                <View style ={{
+                    ...styles.flexRow,
+                    justifyContent: 'center'
+                }}> 
+                    <Button
+                        title = 'Add Review'
+                        color = {CUSTOM_COLOR.FlushOrange}
+                        style = {{
+                            width: '40%'
                         }}
                     />
                 </View>
 
-            </View>
+            </View> : null }
 
         </View>
         
     )
 }
+
+const styles = StyleSheet.create({
+    flexRow: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    }
+})
 
 export default ReviewScreen
