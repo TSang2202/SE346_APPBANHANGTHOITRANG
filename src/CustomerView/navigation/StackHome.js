@@ -6,10 +6,11 @@ import DetailProduct from '../screens/DetailProduct';
 import HomeScreenCustomer from '../screens/HomeScreenCustomer';
 import PaymentCardScreen from '../screens/PaymentCardScreen';
 import PaymentMethodScreen from '../screens/PaymentMethodScreen';
-import Review from '../screens/Review';
+
 import SearchingScreen from '../screens/SearchingScreen';
 import ShoppingCartScreen from '../screens/ShoppingCartScreen';
 import TrendingScreen from '../screens/TrendingScreen';
+import ReviewScreen from '../screens/ReviewScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -35,7 +36,7 @@ function StackHome()
             <Stack.Screen name= 'PaymentMethod' component={PaymentMethodScreen} />
             <Stack.Screen name= 'PaymentCard' component={PaymentCardScreen} />
             <Stack.Screen name= 'Chat' component={ChatScreen} />
-            <Stack.Screen name= 'Review' component={Review} />
+            <Stack.Screen name= 'Review' component={ReviewScreen} />
 
         </Stack.Navigator>
 
