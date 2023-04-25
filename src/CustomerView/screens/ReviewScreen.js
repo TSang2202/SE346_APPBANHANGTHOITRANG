@@ -1,14 +1,69 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { IC_Back, IC_Review, } from "../assets/icons";
+import { IC_Back, IC_Cancle, IC_Review, } from "../assets/icons";
+import { IM_AnhGiay1, IM_AnhGiay2 } from "../assets/images";
+import Review from "../components/Review";
 import StarRating from "../components/StarRating";
 
 
 import CUSTOM_COLOR from "../constants/colors";
 
+const data = [
+    {
+        id: '1',
+        avatar: IM_AnhGiay1,
+        name: 'Thạch Sang',
+        time: '10 April, 2023',
+        rating: 3,
+        content: 'Sản phẩm rất tuyệt vời, tối sẽ tiếp tục ủng hộ của hàng của bạn. Thả 1 ngàn trái tim ạ!',
+        image: IM_AnhGiay2
+    },
+    {
+        id: '2',
+        avatar: IM_AnhGiay1,
+        name: 'Thạch Sang',
+        time: '10 April, 2023',
+        rating: 4,
+        content: 'Sản phẩm rất tuyệt vời, tối sẽ tiếp tục ủng hộ của hàng của bạn. Thả 1 ngàn trái tim ạ!',
+        image: null
+    },
+    {
+        id: '3',
+        avatar: IM_AnhGiay1,
+        name: 'Thạch Sang',
+        time: '10 April, 2023',
+        rating: 1,
+        content: 'Sản phẩm rất tuyệt vời, tối sẽ tiếp tục ủng hộ của hàng của bạn. Thả 1 ngàn trái tim ạ!',
+        image: IM_AnhGiay2
+    },
+    {
+        id: '4',
+        avatar: IM_AnhGiay1,
+        name: 'Thạch Sang',
+        time: '10 April, 2023',
+        rating: 5,
+        content: 'Sản phẩm rất tuyệt vời, tối sẽ tiếp tục ủng hộ của hàng của bạn. Thả 1 ngàn trái tim ạ!',
+        image: IM_AnhGiay2
+    },
+    {
+        id: '5',
+        avatar: IM_AnhGiay1,
+        name: 'Thạch Sang',
+        time: '10 April, 2023',
+        rating: 2,
+        content: 'Sản phẩm rất tuyệt vời, tối sẽ tiếp tục ủng hộ của hàng của bạn. Thả 1 ngàn trái tim ạ!',
+        image: IM_AnhGiay2
+    },
+
+
+]
+
 
 function ReviewScreen({navigation}) {
+
+    const [addReview, setAddReview] = useState(false)
+
     return(
         <View style = {{
             flex: 1,
@@ -91,11 +146,57 @@ function ReviewScreen({navigation}) {
             </View>
 
             <ScrollView>
+                {data.map((review, index) =>(
 
-                
+                    <View style = {{
+                        marginVertical: '3%',
+                        borderBottomWidth: 1,
+                        borderBottomColor: CUSTOM_COLOR.Alto,
+                        paddingBottom: '2%'
+                    }}>
+                        <Review
+                            avatar = {review.avatar}
+                            name = {review.name}
+                            time = {review.time}
+                            rating = {review.rating}
+                            content = {review.content}
+                            image = {review.image}
+                        />
+
+                    </View>
+                ))}
             </ScrollView>
 
+            <View style ={{
+                position: 'absolute',
+                width: '80%',
+                height: '50%',
+                backgroundColor: CUSTOM_COLOR.White,
+                borderWidth: 1,
+                borderRadius: 20,
+                alignSelf: 'center',
+                top: '25%'
+            }}>
+
+                <View style ={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    marginHorizontal: '3%',
+                    marginTop: '2%'
+                }}>
+                    <Image source={IC_Cancle}
+                        style ={{
+                            width: 20,
+                            height: 20
+                        }}
+                    />
+                </View>
+
+            </View>
+
         </View>
+        
     )
 }
 
