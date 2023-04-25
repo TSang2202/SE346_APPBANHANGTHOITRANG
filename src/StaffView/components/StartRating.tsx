@@ -5,7 +5,7 @@ import { StartCorner, StartFull } from "../assets/icons";
 import CUSTOM_COLOR from "../constants/colors";
 
 
-const StarRating = (props: any) =>{
+const StartRating = (props: any) =>{
 
 
     const star = []
@@ -39,4 +39,4 @@ const StarRating = (props: any) =>{
    
 };
 
-export default StarRating
+export default StartRating
