@@ -233,7 +233,8 @@ function CheckoutScreen({navigation}) {
 
             <View style = {{
               alignItems: 'center',
-              marginVertical: 10
+              marginVertical: 10,
+              marginVertical: '10%'
             }}>
               <Button 
                 color = {CUSTOM_COLOR.FlushOrange}
