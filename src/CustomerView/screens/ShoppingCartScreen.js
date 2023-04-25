@@ -158,7 +158,8 @@ function ShoppingCartScreen({navigation}) {
             </View>
              
              <View style = {{
-                alignItems: 'center'
+                alignItems: 'center',
+                marginVertical: '5%'
              }}>
                 <Button
                     title = 'CHECK OUT'

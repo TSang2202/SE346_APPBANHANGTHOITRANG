@@ -97,7 +97,9 @@ function TrendingScreen({navigation}) {
                 }}>Trending now</Text>
             </View>
 
-            <View>
+            <View style ={{
+                height: '80%'
+            }}>
                 <FlatList
                     data={datas}
                     renderItem = {({item}) => {
@@ -119,9 +121,7 @@ function TrendingScreen({navigation}) {
 
             </View>
                 
-            <Text style = {{height: 300}}>Sang
-
-            </Text>
+           
 
         </View>
 
