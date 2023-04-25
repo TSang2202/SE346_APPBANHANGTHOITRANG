@@ -8,6 +8,7 @@ import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
 import { IC_Back, IC_Cancle, IC_Down, IC_Heart, IC_ShoppingCart, IC_StartCorner, IC_StartFull } from "../assets/icons";
 import { IM_MauAo } from "../assets/images";
 import Button from "../components/Button";
+import StarRating from "../components/StarRating";
 import CUSTOM_COLOR from "../constants/colors";
 
 
@@ -109,10 +110,16 @@ function DetailProduct({navigation, route}) {
           <View style = {{
             flexDirection: 'row', 
             marginVertical: 20,
-            marginHorizontal: 40
+            marginHorizontal: 40,
+            alignItems: 'center'
           }}>
-                <Text>Star Rating</Text>
-                <TouchableOpacity>
+                <StarRating
+                    nums = {5}
+                    fill = {2}
+                />
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Review')}
+                >
                     <Text style = {{
                         marginHorizontal: 40,
                         fontStyle: 'italic'
@@ -125,7 +132,8 @@ function DetailProduct({navigation, route}) {
         <View style ={{
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-evenly'
+            justifyContent: 'space-evenly',
+            marginVertical: '1%'
 
         }}>
             <Text style = {{
@@ -138,36 +146,27 @@ function DetailProduct({navigation, route}) {
                
             }}>
             <View style = {{
-                height:20,
-                width: 20,
-                borderRadius: 20,
-                borderWidth: 1,
+                ...styles.colorCicle,
                 backgroundColor: CUSTOM_COLOR.ChathamsBlue,
-                marginHorizontal: 5
+                
 
             }}>
 
             </View>
 
             <View style = {{
-                height:20,
-                width: 20,
-                borderRadius: 20,
-                borderWidth: 1,
+                ...styles.colorCicle,
                 backgroundColor: CUSTOM_COLOR.Carnation,
-                marginHorizontal: 5
+                
 
             }}>
 
             </View>
 
             <View style = {{
-                height:20,
-                width: 20,
-                borderRadius: 20,
-                borderWidth: 1,
+                ...styles.colorCicle,
                 backgroundColor: CUSTOM_COLOR.Mercury,
-                marginHorizontal: 5
+               
 
             }}>
 
@@ -219,7 +218,8 @@ function DetailProduct({navigation, route}) {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-evenly',
-            marginTop: 10
+            marginTop: 10,
+            marginVertical: '1%'
         }}>
             <Text style ={{
                 ...styles.textLarge,
@@ -312,12 +312,15 @@ function DetailProduct({navigation, route}) {
         </View>
 
         <View style = {{
-            flexDirection: 'row', justifyContent: 'center'
+            flexDirection: 'row', justifyContent: 'center',
+            marginVertical: '3%'
         }}>
             <Button
                 color = {CUSTOM_COLOR.Carnation}
                 title = 'ADD TO CARD'
-               
+                style = {{
+                    paddingVertical: '3%'
+                }}
             />
 
             <Button
@@ -509,7 +512,7 @@ function DetailProduct({navigation, route}) {
 const styles = StyleSheet.create({
   container:{
     flex: 1,
-   
+    backgroundColor: CUSTOM_COLOR.White
   },
   textLarge: {
     fontSize: 20,
