@@ -45,26 +45,6 @@ function ViewShop2({navigation, route}) {
                 <Text style ={{height: 40, padding: 7, fontSize: 18, fontWeight: 'bold', color: CUSTOM_COLOR.Black}}>Product</Text>
             </View>
 
-                
-            <View style ={{flexDirection: "row", alignItems: 'center',}} >
-                <Image
-                    source={IC_Heart}
-                    style = {{
-                        margin: 10,
-
-                    }}
-                    resizeMode = 'contain'
-                />    
-
-                <Image
-                    source={IC_ShoppingCart}
-                    style = {{  
-                        margin: 10,
-                        
-                    }}
-                    resizeMode = 'contain'
-                />  
-            </View>
 
                
           </View>
@@ -104,13 +84,14 @@ function ViewShop2({navigation, route}) {
                     fontWeight: 'bold'
                 }}
             >200.000 đ</Text>
-
         </View>
-          
+        <View>
+            <Text style = {{marginLeft: 60, marginTop: 5}}>4.37+</Text>
+        </View>
           <View style = {{
             flexDirection: 'row', 
-            marginVertical: 20,
-            marginHorizontal: 40,
+            marginVertical: 5,
+            marginHorizontal: 35,
             alignItems: 'center'
           }}>
                 <StarRating
@@ -122,7 +103,8 @@ function ViewShop2({navigation, route}) {
                 >
                     <Text style = {{
                         marginHorizontal: 40,
-                        fontStyle: 'italic'
+                        fontStyle: 'italic',
+                        textDecorationLine: 'underline'
                     }}>
                         See reviews
                     </Text>
@@ -285,7 +267,8 @@ function ViewShop2({navigation, route}) {
                 onPress={() => setChooseStyle(true)}
             >
                 <Text style = {{
-                    fontStyle: 'italic'
+                    fontStyle: 'italic',
+                    textDecorationLine: 'underline'
                 }}>How can I choose my size?</Text>
             </TouchableOpacity>
         </View>
@@ -317,194 +300,15 @@ function ViewShop2({navigation, route}) {
         }}>
             <ButtonDetail
                 color = {CUSTOM_COLOR.Carnation}
-                title = 'ADD TO CARD'
+                title = 'EDIT NOW'
                 style = {{
                     paddingVertical: '3%'
                 }}
             />
 
-            <ButtonDetail
-                color = {CUSTOM_COLOR.Sunshade}
-                title = 'BUY NOW'
-            />
         </View>
 
-      
-
-        {chooseStyle ? 
-
-        <View style = {{
-            position: 'absolute',
-            width: '80%',
-            height: '40%',
-            backgroundColor: CUSTOM_COLOR.White,
-            alignSelf: 'center',
-            top: '30%',
-            borderRadius: 30,
-            borderWidth: 1
-        }}>
-
-            <View style ={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginHorizontal: '5%',
-                marginVertical: '2%'
-            }}>
-                <Text style ={{
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    color: CUSTOM_COLOR.Black
-                }}>Choose your style</Text>
-
-                <TouchableOpacity 
-                    onPress={() => setChooseStyle(false)}
-                >
-                    <Image style ={{
-                        width: 15,
-                        height: 15
-                    }}
-                        source = {IC_Cancle}
-                    />
-
-                </TouchableOpacity>
-            </View>
-
-            <View style ={{
-                ...styles.flexRow,
-                marginHorizontal: '10%',
-                marginVertical: '3%'
-            }}>
-                <Text style = {{...styles.textLarge, fontWeight: 'normal'}}>Color</Text>
-
-                <View>
-
-                    <View style ={{
-                        ...styles.flexRow,
-                        justifyContent: 'center',
-                        marginVertical: '5%'
-                    }}>
-                        <View style ={{
-                            ...styles.flexRow,
-                            marginHorizontal: '5%'
-                
-                        }}>
-                            <View style = {{                   
-                                ...styles.colorCicle,
-                                backgroundColor: CUSTOM_COLOR.White, 
-                            }}>
-
-                            </View>
-                            <Text style = {{...styles.textSmall}}>White</Text>
-
-                        </View>
-
-                        <View style ={{
-                            ...styles.flexRow,          
-                        }}>
-                            <View style = {{
-                                ...styles.colorCicle,
-                                backgroundColor: CUSTOM_COLOR.Black,                           
-                            }}>
-
-                            </View>
-                            <Text style = {{...styles.textSmall}}>Black</Text>
-
-                        </View>
-
-                    </View>
-
-                    <View style ={{
-                        ...styles.flexRow,
-                        justifyContent: 'center'
-                    }}>
-                        <View style ={{
-                            ...styles.flexRow,
-                            marginHorizontal: '5%'
-                
-                        }}>
-                            <View style = {{                   
-                                ...styles.colorCicle,
-                                backgroundColor: CUSTOM_COLOR.Carnation, 
-                            }}>
-
-                            </View>
-                            <Text style = {{...styles.textSmall}}>Red</Text>
-
-                        </View>
-
-                        <View style ={{
-                            ...styles.flexRow,          
-                        }}>
-                            <View style = {{
-                                ...styles.colorCicle,
-                                backgroundColor: CUSTOM_COLOR.Yellow,                           
-                            }}>
-
-                            </View>
-                            <Text style = {{...styles.textSmall}}>Yellow</Text>
-
-                        </View>
-
-                    </View>
-                </View>
-
-
-            </View>
-
-            <View style = {{...styles.flexRow}}>
-                <Text style = {{
-                    ...styles.textLarge, 
-                    fontWeight: 'normal', 
-                    marginHorizontal: '10%',
-                    marginVertical: '3%'
-                    }}>Size</Text>
-
-                <View style = {{...styles.flexRow}}>
-                    <TouchableWithoutFeedback style = {{
-                        ...styles.sizeCircle
-                    }}>
-                        <Text>S</Text>
-                    </TouchableWithoutFeedback>
-
-                    <TouchableWithoutFeedback style = {{
-                        ...styles.sizeCircle
-                    }}>
-                        <Text>M</Text>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback style = {{
-                        ...styles.sizeCircle
-                    }}>
-                        <Text>L</Text>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback style = {{
-                        ...styles.sizeCircle
-                    }}>
-                        <Text>XL</Text>
-                    </TouchableWithoutFeedback>
-                    
-
-                </View>
-
-            </View>
-
-            <View style ={{
-                ...styles.flexRow,
-                justifyContent: 'center',
-                marginVertical: '6%'
-            }}>
-                <Button
-                    title = 'DONE'
-                    color = {CUSTOM_COLOR.Carnation}
-                />
-
-            </View>
-
-        </View> : null}
-
       </View>
-
-      
       
     )
   }

@@ -12,7 +12,4 @@ export {default as back} from '../icons/OverView/BackTo.png'
 export {default as backto} from '../icons/OverView/BackNext.png'
 export {default as StartCorner} from '../icons/OverView/starcorner.png'
 export {default as StartFull} from '../icons/OverView/starfull.png'
-export {default as IC_ShoppingCart} from "../icons/OverView/BackTo.png"
-export {default as IC_Down} from '../icons/OverView/BackTo.png'
-export {default as IC_Heart} from '../icons/OverView/starfull.png'
-export {default as IC_Cancle} from '../icons/OverView/starfull.png'
+export {default as IC_Down} from '../icons/OverView/down.png'
