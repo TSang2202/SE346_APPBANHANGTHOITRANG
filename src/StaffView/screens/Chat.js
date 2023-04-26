@@ -4,6 +4,7 @@ import Search from '../components/Search'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Acount } from './OverView'
 import CUSTOM_COLOR from '../constants/colors'
+import UserChat from '../components/UserChat'
 function Chat({navigation}){
     return (
       <SafeAreaView style = {{ backgroundColor: CUSTOM_COLOR.White}}>
@@ -17,6 +18,36 @@ function Chat({navigation}){
       <Search
         placeholder = 'Search'
       ></Search>
+      <View>
+        <UserChat
+          onPress = {()=> navigation.navigate('DeTailsChat')}
+          source={{uri: Acount.avartar}}
+          source1={{uri: Acount.avartar}}
+          name='NGUYEN TRUNG TINH'
+          message='You:What are you doing? - 12:40PM'
+        ></UserChat>
+        <UserChat
+          onPress = {()=> navigation.navigate('DeTailsChat')}
+          source={{uri: Acount.avartar}}
+          source1={{uri: Acount.avartar}}
+          name='NGUYEN TRUNG TINH'
+          message='You:What are you doing? - 12:40PM'
+        ></UserChat>
+        <UserChat
+          onPress = {()=> navigation.navigate('DeTailsChat')}
+          source={{uri: Acount.avartar}}
+          source1={{uri: Acount.avartar}}
+          name='NGUYEN TRUNG TINH'
+          message='You:What are you doing? - 12:40PM'
+        ></UserChat>
+        <UserChat
+          onPress = {()=> navigation.navigate('DeTailsChat')}
+          source={{uri: Acount.avartar}}
+          source1={{uri: Acount.avartar}}
+          name='NGUYEN TRUNG TINH'
+          message='You:What are you doing? - 12:40PM'
+        ></UserChat>
+      </View>
       </SafeAreaView>
     )
   }

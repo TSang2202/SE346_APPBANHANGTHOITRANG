@@ -13,7 +13,7 @@ const Search = (props: any) =>{
       padding: 10,
       borderRadius: 20,
       height: 40,
-      width: 320,
+      width: 370,
       backgroundColor: CUSTOM_COLOR.White,
       margin: 10
         }}>
