@@ -15,7 +15,8 @@ const Search = (props: any) =>{
       height: 40,
       width: 370,
       backgroundColor: CUSTOM_COLOR.White,
-      margin: 10
+      margin: 10,
+      ...props.style
         }}>
       <Image
         style = {{
