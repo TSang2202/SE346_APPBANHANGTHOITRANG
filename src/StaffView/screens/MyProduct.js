@@ -8,8 +8,8 @@ import CUSTOM_COLOR from '../constants/colors'
 import ButtonDetail from '../components/ButtonDetail'
 import Status from '../components/Status'
 import { IM_MauAo } from '../assets/images'
-import MyProduct1 from '../components/MyProduct'
-const Data = [
+import MyProduct1 from '../components/MyProductOne'
+export const Data = [
     {
     id: '1',
     name: 'T-Shirt Back Blank - VD86547 - New Elevent',
@@ -32,6 +32,29 @@ const Data = [
         },
 
 ]
+const DataOut = [
+    {
+    id: '1',
+    name: 'T-Shirt Back Blank - VD86547 - New Elevent',
+    price: '139.999đ',
+    ware: '0',
+    sold: '100',
+    love: '200',
+    view: '1000',
+    pic : IM_MauAo,
+    },
+    {
+        id: '2',
+        name: 'T-Shirt Back Blank - VD86547 - New Elevent',
+        price: '139.999đ',
+        ware: '0',
+        sold: '100',
+        love: '200',
+        view: '1000',
+        pic : IM_MauAo,
+        },
+
+]
 export default function MyProduct({navigation}) {
     const [inventory, setinventory] = useState(true)
     const [Out, setOut] = useState(false)
@@ -42,11 +65,11 @@ export default function MyProduct({navigation}) {
     <SafeAreaView>
     <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 15}}>
         <BackTo
-            //onPress = {navigation.goBack()}
+            onPress = {()=>navigation.navigate('OverView')}
             Info = 'My Product'
         ></BackTo>
         <TouchableOpacity 
-            //onPress={navigation.navigate('Search')}
+            onPress={()=>navigation.navigate('Search')}
         >
         <Image
             source={SearchIcon}
@@ -88,6 +111,7 @@ export default function MyProduct({navigation}) {
                             soluonglove = {item.love}
                             soluongview = {item.view}
                             soluongban = {item.sold}
+                            edit = {()=>navigation.navigate('EditProduct')}
                         ></MyProduct1>
                     )
                 }
@@ -101,7 +125,7 @@ export default function MyProduct({navigation}) {
             style = {{width: 250}}
             color = {CUSTOM_COLOR.DarkOrange}
             title = 'ADD A NEW PRODUCT'
-            //onPress = {navigation.navigate('AddProduct')}
+            onPress = {()=>navigation.navigate('AddProduct')}
         ></ButtonDetail>
         </View>
     </View>
@@ -112,11 +136,11 @@ export default function MyProduct({navigation}) {
         <SafeAreaView>
         <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 15}}>
         <BackTo
-            //onPress = {navigation.goBack()}
+            onPress = {() => navigation.navigate('OverView')}
             Info = 'My Product'
         ></BackTo>
         <TouchableOpacity 
-            //onPress={navigation.navigate('Search')}
+            onPress={()=>navigation.navigate('Search')}
         >
         <Image
             source={SearchIcon}
@@ -143,10 +167,39 @@ export default function MyProduct({navigation}) {
             title = 'On Wait'>
         </Status>
         </View>
-        <ScrollView style = {{flexDirection: 'row', width: '100%', marginTop: 15}}> 
+         <View style = {{flexDirection: 'row', width: '100%', height: 450, marginTop: 10}}> 
         <View>
+            <FlatList
+                horizontal='true'
+                data={DataOut}
+                renderItem={({item}) =>{
+                    return(
+                        <MyProduct1
+                            source = {item.pic}
+                            title = {item.name}
+                            price = {item.price}
+                            soluongtonkho = {item.ware}
+                            soluonglove = {item.love}
+                            soluongview = {item.view}
+                            soluongban = {item.sold}
+                            edit = {()=>navigation.navigate('EditProduct')}
+                        ></MyProduct1>
+                    )
+                }
+            }
+            ></FlatList>
         </View>
-        </ScrollView>
+    </View>
+    <View style = {{width: '100%', marginTop: 15 }}>
+        <View style = {{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+        <ButtonDetail
+            style = {{width: 250}}
+            color = {CUSTOM_COLOR.DarkOrange}
+            title = 'ADD A NEW PRODUCT'
+            onPress = {()=>navigation.navigate('AddProduct')}
+        ></ButtonDetail>
+        </View>
+    </View>
         </SafeAreaView>
         )
      }
@@ -155,11 +208,11 @@ export default function MyProduct({navigation}) {
             <SafeAreaView>
             <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 15}}>
             <BackTo
-                //onPress = {navigation.goBack()}
+                onPress = {()=> navigation.navigate('OverView')}
                 Info = 'My Product'
             ></BackTo>
             <TouchableOpacity 
-                //onPress={navigation.navigate('Search')}
+                onPress={()=> navigation.navigate('Search')}
             >
             <Image
                 source={SearchIcon}
