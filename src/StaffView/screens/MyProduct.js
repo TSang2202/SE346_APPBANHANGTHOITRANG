@@ -3,10 +3,35 @@ import React, {useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import BackTo from '../components/BackTo'
 import { SearchIcon } from '../../CustomerView/assets/icons'
-import { ScrollView } from 'react-native-gesture-handler'
+import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import CUSTOM_COLOR from '../constants/colors'
 import ButtonDetail from '../components/ButtonDetail'
 import Status from '../components/Status'
+import { IM_MauAo } from '../assets/images'
+import MyProduct1 from '../components/MyProduct'
+const Data = [
+    {
+    id: '1',
+    name: 'T-Shirt Back Blank - VD86547 - New Elevent',
+    price: '139.999đ',
+    ware: '100',
+    sold: '100',
+    love: '200',
+    view: '1000',
+    pic : IM_MauAo,
+    },
+    {
+        id: '2',
+        name: 'T-Shirt Back Blank - VD86547 - New Elevent',
+        price: '139.999đ',
+        ware: '100',
+        sold: '100',
+        love: '200',
+        view: '1000',
+        pic : IM_MauAo,
+        },
+
+]
 export default function MyProduct({navigation}) {
     const [inventory, setinventory] = useState(true)
     const [Out, setOut] = useState(false)
@@ -48,17 +73,38 @@ export default function MyProduct({navigation}) {
             title = 'On Wait'>
         </Status>
     </View>
-    <ScrollView style = {{flexDirection: 'row', width: '100%', marginTop: 15}}> 
+    <View style = {{flexDirection: 'row', width: '100%', height: 450, marginTop: 10}}> 
         <View>
+            <FlatList
+                horizontal='true'
+                data={Data}
+                renderItem={({item}) =>{
+                    return(
+                        <MyProduct1
+                            source = {item.pic}
+                            title = {item.name}
+                            price = {item.price}
+                            soluongtonkho = {item.ware}
+                            soluonglove = {item.love}
+                            soluongview = {item.view}
+                            soluongban = {item.sold}
+                        ></MyProduct1>
+                    )
+                }
+            }
+            ></FlatList>
         </View>
-    <View style = {{justifyContent: 'center',flexDirection: 'row', width: '100%'}}>
+    </View>
+    <View style = {{width: '100%', marginTop: 15 }}>
+        <View style = {{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
         <ButtonDetail
-            color = {CUSTOM_COLOR.Carnation}
+            style = {{width: 250}}
+            color = {CUSTOM_COLOR.DarkOrange}
             title = 'ADD A NEW PRODUCT'
             //onPress = {navigation.navigate('AddProduct')}
         ></ButtonDetail>
+        </View>
     </View>
-    </ScrollView>
     </SafeAreaView>
      )}
      if(Out == true){
