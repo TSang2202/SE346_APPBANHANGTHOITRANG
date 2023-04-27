@@ -12,6 +12,8 @@ import Report from '../screens/Report.js'
 import User from '../screens/User.js'
 import Promotion from '../screens/Promotion.js';
 import DeTailsChat from '../screens/DeTailsChat.js';
+import MyProduct from '../screens/MyProduct.js';
+import Search from '../screens/Search.js';
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
@@ -30,6 +32,8 @@ function StackNavigator() {
       <Stack.Screen name='Report' component={Report}/>
       <Stack.Screen name='Promotion' component={Promotion}/>
       <Stack.Screen name='DeTailsChat' component={DeTailsChat}/>
+      <Stack.Screen name='MyProduct' component={MyProduct}/>
+      <Stack.Screen name='Search' component={Search}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
