@@ -4,7 +4,7 @@ import { backto } from '../assets/icons'
 import CUSTOM_COLOR from '../constants/colors'
 const BackTo = (props: any) => {
   return (
-    <View style = {{flexDirection: 'row', marginTop: 5}}>
+    <View style = {{flexDirection: 'row', marginTop: 5, ...props.style}}>
     <TouchableOpacity 
             onPress={props.onPress}
             style = {{width: 17, height: 17, marginLeft: 18, marginTop: 5}}>
