@@ -120,8 +120,8 @@ function OverView ({navigation}) {
       <View style = {{flexDirection: 'row',width: '100%', height: '30%', marginTop: '7%'}}>
       <Button 
         source={product}
-        onPress = {()=> navigation.navigate('ViewShop1')}
-      ></Button>
+        onPress = {()=> navigation.navigate('MyProduct')}
+        />
       <Button 
         source={order}
         onPress = {()=> navigation.navigate('Order')}
