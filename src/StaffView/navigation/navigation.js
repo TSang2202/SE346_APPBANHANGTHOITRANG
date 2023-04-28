@@ -16,6 +16,7 @@ import MyProduct from '../screens/MyProduct.js';
 import SearchSrc from '../screens/Search.js';
 import EditProduct from '../screens/EditProduct.js';
 import AddProduct from '../screens/AddProduct.js';
+import DeTailDelivery from '../screens/DeTailDelivery.js';
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
@@ -38,6 +39,7 @@ function StackNavigator() {
       <Stack.Screen name='Search' component={SearchSrc}/>
       <Stack.Screen name='EditProduct' component={EditProduct}/>
       <Stack.Screen name='AddProduct' component={AddProduct}/>
+      <Stack.Screen name='DeTailsDelivery' component={DeTailDelivery}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
