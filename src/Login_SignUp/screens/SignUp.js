@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, View, ImageBackground} from 'react-native';
+import {StyleSheet, SafeAreaView, View, Text, ImageBackground, TouchableOpacity} from 'react-native';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';
@@ -8,6 +8,8 @@ import { IMG_Rectangle182 } from '../assets/images/index.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
 import HederContent from '../components/Header/HederContent.js';
 import CheckBox from '@react-native-community/checkbox';
+import FONT_FAMILY from '../constants/fonts.js';
+import CUSTOM_COLOR from '../constants/colors.js';
 
 const SignUp = props => {
     const {navigation} = props;
@@ -35,7 +37,7 @@ const SignUp = props => {
 
                     <View style={{flex: 1}}>
                         <TextInputCard
-                            title="Phone number *"
+                            title="Phone number*"
                             txtInput="03333333333" />
                     </View>
 
@@ -47,13 +49,13 @@ const SignUp = props => {
 
                     <View style={{flex: 1}}>
                         <PasswordCard
-                            title="Password"
+                            title="Password*"
                             txtInput="********" />
                     </View>
 
                     <View style={{flex: 1}}>
                         <PasswordCard
-                            title="Confirm Password"
+                            title="Confirm Password*"
                             txtInput="********" />
                     </View>
                 </View>
@@ -71,7 +73,11 @@ const SignUp = props => {
                     </View>
 
                     <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
-                        <HederContent content="Policy"/>
+                        <TouchableOpacity  onPress={() => navigation.navigate('Policy')}>
+                            <Text style={styles.policyStyles}>
+                                Policy
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -99,12 +105,12 @@ unitContainer: {
 },
 topContainer: {
     height: '7%',
-    top: '1%',
+    top: '-1%',
     left: '3%',
 },
 bodyContainer: {
     height: '72%',
-    top: '1%',
+    top: '0%',
 },
 checkContainer: {
     height: '4%',
@@ -123,6 +129,12 @@ containerBot: {
 button: {
     width: '80%',
     height: '100%',
+},
+policyStyles: {
+    fontSize: 15,
+    fontFamily: FONT_FAMILY.Light,
+    color: CUSTOM_COLOR.Black,
+    fontWeight: 'bold',
 },
 });
 export default SignUp;
