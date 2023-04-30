@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, Keyboard } from "react-native";
 import { IC_Attachment, IC_Back, IC_Camera, IC_Emo } from "../assets/icons";
 import { IM_AnhGiay2 } from "../assets/images";
 import Message from "../components/Message";
@@ -124,8 +124,9 @@ function ChatScreen({navigation}) {
             <ScrollView style ={{
                 backgroundColor: CUSTOM_COLOR.Gallery
             }}>
-                {data.map((message, index) =>(
+                {data.map((message, index) =>( 
                     <Message
+                        key = {message.id}
                         content = {message.content}
                         time = {message.time}
                         isRight = {message.isRight}
