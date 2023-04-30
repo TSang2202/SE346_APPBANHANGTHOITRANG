@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, View, Text} from 'react-native';
+import {StyleSheet, SafeAreaView, View, Text, TouchableOpacity} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
@@ -26,13 +26,15 @@ const ForgotPassword = props => {
             </View>
 
             <View style={[styles.botContainer, styles.unitContainer]}>
-                <View style={{flex: 1, alignItems: 'center'}}>
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
                     <HederContent content="I lost my phone and I cant receive the code"></HederContent>
-                    <Text style={styles.italicText}>
-                        Help center
-                    </Text>                   
+                    <TouchableOpacity>
+                        <Text style={styles.italicText}>
+                            Help center
+                        </Text>                   
+                    </TouchableOpacity>
                 </View>
-                <View style={{flex: 1}}>
+                <View style={{flex: 1, alignItems: 'center'}}>
                     <CustomButton
                         type="primary"
                         text="Continue"
@@ -62,8 +64,8 @@ centerContainer: {
     top: '7%',
 },
 botContainer: {
-    height: '15%',
-    bottom: '-36%',
+    height: '17%',
+    bottom: '-30%',
 },
 italicText: {
     fontFamily: FONT_FAMILY.MediumItalic, 

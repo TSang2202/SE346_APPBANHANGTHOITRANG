@@ -12,12 +12,13 @@ import SmartOTP from '../screens/SmartOTP.js';
 import WellcomeUser1 from '../screens/WellcomeUser1.js';
 import WellcomeUser2 from '../screens/WellcomeUser2.js';
 import WellcomeUser3 from '../screens/WellcomeUser3.js';
+import Policy from '../screens/Policy.js';
 
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="SignUp"
+      initialRouteName="Intro"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Congratulation" component={Congratulation} />
       <Stack.Screen name="Done" component={Done} />
@@ -30,6 +31,7 @@ function StackNavigator() {
       <Stack.Screen name="WellcomeUser1" component={WellcomeUser1} />
       <Stack.Screen name="WellcomeUser2" component={WellcomeUser2} />
       <Stack.Screen name="WellcomeUser3" component={WellcomeUser3} />
+      <Stack.Screen name="Policy" component={Policy} />
     </Stack.Navigator>
   );
 }

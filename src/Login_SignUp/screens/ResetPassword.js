@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, View, Text} from 'react-native';
+import {StyleSheet, SafeAreaView, View, Text, TouchableOpacity} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
@@ -35,17 +35,19 @@ const ResetPassword = props => {
             </View>
 
             <View style={[styles.botContainer, styles.unitContainer]}>
-                <View style={{flex: 1, alignItems: 'center'}}>
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
                     <HederContent content="I lost my phone and I cant receive the code"></HederContent>
-                    <Text style={styles.italicText}>
-                        Help center
-                    </Text>                   
+                    <TouchableOpacity>
+                        <Text style={styles.italicText}>
+                            Help center
+                        </Text>                   
+                    </TouchableOpacity>
                 </View>
-                <View style={{flex: 1}}>
+                <View style={{flex: 1, alignItems: 'center'}}>
                     <CustomButton
                         type="primary"
                         text="Continue"
-                        onPress={() => navigation.navigate('SignIn')}
+                        onPress={() => navigation.navigate('SmartOTP')}
                     />                
                 </View>
             </View>
@@ -71,14 +73,14 @@ centerContainer: {
     top: '7%',
 },
 botContainer: {
-    height: '15%',
-    bottom: '-22%',
+    height: '17%',
+    bottom: '-20%',
 },
 italicText: {
     fontFamily: FONT_FAMILY.MediumItalic, 
     fontSize: 15, 
     color: CUSTOM_COLOR.Black, 
-    fontStyle: 'italic'
+    fontStyle: 'italic',
 },
 });
 export default ResetPassword;

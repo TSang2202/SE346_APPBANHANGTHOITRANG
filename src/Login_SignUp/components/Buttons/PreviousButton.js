@@ -24,11 +24,11 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%',
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: CUSTOM_COLOR.Black,
+    // borderRadius: 50,
+    // borderWidth: 1,
+    // borderColor: CUSTOM_COLOR.Black,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: CUSTOM_COLOR.Mercury,
+    // backgroundColor: CUSTOM_COLOR.Mercury,
   },
 });

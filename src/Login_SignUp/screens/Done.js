@@ -57,13 +57,13 @@ textView: {
     justifyContent: 'center',
 },
 topText: {
-    fontFamily: FONT_FAMILY.Bold,
+    fontFamily: FONT_FAMILY.Semibold,
     fontSize: 30,
-    fontWeight: 700,
     color: CUSTOM_COLOR.Black,
+    fontWeight: 'bold',
 },
 botText: {
-    fontFamily: FONT_FAMILY.Bold,
+    fontFamily: FONT_FAMILY.Semibold,
     fontSize: 15,
     color: CUSTOM_COLOR.Black,
 },
