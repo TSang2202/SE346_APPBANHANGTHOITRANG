@@ -1,11 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-
-export default function DeTailsChat() {
+import ChatScreen from '../../CustomerView/screens/ChatScreen'
+export default function DeTailsChat(navigation) {
   return (
-    <View>
-      <Text>DeTailsChat</Text>
-    </View>
+    <ChatScreen></ChatScreen>
   )
 }
 

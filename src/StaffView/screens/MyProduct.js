@@ -9,6 +9,7 @@ import ButtonDetail from '../components/ButtonDetail'
 import Status from '../components/Status'
 import { IM_MauAo } from '../assets/images'
 import MyProduct1 from '../components/MyProductOne'
+import Size from '../constants/size'
 export const Data = [
     {
     id: '1',
@@ -62,10 +63,10 @@ export default function MyProduct({navigation}) {
 
     if(inventory == true){
     return (
-    <SafeAreaView>
+    <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight}}>
     <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 15}}>
         <BackTo
-            onPress = {()=>navigation.navigate('OverView')}
+            onPress = {()=>navigation.goBack()}
             Info = 'My Product'
         ></BackTo>
         <TouchableOpacity 
@@ -133,7 +134,7 @@ export default function MyProduct({navigation}) {
      )}
      if(Out == true){
         return(
-        <SafeAreaView>
+        <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight}}>
         <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 15}}>
         <BackTo
             onPress = {() => navigation.navigate('OverView')}
@@ -205,7 +206,7 @@ export default function MyProduct({navigation}) {
      }
      if(Wait == true){
         return(
-            <SafeAreaView>
+            <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight}}>
             <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 15}}>
             <BackTo
                 onPress = {()=> navigation.navigate('OverView')}

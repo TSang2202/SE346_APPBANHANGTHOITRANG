@@ -15,13 +15,13 @@ const DataDelivery = {
   CTY: 'Fast Delivery VietNam',
   Code: '#JHGUJHCFJG'
 }
-export default function DeTailDelivery() {
+export default function DeTailDelivery({navigation}) {
   return (
-    <ScrollView>
+    <ScrollView style = {{backgroundColor: CUSTOM_COLOR.White}}>
       <BackTo
         style = {{marginTop: 20}}
         Info = 'Order/DeTails'
-        onPress = {()=> {}}
+        onPress = {()=> {navigation.goBack()}}
       ></BackTo>
     <View style = {{width: '100%', height: 10,marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray}}></View>
     <View style = {{width: '100%', flexDirection: 'column', marginTop: 10}}>
@@ -107,7 +107,7 @@ export default function DeTailDelivery() {
              <ButtonDetail
               title = 'Buyer Contact'
               color = {CUSTOM_COLOR.DarkBlue}
-              onPress={()=>{}}
+              onPress={()=>{navigation.navigate('ChatScreen')}}
               style = {styles.button}
             ></ButtonDetail>
           <ButtonDetail
