@@ -107,7 +107,7 @@ export default function DeTailDelivery({navigation}) {
              <ButtonDetail
               title = 'Buyer Contact'
               color = {CUSTOM_COLOR.DarkBlue}
-              onPress={()=>{}}
+              onPress={()=>{navigation.navigate('ChatScreen')}}
               style = {styles.button}
             ></ButtonDetail>
           <ButtonDetail

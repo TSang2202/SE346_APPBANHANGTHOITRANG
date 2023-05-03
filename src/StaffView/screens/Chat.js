@@ -21,28 +21,28 @@ function Chat({navigation}){
       ></Search>
       <View>
         <UserChat
-          onPress = {()=> navigation.navigate('DeTailsChat')}
+          onPress = {()=> navigation.navigate('ChatScreen')}
           source={{uri: Acount.avartar}}
           source1={{uri: Acount.avartar}}
           name='NGUYEN TRUNG TINH'
           message='You:What are you doing? - 12:40PM'
         ></UserChat>
         <UserChat
-          onPress = {()=> navigation.navigate('DeTailsChat')}
+          onPress = {()=> navigation.navigate('ChatScreen')}
           source={{uri: Acount.avartar}}
           source1={{uri: Acount.avartar}}
           name='NGUYEN TRUNG TINH'
           message='You:What are you doing? - 12:40PM'
         ></UserChat>
         <UserChat
-          onPress = {()=> navigation.navigate('DeTailsChat')}
+          onPress = {()=> navigation.navigate('ChatScreen')}
           source={{uri: Acount.avartar}}
           source1={{uri: Acount.avartar}}
           name='NGUYEN TRUNG TINH'
           message='You:What are you doing? - 12:40PM'
         ></UserChat>
         <UserChat
-          onPress = {()=> navigation.navigate('DeTailsChat')}
+          onPress = {()=> navigation.navigate('ChatScreen')}
           source={{uri: Acount.avartar}}
           source1={{uri: Acount.avartar}}
           name='NGUYEN TRUNG TINH'
