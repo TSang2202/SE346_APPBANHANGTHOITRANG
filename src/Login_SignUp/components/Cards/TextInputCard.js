@@ -42,7 +42,7 @@ textinputStyle: {
   fontFamily: FONT_FAMILY.Semibold,
   fontSize: 15,
   color: CUSTOM_COLOR.Black,
-  left: '20%',
+  left: '25%',
   justifyContent: 'center',
 },
 });

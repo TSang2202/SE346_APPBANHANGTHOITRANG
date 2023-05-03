@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, SafeAreaView, View, Text, TouchableOpacity} from 'react-native';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import HederContent from '../components/Header/HederContent.js';
+import CUSTOM_COLOR from '../constants/colors.js';
+import FONT_FAMILY from '../constants/fonts.js';
 
 const SignIn = props => {
     const {navigation} = props;
@@ -13,7 +15,7 @@ const SignIn = props => {
     return (
         <SafeAreaView style={styles.container}>
             <HeaderWithBack onPress={() => navigation.navigate('Intro')}></HeaderWithBack>
-            <View style={[styles.unitContainer, {height: '10%'}]}>
+            <View style={[styles.unitContainer, {height: '15%'}]}>
                 <HeaderTitlle title="Sign in"/>
             </View>
 
@@ -34,7 +36,9 @@ const SignIn = props => {
 
                 <View style={{flex: 1, alignItems: 'flex-end'}}>
                     <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-                        <HederContent content="Forgot Password"></HederContent>
+                        <Text style={styles.contentStyle}>
+                            Forgot Password
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -55,7 +59,9 @@ const SignIn = props => {
                 </View>
                 <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
                     <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                        <HederContent content="Sign up"></HederContent>
+                        <Text style={styles.contentStyle}>
+                            Sign up
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -73,13 +79,13 @@ unitContainer: {
 },
 bodyContainer: {
     height: '40%',
-    top: '5%',
+    top: '0%',
     flexDirection: 'column',
 },
 containerBot: {
     width: '100%',
     height: '10%',
-    bottom: '-5%',
+    bottom: '-3%',
     alignItems: 'center',
     justifyContent: 'center',
 },
@@ -89,8 +95,14 @@ button: {
 },
 botContainer: {
     height: '15%',
-    bottom: '-3%',
+    bottom: '0%',
     flexDirection: 'row',
-}
+},
+contentStyle: {
+    fontFamily: FONT_FAMILY.Light,
+    fontSize: 15,
+    color: CUSTOM_COLOR.Black,
+    fontWeight: 'bold',
+},
 });
 export default SignIn;

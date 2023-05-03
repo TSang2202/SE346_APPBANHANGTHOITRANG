@@ -159,6 +159,7 @@ function ReviewScreen({navigation}) {
                         paddingBottom: '2%'
                     }}>
                         <Review
+                            key = {review.id}
                             avatar = {review.avatar}
                             name = {review.name}
                             time = {review.time}

@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, View, ImageBackground} from 'react-native';
+import {StyleSheet, SafeAreaView, View, Text, ImageBackground, TouchableOpacity} from 'react-native';
 import CustomButton from '../components/Buttons/CustomButton.js';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import HederContent from '../components/Header/HederContent.js';
 import OTPCard from '../components/Cards/OTPCard.js';
 import { IMG_Rectangle182 } from '../assets/images/index.js';
+import CUSTOM_COLOR from '../constants/colors.js';
+import FONT_FAMILY from '../constants/fonts.js';
 
 const SmartOTP = props => {
     const {navigation} = props;
@@ -27,11 +29,15 @@ const SmartOTP = props => {
 
                 <View style={styles.centerContainer}>
                     <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-end'}}>
-                        <HederContent content="You don’t receive the code ?  "/>
+                        <HederContent content="You don’t receive the code?  "/>
                     </View>
 
                     <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
-                        <HederContent content="Resend (After 2:00)"/>
+                        <TouchableOpacity>
+                            <Text style={styles.resendStyles}>
+                                Resend (After 2:00)
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -79,6 +85,12 @@ containerBot: {
 button: {
     width: '100%',
     height: '100%',
+},
+resendStyles: {
+    fontSize: 15,
+    fontFamily: FONT_FAMILY.Light,
+    color: CUSTOM_COLOR.Black,
+    fontWeight: 'bold',
 },
 });
 export default SmartOTP;
