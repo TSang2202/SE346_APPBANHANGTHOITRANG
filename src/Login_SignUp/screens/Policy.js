@@ -8,7 +8,7 @@ const Policy = props => {
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderWithBack onPress={() => navigation.navigate('SignUp')}></HeaderWithBack>
+            <HeaderWithBack onPress={() => navigation.goBack()}></HeaderWithBack>
         </SafeAreaView>
     );
 };
