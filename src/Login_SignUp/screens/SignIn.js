@@ -14,7 +14,7 @@ const SignIn = props => {
     const [status, setStatus] = useState('');
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderWithBack onPress={() => navigation.navigate('Intro')}></HeaderWithBack>
+            <HeaderWithBack onPress={() => navigation.goBack()}></HeaderWithBack>
             <View style={[styles.unitContainer, {height: '15%'}]}>
                 <HeaderTitlle title="Sign in"/>
             </View>
