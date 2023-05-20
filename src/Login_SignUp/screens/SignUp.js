@@ -10,11 +10,30 @@ import HederContent from '../components/Header/HederContent.js';
 import CheckBox from '@react-native-community/checkbox';
 import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
+//import {  ref, set } from "firebase/database";
+//import {db} from '../../../Firebase/firebase';
 
 const SignUp = props => {
     const {navigation} = props;
     const [status, setStatus] = useState('');
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  
+
+
+    // const username = 'Sang'
+    // const email = 'thachsang2202@gmail.com'
+
+    // function create()
+    // {
+    //     set(ref(db, 'users/' + username), {
+    //     username: username,
+    //     email: email,
+     
+    //     }).then(()=>{
+    //         Alert('data update');
+    //     }).catch((error) => Alert(error))
+    // }
+
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={IMG_Rectangle182} resizeMode="cover" style={styles.container}>
@@ -86,7 +105,14 @@ const SignUp = props => {
                         <CustomButton
                             type="primary"
                             text="Sign up now"
-                            onPress={() => navigation.navigate('SmartOTP')}
+                            onPress={
+                                //create
+                                () => {navigation.navigate('SmartOTP')}
+
+
+                                }
+                                
+                                
                         />
                     </View>
                 </View>

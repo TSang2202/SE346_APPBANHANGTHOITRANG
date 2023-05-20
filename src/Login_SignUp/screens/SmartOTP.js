@@ -8,6 +8,7 @@ import OTPCard from '../components/Cards/OTPCard.js';
 import { IMG_Rectangle182 } from '../assets/images/index.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
+import { firebaseApp } from '../../../Firebase/firebase.js';
 
 const SmartOTP = props => {
     const {navigation} = props;
@@ -46,7 +47,12 @@ const SmartOTP = props => {
                     <CustomButton
                         type="primary"
                         text="Continue"
-                        onPress={() => navigation.navigate('SignIn')}
+                        onPress={() => {
+                            navigation.navigate('SignIn')
+                            console.log(firebaseApp)
+                        }
+
+                        }
                     />
                 </View>
             </View>

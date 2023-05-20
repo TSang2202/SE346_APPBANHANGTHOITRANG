@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, TouchableWithoutFeedback } from "react-native";
+import { Firestore } from "../../../Firebase/firebase";
 import { IC_Chat, IC_ShoppingCart } from "../assets/icons";
 import { IM_GiayNam, IM_MauAo, IM_PhuKien, IM_SaleImage, IM_ThoiTrangNam, IM_ThoiTrangNu } from "../assets/images";
 import Categories from "../components/Categories";
 import ProductCard from "../components/ProductCard";
 import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
+import { collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
+import { async } from "@firebase/util";
+//import { get } from "firebase/database";
 
 
 
@@ -34,7 +38,7 @@ const dataTredding = [
 
 ];
 
-const dataCategorie= [
+const dataCategorie = [
   {
     id: '1',
     source: IM_ThoiTrangNam,
@@ -57,138 +61,171 @@ const dataCategorie= [
   },
 ]
 
-function HomeScreenCustomer({navigation}) {
+function HomeScreenCustomer({ navigation }) {
 
- 
+  const [items, setItems] = useState([]);
 
-    return (
-      <ScrollView style = {{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
+  useEffect(() => {
+    const getData = async () => {
+      //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
 
-          <View style = {{flexDirection: 'row'}}>
-              <SearchInput
-                placeholder = 'Search product'
-                style = {{
-                  width: 290, 
-                  margin: 10
-                }}
-                onPressIn = {() =>{
-                  navigation.navigate('Searching')
-                }}
-              />
-              <TouchableOpacity style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
-                alignItems: 'center',
-                justifyContent: 'center', 
-                marginVertical: 10, 
-                padding: 8,
-                borderRadius: 10
-                }}
-                onPress = {() => {
-                  navigation.navigate('Chat')
-                }}
-                >
-                <Image 
-                  source={IC_Chat}
-                />
-              </TouchableOpacity>
+      const q = query(collection(Firestore, "MATHANG"), where("Trending", "==", true));
 
-              <TouchableOpacity style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
-                alignItems: 'center',
-                justifyContent: 'center', 
-                marginVertical: 10, 
-                marginHorizontal: 10,
-                padding: 8,
-                borderRadius: 10
-                }}
-                onPress = {() => {
-                  navigation.navigate('ShoppingCard')
-                }}
-                >
-                <Image 
-                  source={IC_ShoppingCart}
-                />
-              </TouchableOpacity>
+      const querySnapshot = await getDocs(q);
 
-              
-              
-          </View>
-
-          
+      const items = [];
 
 
-          <Text style = {styles.textView}>On sale</Text>
+      querySnapshot.forEach(documentSnapshot => {
+        items.push({
+          ...documentSnapshot.data(),
+          key: documentSnapshot.id,
+        });
+      });
 
-          <Image style= {{marginHorizontal: 30, height: 120, width: 380}}
-            source={IM_SaleImage}
+
+
+      setItems(items);
+
+
+    }
+
+    getData();
+
+    const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
+    return () => clearInterval(interval); // Xóa interval khi component bị unmount
+  }, []);
+
+
+  return (
+    <ScrollView style={{ flex: 1, backgroundColor: CUSTOM_COLOR.White }}>
+
+      <View style={{ flexDirection: 'row' }}>
+        <SearchInput
+          placeholder='Search product'
+          style={{
+            width: 290,
+            margin: 10
+          }}
+          onPressIn={() => {
+            navigation.navigate('Searching')
+          }}
+        />
+        <TouchableOpacity style={{
+          backgroundColor: CUSTOM_COLOR.Mercury,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginVertical: 10,
+          padding: 8,
+          borderRadius: 10
+        }}
+          onPress={() => {
+            navigation.navigate('Chat')
+
+          }}
+        >
+          <Image
+            source={IC_Chat}
           />
-          
-          <View style={{flexDirection: "row", justifyContent: 'space-between'}}>
-             <Text style = {styles.textView}>Trending now</Text>
-             <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Trending')
-              }}
-              ><Text style={{margin:20}}>See all</Text></TouchableOpacity>
-          </View>
-          
-          <View style ={{height: 140}}>
-            <FlatList 
-              windowSize ={10}
-              horizontal = {true}
-              data = {dataTredding}
-            
-              renderItem = {({item}) => 
-                <TouchableOpacity style = {{}}
-                  onPress = {() =>{navigation.navigate('DetailProduct', {item})}}
-                >
-                  <ProductCard
-                  source = {item.image}
-                  title = {item.title}
-                  />
-                </TouchableOpacity>
-                
-                
-              }
-              keyExtractor={item => item.id}
-            />
+        </TouchableOpacity>
 
-          </View>
-          
+        <TouchableOpacity style={{
+          backgroundColor: CUSTOM_COLOR.Mercury,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginVertical: 10,
+          marginHorizontal: 10,
+          padding: 8,
+          borderRadius: 10
+        }}
+          onPress={() => {
+            navigation.navigate('ShoppingCard')
+          }}
+        >
+          <Image
+            source={IC_ShoppingCart}
+          />
+        </TouchableOpacity>
 
-          <View style={{flexDirection: "row", justifyContent: 'space-between'}}>
-             <Text style = {styles.textView}>Orther categories</Text>
-             <TouchableOpacity><Text style={{margin:20}}>Explore now</Text></TouchableOpacity>
-          </View>
 
-          <View style ={{}}>
-            <FlatList 
-              
-             
-              data = {dataCategorie}
-            
-              renderItem = {({item}) => 
-                <TouchableWithoutFeedback style = {{}}>
-                  <Categories
-                    source = {item.source}
-                    title = {item.name}
-                  />
-                </TouchableWithoutFeedback>
-                
-                
-              }
-              keyExtractor={item => item.id}
-            />
 
-          </View>
-          
-          <View style = {{height: 200}}></View>
-      </ScrollView>
-      
-    )
-  }
+      </View>
+
+
+
+
+      <Text style={styles.textView}>On sale</Text>
+
+      <Image style={{ marginHorizontal: 30, height: 120, width: 380 }}
+        source={IM_SaleImage}
+      />
+
+      <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+        <Text style={styles.textView}>Trending now</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Trending')
+          }}
+        ><Text style={{ margin: 20 }}>See all</Text></TouchableOpacity>
+      </View>
+
+      <View style={{ height: 140 }}>
+        <FlatList
+          windowSize={10}
+          horizontal={true}
+          data={items}
+
+          renderItem={({ item }) =>
+            <TouchableOpacity style={{}}
+              onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+            >
+              <ProductCard
+                source={item.AnhMH}
+                title={item.TenMH}
+              />
+            </TouchableOpacity>
+          }
+          keyExtractor={item => item.MaMH}
+        />
+
+      </View>
+
+
+      <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+        <Text style={styles.textView}>Orther categories</Text>
+        <TouchableOpacity><Text style={{ margin: 20 }}>Explore now</Text></TouchableOpacity>
+      </View>
+
+      <View style={{}}>
+        <FlatList
+
+
+          data={dataCategorie}
+
+          renderItem={({ item }) =>
+            <TouchableWithoutFeedback style={{}}>
+              <Categories
+                source={item.source}
+                title={item.name}
+              />
+            </TouchableWithoutFeedback>
+
+
+          }
+          keyExtractor={item => item.id}
+        />
+
+      </View>
+
+      <View style={{ height: 200 }}></View>
+    </ScrollView>
+
+  )
+}
 
 
 const styles = StyleSheet.create({
-  textView:{
+  textView: {
     marginHorizontal: 15,
     marginVertical: 10,
     fontWeight: 'bold',
@@ -197,5 +234,5 @@ const styles = StyleSheet.create({
   }
 
 })
-  
+
 export default HomeScreenCustomer
