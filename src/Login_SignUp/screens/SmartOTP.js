@@ -16,7 +16,7 @@ const SmartOTP = props => {
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={IMG_Rectangle182} resizeMode="cover" style={styles.container}>
-                <HeaderWithBack onPress={() => navigation.navigate('ForgotPassword')}></HeaderWithBack>
+            <HeaderWithBack onPress={() => navigation.goBack()}></HeaderWithBack>
                 <View style={[styles.unitContainer, {height: '5%'}]}>
                     <HeaderTitlle title="Smart OTP"/>
                 </View>

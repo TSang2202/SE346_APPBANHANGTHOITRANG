@@ -37,7 +37,7 @@ const SignUp = props => {
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={IMG_Rectangle182} resizeMode="cover" style={styles.container}>
-                <HeaderWithBack onPress={() => navigation.navigate('WellcomeUser3')}></HeaderWithBack>
+                <HeaderWithBack onPress={() => navigation.goBack()}></HeaderWithBack>
                 <View style={[styles.topContainer, styles.unitContainer]}>
                     <HeaderTitlle title="Sign Up"></HeaderTitlle>
                 </View>
@@ -80,12 +80,12 @@ const SignUp = props => {
                 </View>
 
                 <View style={[styles.checkContainer, styles.unitContainer]}>
-                    <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
+                    {/* <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
                         <CheckBox
                             disabled={false}
                             value={toggleCheckBox}
                             onValueChange={(newValue) => setToggleCheckBox(newValue)}/>
-                    </View>
+                    </View> */}
 
                     <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
                         <HederContent content="I agree with this "></HederContent>                        

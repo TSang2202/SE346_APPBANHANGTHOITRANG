@@ -7,11 +7,11 @@ import { AddImage } from '../assets/images'
 import Search from '../components/Search'
 import Categorybutton from '../components/categorybutton'
 
-export default function AddProduct() {
+export default function AddProduct({navigation}) {
   return (
     <View style = {{width: '100%', height: '100%',backgroundColor: CUSTOM_COLOR.White}}>
       <BackTo
-        onPress={()=>{}}
+        onPress={()=>{navigation.goBack()}}
         Info = 'Add Product'
       ></BackTo>
       <ScrollView style = {{backgroundColor: CUSTOM_COLOR.White}}>

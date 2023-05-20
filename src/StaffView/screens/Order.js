@@ -38,10 +38,10 @@ export default function Order({navigation}) {
     const [Review, setReview] = useState(false)
     if(Wait == true){
     return (
-    <SafeAreaView>
-    <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 10}}>
+    <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
+    <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop:5}}>
         <BackTo
-            //onPress = {navigation.goBack()}
+            onPress = {()=>navigation.goBack()}
             Info = 'My Order'
         ></BackTo>
     </View>
@@ -97,10 +97,10 @@ export default function Order({navigation}) {
      )}
      if(Cancel == true){
       return (
-        <SafeAreaView>
-        <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 10}}>
+        <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
+        <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 5}}>
             <BackTo
-                //onPress = {navigation.goBack()}
+                onPress = {()=> navigation.goBack()}
                 Info = 'My Order'
             ></BackTo>
         </View>
@@ -133,10 +133,10 @@ export default function Order({navigation}) {
      }
      if(Request == true){
       return (
-        <SafeAreaView>
-        <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 10}}>
+        <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
+        <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 5}}>
             <BackTo
-                //onPress = {navigation.goBack()}
+                onPress = {() => navigation.goBack()}
                 Info = 'My Order'
             ></BackTo>
         </View>
@@ -169,10 +169,10 @@ export default function Order({navigation}) {
      }
      if(Review == true){
       return (
-        <SafeAreaView>
-        <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 10}}>
+        <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
+        <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 5}}>
             <BackTo
-                //onPress = {navigation.goBack()}
+                onPress = {() => navigation.goBack()}
                 Info = 'My Order'
             ></BackTo>
         </View>

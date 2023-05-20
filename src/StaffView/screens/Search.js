@@ -3,9 +3,11 @@ import React from 'react'
 import Search from '../components/Search'
 import MyProduct1 from '../components/MyProductOne'
 import { Data } from './MyProduct'
+import Size from '../constants/size'
+import CUSTOM_COLOR from '../constants/colors'
 export default function SearchSrc({navigation}) {
   return (
-    <View>
+    <View style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: Size.DeviceHeight}}>
      <Search
         placeholder = 'Search In The Shop'
      ></Search>
