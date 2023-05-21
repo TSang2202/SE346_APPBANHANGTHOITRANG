@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, ImageBackground, View, Image} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  ImageBackground,
+  View,
+  Image,
+} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
 import {IMG_image1, IMG_Rectangle} from '../assets/images/index.js';
@@ -10,52 +17,54 @@ const Intro = props => {
   const {navigation} = props;
   const [status, setStatus] = useState('');
   return (
-<SafeAreaView style={styles.container}>
-        <ImageBackground source={IMG_image1} resizeMode="cover" style={styles.image}>
-          <ImageBackground source={IMG_Rectangle} resizeMode="cover" style={styles.image}>
-            <>
+    <SafeAreaView style={styles.container}>
+      <ImageBackground
+        source={IMG_image1}
+        resizeMode="cover"
+        style={styles.image}>
+        <ImageBackground
+          source={IMG_Rectangle}
+          resizeMode="cover"
+          style={styles.image}>
+          <>
             <View style={styles.containeTop}>
               <View style={styles.viewTop}>
                 <Image
-                    source={IC_Line}
-                    style={{width: '100%', height: '10%', top: '10%'}}
+                  source={IC_Line}
+                  style={{width: '100%', height: '10%', top: '10%'}}
                 />
-                <Text style={styles.baseText}>
-                  FAUGET
-                </Text>
+                <Text style={styles.baseText}>FAUGET</Text>
               </View>
 
               <View style={styles.viewBot}>
                 <View style={styles.flexbot}>
                   <Image
-                  source={IC_Line}
-                  style={{width: '100%', height: '10%'}}
+                    source={IC_Line}
+                    style={{width: '100%', height: '10%'}}
                   />
                 </View>
 
                 <View style={styles.flexbot}>
-                  <Text style={styles.botBaseText}>
-                    CLOTHING
-                  </Text>
+                  <Text style={styles.botBaseText}>CLOTHING</Text>
                 </View>
 
                 <View style={styles.flexbot}>
                   <Image
-                  source={IC_Line}
-                  style={{width: '100%', height: '10%'}}
+                    source={IC_Line}
+                    style={{width: '100%', height: '10%'}}
                   />
                 </View>
-              </View>        
+              </View>
             </View>
-            </>
+          </>
 
-            <>
+          <>
             <View style={styles.buttonContainer}>
               <CustomButton
-                      type="primary"
-                      text="Continue"
-                      onPress={() => navigation.navigate('WellcomeUser1')}
-              />                
+                type="primary"
+                text="Continue"
+                onPress={() => navigation.navigate('WellcomeUser1')}
+              />
             </View>
 
             <View style={styles.containeBottom}>
@@ -63,10 +72,9 @@ const Intro = props => {
                 Build the better world in fashion
               </Text>
             </View>
-            </>
-
-          </ImageBackground>
+          </>
         </ImageBackground>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -86,8 +94,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  viewTop:{
-    justifyContent: 'center', 
+  viewTop: {
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     height: '65%',
@@ -103,9 +111,9 @@ const styles = StyleSheet.create({
     height: '20%',
     flexDirection: 'row',
   },
-  flexbot:{
+  flexbot: {
     flex: 1,
-    justifyContent: 'center', 
+    justifyContent: 'center',
     alignItems: 'center',
   },
   botBaseText: {
@@ -114,12 +122,12 @@ const styles = StyleSheet.create({
     color: CUSTOM_COLOR.White,
   },
   buttonContainer: {
-  width: '180%',
-  height: '10%',
-  bottom: '-25%',
-  alignItems: 'center',
-  justifyContent: 'center',
-  left: '-40%',
+    width: '180%',
+    height: '10%',
+    bottom: '-25%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: '-40%',
   },
   containeBottom: {
     width: '90%',
@@ -127,8 +135,8 @@ const styles = StyleSheet.create({
     bottom: '-20%',
     marginHorizontal: '5%',
     justifyContent: 'center',
-    alignItems: 'center',  
-    flexDirection: 'column',  
+    alignItems: 'center',
+    flexDirection: 'column',
   },
 });
 export default Intro;

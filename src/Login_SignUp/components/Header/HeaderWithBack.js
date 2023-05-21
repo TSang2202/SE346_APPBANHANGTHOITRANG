@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import PreviousButton from '../Buttons/PreviousButton.js';
 
 const HeaderWithBack = props => {
@@ -15,16 +12,16 @@ const HeaderWithBack = props => {
   );
 };
 const styles = StyleSheet.create({
-header: {
-  width: '100%',
-  height: '7%',
-  justifyContent: 'center',
-},
-buttonContainer: {
-  width: '12%',
-  height: '100%',
-  top: '15%',
-  left: '8%',
-},
+  header: {
+    width: '100%',
+    height: '7%',
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    width: '12%',
+    height: '100%',
+    top: '15%',
+    left: '8%',
+  },
 });
 export default HeaderWithBack;
