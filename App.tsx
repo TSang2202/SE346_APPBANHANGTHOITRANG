@@ -3,11 +3,11 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import MainNavigator from './src/Login_SignUp/navigation/navigation.js';
 import type {PropsWithChildren} from 'react';
 import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab.js';
-
+import StackNavigator from './src/StaffView/navigation/navigation.js';
 function App(): JSX.Element {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFF'}}>
-      <CustomerBottomTab/>
+      <StackNavigator></StackNavigator>
     </SafeAreaView>
   );}
 

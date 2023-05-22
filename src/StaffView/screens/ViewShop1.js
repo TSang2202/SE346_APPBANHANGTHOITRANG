@@ -113,8 +113,8 @@ function ViewShop1({navigation}){
   const [product, setproduct] = useState(true)
   if(product == true && detail == false){
   return (
-    <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
-    <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
+    <SafeAreaView style = {styles.stylescreen}>
+    <View style = {styles.stylebackground}>
     <Search
       placeholder = 'Search in the Shop'
       style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
@@ -278,8 +278,8 @@ function ViewShop1({navigation}){
     else{
       if(product == false && detail == false){
       return(
-        <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White,width: '100%', height: '100%'}}>
-        <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
+        <SafeAreaView style = {styles.stylescreen}>
+        <View style = {styles.stylebackground}>
         <Search
           placeholder = 'Search in the Shop'
           style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
@@ -329,8 +329,8 @@ function ViewShop1({navigation}){
       }
       else{
           return(
-            <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
-            <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
+            <SafeAreaView style = {styles.stylescreen}>
+            <View style = {styles.stylebackground}>
             <Search
               placeholder = 'Search in the Shop'
               style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
@@ -380,3 +380,17 @@ function ViewShop1({navigation}){
     }
 }
 export default ViewShop1
+const styles = StyleSheet.create({
+  stylescreen:{
+    backgroundColor: CUSTOM_COLOR.White,
+    width: '100%', 
+    height: '100%'
+  },
+  stylebackground:{
+    width: '100%',
+    height:180,
+    flexDirection: 'column', 
+    alignItems: 'center',
+    backgroundColor: CUSTOM_COLOR.LavenderBlush
+  }
+})

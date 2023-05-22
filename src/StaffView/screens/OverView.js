@@ -31,7 +31,7 @@ const Order = [
   {  
     id: '3',
     number: 10,
-    status: 'Request',
+    status: 'Delivering',
   },
   {
     id: '4',
@@ -41,32 +41,25 @@ const Order = [
 ]
 function OverView ({navigation}) {
   return (
-    <SafeAreaView style = {{flexDirection: 'column', backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
+    <SafeAreaView style = {styles.stylescrenn}>
     <View style = {{width: '100%',height: '12%', flexDirection: 'row'}}>
-      <TouchableOpacity style = {styles.settingicon} onPress = {() => {navigation.navigate('Setting')}}>
-      <Image 
-      style={{width:'100%',height:'100%'}}
-      source={settingicon}
-      resizeMode='stretch'>
-      </Image>
-      </TouchableOpacity>
-      <TouchableOpacity  style= {styles.messengericon} onPress = {() => {navigation.navigate('Chat')}}>
+      <TouchableOpacity  style= {styles.settingicon} onPress = {() => {navigation.navigate('Setting')}}>
       <Image
       style={{width:'100%',height:'100%'}}
-      source={messenger}
+      source={settingicon}
       resizeMode="contain"
       >
       </Image>
       </TouchableOpacity>
-      <TouchableOpacity style = {styles.notificationicon} onPress = {() => {navigation.navigate('Notification')}}>
+      <TouchableOpacity style = {styles.messengericon} onPress = {() => {navigation.navigate('Chat')}}>
       <Image 
       style={{width:'100%',height:'100%'}}
-      source={notification} 
+      source={messenger} 
       resizeMode="contain">
       </Image>
       </TouchableOpacity>
     </View>
-    <View style = {{width:'100%',height:'2%',backgroundColor: CUSTOM_COLOR.SlateGray}}>
+    <View style = {styles.styleline}>
     </View>
     <View style = {{width: '100%',height: '17%', flexDirection: 'row'}}>
     <Image
@@ -87,7 +80,7 @@ function OverView ({navigation}) {
       
     </TouchableOpacity>
     </View>
-    <View style = {{width:'100%',height:'2%',backgroundColor: CUSTOM_COLOR.SlateGray}}>
+    <View style = {styles.styleline}>
     </View>
     <View style = {{width: '100%',height: '20%'}}>
       <View style = {{flexDirection: 'row'}}>
@@ -114,7 +107,7 @@ function OverView ({navigation}) {
       ></FlatList>
       </View>
     </View>
-    <View style = {{width:'100%',height:'2%',backgroundColor: CUSTOM_COLOR.SlateGray}}>
+    <View style = {styles.styleline}>
     </View>
     <View style = {{flexDirection: 'column', width: '100%', height: '40%'}}>
       <View style = {{flexDirection: 'row',width: '100%', height: '30%', marginTop: '7%'}}>
@@ -161,22 +154,27 @@ function OverView ({navigation}) {
 }
 
 const styles = StyleSheet.create({
+    stylescrenn:{
+      flexDirection: 'column', 
+      backgroundColor: CUSTOM_COLOR.White, 
+      width: '100%', 
+      height: '100%'
+    },
+    styleline:{
+      width:'100%',
+      height:'2%',
+      backgroundColor: CUSTOM_COLOR.SlateGray
+    },
     settingicon:{
         width: 42,
         height: 42,
-        marginLeft: '68%',
+        marginLeft: '75%',
         marginTop: '9%',
     },
     messengericon:{
       width: 28,
       height: 28,
       marginTop: '9%',
-      marginLeft: '3%'
-    },
-    notificationicon:{
-      marginTop: '8.8%',
-      width: 32,
-      height: 32,
       marginLeft: '3%'
     },
     viewshop:{
