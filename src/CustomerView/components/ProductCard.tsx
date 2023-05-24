@@ -11,9 +11,10 @@ const ProductCard = (props: any) => {
         source={{ uri: props.source }}
       />
       <View style={{ alignItems: 'center', width: 120, justifyContent: 'center' }}>
-        <Text style={{}}>{props.title}</Text>
-      </View>
+        <Text style={{
 
+        }}>{props.title}</Text>
+      </View>
 
     </View>
   )
