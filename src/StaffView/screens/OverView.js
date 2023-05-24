@@ -15,7 +15,7 @@ export const Acount = {
   phone: '0704408389',
   sex: 'male',
   day: '16/12/2003',
-  background: 'https://c4.wallpaperflare.com/wallpaper/815/737/246/abstract-1920x1200-nature-wallpaper-preview.jpg'
+  background: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9z5m7BtaVEQCqDkL5UI2QrBqr1EiCI6-YXA&usqp=CAU'
 }
 const Order = [
   {

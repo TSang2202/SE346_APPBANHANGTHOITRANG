@@ -9,9 +9,11 @@ import ButtonDetail from '../components/ButtonDetail'
 import Status from '../components/Status'
 import { IM_MauAo } from '../assets/images'
 import MyProduct1 from '../components/MyProductOne'
+
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 import { Firestore, Storage } from '../../../Firebase/firebase'
 import { async } from '@firebase/util'
+
 
 
 
@@ -20,6 +22,7 @@ export default function MyProduct({ navigation }) {
     const [inventory, setinventory] = useState(true)
     const [Out, setOut] = useState(false)
     const [Wait, setWait] = useState(false)
+
 
     const [dataOnWait, setDataOnWait] = useState([])
     const [dataOutOfStock, setDataOutOfStock] = useState([])
@@ -167,6 +170,7 @@ export default function MyProduct({ navigation }) {
                         ></ButtonDetail>
                     </View>
                 </View>
+
             </SafeAreaView>
         )
     }

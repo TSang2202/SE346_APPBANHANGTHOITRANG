@@ -66,13 +66,13 @@ const datas = [
   {
       id: '5',
       source: IM_Giay3,
-      title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
+      title: 'T-Shirt Black Blank-VSD343545D - New Elevent',
       price: 399999
   },
   {
       id: '6',
       source: IM_Giay1,
-      title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
+      title: 'T-Shirt Black Blank-VSD343545D - New Elevent',
       price: 399999
   }
 ]
@@ -117,7 +117,7 @@ function ViewShop1({navigation}){
     <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
     <Search
       placeholder = 'Search in the Shop'
-      style = {{width: '80%', height: '50%', backgroundColor: CUSTOM_COLOR.White}}
+      style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
     ></Search>
     <Image
       style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
@@ -249,7 +249,7 @@ function ViewShop1({navigation}){
                     }}>Discount</Text>
                 </View>
       </View>
-    <View>
+    <View style = {{width: '100%', height: 300}}>
                 <FlatList
                      nestedScrollEnabled={true}
                     data={datas}
@@ -282,7 +282,7 @@ function ViewShop1({navigation}){
         <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
         <Search
           placeholder = 'Search in the Shop'
-          style = {{width: '80%', height: '50%', backgroundColor: CUSTOM_COLOR.White}}
+          style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
         ></Search>
         <Image
           style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
@@ -333,7 +333,7 @@ function ViewShop1({navigation}){
             <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
             <Search
               placeholder = 'Search in the Shop'
-              style = {{width: '80%', height: '50%', backgroundColor: CUSTOM_COLOR.White}}
+              style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
             ></Search>
             <Image
               style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}

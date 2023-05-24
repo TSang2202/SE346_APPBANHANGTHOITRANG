@@ -10,7 +10,7 @@ function Setting({navigation}){
     return (
       <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White}}>
       <BackTo
-        onPress={()=> navigation.navigate('OverView')}
+        onPress={()=> navigation.goBack()}
         Info="Home"
       ></BackTo>
       <ImageBackground 
@@ -35,44 +35,24 @@ function Setting({navigation}){
         </View>
       </ImageBackground>
       <View style = {styles.viewstyle}>
-          <View style = {{flex: 1, flexDirection: 'row'}}>
           <Text style = {{marginLeft: 15}}>Name</Text>
-          </View>
-          <View style = {{flex: 1, flexDirection: 'row-reverse'}}>
-          <Text style = {{ flex: 1, marginRight: 15}}>{Acount.name}</Text>
-          </View>
+          <Text style = {{marginRight: 15}}>{Acount.name}</Text>
       </View>
       <View style = {styles.viewstyle}>
-          <View style = {{flex: 1, flexDirection: 'row'}}>
           <Text style = {{marginLeft: 15}}>Day Of Birth</Text>
-          </View>
-          <View style = {{flex: 1, flexDirection: 'row-reverse'}}>
-          <Text style = {{ flex: 1, marginRight: 15}}>{Acount.day}</Text>
-          </View>
+          <Text style = {{marginRight: 15}}>{Acount.day}</Text>
         </View>
         <View style = {styles.viewstyle}>
-          <View style = {{flex: 1, flexDirection: 'row'}}>
           <Text style = {{marginLeft: 15}}>Sex</Text>
-          </View>
-          <View style = {{flex: 1, flexDirection: 'row-reverse'}}>
-          <Text style = {{ flex: 1, marginRight: 15}}>{Acount.sex}</Text>
-          </View>
+          <Text style = {{marginRight: 15}}>{Acount.sex}</Text>
         </View>
         <View style = {styles.viewstyle}>
-          <View style = {{flex: 1, flexDirection: 'row'}}>
           <Text style = {{marginLeft: 15}}>Phone</Text>
-          </View>
-          <View style = {{flex: 1, flexDirection: 'row-reverse'}}>
-          <Text style = {{ flex: 1, marginRight: 15}}>{Acount.phone}</Text>
-          </View>
+          <Text style = {{marginRight: 15}}>{Acount.phone}</Text>
         </View>
         <View style = {styles.viewstyle}>
-          <View style = {{flex: 1, flexDirection: 'row'}}>
           <Text style = {{marginLeft: 15}}>Address</Text>
-          </View>
-          <View style = {{flex: 1, flexDirection: 'row-reverse'}}>
-          <Text style = {{ flex: 1, marginRight: 15}}>{Acount.address}</Text>
-          </View>
+          <Text style = {{ marginRight: 15}}>{Acount.address}</Text>
         </View>
       </SafeAreaView>
     )
@@ -106,7 +86,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     width: '100%',
     height: 70,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center'
   }

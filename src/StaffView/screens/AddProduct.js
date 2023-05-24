@@ -15,6 +15,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { firebase, storage } from 'firebase'
 
 
+
 export default function AddProduct() {
 
 
@@ -181,11 +182,13 @@ export default function AddProduct() {
 
   }, [])
 
+
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: CUSTOM_COLOR.White }}>
       <BackTo
-        onPress={() => { }}
+        onPress={() => { navigation.goBack() }}
         Info='Add Product'
+
       ></BackTo>
       <ScrollView style={{ backgroundColor: CUSTOM_COLOR.White }}>
         <View style={{

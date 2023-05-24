@@ -6,6 +6,7 @@ import ButtonDetail from '../components/ButtonDetail'
 import { AddImage } from '../assets/images'
 import Search from '../components/Search'
 import Categorybutton from '../components/categorybutton'
+
 import CheckBox from 'react-native-check-box'
 import { Firestore, Storage } from '../../../Firebase/firebase'
 import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
@@ -118,7 +119,8 @@ export default function EditProduct({ navigation, route }) {
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: CUSTOM_COLOR.White }}>
       <BackTo
-        onPress={() => { }}
+
+        onPress={() => { navigation.goBack() }}
         Info='Edit Product'
       ></BackTo>
 
