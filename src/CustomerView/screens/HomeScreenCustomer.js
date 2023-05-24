@@ -169,7 +169,7 @@ function HomeScreenCustomer({ navigation }) {
         ><Text style={{ margin: 20 }}>See all</Text></TouchableOpacity>
       </View>
 
-      <View style={{ height: 140 }}>
+      <View style={{ height: 150 }}>
         <FlatList
           windowSize={10}
           horizontal={true}
