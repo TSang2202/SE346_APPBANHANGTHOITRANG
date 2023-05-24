@@ -16,11 +16,12 @@ import { firebase, storage } from 'firebase'
 
 
 
-export default function AddProduct() {
+export default function AddProduct({ navigation }) {
 
 
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+
 
 
 
@@ -365,27 +366,6 @@ export default function AddProduct() {
             <Text>Categorize</Text>
             <Text style={{ color: CUSTOM_COLOR.Red }}> *</Text>
           </View>
-          {/* <View>
-            <Search
-              style={{ width: 200, marginTop: 10, marginLeft: 5, height: 30 }}
-              placeholder='Search list item '
-            ></Search>
-          </View> */}
-
-          {/* <View style={{ flexDirection: 'row', width: '100%', marginTop: 10 }}>
-            <Categorybutton
-              title='Shoes'
-              style={{ width: 100, height: 40, marginLeft: 10 }}
-            ></Categorybutton>
-            <Categorybutton
-              title='T-Shirt'
-              style={{ width: 100, height: 40, marginLeft: 10 }}
-            ></Categorybutton>
-            <Categorybutton
-              title='Hat'
-              style={{ width: 100, height: 40, marginLeft: 10 }}
-            ></Categorybutton>
-          </View> */}
 
           <View>
 
@@ -408,6 +388,7 @@ export default function AddProduct() {
               onChange={item => {
                 setValue(item.key);
                 setIsFocus(false);
+                setCategorize(item)
               }}
 
             />

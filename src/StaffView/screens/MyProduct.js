@@ -125,16 +125,22 @@ export default function MyProduct({ navigation }) {
                         Color={CUSTOM_COLOR.DarkOrange}
                         botwidth={2}
                         borderColor={CUSTOM_COLOR.Red}
+                        countProduct={dataInventory.length}
                     ></Status>
                     <Status
                         Color={CUSTOM_COLOR.Black}
                         onPress={() => { setOut(true), setinventory(false) }}
-                        title='Out of Stock'>
+                        title='Out of Stock'
+                        countProduct={dataOutOfStock.length}
+                    >
+
                     </Status>
                     <Status
                         Color={CUSTOM_COLOR.Black}
                         onPress={() => { setWait(true), setinventory(false) }}
-                        title='On Wait'>
+                        title='On Wait'
+                        countProduct={dataOnWait.length}
+                    >
                     </Status>
                 </View>
                 <View style={{ flexDirection: 'row', width: '100%', height: 450, marginTop: 10 }}>
@@ -197,17 +203,21 @@ export default function MyProduct({ navigation }) {
                         title='My invantory'
                         Color={CUSTOM_COLOR.Black}
                         onPress={() => { setOut(false), setinventory(true) }}
+                        countProduct={dataInventory.length}
                     ></Status>
                     <Status
                         botwidth={2}
                         borderColor={CUSTOM_COLOR.Red}
                         Color={CUSTOM_COLOR.DarkOrange}
-                        title='Out of Stock'>
+                        title='Out of Stock'
+                        countProduct={dataOutOfStock.length}>
+
                     </Status>
                     <Status
                         Color={CUSTOM_COLOR.Black}
                         onPress={() => { setWait(true), setOut(false) }}
-                        title='On Wait'>
+                        title='On Wait'
+                        countProduct={dataOnWait.length}>
                     </Status>
                 </View>
                 <View style={{ flexDirection: 'row', width: '100%', height: 450, marginTop: 10 }}>
@@ -269,17 +279,21 @@ export default function MyProduct({ navigation }) {
                         title='My invantory'
                         Color={CUSTOM_COLOR.Black}
                         onPress={() => { setWait(false), setinventory(true) }}
+                        countProduct={dataInventory.length}
                     ></Status>
                     <Status
                         onPress={() => { setWait(false), setOut(true) }}
                         Color={CUSTOM_COLOR.Black}
-                        title='Out of Stock'>
+                        title='Out of Stock'
+                        countProduct={dataOutOfStock.length}
+                    >
                     </Status>
                     <Status
                         botwidth={2}
                         borderColor={CUSTOM_COLOR.Red}
                         Color={CUSTOM_COLOR.DarkOrange}
-                        title='On Wait'>
+                        title='On Wait'
+                        countProduct={dataOnWait.length}>
                     </Status>
                 </View>
                 <View style={{ flexDirection: 'row', width: '100%', height: 450, marginTop: 10 }}>

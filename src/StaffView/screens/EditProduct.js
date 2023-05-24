@@ -6,10 +6,11 @@ import ButtonDetail from '../components/ButtonDetail'
 import { AddImage } from '../assets/images'
 import Search from '../components/Search'
 import Categorybutton from '../components/categorybutton'
-
+import { Dropdown } from 'react-native-element-dropdown';
 import CheckBox from 'react-native-check-box'
 import { Firestore, Storage } from '../../../Firebase/firebase'
 import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
+import { async } from '@firebase/util'
 
 
 
@@ -23,6 +24,9 @@ export default function EditProduct({ navigation, route }) {
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState()
   const [amount, setAmount] = useState()
+  const [danhMuc, setDanhMuc] = useState([])
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
 
   const [color, setColor] = useState([])
   const [sizes, setSize] = useState([
@@ -58,6 +62,35 @@ export default function EditProduct({ navigation, route }) {
     },
 
   ])
+
+
+  const handleCheckColor = (key) => {
+    const newList = color.map((item) =>
+      item.key === key ? { ...item, checked: !item.checked } : item
+    );
+    setColor(newList);
+  };
+
+  const handleCheckSize = (id) => {
+    const newList = sizes.map((item) =>
+      item.id === id ? { ...item, checked: !item.checked } : item
+    );
+    setSize(newList);
+  };
+
+
+  const getDataDanhMuc = async () => {
+    const querySnapshot = await getDocs(collection(Firestore, "DANHMUC"));
+    const danhMucs = [];
+    querySnapshot.forEach(documentSnapshot => {
+      danhMucs.push({
+        ...documentSnapshot.data(),
+        key: documentSnapshot.id
+      })
+    })
+
+    setDanhMuc(danhMucs);
+  }
 
   const getDataColor = async () => {
     const querySnapshot = await getDocs(collection(Firestore, "MAUSAC"));
@@ -101,6 +134,23 @@ export default function EditProduct({ navigation, route }) {
     setSize(data)
   }
 
+  const UpdateData = async () => {
+    const updateRef = doc(Firestore, "SANPHAM", item.MaSP)
+
+    await updateDoc(updateRef, {
+      TenSP: name,
+      MoTaSP: description,
+      GiaSP: Number(price),
+      SoLuongSP: Number(amount),
+      MauSac: color,
+      Size: sizes,
+      MaDM: value,
+
+    })
+
+    navigation.navigate('MyProduct')
+  }
+
 
 
   useEffect(() => {
@@ -110,8 +160,10 @@ export default function EditProduct({ navigation, route }) {
     setDescription(item.MoTaSP)
     setPrice(item.GiaSP)
     setAmount(item.SoLuongSP)
+    setValue(item.MaDM)
     getDataColor()
     getDataSize()
+    getDataDanhMuc()
 
 
   }, [])
@@ -282,32 +334,37 @@ export default function EditProduct({ navigation, route }) {
             <Text style={{ color: CUSTOM_COLOR.Red }}> *</Text>
           </View>
           <View>
-            <Search
-              style={{ width: 200, marginTop: 10, marginLeft: 5, height: 30 }}
-              placeholder='Search list item '
-            ></Search>
-          </View>
 
-          <View style={{ flexDirection: 'row', width: '100%', marginTop: 10 }}>
-            <Categorybutton
-              title='Shoes'
-              style={{ width: 100, height: 40, marginLeft: 10 }}
-            ></Categorybutton>
-            <Categorybutton
-              title='T-Shirt'
-              style={{ width: 100, height: 40, marginLeft: 10 }}
-            ></Categorybutton>
-            <Categorybutton
-              title='Hat'
-              style={{ width: 100, height: 40, marginLeft: 10 }}
-            ></Categorybutton>
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={danhMuc}
+              search
+              maxHeight={200}
+              labelField="TenDM"
+              valueField="key"
+              placeholder={!isFocus ? 'Select item' : '...'}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.key);
+                setIsFocus(false);
+
+              }}
+
+            />
           </View>
         </View>
         <View style={{ alignItems: 'center', width: '100%', marginTop: 30 }}>
           <ButtonDetail
             title='Edit now'
             style={{ width: 150, height: 50 }}
-            onPress={() => { }}
+            onPress={() => { UpdateData() }}
             color={CUSTOM_COLOR.DarkOrange}
           ></ButtonDetail>
         </View>
@@ -316,4 +373,44 @@ export default function EditProduct({ navigation, route }) {
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    padding: 16,
+  },
+  dropdown: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
+    marginTop: 10
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 14,
+  },
+});
