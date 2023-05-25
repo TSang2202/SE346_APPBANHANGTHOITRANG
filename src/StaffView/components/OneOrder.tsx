@@ -6,6 +6,7 @@ const OneOrder = (props: any) => {
   return (
     <View style = {{width: '100%', height: 200, flexDirection: 'column', marginTop: 10}}>
       <View style = {{width: '100%', height: 145, borderBottomWidth: 0.5, flexDirection: 'row'}}>
+        
         <Image source={props.source}
           style = {{width: 80, height: 80, marginLeft: 35}}
           resizeMode='cover'
