@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import BackTo from '../components/BackTo'
 import CUSTOM_COLOR from '../constants/colors'
 import { Address, Delivery, Payment } from '../assets/icons'
@@ -8,6 +8,11 @@ import { Acount } from './OverView'
 import PerSon from '../components/PerSon'
 import { IM_MauAo } from '../assets/images'
 import ButtonDetail from '../components/ButtonDetail'
+
+import { Firestore, Storage } from '../../../Firebase/firebase'
+import { async } from '@firebase/util'
+import { collection, doc, getDocs, updateDoc, where } from 'firebase/firestore'
+import { query } from 'firebase/database'
 const DataDelivery = {
   Name: 'Trung Tinh',
   Phone: '0704408389',
@@ -15,7 +20,35 @@ const DataDelivery = {
   CTY: 'Fast Delivery VietNam',
   Code: '#JHGUJHCFJG'
 }
-export default function DeTailDelivery({navigation}) {
+export default function DeTailDelivery({navigation, route}) {
+
+  const { order } = route.params
+  const [dataAddress, setdataAddress] = useState([])
+  const [dataUser, setDataUser] = useState([])
+  
+
+  const getDataAddress = async() => {
+    const t = query(collection(Firestore, "DIACHI"), where ("MaDC", "==", order.MaDC))
+    const querySnapshot = await getDocs(q)
+        const data = []
+        querySnapshot.forEach((doc) => {
+            data.push({...doc.data()})
+        })
+        setdataAddress(data)
+  }
+  const getDataUser = async() => {
+    const t = query(collection(Firestore, "NGUOIDUNG"), where ("MaDC", "==", order.MaND))
+    const querySnapshot = await getDocs(q)
+        const data = []
+        querySnapshot.forEach((doc) => {
+            data.push({...doc.data()})
+        })
+        setDataUser(data)
+    useEffect(()=>{
+      getDataAddress()
+      getDataUser()
+    })
+  }
   return (
     <ScrollView style = {{backgroundColor: CUSTOM_COLOR.White}}>
       <BackTo
@@ -23,9 +56,9 @@ export default function DeTailDelivery({navigation}) {
         Info = 'Order/DeTails'
         onPress = {()=> {navigation.goBack()}}
       ></BackTo>
-    <View style = {{width: '100%', height: 10,marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray}}></View>
-    <View style = {{width: '100%', flexDirection: 'column', marginTop: 10}}>
-    <View style = {{width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between'}}>
+        <View style = {{width: '100%', height: 10,marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray}}></View>
+        <View style = {{width: '100%', flexDirection: 'column', marginTop: 10}}>
+        <View style = {{width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between'}}>
             <View style = {{flexDirection: 'row'}}>
             <Image
               source={Address}
@@ -40,9 +73,9 @@ export default function DeTailDelivery({navigation}) {
             </TouchableOpacity>
         </View>
         <View style = {{marginLeft: 50, marginTop: 5, marginRight: 20}}>
-        <Text>{DataDelivery.Name}</Text>
-        <Text>{DataDelivery.Phone}</Text>
-        <Text>{DataDelivery.Address}</Text>
+        <Text>{order.TenNguoiDat}</Text>
+        <Text>{order.SDT}</Text>
+        <Text>{dataAddress[0].DiaChi}, {dataAddress[0].PhongXa}, {dataAddress[0].QuanHuyen}, {dataAddress[0].TinhThanhPho}</Text>
         </View>
     </View>
     <View style = {{width: '100%', height: 10,marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray}}></View>
@@ -62,7 +95,7 @@ export default function DeTailDelivery({navigation}) {
             </TouchableOpacity>
         </View>
         <View style = {{marginLeft: 50, marginTop: 5, marginRight: 20}}>
-        <Text>{DataDelivery.CTY}</Text>
+        <Text>{order.DonViVanChuyen}</Text>
         <Text>Delivery Code: {DataDelivery.Code}</Text>
         </View>
     </View>
@@ -88,9 +121,9 @@ export default function DeTailDelivery({navigation}) {
     <View style = {{width: '100%', height: 10,marginTop: 20, backgroundColor: CUSTOM_COLOR.LightGray}}></View>
     <View>
       <PerSon
-            avartar = {Acount.avartar}
-            name = {Acount.name}
-            id = {Acount.id}
+            avartar = {dataUser[0].Avartar}
+            name = {dataUser[0].TenND}
+            id = {dataUser[0].MaND}
         ></PerSon>
         <View style = {{width: '100%', borderBottomWidth: 0.5,height: 100, marginTop: 10, flexDirection: 'row'}}>
         <Image source={IM_MauAo}

@@ -1,12 +1,32 @@
 import { View, Text, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Search from '../components/Search'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Acount } from './OverView'
 import CUSTOM_COLOR from '../constants/colors'
 import UserChat from '../components/UserChat'
 import Size from '../constants/size'
+import { Firestore, Storage } from '../../../Firebase/firebase'
+import { async } from '@firebase/util'
+import { collection, doc, getDocs, updateDoc, where } from 'firebase/firestore'
+import { query } from 'firebase/database'
 function Chat({navigation}){
+    const [dataChat, setDataChat] = useState([])
+
+    const getDataChat = async() => {
+      const q = query(collection(Firestore, "CHAT"))
+      const querySnapshot = await getDocs(q)
+      const data = []
+      querySnapshot.forEach((doc) => {
+          data.push({...doc.data()})
+      })
+      setDataChat(data)
+
+      useEffect(()=>{
+        getDataChat()
+      })
+
+  }
     return (
       <SafeAreaView style = {{ backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight}}>
       <View style = {{flexDirection: 'row', marginTop: 20, width: '100%', height: 70}}>
