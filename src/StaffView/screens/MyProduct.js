@@ -88,8 +88,18 @@ export default function MyProduct({ navigation }) {
 
 
 
+
     useEffect(() => {
 
+        const unsubscribe = navigation.addListener('focus', () => {
+            console.log('Screen A is focused');
+
+            getDadaOnWait()
+            getDadaOutOfStock()
+            getDadaInventory()
+
+
+        });
 
         getDadaOnWait()
         getDadaOutOfStock()
