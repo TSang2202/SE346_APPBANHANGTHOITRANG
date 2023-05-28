@@ -14,10 +14,39 @@ import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import HederContent from '../components/Header/HederContent.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
+import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+
+const auth = getAuth();
 
 const SignIn = props => {
   const {navigation} = props;
   const [status, setStatus] = useState('');
+
+  const [value, setValue] = React.useState({
+    email: '',
+    password: '',
+    error: '',
+  });
+
+  async function signIn() {
+    if (value.email === '' || value.password === '') {
+      setValue({
+        ...value,
+        error: 'Email and password are mandatory.',
+      });
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, value.email, value.password);
+    } catch (error) {
+      setValue({
+        ...value,
+        error: error.message,
+      });
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderWithBack onPress={() => navigation.goBack()} />

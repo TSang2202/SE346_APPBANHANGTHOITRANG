@@ -1,22 +1,16 @@
 import React from 'react';
-
-import { SafeAreaView, StyleSheet } from 'react-native';
+import './Firebase/firebase';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import MainNavigator from './src/Login_SignUp/navigation/navigation.js';
-//import type { PropsWithChildren } from 'react';
-
-import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab.js';
-import OverView from './src/StaffView/screens/OverView.js';
 import StackNavigator from './src/StaffView/navigation/navigation.js';
+import StackHome from './src/CustomerView/navigation/StackHome';
+import {useAuth} from './src/Login_SignUp/hooks/useAuth';
 
 const App = () => {
-  return (
+  const {user} = useAuth();
 
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <StackNavigator />
-    </SafeAreaView>
-  );
-}
-
+  return user ? <StackHome /> : <MainNavigator />;
+};
 
 const styles = StyleSheet.create({});
 
