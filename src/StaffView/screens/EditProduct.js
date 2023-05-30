@@ -99,7 +99,7 @@ export default function EditProduct({ navigation, route }) {
 
     querySnapshot.forEach(documentSnapshot => {
 
-      const check = item.MauSac.find(color => color.MaMS === documentSnapshot.data().MaMS)
+      const check = item.MauSac.find(color => color.MaMS === documentSnapshot.data().MaMS && color.checked == true)
 
       colors.push({
         ...documentSnapshot.data(),
@@ -116,7 +116,7 @@ export default function EditProduct({ navigation, route }) {
 
     const data = []
     sizes.forEach((sizes) => {
-      const check = item.Size.find(size => size.id === sizes.id)
+      const check = item.Size.find(size => size.id === sizes.id && size.checked == true)
       if (check) {
         data.push({
           ...sizes,
@@ -155,7 +155,7 @@ export default function EditProduct({ navigation, route }) {
 
   useEffect(() => {
 
-    console.log(item.MauSac)
+
     setName(item.TenSP)
     setDescription(item.MoTaSP)
     setPrice(item.GiaSP)
