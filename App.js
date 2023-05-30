@@ -1,23 +1,40 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {firebase} from './Firebase/firebase';
+import MainNavigator from './src/Login_SignUp/navigation/navigation';
+import StackHome from './src/CustomerView/navigation/StackHome';
+import {NavigationContainer} from '@react-navigation/native';
 
-import { SafeAreaView, StyleSheet } from 'react-native';
-import MainNavigator from './src/Login_SignUp/navigation/navigation.js';
-//import type { PropsWithChildren } from 'react';
+function App() {
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
 
-import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab.js';
-import OverView from './src/StaffView/screens/OverView.js';
-import StackNavigator from './src/StaffView/navigation/navigation.js';
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) {
+      setInitializing(false);
+    }
+  }
 
-const App = () => {
+  useEffect(() => {
+    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  if (initializing) {
+    return null;
+  }
+
+  if (!user) {
+    return <MainNavigator />;
+  }
+
   return (
-
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <StackNavigator />
-    </SafeAreaView>
+    <NavigationContainer>
+      <StackHome />
+    </NavigationContainer>
   );
 }
 
-
-const styles = StyleSheet.create({});
-
-export default App;
+export default () => {
+  return <App />;
+};

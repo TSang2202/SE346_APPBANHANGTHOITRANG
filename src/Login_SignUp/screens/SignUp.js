@@ -17,6 +17,8 @@ import HederContent from '../components/Header/HederContent.js';
 import CheckBox from '@react-native-community/checkbox';
 import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
+import {firebase} from '../../../Firebase/firebase.js';
+import {useNavigation} from '@react-navigation/native';
 //import {  ref, set } from "firebase/database";
 //import {db} from '../../../Firebase/firebase';
 
@@ -24,6 +26,51 @@ const SignUp = props => {
   const {navigation} = props;
   const [status, setStatus] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [birth, setBirth] = useState('');
+  const [password, setPassword] = useState('');
+
+  const signUp = async (fullName, email, phoneNumber, birth, password) => {
+    await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        firebase
+          .auth()
+          .currentUser.sendEmailVerification({
+            handleCodeInApp: true,
+            url: 'http://shoppingapp-ada07.firebaseapp.com',
+          })
+          .then(() => {
+            alert('Verification email sent');
+          })
+          .catch(error => {
+            alert(error.message);
+          })
+          .then(() => {
+            firebase
+              .firestore()
+              .collection('users')
+              .doc(firebase.auth().currentUser.uid)
+              .set({
+                fullName,
+                email,
+                phoneNumber,
+                birth,
+                password,
+              });
+          })
+          .catch(error => {
+            alert(error.message);
+          });
+      })
+      .catch(error => {
+        alert(error.message);
+      });
+  };
 
   // const username = 'Sang'
   // const email = 'thachsang2202@gmail.com'
@@ -51,23 +98,43 @@ const SignUp = props => {
         </View>
         <View style={[styles.bodyContainer, styles.unitContainer]}>
           <View style={{flex: 1}}>
-            <TextInputCard title="Full name*" txtInput="Nguyen Van A" />
+            <TextInputCard
+              title="Full name*"
+              txtInput="Nguyen Van A"
+              onChangeText={fullName => setFullName(fullName)}
+            />
           </View>
 
           <View style={{flex: 1}}>
-            <TextInputCard title="Email" txtInput="abc@gmail.com" />
+            <TextInputCard
+              title="Email"
+              txtInput="abc@gmail.com"
+              onChangeText={email => setEmail(email)}
+            />
           </View>
 
           <View style={{flex: 1}}>
-            <TextInputCard title="Phone number*" txtInput="03333333333" />
+            <TextInputCard
+              title="Phone number*"
+              txtInput="03333333333"
+              onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+            />
           </View>
 
           <View style={{flex: 1}}>
-            <TextInputCard title="Day of birth" txtInput="01/01/2003" />
+            <TextInputCard
+              title="Day of birth"
+              txtInput="01/01/2003"
+              onChangeText={birth => setBirth(birth)}
+            />
           </View>
 
           <View style={{flex: 1}}>
-            <PasswordCard title="Password*" txtInput="********" />
+            <PasswordCard
+              title="Password*"
+              txtInput="********"
+              onChangeText={password => setPassword(password)}
+            />
           </View>
 
           <View style={{flex: 1}}>
@@ -85,7 +152,7 @@ const SignUp = props => {
 
           <View
             style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
-            <HederContent content="I agree with this "></HederContent>
+            <HederContent content="I agree with this " />
           </View>
 
           <View
@@ -105,11 +172,8 @@ const SignUp = props => {
             <CustomButton
               type="primary"
               text="Sign up now"
-              onPress={
-                //create
-                () => {
-                  navigation.navigate('SmartOTP');
-                }
+              onPress={() =>
+                signUp(fullName, email, phoneNumber, birth, password)
               }
             />
           </View>
@@ -128,12 +192,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topContainer: {
-    height: '7%',
+    height: 50,
     top: '-1%',
     left: '3%',
   },
   bodyContainer: {
-    height: '72%',
+    height: 480,
     top: '0%',
   },
   checkContainer: {
