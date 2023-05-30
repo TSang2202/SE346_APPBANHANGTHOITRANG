@@ -10,7 +10,7 @@ import { Firestore } from '../../../Firebase/firebase'
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { async } from '@firebase/util'
 
-
+import PropTypes from 'deprecated-react-native-prop-types';
 
 
 export default function Chat({ navigation }) {
@@ -125,7 +125,7 @@ export default function Chat({ navigation }) {
             source={item.Avatar}
             name={item.TenND}
             message='You:What are you doing? - 12:40PM'
-            onPress={() => navigation.navigate('ChatScreen')}
+            onPress={() => navigation.navigate('ChatScreen', { item })}
           ></UserChat>
         )}
         keyExtractor={(item) => item.MaChat}
