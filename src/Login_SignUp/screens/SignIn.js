@@ -32,6 +32,19 @@ const SignIn = props => {
     }
   };
 
+  const fogotPassword = email => {
+    firebase
+      .auth()
+      // .sendPasswordResetEmail(firebase.auth().currentUser.email)
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        alert('Password reset email sent');
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderWithBack onPress={() => navigation.goBack()} />
@@ -59,7 +72,10 @@ const SignIn = props => {
 
         <View style={{flex: 1, alignItems: 'flex-end'}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('ForgotPassword')}>
+            // onPress={() => navigation.navigate('ForgotPassword')}
+            onPress={() => {
+              fogotPassword(email);
+            }}>
             <Text style={styles.contentStyle}>Forgot Password</Text>
           </TouchableOpacity>
         </View>
