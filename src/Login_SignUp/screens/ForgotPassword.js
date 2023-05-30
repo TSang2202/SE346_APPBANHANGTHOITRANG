@@ -27,8 +27,8 @@ const ForgotPassword = props => {
 
       <View style={[styles.centerContainer, styles.unitContainer]}>
         <TextInputCard
-          title="Enter your account phone number"
-          txtInput="033333333"
+          title="Enter your account email"
+          txtInput="abc@gmail.com"
         />
       </View>
 
@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topContainer: {
-    height: '15%',
+    height: 120,
     top: '1%',
   },
   centerContainer: {
-    height: '16%',
+    height: 120,
     top: '7%',
   },
   botContainer: {

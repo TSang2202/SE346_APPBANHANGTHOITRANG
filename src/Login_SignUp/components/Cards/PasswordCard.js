@@ -24,8 +24,10 @@ const PasswordCard = props => {
             style={styles.textinputStyle}
             placeholder={props.txtInput}
             // placeholderTextColor='CUSTOM_COLOR.Black'
-            secureTextEntry
+            secureTextEntry={isSecureEntry}
+            autoCapitalize="none"
             autoCorrect={false}
+            onChangeText={props.onChangeText}
           />
         </View>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -34,15 +36,9 @@ const PasswordCard = props => {
               setIsSecureEntry(!isSecureEntry);
             }}>
             {isSecureEntry === true ? (
-              <Image
-                source={IC_visibility1}
-                style={{width: '60%', height: '60%', resizeMode: 'contain'}}
-              />
+              <Image source={IC_visibility1} style={styles.iconStyle} />
             ) : (
-              <Image
-                source={IC_visibility}
-                style={{width: '60%', height: '60%', resizeMode: 'contain'}}
-              />
+              <Image source={IC_visibility} style={styles.iconStyle} />
             )}
           </TouchableOpacity>
 
@@ -80,6 +76,11 @@ const styles = StyleSheet.create({
     color: CUSTOM_COLOR.Black,
     left: '5%',
     justifyContent: 'center',
+  },
+  iconStyle: {
+    width: '60%',
+    height: '60%',
+    resizeMode: 'contain',
   },
 });
 export default PasswordCard;
