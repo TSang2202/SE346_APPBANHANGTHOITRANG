@@ -8,14 +8,15 @@ import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
 
 
-function TrendingScreen({ navigation }) {
+function DetailCategoryScreen({ navigation, route }) {
 
-    const [trending, setTrending] = useState([]);
+    const { item } = route.params
 
-    const getDataTrending = async () => {
-        //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
+    const [items, setItems] = useState([]);
 
-        const q = query(collection(Firestore, "SANPHAM"), where("Trending", "==", true));
+    const getDataCategory = async () => {
+
+        const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", item.MaDM));
 
         const querySnapshot = await getDocs(q);
 
@@ -29,13 +30,14 @@ function TrendingScreen({ navigation }) {
             });
         });
 
-        setTrending(items);
+        setItems(items);
     }
 
     useEffect(() => {
 
 
-        getDataTrending();
+        getDataCategory();
+        console.log(items)
 
 
         // const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
@@ -83,20 +85,29 @@ function TrendingScreen({ navigation }) {
                 </View>
             </View>
 
-            <View>
+            <View style={{
+                flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
+            }}>
                 <Text style={{
                     fontSize: 20,
                     marginHorizontal: 30,
                     fontWeight: 'bold',
                     marginBottom: 10
-                }}>Trending now</Text>
+                }}>{item.TenDM}</Text>
+
+                <Text style={{
+                    fontSize: 17,
+                    marginHorizontal: 20,
+                    fontWeight: 'bold',
+                    marginBottom: 0
+                }}>{item.SoLuongSP} sản phẩm</Text>
             </View>
 
             <View style={{
                 height: '80%'
             }}>
                 <FlatList
-                    data={trending}
+                    data={items}
                     renderItem={({ item }) => {
                         return (
                             <TouchableWithoutFeedback style={{
@@ -112,6 +123,7 @@ function TrendingScreen({ navigation }) {
                         )
                     }}
                     numColumns={2}
+                    keyExtractor={(item) => item.MaDM}
                 />
 
             </View>
@@ -123,4 +135,4 @@ function TrendingScreen({ navigation }) {
     )
 }
 
-export default TrendingScreen
+export default DetailCategoryScreen
