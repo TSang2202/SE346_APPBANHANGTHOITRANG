@@ -12,7 +12,7 @@ const App = () => {
   return (
 
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <StackNavigator />
+      <CustomerBottomTab />
     </SafeAreaView>
   );
 }
