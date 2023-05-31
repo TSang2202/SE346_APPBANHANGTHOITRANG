@@ -14,24 +14,60 @@ import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import HederContent from '../components/Header/HederContent.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
+import {useNavigation} from '@react-navigation/native';
+import {firebase} from '../../../Firebase/firebase.js';
 
 const SignIn = props => {
   const {navigation} = props;
   const [status, setStatus] = useState('');
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const loginUser = async (email, password) => {
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const fogotPassword = email => {
+    firebase
+      .auth()
+      // .sendPasswordResetEmail(firebase.auth().currentUser.email)
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        alert('Password reset email sent');
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderWithBack onPress={() => navigation.goBack()} />
-      <View style={[styles.unitContainer, {height: '15%'}]}>
+      <View style={[styles.unitContainer, {height: 100}]}>
         <HeaderTitlle title="Sign in" />
       </View>
 
       <View style={[styles.unitContainer, styles.bodyContainer]}>
         <View style={{flex: 2}}>
-          <TextInputCard title="Phone number*" txtInput="03333333333" />
+          <TextInputCard
+            title="Email*"
+            txtInput="abc@gmail.com"
+            onChangeText={email => setEmail(email)}
+            keyboardType="email-address"
+          />
         </View>
 
         <View style={{flex: 2}}>
-          <PasswordCard title="Pasword*" txtInput="********" />
+          <PasswordCard
+            title="Pasword*"
+            txtInput="********"
+            onChangeText={password => setPassword(password)}
+          />
         </View>
 
         <View style={{flex: 1, alignItems: 'flex-end'}}>
@@ -47,7 +83,8 @@ const SignIn = props => {
           <CustomButton
             type="primary"
             text="Sign in"
-            onPress={() => navigation.navigate('SignIn')}
+            onPress={() => loginUser(email, password)}
+            // onPress={() => navigation.navigate('SignIn')}
           />
         </View>
       </View>
@@ -77,7 +114,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bodyContainer: {
-    height: '40%',
+    height: 270,
     top: '0%',
     flexDirection: 'column',
   },

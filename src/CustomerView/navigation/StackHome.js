@@ -1,4 +1,6 @@
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
 import ChatScreen from '../screens/ChatScreen';
 import CheckoutScreen from '../screens/CheckoutScreen';
 import DeliveryAddressScreen from '../screens/DeliveryAddressScreen';
@@ -13,10 +15,10 @@ import TrendingScreen from '../screens/TrendingScreen';
 import ReviewScreen from '../screens/ReviewScreen';
 import DetailCategoryScreen from '../screens/DetailCategoryScreen';
 
-
 const Stack = createNativeStackNavigator();
 
 function StackHome() {
+
     return (
         <Stack.Navigator
             screenOptions={
@@ -42,6 +44,7 @@ function StackHome() {
         </Stack.Navigator>
 
     )
+
 }
 
-export default StackHome
+export default StackHome;

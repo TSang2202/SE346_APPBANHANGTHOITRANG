@@ -13,6 +13,10 @@ const TextInputCard = props => {
           style={styles.textinputStyle}
           placeholder={props.txtInput}
           // placeholderTextColor='CUSTOM_COLOR.Black'
+          onChangeText={props.onChangeText}
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType={props.keyboardType}
         />
       </View>
     </View>
