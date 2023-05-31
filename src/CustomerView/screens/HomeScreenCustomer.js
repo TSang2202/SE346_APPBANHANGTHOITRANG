@@ -9,34 +9,11 @@ import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
 import { collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
 import { async } from "@firebase/util";
+import ProductView from "../components/ProductView";
 //import { get } from "firebase/database";
 
 
 
-
-const dataTredding = [
-  {
-    id: '1',
-    image: IM_MauAo,
-    title: 'Áo len nâu'
-  },
-  {
-    id: '2',
-    image: IM_MauAo,
-    title: 'Áo len nâu'
-  },
-  {
-    id: '3',
-    image: IM_MauAo,
-    title: 'Áo len nâu'
-  },
-  {
-    id: '4',
-    image: IM_MauAo,
-    title: 'Áo len nâu'
-  },
-
-];
 
 const dataCategorie = [
   {
@@ -63,37 +40,56 @@ const dataCategorie = [
 
 function HomeScreenCustomer({ navigation }) {
 
-  const [items, setItems] = useState([]);
+  const [trending, setTrending] = useState([]);
+  const [danhmuc, setDanhMuc] = useState([])
+
+  const getDataTrending = async () => {
+    //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
+
+    const q = query(collection(Firestore, "SANPHAM"), where("Trending", "==", true));
+
+    const querySnapshot = await getDocs(q);
+
+    const items = [];
+
+
+    querySnapshot.forEach(documentSnapshot => {
+      items.push({
+        ...documentSnapshot.data(),
+        key: documentSnapshot.id,
+      });
+    });
+
+    setTrending(items);
+  }
+
+  const getDataDanhMuc = async () => {
+    const q = query(collection(Firestore, "DANHMUC"))
+
+    const querySnapshot = await getDocs(q);
+
+    const items = [];
+
+
+    querySnapshot.forEach(documentSnapshot => {
+      items.push({
+        ...documentSnapshot.data(),
+        key: documentSnapshot.id,
+      });
+    });
+
+    setDanhMuc(items);
+  }
 
   useEffect(() => {
-    const getData = async () => {
-      //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
-
-      const q = query(collection(Firestore, "MATHANG"), where("Trending", "==", true));
-
-      const querySnapshot = await getDocs(q);
-
-      const items = [];
 
 
-      querySnapshot.forEach(documentSnapshot => {
-        items.push({
-          ...documentSnapshot.data(),
-          key: documentSnapshot.id,
-        });
-      });
+    getDataTrending();
+    getDataDanhMuc();
 
 
-
-      setItems(items);
-
-
-    }
-
-    getData();
-
-    const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
-    return () => clearInterval(interval); // Xóa interval khi component bị unmount
+    // const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
+    // return () => clearInterval(interval); // Xóa interval khi component bị unmount
   }, []);
 
 
@@ -169,23 +165,26 @@ function HomeScreenCustomer({ navigation }) {
         ><Text style={{ margin: 20 }}>See all</Text></TouchableOpacity>
       </View>
 
-      <View style={{ height: 150 }}>
+      <View style={{}}>
         <FlatList
           windowSize={10}
           horizontal={true}
-          data={items}
+          data={trending}
 
           renderItem={({ item }) =>
-            <TouchableOpacity style={{}}
+            <TouchableOpacity style={{
+              marginHorizontal: -10
+            }}
               onPress={() => { navigation.navigate('DetailProduct', { item }) }}
             >
-              <ProductCard
-                source={item.AnhMH}
-                title={item.TenMH}
+              <ProductView
+                source={item.HinhAnhSP}
+                title={item.TenSP}
+                price={item.GiaSP}
               />
             </TouchableOpacity>
           }
-          keyExtractor={item => item.MaMH}
+          keyExtractor={item => item.MaSP}
         />
 
       </View>
@@ -200,19 +199,21 @@ function HomeScreenCustomer({ navigation }) {
         <FlatList
 
 
-          data={dataCategorie}
+          data={danhmuc}
 
           renderItem={({ item }) =>
-            <TouchableWithoutFeedback style={{}}>
+            <TouchableOpacity style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}
+              onPress={() => { navigation.navigate('DetailCategory', { item }) }}
+            >
               <Categories
-                source={item.source}
-                title={item.name}
+                source={item.AnhDM}
+                title={item.TenDM}
               />
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
 
 
           }
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.MaDM}
         />
 
       </View>
