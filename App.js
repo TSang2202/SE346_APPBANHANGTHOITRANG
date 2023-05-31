@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {firebase} from './Firebase/firebase';
 import MainNavigator from './src/Login_SignUp/navigation/navigation';
-import StackHome from './src/CustomerView/navigation/StackHome';
-import {NavigationContainer} from '@react-navigation/native';
+import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab';
 
 function App() {
   const [initializing, setInitializing] = useState(true);
@@ -28,11 +27,7 @@ function App() {
     return <MainNavigator />;
   }
 
-  return (
-    <NavigationContainer>
-      <StackHome />
-    </NavigationContainer>
-  );
+  return <CustomerBottomTab />;
 }
 
 export default () => {

@@ -13,10 +13,26 @@ import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import HederContent from '../components/Header/HederContent.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
+import {firebase} from '../../../Firebase/firebase.js';
 
 const ForgotPassword = props => {
   const {navigation} = props;
+  const [email, setEmail] = useState('');
   const [status, setStatus] = useState('');
+
+  const fogotPassword = email => {
+    firebase
+      .auth()
+      // .sendPasswordResetEmail(firebase.auth().currentUser.email)
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        alert('Password reset email sent');
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderWithBack onPress={() => navigation.goBack()} />
@@ -29,6 +45,8 @@ const ForgotPassword = props => {
         <TextInputCard
           title="Enter your account email"
           txtInput="abc@gmail.com"
+          onChangeText={email => setEmail(email)}
+          keyboardType="email-address"
         />
       </View>
 
@@ -44,7 +62,11 @@ const ForgotPassword = props => {
           <CustomButton
             type="primary"
             text="Continue"
-            onPress={() => navigation.navigate('SmartOTP')}
+            onPress={() => {
+              fogotPassword(email);
+              navigation.navigate('Done');
+              // onPress={() => navigation.navigate('SmartOTP')}
+            }}
           />
         </View>
       </View>

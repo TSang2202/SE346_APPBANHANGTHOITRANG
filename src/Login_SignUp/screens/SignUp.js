@@ -32,6 +32,7 @@ const SignUp = props => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [birth, setBirth] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const signUp = async (fullName, email, phoneNumber, birth, password) => {
     await firebase
@@ -60,7 +61,6 @@ const SignUp = props => {
                 email,
                 phoneNumber,
                 birth,
-                password,
               });
           })
           .catch(error => {
@@ -110,6 +110,7 @@ const SignUp = props => {
               title="Email"
               txtInput="abc@gmail.com"
               onChangeText={email => setEmail(email)}
+              keyboardType="email-address"
             />
           </View>
 
@@ -138,7 +139,13 @@ const SignUp = props => {
           </View>
 
           <View style={{flex: 1}}>
-            <PasswordCard title="Confirm Password*" txtInput="********" />
+            <PasswordCard
+              title="Confirm Password*"
+              txtInput="********"
+              onChangeText={corfirmPassword =>
+                setConfirmPassword(corfirmPassword)
+              }
+            />
           </View>
         </View>
 
@@ -172,9 +179,14 @@ const SignUp = props => {
             <CustomButton
               type="primary"
               text="Sign up now"
-              onPress={() =>
-                signUp(fullName, email, phoneNumber, birth, password)
-              }
+              onPress={() => {
+                if (password === confirmPassword) {
+                  signUp(fullName, email, phoneNumber, birth, password);
+                  navigation.navigate('Congratulation');
+                } else {
+                  alert('Corfirm password not match with password');
+                }
+              }}
             />
           </View>
         </View>
