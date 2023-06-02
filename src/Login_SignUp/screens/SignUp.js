@@ -62,14 +62,15 @@ const SignUp = props => {
           .then(() => {
             firebase
               .firestore()
-              .collection('users')
+              .collection('NGUOIDUNG')
               .doc(firebase.auth().currentUser.uid)
               .set({
-                fullName,
-                email,
-                phoneNumber,
-                birth,
-                user,
+                TenND: fullName,
+                Email: email,
+                Phone: phoneNumber,
+                NgaySinh: birth,
+                MaND: firebase.auth().currentUser.uid,
+                LoaiND: user,
               });
           })
           .catch(error => {
@@ -116,7 +117,7 @@ const SignUp = props => {
 
           <View style={{flex: 1}}>
             <TextInputCard
-              title="Email"
+              title="Email*"
               txtInput="abc@gmail.com"
               onChangeText={email => setEmail(email)}
               keyboardType="email-address"
@@ -125,7 +126,7 @@ const SignUp = props => {
 
           <View style={{flex: 1}}>
             <TextInputCard
-              title="Phone number*"
+              title="Phone number"
               txtInput="03333333333"
               onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
             />
@@ -134,7 +135,7 @@ const SignUp = props => {
           <View style={{flex: 1}}>
             <TextInputCard
               title="Day of birth"
-              txtInput="01/01/2003"
+              txtInput="dd/mm/yy"
               onChangeText={birth => setBirth(birth)}
             />
           </View>
