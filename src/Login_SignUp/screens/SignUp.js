@@ -33,8 +33,16 @@ const SignUp = props => {
   const [birth, setBirth] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const user = true;
 
-  const signUp = async (fullName, email, phoneNumber, birth, password) => {
+  const signUp = async (
+    fullName,
+    email,
+    phoneNumber,
+    birth,
+    password,
+    user,
+  ) => {
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -61,6 +69,7 @@ const SignUp = props => {
                 email,
                 phoneNumber,
                 birth,
+                user,
               });
           })
           .catch(error => {
@@ -181,7 +190,7 @@ const SignUp = props => {
               text="Sign up now"
               onPress={() => {
                 if (password === confirmPassword) {
-                  signUp(fullName, email, phoneNumber, birth, password);
+                  signUp(fullName, email, phoneNumber, birth, password, user);
                   navigation.navigate('Congratulation');
                 } else {
                   alert('Corfirm password not match with password');
