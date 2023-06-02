@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, TouchableWithoutFeedback } from "react-native";
-import { Firestore } from "../../../Firebase/firebase";
+import { Firestore, firebase } from "../../../Firebase/firebase";
 import { IC_Chat, IC_ShoppingCart } from "../assets/icons";
 import { IM_GiayNam, IM_MauAo, IM_PhuKien, IM_SaleImage, IM_ThoiTrangNam, IM_ThoiTrangNu } from "../assets/images";
 import Categories from "../components/Categories";
 import ProductCard from "../components/ProductCard";
 import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
 import { async } from "@firebase/util";
 import ProductView from "../components/ProductView";
+
 //import { get } from "firebase/database";
 
 
@@ -42,6 +43,7 @@ function HomeScreenCustomer({ navigation }) {
 
   const [trending, setTrending] = useState([]);
   const [danhmuc, setDanhMuc] = useState([])
+  const [chatUser, setChatUser] = useState()
 
   const getDataTrending = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
@@ -81,12 +83,35 @@ function HomeScreenCustomer({ navigation }) {
     setDanhMuc(items);
   }
 
+  const getDataChatUser = async () => {
+    const q = query(collection(Firestore, "CHAT"), where("MaND", "==", firebase.auth().currentUser.uid));
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.size == 0) {
+      const docRef = await addDoc(collection(Firestore, "CHAT"), {
+        MaND: firebase.auth().currentUser.uid
+      });
+
+      const updateRef = doc(Firestore, "CHAT", docRef.id);
+      await updateDoc(updateRef, {
+        MaChat: docRef.id
+      });
+
+    }
+    querySnapshot.forEach((doc) => {
+      setChatUser(doc.data())
+    });
+  }
+
   useEffect(() => {
 
 
     getDataTrending();
     getDataDanhMuc();
+    getDataChatUser()
 
+    console.log(chatUser)
 
     // const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
     // return () => clearInterval(interval); // Xóa interval khi component bị unmount
@@ -116,7 +141,7 @@ function HomeScreenCustomer({ navigation }) {
           borderRadius: 10
         }}
           onPress={() => {
-            navigation.navigate('Chat')
+            navigation.navigate('Chat', { chatUser })
 
           }}
         >

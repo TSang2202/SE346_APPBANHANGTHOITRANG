@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { firebase } from './Firebase/firebase';
+import MainNavigator from './src/Login_SignUp/navigation/navigation';
+import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab';
 
-import { SafeAreaView, StyleSheet } from 'react-native';
-import MainNavigator from './src/Login_SignUp/navigation/navigation.js';
-//import type { PropsWithChildren } from 'react';
+function App() {
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
 
-import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab.js';
-import OverView from './src/StaffView/screens/OverView.js';
-import StackNavigator from './src/StaffView/navigation/navigation.js';
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) {
+      setInitializing(false);
+    }
+  }
 
-const App = () => {
-  return (
+  useEffect(() => {
+    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
 
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <CustomerBottomTab />
-    </SafeAreaView>
-  );
+  if (initializing) {
+    return null;
+  }
+
+  if (!user) {
+    return <MainNavigator />;
+  }
+
+  return <CustomerBottomTab />;
+
 }
 
-
-const styles = StyleSheet.create({});
-
-export default App;
+export default () => {
+  return <App />;
+};

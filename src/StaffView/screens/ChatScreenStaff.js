@@ -10,16 +10,16 @@ import { async } from "@firebase/util";
 import { set } from "firebase/database";
 
 
-function ChatScreen({ navigation, route }) {
+function ChatScreenStaff({ navigation, route }) {
 
-    const { chatUser } = route.params;
+    const { item } = route.params;
 
     const [message, setMessage] = useState([])
     const [chat, setChat] = useState('')
 
 
     const getDataMessage = async () => {
-        const q = query(collection(Firestore, "CHITIETCHAT"), orderBy("ThoiGian", "asc"), where("MaChat", "==", chatUser.MaChat));
+        const q = query(collection(Firestore, "CHITIETCHAT"), orderBy("ThoiGian", "asc"), where("MaChat", "==", item.MaChat));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const data = [];
             querySnapshot.forEach((doc) => {
@@ -35,9 +35,9 @@ function ChatScreen({ navigation, route }) {
         const currentTime = new Date();
         const docRef = await addDoc(collection(Firestore, "CHITIETCHAT"), {
             NoiDung: chat,
-            LaNguoiMua: true,
+            LaNguoiMua: false,
             ThoiGian: Timestamp.fromDate(currentTime),
-            MaChat: chatUser.MaChat
+            MaChat: item.MaChat
         });
         console.log("Document written with ID: ", docRef.id);
 
@@ -74,7 +74,7 @@ function ChatScreen({ navigation, route }) {
                         resizeMode='stretch'
                     />
                 </TouchableOpacity>
-                {/* 
+
                 <Image
                     style={{
                         width: 45,
@@ -84,13 +84,13 @@ function ChatScreen({ navigation, route }) {
                     }}
 
                     source={{ uri: item.Avatar }}
-                /> */}
+                />
 
                 <Text style={{
                     marginHorizontal: '5%',
                     fontSize: 17,
                     fontWeight: 'bold'
-                }}>Fauget</Text>
+                }}>{item.TenND}</Text>
 
             </View>
 
@@ -209,4 +209,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default ChatScreen
+export default ChatScreenStaff
