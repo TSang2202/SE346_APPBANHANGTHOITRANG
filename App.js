@@ -50,15 +50,13 @@ function App() {
   if (!user) {
     return <MainNavigator />;
   } else {
-    // getDataUser(firebase.auth().currentUser.email);
-    // console.log(dataUser);
-    if (dataUser.LoaiND === true) {
+    getDataUser(firebase.auth().currentUser.email);
+    console.log(dataUser);
+    if (dataUser && dataUser.LoaiND === true) {
       return <CustomerBottomTab />;
-    } else {
+    } else if (dataUser && dataUser.LoaiND === false) {
       return (
-        <NavigationContainer>
-          <StackNavigator />
-        </NavigationContainer>
+        <StackNavigator />
       );
     }
   }
