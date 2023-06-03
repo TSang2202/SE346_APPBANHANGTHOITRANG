@@ -11,7 +11,7 @@ function App() {
   const [dataUser, setDataUser] = useState()
 
   const getDataUser = async (userId) => {
-    const docRef = doc(Firestore, "users", userId);
+    const docRef = doc(Firestore, "NGUOIDUNG", userId);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -37,13 +37,12 @@ function App() {
     if (user) {
       getDataUser(firebase.auth().currentUser.uid)
       console.log(dataUser)
+      console.log(firebase.auth().currentUser.uid)
 
     }
 
-
-
     return subscriber;
-  }, []);
+  }, [user]);
 
   if (initializing) {
     return null;
