@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   StyleSheet,
@@ -24,11 +25,30 @@ import {
 } from '../assets/icons';
 import {IM_AnhGiay2} from '../assets/images';
 import CUSTOM_COLOR from '../constants/colors';
-import {firebase} from '../../../Firebase/firebase.js';
+import {firebase, Firestore} from '../../../Firebase/firebase.js';
 import {useNavigation} from '@react-navigation/native';
+import { doc, getDoc } from "firebase/firestore";
+import { async } from "@firebase/util";
 function AccountScreen() {
   const navigation = useNavigation();
   const hanleSignOut = () => {};
+  
+  const [user, setUser] = useState()
+
+    const getUser = async () => {
+        const docRef = doc(Firestore, "NGUOIDUNG", firebase.auth().currentUser.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            setUser(docSnap.data())
+        } else {
+
+        }
+    }
+    useEffect(() => {
+        getUser()
+        console.log(user)
+    }, [])
 
   return (
     <View style={styles.container}>
@@ -354,3 +374,4 @@ const styles = StyleSheet.create({
 });
 
 export default AccountScreen;
+

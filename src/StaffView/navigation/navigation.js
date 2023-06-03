@@ -18,7 +18,7 @@ import EditProduct from '../screens/EditProduct.js';
 import AddProduct from '../screens/AddProduct.js';
 import DeTailDelivery from '../screens/DeTailDelivery.js';
 import ReView from '../screens/ReView.js';
-import ChatScreen from '../../CustomerView/screens/ChatScreen.js';
+import ChatScreenStaff from '../screens/ChatScreenStaff.js';
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
@@ -43,7 +43,7 @@ function StackNavigator() {
         <Stack.Screen name='AddProduct' component={AddProduct} />
         <Stack.Screen name='DeTailsDelivery' component={DeTailDelivery} />
         <Stack.Screen name='Review' component={ReView} />
-        <Stack.Screen name='ChatScreen' component={ChatScreen} />
+        <Stack.Screen name='ChatScreenStaff' component={ChatScreenStaff} />
       </Stack.Navigator>
     </NavigationContainer>
   );

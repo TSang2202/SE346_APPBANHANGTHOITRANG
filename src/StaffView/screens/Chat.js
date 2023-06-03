@@ -125,7 +125,7 @@ export default function Chat({ navigation }) {
             source={item.Avatar}
             name={item.TenND}
             message='You:What are you doing? - 12:40PM'
-            onPress={() => navigation.navigate('ChatScreen', { item })}
+            onPress={() => navigation.navigate('ChatScreenStaff', { item })}
           ></UserChat>
         )}
         keyExtractor={(item) => item.MaChat}

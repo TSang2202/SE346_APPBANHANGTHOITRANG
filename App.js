@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import { firebase, Firestore } from './Firebase/firebase';
 import MainNavigator from './src/Login_SignUp/navigation/navigation';
 import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab';
@@ -6,9 +7,11 @@ import StackNavigator from './src/StaffView/navigation/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { NavigationContainer } from '@react-navigation/native';
 
+
 function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+
 
   const [dataUser, setDataUser] = useState();
 
@@ -60,6 +63,7 @@ function App() {
       );
     }
   }
+
 }
 
 export default () => {
