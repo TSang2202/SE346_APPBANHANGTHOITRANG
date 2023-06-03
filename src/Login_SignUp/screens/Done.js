@@ -18,7 +18,9 @@ const Done = props => {
 
         <View style={styles.textView}>
           <Text style={styles.topText}>COMPLETE!</Text>
-          <Text style={styles.botText}>Your password has been reset</Text>
+          <Text style={styles.botText}>
+            Email reset password has been sent. Please check your email.
+          </Text>
         </View>
       </View>
 
