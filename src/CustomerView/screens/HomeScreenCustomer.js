@@ -16,34 +16,12 @@ import ProductView from "../components/ProductView";
 
 
 
-const dataCategorie = [
-  {
-    id: '1',
-    source: IM_ThoiTrangNam,
-    name: 'Thời trang nam',
-  },
-  {
-    id: '2',
-    source: IM_ThoiTrangNu,
-    name: 'Thời trang nữ',
-  },
-  {
-    id: '3',
-    source: IM_PhuKien,
-    name: 'Phụ kiện',
-  },
-  {
-    id: '4',
-    source: IM_GiayNam,
-    name: 'Giày nam',
-  },
-]
-
 function HomeScreenCustomer({ navigation }) {
 
   const [trending, setTrending] = useState([]);
   const [danhmuc, setDanhMuc] = useState([])
   const [chatUser, setChatUser] = useState()
+  const [loadingChatUser, setLoadingChatUser] = useState(false)
 
   const getDataTrending = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
@@ -98,6 +76,7 @@ function HomeScreenCustomer({ navigation }) {
         MaChat: docRef.id
       });
 
+      setLoadingChatUser(true)
     }
     querySnapshot.forEach((doc) => {
       setChatUser(doc.data())
@@ -115,12 +94,14 @@ function HomeScreenCustomer({ navigation }) {
 
     // const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
     // return () => clearInterval(interval); // Xóa interval khi component bị unmount
-  }, []);
+  }, [loadingChatUser]);
 
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: CUSTOM_COLOR.White }}>
 
+    <View style={{ backgroundColor: CUSTOM_COLOR.White }}
+      nestedScrollEnabled={true}
+    >
       <View style={{ flexDirection: 'row' }}>
         <SearchInput
           placeholder='Search product'
@@ -172,79 +153,99 @@ function HomeScreenCustomer({ navigation }) {
 
       </View>
 
+      <ScrollView style={{}}>
 
 
 
-      <Text style={styles.textView}>On sale</Text>
 
-      <Image style={{ marginHorizontal: 30, height: 120, width: 380 }}
-        source={IM_SaleImage}
-      />
 
-      <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-        <Text style={styles.textView}>Trending now</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Trending')
-          }}
-        ><Text style={{ margin: 20 }}>See all</Text></TouchableOpacity>
-      </View>
+        <Text style={styles.textView}>On sale</Text>
 
-      <View style={{}}>
-        <FlatList
-          windowSize={10}
-          horizontal={true}
-          data={trending}
-
-          renderItem={({ item }) =>
-            <TouchableOpacity style={{
-              marginHorizontal: -10
-            }}
-              onPress={() => { navigation.navigate('DetailProduct', { item }) }}
-            >
-              <ProductView
-                source={item.HinhAnhSP}
-                title={item.TenSP}
-                price={item.GiaSP}
-              />
-            </TouchableOpacity>
-          }
-          keyExtractor={item => item.MaSP}
+        <Image style={{ marginHorizontal: 30, height: 120, width: 380 }}
+          source={IM_SaleImage}
         />
 
-      </View>
+        <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+          <Text style={styles.textView}>Trending now</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Trending')
+            }}
+          ><Text style={{ margin: 20 }}>See all</Text></TouchableOpacity>
+        </View>
+
+        <View style={{}}>
+          <FlatList
+            windowSize={10}
+            horizontal={true}
+            data={trending}
+
+            renderItem={({ item }) =>
+              <TouchableOpacity style={{
+                marginHorizontal: -10
+              }}
+                onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+              >
+                <ProductView
+                  source={item.HinhAnhSP}
+                  title={item.TenSP}
+                  price={item.GiaSP}
+                />
+              </TouchableOpacity>
+            }
+            keyExtractor={item => item.MaSP}
+          />
+
+        </View>
 
 
-      <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-        <Text style={styles.textView}>Orther categories</Text>
-        <TouchableOpacity><Text style={{ margin: 20 }}>Explore now</Text></TouchableOpacity>
-      </View>
-
-      <View style={{}}>
-        <FlatList
+        <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+          <Text style={styles.textView}>Orther categories</Text>
+          <TouchableOpacity><Text style={{ margin: 20 }}>Explore now</Text></TouchableOpacity>
+        </View>
 
 
-          data={danhmuc}
 
-          renderItem={({ item }) =>
+        {/* 
+      <FlatList
+
+
+        data={danhmuc}
+
+        renderItem={({ item }) =>
+          <TouchableOpacity style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}
+            onPress={() => { navigation.navigate('DetailCategory', { item }) }}
+          >
+            <Categories
+              source={item.AnhDM}
+              title={item.TenDM}
+            />
+          </TouchableOpacity>
+
+
+        }
+        keyExtractor={item => item.MaDM}
+      /> */}
+
+        {danhmuc ?
+          danhmuc.map((item) =>
+          (
             <TouchableOpacity style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}
               onPress={() => { navigation.navigate('DetailCategory', { item }) }}
+              key={item.MaDM}
             >
               <Categories
                 source={item.AnhDM}
                 title={item.TenDM}
               />
             </TouchableOpacity>
+          ))
+          : null}
 
 
-          }
-          keyExtractor={item => item.MaDM}
-        />
+      </ScrollView>
 
-      </View>
-
-      <View style={{ height: 200 }}></View>
-    </ScrollView>
+    </View>
 
   )
 }
