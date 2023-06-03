@@ -50,6 +50,7 @@ function ChatScreen({ navigation, route }) {
 
     useEffect(() => {
         getDataMessage();
+        console.log(chatUser)
     }, [])
 
     return (

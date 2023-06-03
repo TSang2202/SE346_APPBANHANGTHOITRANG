@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -14,17 +14,17 @@ import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import HederContent from '../components/Header/HederContent.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-import {firebase, Firestore} from '../../../Firebase/firebase.js';
+import { firebase, Firestore } from '../../../Firebase/firebase.js';
 import CustomerBottomTab from '../../CustomerView/navigation/CustomerBottomTab.js';
 import StackNavigator from '../../StaffView/navigation/navigation.js';
-import {doc, getDoc} from 'firebase/firestore';
-import {NavigationContainer} from '@react-navigation/native';
+import { doc, getDoc } from 'firebase/firestore';
+import { NavigationContainer } from '@react-navigation/native';
 
 
 const SignIn = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [status, setStatus] = useState('');
 
   const [email, setEmail] = useState('');
@@ -62,7 +62,7 @@ const SignIn = props => {
       .catch(error => {
         alert(error);
       });
-
+  }
   const [dataUser, setDataUser] = useState();
 
   const getDataUser = async userId => {
@@ -81,12 +81,12 @@ const SignIn = props => {
   return (
     <SafeAreaView style={styles.container}>
       <HeaderWithBack onPress={() => navigation.goBack()} />
-      <View style={[styles.unitContainer, {height: 100}]}>
+      <View style={[styles.unitContainer, { height: 100 }]}>
         <HeaderTitlle title="Sign in" />
       </View>
 
       <View style={[styles.unitContainer, styles.bodyContainer]}>
-        <View style={{flex: 2}}>
+        <View style={{ flex: 2 }}>
           <TextInputCard
             title="Email*"
             txtInput="abc@gmail.com"
@@ -95,7 +95,7 @@ const SignIn = props => {
           />
         </View>
 
-        <View style={{flex: 2}}>
+        <View style={{ flex: 2 }}>
           <PasswordCard
             title="Pasword*"
             txtInput="********"
@@ -103,7 +103,7 @@ const SignIn = props => {
           />
         </View>
 
-        <View style={{flex: 1, alignItems: 'flex-end'}}>
+        <View style={{ flex: 1, alignItems: 'flex-end' }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('ForgotPassword')}>
             <Text style={styles.contentStyle}>Forgot Password</Text>
@@ -122,18 +122,18 @@ const SignIn = props => {
               // navigation.navigate('Done');
             }}
 
-            // onPress={() => navigation.navigate('SignIn')}
+          // onPress={() => navigation.navigate('SignIn')}
           />
         </View>
       </View>
 
       <View style={[styles.unitContainer, styles.botContainer]}>
         <View
-          style={{flex: 5, justifyContent: 'center', alignItems: 'flex-end'}}>
+          style={{ flex: 5, justifyContent: 'center', alignItems: 'flex-end' }}>
           <HederContent content="Don't you have an account ? " />
         </View>
         <View
-          style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
+          style={{ flex: 2, justifyContent: 'center', alignItems: 'flex-start' }}>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.contentStyle}>Sign up</Text>
           </TouchableOpacity>
