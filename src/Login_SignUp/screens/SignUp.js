@@ -34,7 +34,17 @@ const SignUp = props => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const signUp = async (fullName, email, phoneNumber, birth, password) => {
+  const user = true;
+
+  const signUp = async (
+    fullName,
+    email,
+    phoneNumber,
+    birth,
+    password,
+    user,
+  ) => {
+
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -61,7 +71,10 @@ const SignUp = props => {
                 Email: email,
                 Phone: phoneNumber,
                 NgaySinh: birth,
-                MaND: firebase.auth().currentUser.uid
+
+                MaND: firebase.auth().currentUser.uid,
+                LoaiND: user,
+
               });
           })
           .catch(error => {
@@ -108,7 +121,9 @@ const SignUp = props => {
 
           <View style={{ flex: 1 }}>
             <TextInputCard
-              title="Email"
+
+              title="Email*"
+
               txtInput="abc@gmail.com"
               onChangeText={email => setEmail(email)}
               keyboardType="email-address"
@@ -117,7 +132,9 @@ const SignUp = props => {
 
           <View style={{ flex: 1 }}>
             <TextInputCard
-              title="Phone number*"
+
+              title="Phone number"
+
               txtInput="03333333333"
               onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
             />
@@ -126,7 +143,9 @@ const SignUp = props => {
           <View style={{ flex: 1 }}>
             <TextInputCard
               title="Day of birth"
-              txtInput="01/01/2003"
+
+              txtInput="dd/mm/yy"
+
               onChangeText={birth => setBirth(birth)}
             />
           </View>
@@ -182,7 +201,9 @@ const SignUp = props => {
               text="Sign up now"
               onPress={() => {
                 if (password === confirmPassword) {
-                  signUp(fullName, email, phoneNumber, birth, password);
+
+                  signUp(fullName, email, phoneNumber, birth, password, user);
+
                   navigation.navigate('Congratulation');
                 } else {
                   alert('Corfirm password not match with password');
