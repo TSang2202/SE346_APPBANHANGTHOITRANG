@@ -22,6 +22,7 @@ function HomeScreenCustomer({ navigation }) {
   const [danhmuc, setDanhMuc] = useState([])
   const [chatUser, setChatUser] = useState()
   const [loadingChatUser, setLoadingChatUser] = useState(false)
+  const [idUser, setIdUser] = useState()
 
   const getDataTrending = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
@@ -89,6 +90,7 @@ function HomeScreenCustomer({ navigation }) {
     getDataTrending();
     getDataDanhMuc();
     getDataChatUser()
+    setIdUser(firebase.auth().currentUser.uid)
 
     console.log(chatUser)
 
@@ -141,7 +143,7 @@ function HomeScreenCustomer({ navigation }) {
           borderRadius: 10
         }}
           onPress={() => {
-            navigation.navigate('ShoppingCard')
+            navigation.navigate('ShoppingCard', { idUser })
           }}
         >
           <Image

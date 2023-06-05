@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from "react-native";
 import { IC_Delete } from "../assets/icons";
 import { IM_AnhGiay1 } from "../assets/images";
@@ -6,6 +6,10 @@ import CUSTOM_COLOR from "../constants/colors";
 
 
 const ProductCheckOut = (props: any) => {
+
+    const [checkSelect, setCheckSelect] = useState(false)
+
+
 
     return (
         <View style={{
@@ -22,10 +26,23 @@ const ProductCheckOut = (props: any) => {
                 width: 20,
                 height: 20,
                 borderWidth: 1,
-                borderRadius: 20
+                borderRadius: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: 10
             }}
                 onPress={props.onPressChoose}
-            />
+            >
+                {props.checkSelect ?
+                    <View style={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 10,
+                        backgroundColor: CUSTOM_COLOR.Black
+                    }}>
+
+                    </View> : null}
+            </TouchableOpacity>
 
             <Image source={{ uri: props.source }}
                 style={{
@@ -44,7 +61,11 @@ const ProductCheckOut = (props: any) => {
                 <Text style={{
                     fontStyle: 'italic',
 
-                }}>{props.type}</Text>
+                }}>Color: {props.color}</Text>
+                <Text style={{
+                    fontStyle: 'italic',
+
+                }}>Size: {props.size}</Text>
                 <Text style={{
                     marginVertical: 2
                 }}>{props.price} đ</Text>
@@ -66,7 +87,7 @@ const ProductCheckOut = (props: any) => {
                         backgroundColor: CUSTOM_COLOR.Alto,
                         marginRight: 10
                     }}
-                        onPress={props.onPressUp}
+                        onPress={props.onPressDown}
                     >
                         <Text style={{
                             fontSize: 15,
@@ -86,7 +107,7 @@ const ProductCheckOut = (props: any) => {
                         backgroundColor: CUSTOM_COLOR.Alto,
                         marginLeft: 10
                     }}
-                        onPress={props.onPressDown}
+                        onPress={props.onPressUp}
                     >
                         <Text style={{
                             fontSize: 15,
@@ -106,7 +127,8 @@ const ProductCheckOut = (props: any) => {
                 borderWidth: 1,
                 borderRadius: 20,
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                marginRight: 10
             }}
                 onPress={props.onPressDelete}
             >

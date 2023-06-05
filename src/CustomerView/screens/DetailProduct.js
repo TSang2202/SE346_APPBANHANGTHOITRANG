@@ -1,6 +1,6 @@
 
-import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, Alert } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { CurvedTransition } from "react-native-reanimated";
@@ -10,12 +10,54 @@ import { IM_MauAo } from "../assets/images";
 import Button from "../components/Button";
 import StarRating from "../components/StarRating";
 import CUSTOM_COLOR from "../constants/colors";
+import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
+import { async } from "@firebase/util";
+import { Firestore, firebase } from "../../../Firebase/firebase";
 
 
 function DetailProduct({ navigation, route }) {
 
     const { item } = route.params
     const [chooseStyle, setChooseStyle] = useState(false)
+    const [numProduct, setNumProduct] = useState(1)
+    const [chooseColor, setChooseColor] = useState()
+    const [chooseSize, setChooseSize] = useState()
+
+    const setDataGioHang = async () => {
+        const docRef = await addDoc(collection(Firestore, "GIOHANG"), {
+            MaND: firebase.auth().currentUser.uid,
+            MaSP: item.MaSP,
+            SoLuong: numProduct,
+            GiaTien: item.GiaSP * numProduct,
+            MauSac: chooseColor,
+            Size: chooseSize,
+            HinhAnhSP: item.HinhAnhSP,
+            TenSP: item.TenSP
+
+        });
+
+        const updateRef = doc(Firestore, "GIOHANG", docRef.id);
+        await updateDoc(updateRef, {
+            MaGH: docRef.id
+        });
+
+        Alert.alert(
+            'Notification',
+            'Add to cart successfully',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => navigation.navigate('HomeScreen'),
+                    style: 'cancel',
+                },
+            ],
+        );
+
+    }
+
+    useEffect(() => {
+        console.log(item.Size)
+    }, [])
 
     return (
         <View style={{
@@ -73,7 +115,7 @@ function DetailProduct({ navigation, route }) {
 
             <View style={{ width: '100%', height: '40%', alignItems: 'center', justifyContent: 'center' }}>
                 <Image
-                    source={{ uri: item.AnhMH }}
+                    source={{ uri: item.HinhAnhSP }}
                     style={{
                         width: 240,
                         height: 240, borderRadius: 20
@@ -95,7 +137,7 @@ function DetailProduct({ navigation, route }) {
                         marginLeft: 40,
                         width: '50%'
 
-                    }}>{item.TenMH}</Text>
+                    }}>{item.TenSP}</Text>
 
                 <Text
                     style={{
@@ -106,7 +148,7 @@ function DetailProduct({ navigation, route }) {
                         width: '30%'
 
                     }}
-                >{item.GiaTien} đ</Text>
+                >{item.GiaSP * numProduct} đ</Text>
 
             </View>
 
@@ -132,88 +174,103 @@ function DetailProduct({ navigation, route }) {
                 </TouchableOpacity>
             </View>
 
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                }}
+            >
+
+
+            </View>
+
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-evenly',
+                justifyContent: 'space-between',
                 marginVertical: '1%'
 
             }}>
-                <Text style={{
-                    marginLeft: 25,
-                    ...styles.textLarge
 
-                }}>Color</Text>
                 <View style={{
                     flexDirection: 'row',
-
+                    alignItems: 'center'
                 }}>
-                    <View style={{
-                        ...styles.colorCicle,
-                        backgroundColor: CUSTOM_COLOR.ChathamsBlue,
+
+                    <Text style={{
+                        marginLeft: 35,
+                        marginRight: 20,
+                        ...styles.textLarge
+
+                    }}>Color</Text>
 
 
-                    }}>
 
-                    </View>
+                    {item.MauSac.filter(color => color.checked == true).map(color => (
+                        <View style={{
+                            ...styles.colorCicle,
+                            backgroundColor: color.MaMau,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                            key={color.MaMS}
+                        >
+                            {chooseColor === color.TenMau ?
+                                <View style={{
+                                    ...styles.colorCicle,
+                                    width: 10,
+                                    height: 10,
+                                    backgroundColor: CUSTOM_COLOR.White,
+                                    borderWidth: 0
+                                }}>
 
-                    <View style={{
-                        ...styles.colorCicle,
-                        backgroundColor: CUSTOM_COLOR.Carnation,
+                                </View> : null}
+
+                        </View>
+                    ))}
 
 
-                    }}>
-
-                    </View>
-
-                    <View style={{
-                        ...styles.colorCicle,
-                        backgroundColor: CUSTOM_COLOR.Mercury,
 
 
-                    }}>
 
-                    </View>
+
                 </View>
 
 
-                <Text>+2 colors</Text>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}
+                >
 
-                <TouchableOpacity style={{
-                    width: 30,
-                    height: 30,
-                    borderWidth: 1,
-                    borderRadius: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: CUSTOM_COLOR.Alto,
-                    marginLeft: 20
-                }}>
-                    <Text style={{
-                        fontSize: 20,
-                        fontWeight: 'bold'
-                    }}>-</Text>
+                    <TouchableOpacity style={{
+                        ...styles.btnCount
+                    }}
+                        onPress={() => numProduct > 1 ? setNumProduct(numProduct - 1) : null}
+                    >
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold'
+                        }}>-</Text>
 
-                </TouchableOpacity>
+                    </TouchableOpacity>
 
-                <Text>1</Text>
+                    <Text>{numProduct}</Text>
 
-                <TouchableOpacity style={{
-                    width: 30,
-                    height: 30,
-                    borderWidth: 1,
-                    borderRadius: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: CUSTOM_COLOR.Alto,
-                    marginRight: 20
-                }}>
-                    <Text style={{
-                        fontSize: 20,
-                        fontWeight: 'bold'
-                    }}>+</Text>
+                    <TouchableOpacity style={{
+                        ...styles.btnCount
+                    }}
+                        onPress={() => setNumProduct(numProduct + 1)}
+                    >
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold'
+                        }}>+</Text>
 
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                </View>
+
             </View>
 
 
@@ -235,52 +292,32 @@ function DetailProduct({ navigation, route }) {
                 }}>
 
                     <TouchableWithoutFeedback style={{
-                        width: 25,
-                        height: 25,
-                        backgroundColor: CUSTOM_COLOR.Alto,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: 10,
-                        marginHorizontal: 5
+                        ...styles.btnSize
                     }}>
-                        <Text>S</Text>
+                        <Text>{item.Size[0].title}</Text>
                     </TouchableWithoutFeedback>
 
-                    <TouchableWithoutFeedback style={{
-                        width: 25,
-                        height: 25,
-                        backgroundColor: CUSTOM_COLOR.Alto,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: 10,
-                        marginHorizontal: 5
-                    }}>
-                        <Text>M</Text>
-                    </TouchableWithoutFeedback>
 
                     <TouchableWithoutFeedback style={{
-                        width: 25,
-                        height: 25,
-                        backgroundColor: CUSTOM_COLOR.Alto,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: 10,
-                        marginHorizontal: 5
+                        ...styles.btnSize
                     }}>
-                        <Text>L</Text>
+                        <Text>{item.Size[1].title}</Text>
                     </TouchableWithoutFeedback>
 
+
+
+
                     <TouchableWithoutFeedback style={{
-                        width: 25,
-                        height: 25,
-                        backgroundColor: CUSTOM_COLOR.Alto,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: 10,
-                        marginHorizontal: 5
+                        ...styles.btnSize
                     }}>
-                        <Text>+1</Text>
+                        <Text>{item.Size[2].title}</Text>
                     </TouchableWithoutFeedback>
+
+
+
+
+
+
 
                 </View>
 
@@ -324,6 +361,7 @@ function DetailProduct({ navigation, route }) {
                     style={{
                         paddingVertical: '3%'
                     }}
+                    onPress={() => setDataGioHang()}
                 />
 
                 <Button
@@ -382,74 +420,52 @@ function DetailProduct({ navigation, route }) {
 
                         <View>
 
-                            <View style={{
-                                ...styles.flexRow,
-                                justifyContent: 'center',
-                                marginVertical: '5%'
-                            }}>
-                                <View style={{
-                                    ...styles.flexRow,
-                                    marginHorizontal: '5%'
+                            <FlatList
+                                data={item.MauSac}
+                                renderItem={({ item }) => {
+                                    return item.checked == true ? (
+                                        <View style={{
+                                            ...styles.flexRow,
+                                            marginHorizontal: '5%',
+                                            marginVertical: 3
 
-                                }}>
-                                    <View style={{
-                                        ...styles.colorCicle,
-                                        backgroundColor: CUSTOM_COLOR.White,
-                                    }}>
+                                        }}>
+                                            <TouchableOpacity style={{
+                                                ...styles.colorCicle,
+                                                backgroundColor: item.MaMau,
+                                                borderWidth: 1,
 
-                                    </View>
-                                    <Text style={{ ...styles.textSmall }}>White</Text>
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
 
-                                </View>
+                                            }}
+                                                onPress={() => setChooseColor(item.TenMau)}
+                                            >
+                                                {chooseColor === item.TenMau ?
+                                                    <View style={{
+                                                        ...styles.colorCicle,
+                                                        width: 10,
+                                                        height: 10,
+                                                        backgroundColor: CUSTOM_COLOR.White,
+                                                        borderWidth: 0
+                                                    }}>
 
-                                <View style={{
-                                    ...styles.flexRow,
-                                }}>
-                                    <View style={{
-                                        ...styles.colorCicle,
-                                        backgroundColor: CUSTOM_COLOR.Black,
-                                    }}>
+                                                    </View> : null}
 
-                                    </View>
-                                    <Text style={{ ...styles.textSmall }}>Black</Text>
+                                            </TouchableOpacity>
+                                            <Text style={{ ...styles.textSmall }}>{item.TenMau}</Text>
 
-                                </View>
+                                        </View>
+                                    ) :
+                                        <View></View>
+                                }
+                                }
+                                numColumns={2}
+                            />
 
-                            </View>
 
-                            <View style={{
-                                ...styles.flexRow,
-                                justifyContent: 'center'
-                            }}>
-                                <View style={{
-                                    ...styles.flexRow,
-                                    marginHorizontal: '5%'
 
-                                }}>
-                                    <View style={{
-                                        ...styles.colorCicle,
-                                        backgroundColor: CUSTOM_COLOR.Carnation,
-                                    }}>
 
-                                    </View>
-                                    <Text style={{ ...styles.textSmall }}>Red</Text>
-
-                                </View>
-
-                                <View style={{
-                                    ...styles.flexRow,
-                                }}>
-                                    <View style={{
-                                        ...styles.colorCicle,
-                                        backgroundColor: CUSTOM_COLOR.Yellow,
-                                    }}>
-
-                                    </View>
-                                    <Text style={{ ...styles.textSmall }}>Yellow</Text>
-
-                                </View>
-
-                            </View>
                         </View>
 
 
@@ -463,31 +479,32 @@ function DetailProduct({ navigation, route }) {
                             marginVertical: '3%'
                         }}>Size</Text>
 
-                        <View style={{ ...styles.flexRow }}>
-                            <TouchableWithoutFeedback style={{
-                                ...styles.sizeCircle
-                            }}>
-                                <Text>S</Text>
-                            </TouchableWithoutFeedback>
+                        <View>
+                            <FlatList
 
-                            <TouchableWithoutFeedback style={{
-                                ...styles.sizeCircle
-                            }}>
-                                <Text>M</Text>
-                            </TouchableWithoutFeedback>
-                            <TouchableWithoutFeedback style={{
-                                ...styles.sizeCircle
-                            }}>
-                                <Text>L</Text>
-                            </TouchableWithoutFeedback>
-                            <TouchableWithoutFeedback style={{
-                                ...styles.sizeCircle
-                            }}>
-                                <Text>XL</Text>
-                            </TouchableWithoutFeedback>
+                                data={item.Size}
+                                numColumns={4}
+                                renderItem={({ item }) => {
+                                    return item.checked == true ?
+                                        <TouchableOpacity style={{
+                                            ...styles.sizeCircle,
+                                            width: 45,
+                                            marginVertical: 5,
 
+                                            borderWidth: chooseSize === item.title ? 1 : 0
+
+                                        }}
+                                            onPress={() => setChooseSize(item.title)}
+                                        >
+                                            <Text>{item.title}</Text>
+                                        </TouchableOpacity>
+                                        : <View></View>
+                                }}
+
+                            />
 
                         </View>
+
 
                     </View>
 
@@ -545,8 +562,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 10,
         marginHorizontal: 5
+    },
+    btnCount: {
+        width: 30,
+        height: 30,
+        borderWidth: 1,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: CUSTOM_COLOR.Alto,
+        marginHorizontal: 15
+    },
+    btnSize: {
+        width: 25,
+        height: 25,
+        backgroundColor: CUSTOM_COLOR.Alto,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 10,
+        marginHorizontal: 5
     }
-
 
 })
 
