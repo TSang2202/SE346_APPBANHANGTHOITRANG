@@ -7,7 +7,7 @@ import ProductCheckOut from "../components/ProductCheckOut";
 import ProductView from "../components/ProductView";
 import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, doc, setDoc, getDocs, query, where, onSnapshot, updateDoc } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, query, where, onSnapshot, updateDoc, deleteDoc } from "firebase/firestore";
 import { Firestore } from "../../../Firebase/firebase";
 import { product } from "../../StaffView/assets/icons";
 import { async } from "@firebase/util";
@@ -118,6 +118,11 @@ function ShoppingCartScreen({ navigation, route }) {
         setItems(updateItem)
     }
 
+    const DeleteProduct = async (item) => {
+        await deleteDoc(doc(Firestore, "GIOHANG", item.MaGH));
+        getDataCart()
+    }
+
 
     useEffect(() => {
 
@@ -186,6 +191,7 @@ function ShoppingCartScreen({ navigation, route }) {
                             checkSelect={item.checkSelect}
                             onPressUp={() => UpNumber(item)}
                             onPressDown={() => DownNumber(item)}
+                            onPressDelete={() => DeleteProduct(item)}
                         />
 
 
