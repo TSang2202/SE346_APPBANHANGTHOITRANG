@@ -1,84 +1,94 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
-import { IC_Back, IC_ShoppingCart } from "../assets/icons";
+import { IC_Back, IC_ShoppingCart, IC_Delete } from "../assets/icons";
 import { IM_AnhGiay1, IM_AnhGiay2, IM_AnhGiay3, IM_AnhGiay4 } from "../assets/images";
 import Button from "../components/Button";
 import ProductCheckOut from "../components/ProductCheckOut";
 import ProductView from "../components/ProductView";
 import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, query, where, onSnapshot } from "firebase/firestore";
 import { Firestore } from "../../../Firebase/firebase";
-
-const data = {
-    id: '1',
-    source: IM_AnhGiay1,
-    title: 'Asics Running Shoes',
-    type: "Men's Footwear-Sports Shoes",
-    price: '399999',
-    number: 1
-}
-
-const datas = [
-    {
-        id: '1',
-        source: IM_AnhGiay1,
-        title: 'Asics Running Shoes',
-        type: "Men's Footwear-Sports Shoes",
-        price: '399999',
-        number: 1
-    },
-    {
-        id: '2',
-        source: IM_AnhGiay1,
-        title: 'Asics Running Shoes',
-        type: "Men's Footwear-Sports Shoes",
-        price: '399999',
-        number: 1
-    },
-    {
-        id: '3',
-        source: IM_AnhGiay1,
-        title: 'Asics Running Shoes',
-        type: "Men's Footwear-Sports Shoes",
-        price: '399999',
-        number: 1
-    },
-    {
-        id: '4',
-        source: IM_AnhGiay1,
-        title: 'Asics Running Shoes',
-        type: "Men's Footwear-Sports Shoes",
-        price: '399999',
-        number: 1
-    },
-]
+import { product } from "../../StaffView/assets/icons";
 
 
-function ShoppingCartScreen({ navigation }) {
+function ShoppingCartScreen({ navigation, route }) {
+
+    const { idUser } = route.params
 
     const [items, setItems] = useState([])
+    const [checkChooseAll, setCheckChooseAll] = useState(false)
+    const [totalMoney, setTotalMoney] = useState(0)
+
+    const getDataCart = () => {
+        const q = query(collection(Firestore, "GIOHANG"), where("MaND", "==", idUser));
+        const data = [];
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+
+            querySnapshot.forEach((doc) => {
+                data.push({ ...doc.data(), checkSelect: false });
+            });
+        });
+
+
+        setItems(data)
+
+
+    }
+    const updateCheck = (item) => {
+        const updateItem = items.map((product) => {
+            if (product.MaSP === item.MaSP) {
+                product.checkSelect = !item.checkSelect;
+            }
+            if (product.checkSelect == false) setCheckChooseAll(false)
+            return product
+        })
+
+        const chooseSelectFull = items.filter((product) => (product.checkSelect == true))
+        if (chooseSelectFull.length == items.length) setCheckChooseAll(true)
+
+        const sum = items.reduce((total, product) => {
+            if (product.checkSelect) return total + product.GiaTien
+            else return total
+        }, 0)
+
+        setTotalMoney(sum)
+
+        setItems(updateItem)
+    }
+
+    const ChooseAll = () => {
+
+        const updateItem = items.map((product) => {
+            if (checkChooseAll) {
+                product.checkSelect = false
+                setTotalMoney(0)
+            }
+            else {
+                product.checkSelect = true
+                const sum = items.reduce((total, product) => {
+                    return total + product.GiaTien
+                }, 0)
+
+                setTotalMoney(sum)
+            }
+
+
+            return product
+        })
+
+        setCheckChooseAll(!checkChooseAll)
+
+
+        setItems(updateItem)
+    }
+
 
     useEffect(() => {
-        const getData = async () => {
-            const querySnapshot = await getDocs(collection(Firestore, "GIOHANG"));
 
-            const items = [];
-            querySnapshot.forEach(documentSnapshot => {
-                items.push({
-                    ...documentSnapshot.data(),
-                    key: documentSnapshot.id,
-                });
+        getDataCart()
 
-            });
-            setItems(items);
-        }
-
-        getData();
-
-        const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
-        return () => clearInterval(interval); // Xóa interval khi component bị unmount
-
+        //console.log(items.checkSelect)
     }, [])
 
 
@@ -124,19 +134,147 @@ function ShoppingCartScreen({ navigation }) {
                 }}
                 data={items}
                 renderItem={({ item }) => {
-                    return (
-                        <View style={{
-                            marginVertical: 10
-                        }}>
-                            <ProductCheckOut
-                                source={item.source}
-                                title={item.MoTa}
-                                type={item.TenGioHang}
-                                number={item.number}
-                                price={item.price}
-                            />
 
-                        </View>
+                    return (
+
+                        <ProductCheckOut
+                            source={item.HinhAnhSP}
+                            title={item.TenSP}
+                            color={item.MauSac}
+                            size={item.Size}
+                            price={item.GiaTien}
+                            number={item.SoLuong}
+                            onPressChoose={() => updateCheck(item)}
+                            checkSelect={item.checkSelect}
+                        />
+
+                        // <View style={{
+                        //     marginVertical: 10
+                        // }}>
+                        //     <View style={{
+                        //         flexDirection: 'row',
+                        //         alignItems: 'center',
+                        //         justifyContent: 'space-between',
+                        //         marginHorizontal: 10,
+                        //         backgroundColor: CUSTOM_COLOR.White,
+                        //         padding: 5,
+                        //         borderRadius: 20,
+
+                        //     }}>
+                        //         <TouchableOpacity style={{
+                        //             width: 20,
+                        //             height: 20,
+                        //             borderWidth: 1,
+                        //             borderRadius: 20,
+                        //             justifyContent: 'center',
+                        //             alignItems: 'center'
+                        //         }}
+                        //             onPress={() => updateCheck(item)}
+                        //         >
+                        //             {item.checkSelect ?
+                        //                 <View style={{
+                        //                     width: 10,
+                        //                     height: 10,
+                        //                     borderRadius: 10,
+                        //                     backgroundColor: CUSTOM_COLOR.Black
+                        //                 }}>
+
+                        //                 </View> : null}
+                        //         </TouchableOpacity>
+
+                        //         <Image source={{ uri: item.HinhAnhSP }}
+                        //             style={{
+                        //                 width: 90,
+                        //                 height: 120,
+                        //                 borderRadius: 20
+                        //             }}
+                        //         />
+
+                        //         <View>
+                        //             <Text style={{
+                        //                 fontSize: 17,
+                        //                 fontWeight: 'bold',
+                        //                 marginVertical: 2
+                        //             }}>{item.TenSP}</Text>
+                        //             <Text style={{
+                        //                 fontStyle: 'italic',
+
+                        //             }}>Color: {item.MauSac}</Text>
+                        //             <Text style={{
+                        //                 fontStyle: 'italic',
+
+                        //             }}>Size: {item.Size}</Text>
+                        //             <Text style={{
+                        //                 marginVertical: 2
+                        //             }}>{item.GiaTien} đ</Text>
+
+                        //             <View style={{
+                        //                 flexDirection: 'row',
+
+                        //                 marginVertical: 5,
+                        //                 alignItems: 'center',
+                        //                 justifyContent: 'flex-start'
+                        //             }}>
+                        //                 <TouchableOpacity style={{
+                        //                     width: 25,
+                        //                     height: 25,
+                        //                     borderWidth: 1,
+                        //                     borderRadius: 20,
+                        //                     alignItems: 'center',
+                        //                     justifyContent: 'center',
+                        //                     backgroundColor: CUSTOM_COLOR.Alto,
+                        //                     marginRight: 10
+                        //                 }}
+                        //                     onPress={{}}
+                        //                 >
+                        //                     <Text style={{
+                        //                         fontSize: 15,
+                        //                         fontWeight: 'bold'
+                        //                     }}>-</Text>
+                        //                 </TouchableOpacity>
+
+                        //                 <Text>{item.SoLuong}</Text>
+
+                        //                 <TouchableOpacity style={{
+                        //                     width: 25,
+                        //                     height: 25,
+                        //                     borderWidth: 1,
+                        //                     borderRadius: 20,
+                        //                     alignItems: 'center',
+                        //                     justifyContent: 'center',
+                        //                     backgroundColor: CUSTOM_COLOR.Alto,
+                        //                     marginLeft: 10
+                        //                 }}
+                        //                     onPress={{}}
+                        //                 >
+                        //                     <Text style={{
+                        //                         fontSize: 15,
+                        //                         fontWeight: 'bold'
+                        //                     }}>+</Text>
+                        //                 </TouchableOpacity>
+
+                        //             </View>
+
+
+
+
+                        //         </View>
+                        //         <TouchableOpacity style={{
+                        //             width: 30,
+                        //             height: 30,
+                        //             borderWidth: 1,
+                        //             borderRadius: 20,
+                        //             justifyContent: 'center',
+                        //             alignItems: 'center'
+                        //         }}
+                        //             onPress={{}}
+                        //         >
+                        //             <Image source={IC_Delete} />
+                        //         </TouchableOpacity>
+
+                        //     </View>
+
+                        // </View>
 
                     )
                 }}
@@ -154,13 +292,29 @@ function ShoppingCartScreen({ navigation }) {
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
-                    <View style={{
+                    <TouchableOpacity style={{
                         width: 23,
                         height: 23,
                         borderWidth: 1,
                         borderRadius: 20,
-                        marginRight: 20
-                    }} />
+                        marginRight: 20,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}
+                        onPress={() => {
+                            ChooseAll()
+                        }}
+                    >
+                        {checkChooseAll ?
+                            <View style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: 10,
+                                backgroundColor: CUSTOM_COLOR.Black
+                            }}>
+
+                            </View> : null}
+                    </TouchableOpacity>
 
                     <Text style={{
                         fontSize: 17,
@@ -184,7 +338,7 @@ function ShoppingCartScreen({ navigation }) {
             }}>
                 <Text style={{
                     fontSize: 17
-                }}>1700000 đ</Text>
+                }}>{totalMoney} đ</Text>
             </View>
 
             <View style={{

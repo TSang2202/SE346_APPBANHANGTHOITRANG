@@ -30,7 +30,9 @@ function DetailProduct({ navigation, route }) {
             SoLuong: numProduct,
             GiaTien: item.GiaSP * numProduct,
             MauSac: chooseColor,
-            Size: chooseSize
+            Size: chooseSize,
+            HinhAnhSP: item.HinhAnhSP,
+            TenSP: item.TenSP
 
         });
 
