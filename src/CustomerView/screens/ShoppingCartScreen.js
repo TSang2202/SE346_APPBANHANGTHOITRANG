@@ -7,9 +7,10 @@ import ProductCheckOut from "../components/ProductCheckOut";
 import ProductView from "../components/ProductView";
 import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, doc, setDoc, getDocs, query, where, onSnapshot } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, query, where, onSnapshot, updateDoc } from "firebase/firestore";
 import { Firestore } from "../../../Firebase/firebase";
 import { product } from "../../StaffView/assets/icons";
+import { async } from "@firebase/util";
 
 
 function ShoppingCartScreen({ navigation, route }) {
@@ -83,6 +84,40 @@ function ShoppingCartScreen({ navigation, route }) {
         setItems(updateItem)
     }
 
+    const updateNumber = async (item) => {
+        const updateRef = doc(Firestore, "GIOHANG", item.MaGH);
+        await updateDoc(updateRef, {
+            SoLuong: item.SoLuong
+        });
+    }
+
+
+    const UpNumber = (item) => {
+        const updateItem = items.map((product) => {
+            if (item.MaGH === product.MaGH) {
+                product.SoLuong += 1
+                updateNumber(item)
+            }
+
+            return product
+        })
+
+        setItems(updateItem)
+    }
+
+    const DownNumber = (item) => {
+        const updateItem = items.map((product) => {
+            if (item.MaGH === product.MaGH && item.SoLuong > 1) {
+                product.SoLuong -= 1
+                updateNumber(item)
+            }
+
+            return product
+        })
+
+        setItems(updateItem)
+    }
+
 
     useEffect(() => {
 
@@ -138,6 +173,9 @@ function ShoppingCartScreen({ navigation, route }) {
                     return (
 
                         <ProductCheckOut
+                            style={{
+                                marginVertical: 10
+                            }}
                             source={item.HinhAnhSP}
                             title={item.TenSP}
                             color={item.MauSac}
@@ -146,135 +184,10 @@ function ShoppingCartScreen({ navigation, route }) {
                             number={item.SoLuong}
                             onPressChoose={() => updateCheck(item)}
                             checkSelect={item.checkSelect}
+                            onPressUp={() => UpNumber(item)}
+                            onPressDown={() => DownNumber(item)}
                         />
 
-                        // <View style={{
-                        //     marginVertical: 10
-                        // }}>
-                        //     <View style={{
-                        //         flexDirection: 'row',
-                        //         alignItems: 'center',
-                        //         justifyContent: 'space-between',
-                        //         marginHorizontal: 10,
-                        //         backgroundColor: CUSTOM_COLOR.White,
-                        //         padding: 5,
-                        //         borderRadius: 20,
-
-                        //     }}>
-                        //         <TouchableOpacity style={{
-                        //             width: 20,
-                        //             height: 20,
-                        //             borderWidth: 1,
-                        //             borderRadius: 20,
-                        //             justifyContent: 'center',
-                        //             alignItems: 'center'
-                        //         }}
-                        //             onPress={() => updateCheck(item)}
-                        //         >
-                        //             {item.checkSelect ?
-                        //                 <View style={{
-                        //                     width: 10,
-                        //                     height: 10,
-                        //                     borderRadius: 10,
-                        //                     backgroundColor: CUSTOM_COLOR.Black
-                        //                 }}>
-
-                        //                 </View> : null}
-                        //         </TouchableOpacity>
-
-                        //         <Image source={{ uri: item.HinhAnhSP }}
-                        //             style={{
-                        //                 width: 90,
-                        //                 height: 120,
-                        //                 borderRadius: 20
-                        //             }}
-                        //         />
-
-                        //         <View>
-                        //             <Text style={{
-                        //                 fontSize: 17,
-                        //                 fontWeight: 'bold',
-                        //                 marginVertical: 2
-                        //             }}>{item.TenSP}</Text>
-                        //             <Text style={{
-                        //                 fontStyle: 'italic',
-
-                        //             }}>Color: {item.MauSac}</Text>
-                        //             <Text style={{
-                        //                 fontStyle: 'italic',
-
-                        //             }}>Size: {item.Size}</Text>
-                        //             <Text style={{
-                        //                 marginVertical: 2
-                        //             }}>{item.GiaTien} đ</Text>
-
-                        //             <View style={{
-                        //                 flexDirection: 'row',
-
-                        //                 marginVertical: 5,
-                        //                 alignItems: 'center',
-                        //                 justifyContent: 'flex-start'
-                        //             }}>
-                        //                 <TouchableOpacity style={{
-                        //                     width: 25,
-                        //                     height: 25,
-                        //                     borderWidth: 1,
-                        //                     borderRadius: 20,
-                        //                     alignItems: 'center',
-                        //                     justifyContent: 'center',
-                        //                     backgroundColor: CUSTOM_COLOR.Alto,
-                        //                     marginRight: 10
-                        //                 }}
-                        //                     onPress={{}}
-                        //                 >
-                        //                     <Text style={{
-                        //                         fontSize: 15,
-                        //                         fontWeight: 'bold'
-                        //                     }}>-</Text>
-                        //                 </TouchableOpacity>
-
-                        //                 <Text>{item.SoLuong}</Text>
-
-                        //                 <TouchableOpacity style={{
-                        //                     width: 25,
-                        //                     height: 25,
-                        //                     borderWidth: 1,
-                        //                     borderRadius: 20,
-                        //                     alignItems: 'center',
-                        //                     justifyContent: 'center',
-                        //                     backgroundColor: CUSTOM_COLOR.Alto,
-                        //                     marginLeft: 10
-                        //                 }}
-                        //                     onPress={{}}
-                        //                 >
-                        //                     <Text style={{
-                        //                         fontSize: 15,
-                        //                         fontWeight: 'bold'
-                        //                     }}>+</Text>
-                        //                 </TouchableOpacity>
-
-                        //             </View>
-
-
-
-
-                        //         </View>
-                        //         <TouchableOpacity style={{
-                        //             width: 30,
-                        //             height: 30,
-                        //             borderWidth: 1,
-                        //             borderRadius: 20,
-                        //             justifyContent: 'center',
-                        //             alignItems: 'center'
-                        //         }}
-                        //             onPress={{}}
-                        //         >
-                        //             <Image source={IC_Delete} />
-                        //         </TouchableOpacity>
-
-                        //     </View>
-
-                        // </View>
 
                     )
                 }}

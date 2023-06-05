@@ -28,7 +28,8 @@ const ProductCheckOut = (props: any) => {
                 borderWidth: 1,
                 borderRadius: 20,
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                marginLeft: 10
             }}
                 onPress={props.onPressChoose}
             >
@@ -86,7 +87,7 @@ const ProductCheckOut = (props: any) => {
                         backgroundColor: CUSTOM_COLOR.Alto,
                         marginRight: 10
                     }}
-                        onPress={props.onPressUp}
+                        onPress={props.onPressDown}
                     >
                         <Text style={{
                             fontSize: 15,
@@ -106,7 +107,7 @@ const ProductCheckOut = (props: any) => {
                         backgroundColor: CUSTOM_COLOR.Alto,
                         marginLeft: 10
                     }}
-                        onPress={props.onPressDown}
+                        onPress={props.onPressUp}
                     >
                         <Text style={{
                             fontSize: 15,
@@ -126,7 +127,8 @@ const ProductCheckOut = (props: any) => {
                 borderWidth: 1,
                 borderRadius: 20,
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                marginRight: 10
             }}
                 onPress={props.onPressDelete}
             >
