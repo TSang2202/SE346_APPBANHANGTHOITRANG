@@ -4,11 +4,8 @@ import { IC_Chat, IC_ShoppingCart } from "../assets/icons";
 import { IM_GiayNam, IM_MauAo, IM_PhuKien, IM_SaleImage, IM_ThoiTrangNam, IM_ThoiTrangNu } from "../assets/images";
 import Categories from "../components/Categories";
 import ProductCard from "../components/ProductCard";
-import SearchInput from "../components/SearchInput";
+import SearchInput from "../components/SearchBar";
 import CUSTOM_COLOR from "../constants/colors";
-
-
-
 
 const dataTredding = [
   {
