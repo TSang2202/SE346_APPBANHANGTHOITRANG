@@ -5,7 +5,7 @@ import { IM_AnhGiay1, IM_AnhGiay2, IM_AnhGiay3, IM_AnhGiay4 } from "../assets/im
 import Button from "../components/Button";
 import ProductCheckOut from "../components/ProductCheckOut";
 import ProductView from "../components/ProductView";
-import SearchInput from "../components/SearchInput";
+import SearchInput from "../components/SearchBar";
 import CUSTOM_COLOR from "../constants/colors";
 
 const data = {

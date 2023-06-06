@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+compileSdkVersion 30
 
 import com.android.build.OutputFile
 
