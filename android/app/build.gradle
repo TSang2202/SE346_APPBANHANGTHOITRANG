@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
-compileSdkVersion 30
+
+    
 
 import com.android.build.OutputFile
 
@@ -92,8 +93,8 @@ def reactNativeArchitectures() {
 android {
     ndkVersion rootProject.ext.ndkVersion
 
-    compileSdkVersion rootProject.ext.compileSdkVersion
-
+   
+    compileSdkVersion 30
     namespace "com.shoppingappreact"
     defaultConfig {
         applicationId "com.shoppingappreact"
