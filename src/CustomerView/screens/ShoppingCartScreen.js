@@ -20,6 +20,7 @@ function ShoppingCartScreen({ navigation, route }) {
     const [items, setItems] = useState([])
     const [checkChooseAll, setCheckChooseAll] = useState(false)
     const [totalMoney, setTotalMoney] = useState(0)
+    const [itemsCheckout, setItemsCheckout] = useState([])
 
     const getDataCart = () => {
         const q = query(collection(Firestore, "GIOHANG"), where("MaND", "==", idUser));
@@ -38,7 +39,7 @@ function ShoppingCartScreen({ navigation, route }) {
     }
     const updateCheck = (item) => {
         const updateItem = items.map((product) => {
-            if (product.MaSP === item.MaSP) {
+            if (product.MaGH === item.MaGH) {
                 product.checkSelect = !item.checkSelect;
             }
             if (product.checkSelect == false) setCheckChooseAll(false)
@@ -56,6 +57,8 @@ function ShoppingCartScreen({ navigation, route }) {
         setTotalMoney(sum)
 
         setItems(updateItem)
+
+        LoadItemsCheckout()
     }
 
     const ChooseAll = () => {
@@ -82,6 +85,8 @@ function ShoppingCartScreen({ navigation, route }) {
 
 
         setItems(updateItem)
+
+        LoadItemsCheckout()
     }
 
     const updateNumber = async (item) => {
@@ -121,6 +126,14 @@ function ShoppingCartScreen({ navigation, route }) {
     const DeleteProduct = async (item) => {
         await deleteDoc(doc(Firestore, "GIOHANG", item.MaGH));
         getDataCart()
+    }
+
+    const LoadItemsCheckout = () => {
+        const data = items.filter((product) => product.checkSelect == true)
+
+        setItemsCheckout(data)
+
+
     }
 
 
@@ -267,7 +280,13 @@ function ShoppingCartScreen({ navigation, route }) {
                 <Button
                     title='CHECK OUT'
                     color={CUSTOM_COLOR.FlushOrange}
-                    onPress={() => navigation.navigate('Checkout')}
+                    onPress={() => {
+
+                        if (itemsCheckout.length > 0)
+                            navigation.navigate('Checkout', { itemsCheckout, totalMoney })
+
+
+                    }}
                 />
             </View>
 

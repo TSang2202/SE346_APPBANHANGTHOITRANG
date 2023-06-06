@@ -516,6 +516,7 @@ function DetailProduct({ navigation, route }) {
                         <Button
                             title='DONE'
                             color={CUSTOM_COLOR.Carnation}
+                            onPress={() => setChooseStyle(false)}
                         />
 
                     </View>
