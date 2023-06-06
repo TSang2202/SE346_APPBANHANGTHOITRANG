@@ -12,4 +12,3 @@ const CUSTOM_COLOR = {
 };
 
 export default CUSTOM_COLOR;
-

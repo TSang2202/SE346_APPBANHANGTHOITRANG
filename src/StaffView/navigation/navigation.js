@@ -1,6 +1,6 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OverView from '../screens/OverView.js';
 import ViewShop1 from '../screens/ViewShop1.js';
 import ViewShop2 from '../screens/ViewShop2.js';
@@ -18,32 +18,32 @@ import EditProduct from '../screens/EditProduct.js';
 import AddProduct from '../screens/AddProduct.js';
 import DeTailDelivery from '../screens/DeTailDelivery.js';
 import ReView from '../screens/ReView.js';
-import ChatScreen from '../../CustomerView/screens/ChatScreen.js';
+import ChatScreenStaff from '../screens/ChatScreenStaff.js';
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
     <NavigationContainer>
-    <Stack.Navigator
-      initialRouteName="Test"
-      screenOptions={{headerShown: false}}>
-      <Stack.Screen name="OverView" component={OverView} />
-      <Stack.Screen name="ViewShop1" component={ViewShop1}/>
-      <Stack.Screen name="ViewShop2" component={ViewShop2}/>    
-      <Stack.Screen name="Chat" component={Chat}></Stack.Screen>
-      <Stack.Screen name='Setting' component={Setting}/>
-      <Stack.Screen name='Notification' component={Notification}/>
-      <Stack.Screen name='User' component={User}/>
-      <Stack.Screen name='Order' component={Order}/>
-      <Stack.Screen name='Report' component={Report}/>
-      <Stack.Screen name='Promotion' component={Promotion}/>
-      <Stack.Screen name='DeTailsChat' component={DeTailsChat}/>
-      <Stack.Screen name='MyProduct' component={MyProduct}/>
-      <Stack.Screen name='Search' component={SearchSrc}/>
-      <Stack.Screen name='EditProduct' component={EditProduct}/>
-      <Stack.Screen name='AddProduct' component={AddProduct}/>
-      <Stack.Screen name='DeTailsDelivery' component={DeTailDelivery}/>
-      <Stack.Screen name='ReView' component={ReView}/>
-      <Stack.Screen name='ChatScreen' component={ChatScreen}/>
+      <Stack.Navigator
+        initialRouteName="Test"
+        screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="OverView" component={OverView} />
+        <Stack.Screen name="ViewShop1" component={ViewShop1} />
+        <Stack.Screen name="ViewShop2" component={ViewShop2} />
+        <Stack.Screen name="Chat" component={Chat}></Stack.Screen>
+        <Stack.Screen name='Setting' component={Setting} />
+        <Stack.Screen name='Notification' component={Notification} />
+        <Stack.Screen name='User' component={User} />
+        <Stack.Screen name='Order' component={Order} />
+        <Stack.Screen name='Report' component={Report} />
+        <Stack.Screen name='Promotion' component={Promotion} />
+        <Stack.Screen name='DeTailsChat' component={DeTailsChat} />
+        <Stack.Screen name='MyProduct' component={MyProduct} />
+        <Stack.Screen name='Search' component={SearchSrc} />
+        <Stack.Screen name='EditProduct' component={EditProduct} />
+        <Stack.Screen name='AddProduct' component={AddProduct} />
+        <Stack.Screen name='DeTailsDelivery' component={DeTailDelivery} />
+        <Stack.Screen name='Review' component={ReView} />
+        <Stack.Screen name='ChatScreenStaff' component={ChatScreenStaff} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -9,8 +9,7 @@ class PreviousButton extends React.Component {
       <>
         <View style={styles.container}>
           <TouchableOpacity onPress={this.props.onPress}>
-            <Image source={IC_previous} 
-            style={{resizeMode: 'contain'}}/>
+            <Image source={IC_previous} style={{resizeMode: 'contain'}} />
           </TouchableOpacity>
         </View>
       </>
