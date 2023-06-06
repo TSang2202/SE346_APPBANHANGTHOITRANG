@@ -93,8 +93,7 @@ def reactNativeArchitectures() {
 android {
     ndkVersion rootProject.ext.ndkVersion
 
-   
-    compileSdkVersion 30
+    compileSdkVersion rootProject.ext.compileSdkVersion
     namespace "com.shoppingappreact"
     defaultConfig {
         applicationId "com.shoppingappreact"
