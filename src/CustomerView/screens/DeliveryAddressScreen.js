@@ -10,7 +10,7 @@ import { async } from "@firebase/util";
 
 function DeliveryAddressScreen({ navigation, route }) {
 
-    const { itemsCheckout, totalMoney, choosePayment } = route.params
+    const { itemsCheckout, totalMoney, choosePayment, promotion } = route.params
     // const [delivery, setDelivery] = useState()
     const [diaChi, setDiaChi] = useState('')
     const [quanHuyen, setQuanHuyen] = useState('')
@@ -169,7 +169,7 @@ function DeliveryAddressScreen({ navigation, route }) {
                         const delivery = await addDataAddress()
 
 
-                        navigation.navigate('Checkout', { itemsCheckout, totalMoney, delivery, choosePayment })
+                        navigation.navigate('Checkout', { itemsCheckout, totalMoney, delivery, choosePayment, promotion })
 
                     }
 

@@ -14,6 +14,7 @@ import ShoppingCartScreen from '../screens/ShoppingCartScreen';
 import TrendingScreen from '../screens/TrendingScreen';
 import ReviewScreen from '../screens/ReviewScreen';
 import DetailCategoryScreen from '../screens/DetailCategoryScreen';
+import PromotionScreen from '../screens/PromotionScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,7 @@ function StackHome() {
             <Stack.Screen name='Chat' component={ChatScreen} />
             <Stack.Screen name='Review' component={ReviewScreen} />
             <Stack.Screen name='DetailCategory' component={DetailCategoryScreen} />
+            <Stack.Screen name='Promotion' component={PromotionScreen} />
 
         </Stack.Navigator>
 

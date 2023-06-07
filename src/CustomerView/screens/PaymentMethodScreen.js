@@ -7,7 +7,7 @@ import CUSTOM_COLOR from "../constants/colors";
 
 function PaymentMethodScreen({ navigation, route }) {
 
-    const { itemsCheckout, totalMoney, delivery } = route.params
+    const { itemsCheckout, totalMoney, delivery, promotion } = route.params
 
     const [choosePayment, setChoosePayment] = useState()
 
@@ -126,7 +126,7 @@ function PaymentMethodScreen({ navigation, route }) {
                     <Button
                         title='Continue'
                         color={CUSTOM_COLOR.FlushOrange}
-                        onPress={() => navigation.navigate('Checkout', { itemsCheckout, totalMoney, delivery, choosePayment })}
+                        onPress={() => navigation.navigate('Checkout', { itemsCheckout, totalMoney, delivery, choosePayment, promotion })}
                     />
                 </View>
             </View>

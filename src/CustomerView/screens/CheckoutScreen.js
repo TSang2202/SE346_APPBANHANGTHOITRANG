@@ -12,9 +12,16 @@ function CheckoutScreen({ navigation, route }) {
 
   const { itemsCheckout, totalMoney } = route.params
 
-  const { delivery, choosePayment } = route.params
+  const { delivery, choosePayment, promotion } = route.params
 
+  const deliveryCharge = promotion ? promotion.Loai === 'MienPhiVanChuyen' ? 0 : 20000 : 20000
 
+  const discount = promotion ?
+    promotion.Loai === 'GiamGia' ?
+      promotion.GiamToiDa < totalMoney * promotion.TiLe ? promotion.GiamToiDa : totalMoney * promotion.Tile
+      : 5000 : 5000
+
+  const totalOrder = totalMoney + deliveryCharge - discount
 
   useEffect(() => {
 
@@ -67,31 +74,44 @@ function CheckoutScreen({ navigation, route }) {
         }}
       />
 
-      <View style={{
+      <TouchableOpacity style={{
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginHorizontal: 20,
         marginVertical: 10
-      }}>
+      }}
+        onPress={() => navigation.navigate('Promotion', { itemsCheckout, totalMoney, delivery, choosePayment })}
+      >
         <Text style={{
           fontSize: 18,
           fontWeight: 'bold'
         }}>Offers Details</Text>
         <Image source={IC_Next} />
-      </View>
+      </TouchableOpacity>
 
       <View style={{
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginHorizontal: 20
-      }}>
-        <Text style={{
-          fontSize: 17,
+      }}
 
-        }}>Mega Diwali Sale 50% OFF Offer Applied</Text>
-        <Image source={IC_CheckGreen} />
+      >
+        {promotion ?
+          <Text style={{
+            fontSize: 17,
+
+          }}>{promotion.TenKM}</Text>
+
+          :
+          <Text style={{
+            fontSize: 17,
+
+          }}>Choose promotion</Text>
+        }
+
+        <Image source={promotion ? IC_CheckGreen : IC_CheckGrey} />
       </View>
 
       <TouchableOpacity style={{
@@ -101,7 +121,7 @@ function CheckoutScreen({ navigation, route }) {
         marginHorizontal: 20,
         marginVertical: 10
       }}
-        onPress={() => navigation.navigate('DeliveryAddress', { itemsCheckout, totalMoney, choosePayment })}
+        onPress={() => navigation.navigate('DeliveryAddress', { itemsCheckout, totalMoney, choosePayment, promotion })}
       >
         <Text style={{
           fontSize: 18,
@@ -159,7 +179,7 @@ function CheckoutScreen({ navigation, route }) {
         marginHorizontal: 20,
         marginVertical: 10
       }}
-        onPress={() => navigation.navigate('PaymentMethod', { itemsCheckout, totalMoney, delivery })}
+        onPress={() => navigation.navigate('PaymentMethod', { itemsCheckout, totalMoney, delivery, promotion })}
       >
         <Text style={{
           fontSize: 18,
@@ -236,7 +256,7 @@ function CheckoutScreen({ navigation, route }) {
         }}>Delivery Charge</Text>
         <Text style={{
           fontSize: 16
-        }}>20000đ</Text>
+        }}>{deliveryCharge} đ</Text>
       </View>
 
       <View style={{
@@ -247,16 +267,31 @@ function CheckoutScreen({ navigation, route }) {
       }}>
         <Text style={{
           fontSize: 16
-        }}>Total</Text>
+        }}>Discount</Text>
         <Text style={{
           fontSize: 16
-        }}>220000đ</Text>
+        }}>- {discount} đ</Text>
+      </View>
+
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 20
+
+      }}>
+        <Text style={{
+          fontSize: 16,
+          color: CUSTOM_COLOR.SeaBuckthorn
+        }}>Total</Text>
+        <Text style={{
+          fontSize: 16,
+          color: CUSTOM_COLOR.SeaBuckthorn
+        }}>{totalOrder} đ</Text>
       </View>
 
       <View style={{
         alignItems: 'center',
-        marginVertical: 10,
-        marginVertical: '10%'
+        marginVertical: 10
       }}>
         <Button
           color={CUSTOM_COLOR.FlushOrange}
