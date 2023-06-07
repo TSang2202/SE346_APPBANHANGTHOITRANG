@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
-import { Firestore } from "../../../Firebase/firebase";
+import { Firestore, firebase } from "../../../Firebase/firebase";
 import { IC_Back, IC_Location, IC_MyLocation } from "../assets/icons";
 import Button from "../components/Button";
 import InputData from "../components/InputData";
@@ -11,8 +11,9 @@ import { async } from "@firebase/util";
 function DeliveryAddressScreen({ navigation, route }) {
 
     const { itemsCheckout, totalMoney, choosePayment, promotion } = route.params
-    // const [delivery, setDelivery] = useState()
+
     const [diaChi, setDiaChi] = useState('')
+    const [phuongXa, setPhuongXa] = useState('')
     const [quanHuyen, setQuanHuyen] = useState('')
     const [tinhTP, setTinhTP] = useState('')
     const [numberPhone, setNumberPhone] = useState('')
@@ -22,10 +23,12 @@ function DeliveryAddressScreen({ navigation, route }) {
     const addDataAddress = async () => {
         const docRef = await addDoc(collection(Firestore, "DIACHI"), {
             DiaChi: diaChi,
+            PhuongXa: phuongXa,
             QuanHuyen: quanHuyen,
             TinhThanhPho: tinhTP,
             SDT: numberPhone,
-            TenNguoiMua: name
+            TenNguoiMua: name,
+            MaND: firebase.auth().currentUser.uid
         });
         const updateRef = doc(Firestore, "DIACHI", docRef.id);
 
@@ -35,6 +38,8 @@ function DeliveryAddressScreen({ navigation, route }) {
 
         const loadRef = doc(Firestore, "DIACHI", docRef.id);
         const docSnap = await getDoc(loadRef);
+
+        navigation.navigate('Delivery', { itemsCheckout, totalMoney, choosePayment, promotion })
 
 
         return docSnap.data()
@@ -92,6 +97,13 @@ function DeliveryAddressScreen({ navigation, route }) {
                     placeholder='Input your address'
                     onChangeText={(text) => setDiaChi(text)}
                 />
+
+                <InputData
+                    title='Ward'
+                    width='85%'
+                    placeholder='Linh Trung'
+                    onChangeText={(text) => setPhuongXa(text)}
+                />
             </View>
 
             <View style={{
@@ -127,35 +139,7 @@ function DeliveryAddressScreen({ navigation, route }) {
                 />
             </View>
 
-            <View style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                marginVertical: 10
-            }}>
-                <View style={{
-                    flexDirection: 'row',
-                    backgroundColor: CUSTOM_COLOR.Whisper,
-                    marginVertical: 10,
-                    width: '85%',
-                    paddingVertical: 10,
-                    paddingHorizontal: 10,
-                    borderRadius: 15,
-                    alignItems: 'center'
-                }}>
 
-                    <Image style={{
-                        width: 20,
-                        height: 20
-                    }}
-                        source={IC_MyLocation} />
-
-                    <Text style={{
-                        marginHorizontal: 10,
-                        fontSize: 17
-                    }}>Use my location</Text>
-                </View>
-
-            </View>
 
             <View style={{
                 flexDirection: 'row',
@@ -165,15 +149,8 @@ function DeliveryAddressScreen({ navigation, route }) {
                 <Button
                     title='SAVE'
                     color={CUSTOM_COLOR.FlushOrange}
-                    onPress={async () => {
-                        const delivery = await addDataAddress()
+                    onPress={() => addDataAddress()}
 
-
-                        navigation.navigate('Checkout', { itemsCheckout, totalMoney, delivery, choosePayment, promotion })
-
-                    }
-
-                    }
 
                 />
             </View>

@@ -118,6 +118,11 @@ function PromotionScreen({ navigation, route }) {
                             expiry={`${day}.${month}.${year}`}
                             onPress={() => updateCheck(item)}
                             checkSelect={item.checkSelect}
+                            show={true}
+                            style={{
+                                margin: 10,
+
+                            }}
                         />
                     )
                 }}

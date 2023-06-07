@@ -32,7 +32,8 @@ function DetailProduct({ navigation, route }) {
             MauSac: chooseColor,
             Size: chooseSize,
             HinhAnhSP: item.HinhAnhSP,
-            TenSP: item.TenSP
+            TenSP: item.TenSP,
+            GiaSP: GiaSP
 
         });
 

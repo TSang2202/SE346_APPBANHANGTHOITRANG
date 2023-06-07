@@ -15,6 +15,7 @@ import TrendingScreen from '../screens/TrendingScreen';
 import ReviewScreen from '../screens/ReviewScreen';
 import DetailCategoryScreen from '../screens/DetailCategoryScreen';
 import PromotionScreen from '../screens/PromotionScreen';
+import DeliveryScreen from '../screens/DeliveryScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,7 @@ function StackHome() {
             <Stack.Screen name='Review' component={ReviewScreen} />
             <Stack.Screen name='DetailCategory' component={DetailCategoryScreen} />
             <Stack.Screen name='Promotion' component={PromotionScreen} />
+            <Stack.Screen name='Delivery' component={DeliveryScreen} />
 
         </Stack.Navigator>
 

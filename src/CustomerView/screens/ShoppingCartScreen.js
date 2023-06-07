@@ -38,6 +38,7 @@ function ShoppingCartScreen({ navigation, route }) {
 
     }
     const updateCheck = (item) => {
+        console.log('11111')
         const updateItem = items.map((product) => {
             if (product.MaGH === item.MaGH) {
                 product.checkSelect = !item.checkSelect;
@@ -89,18 +90,30 @@ function ShoppingCartScreen({ navigation, route }) {
         LoadItemsCheckout()
     }
 
+    const resetTotalMoney = () => {
+        const sum = items.reduce((total, product) => {
+            if (product.checkSelect) return total + product.GiaTien
+            else return total
+        }, 0)
+
+        setTotalMoney(sum)
+    }
+
     const updateNumber = async (item) => {
         const updateRef = doc(Firestore, "GIOHANG", item.MaGH);
         await updateDoc(updateRef, {
-            SoLuong: item.SoLuong
+            SoLuong: item.SoLuong,
+            GiaTien: item.GiaTien
         });
     }
 
 
     const UpNumber = (item) => {
+
         const updateItem = items.map((product) => {
             if (item.MaGH === product.MaGH) {
                 product.SoLuong += 1
+                product.GiaTien = product.SoLuong * product.GiaSP
                 updateNumber(item)
             }
 
@@ -108,12 +121,14 @@ function ShoppingCartScreen({ navigation, route }) {
         })
 
         setItems(updateItem)
+        resetTotalMoney()
     }
 
     const DownNumber = (item) => {
         const updateItem = items.map((product) => {
             if (item.MaGH === product.MaGH && item.SoLuong > 1) {
                 product.SoLuong -= 1
+                product.GiaTien = product.SoLuong * product.GiaSP
                 updateNumber(item)
             }
 
@@ -121,6 +136,7 @@ function ShoppingCartScreen({ navigation, route }) {
         })
 
         setItems(updateItem)
+        resetTotalMoney()
     }
 
     const DeleteProduct = async (item) => {
@@ -200,7 +216,7 @@ function ShoppingCartScreen({ navigation, route }) {
                             size={item.Size}
                             price={item.GiaTien}
                             number={item.SoLuong}
-                            onPressChoose={() => updateCheck(item)}
+                            onPress={() => updateCheck(item)}
                             checkSelect={item.checkSelect}
                             onPressUp={() => UpNumber(item)}
                             onPressDown={() => DownNumber(item)}
