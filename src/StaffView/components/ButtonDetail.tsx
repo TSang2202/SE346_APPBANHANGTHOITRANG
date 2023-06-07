@@ -14,7 +14,7 @@ const ButtonDetail = (props: any) =>{
         paddingHorizontal: 20,
         paddingVertical: 8,
         marginHorizontal: 10,
-        minWidth: 150,
+        minWidth: 100,
         ...props.style
         
     }}
@@ -22,6 +22,7 @@ const ButtonDetail = (props: any) =>{
     >
 
         <Text style = {{
+            textAlign: 'center',
             color: CUSTOM_COLOR.White,
             fontWeight: 'bold',
             fontSize: 17
