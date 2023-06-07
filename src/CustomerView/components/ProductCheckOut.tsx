@@ -31,7 +31,7 @@ const ProductCheckOut = (props: any) => {
                 alignItems: 'center',
                 marginLeft: 10
             }}
-                onPress={props.onPressChoose}
+                onPress={props.onPress}
             >
                 {props.checkSelect ?
                     <View style={{

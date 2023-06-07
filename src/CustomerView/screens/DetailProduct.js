@@ -32,7 +32,8 @@ function DetailProduct({ navigation, route }) {
             MauSac: chooseColor,
             Size: chooseSize,
             HinhAnhSP: item.HinhAnhSP,
-            TenSP: item.TenSP
+            TenSP: item.TenSP,
+            GiaSP: GiaSP
 
         });
 
@@ -516,6 +517,7 @@ function DetailProduct({ navigation, route }) {
                         <Button
                             title='DONE'
                             color={CUSTOM_COLOR.Carnation}
+                            onPress={() => setChooseStyle(false)}
                         />
 
                     </View>
