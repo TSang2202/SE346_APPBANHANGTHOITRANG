@@ -68,7 +68,7 @@ function DetailCategoryScreen({ navigation, route }) {
                 <SearchInput
                     style={{
                         marginVertical: 10,
-                        width: 300
+                        width: '70%'
                     }} />
 
                 <View style={{
@@ -110,16 +110,18 @@ function DetailCategoryScreen({ navigation, route }) {
                     data={items}
                     renderItem={({ item }) => {
                         return (
-                            <TouchableWithoutFeedback style={{
+                            <TouchableOpacity style={{
                                 flexDirection: 'row',
                                 //justifyContent: 'space-around'
-                            }}>
+                            }}
+                                onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+                            >
                                 <ProductView
                                     source={item.HinhAnhSP}
                                     title={item.TenSP}
                                     price={item.GiaSP}
                                 />
-                            </TouchableWithoutFeedback>
+                            </TouchableOpacity>
                         )
                     }}
                     numColumns={2}

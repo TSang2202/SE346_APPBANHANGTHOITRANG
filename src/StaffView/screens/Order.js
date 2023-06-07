@@ -365,10 +365,13 @@ export default function Order({ navigation }) {
                     </Status>
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
+                <View style={{
+                    height: '85%'
+                }}>
 
                     <FlatList
                         data={donHangConfirm}
+                        contentContainerStyle={{ paddingBottom: 50 }}
                         renderItem={({ item }) => {
                             //console.log(item)
                             return (
@@ -379,6 +382,7 @@ export default function Order({ navigation }) {
                                     />
                                     <FlatList
                                         data={item.DatHang}
+
                                         renderItem={({ item }) => {
 
                                             console.log(item)
@@ -391,6 +395,8 @@ export default function Order({ navigation }) {
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
                                                         totalPrice={item.ThanhTien}
+                                                        color={item.MauSac}
+                                                        size={item.Size}
                                                         Code={item.MaDH}
                                                         onPress={() => { navigation.navigate('DeTailsDelivery') }}
                                                         PressConfirm={() => { }}

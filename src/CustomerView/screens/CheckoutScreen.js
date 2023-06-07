@@ -1,6 +1,6 @@
 import { async } from "@firebase/util";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { Firestore, firebase } from "../../../Firebase/firebase";
 import { IC_Back, IC_CheckGreen, IC_CheckGrey, IC_Location, IC_Next, IC_Visa } from "../assets/icons";
 import { IM_AnhGiay1 } from "../assets/images";
@@ -10,7 +10,7 @@ import ProductCard from "../components/ProductCard";
 import ProductCheckOut from "../components/ProductCheckOut";
 import Promotion from "../components/Promotion";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, addDoc, Timestamp, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp, doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 
 function CheckoutScreen({ navigation, route }) {
@@ -18,6 +18,8 @@ function CheckoutScreen({ navigation, route }) {
   const { itemsCheckout, totalMoney } = route.params
 
   const { delivery, choosePayment, promotion } = route.params
+
+  const [index, setIndex] = useState(0)
 
   const deliveryCharge = promotion && promotion.Loai === 'MienPhiVanChuyen' ? 0 : 20000
 
@@ -59,17 +61,32 @@ function CheckoutScreen({ navigation, route }) {
       MaDH: docRef.id
     });
 
-    setIdDonHang(docRef.id)
+    console.log(itemsCheckout)
+
 
     itemsCheckout.forEach((item) => {
-      console.log(1)
-      AddDatHang(item)
+
+      AddDatHang(item, docRef.id)
     })
+
+    navigation.navigate('HomeScreen')
+
+    // Alert.alert('Notification', 'You have placed our order successfully!', [
+    //   {
+    //     text: 'Cancle',
+    //     onPress: () => {
+    //       navigation.navigate('HomeScreen')
+
+
+    //     }
+    //   }
+    // ])
   }
 
-  const AddDatHang = async (item) => {
+  const AddDatHang = async (item, id) => {
+
     const docRef = await addDoc(collection(Firestore, "DATHANG"), {
-      MaDH: idDonHang,
+      MaDH: id,
       MaSP: item.MaSP,
       MauSac: item.MauSac,
       Size: item.Size,
@@ -78,13 +95,19 @@ function CheckoutScreen({ navigation, route }) {
 
     });
 
+    await deleteDoc(doc(Firestore, "GIOHANG", item.MaGH));
+
+  }
+
+  const MoveNext = () => {
+    setIndex(index == itemsCheckout.length - 1 ? 0 : index + 1)
   }
 
   useEffect(() => {
 
-    console.log(itemsCheckout)
+    console.log(itemsCheckout, totalMoney)
 
-  }, [])
+  }, [itemsCheckout, totalMoney])
 
 
   return (
@@ -123,17 +146,21 @@ function CheckoutScreen({ navigation, route }) {
 
       <ScrollView>
 
-        <ProductCheckOut
-          source={itemsCheckout[0].HinhAnhSP}
-          title={itemsCheckout[0].TenSP}
-          color={itemsCheckout[0].MauSac}
-          size={itemsCheckout[0].Size}
-          price={itemsCheckout[0].GiaTien}
-          number={itemsCheckout[0].SoLuong}
-          style={{
-            marginVertical: 10
-          }}
-        />
+        {itemsCheckout ?
+
+          <ProductCheckOut
+            source={itemsCheckout[index].HinhAnhSP}
+            title={itemsCheckout[index].TenSP}
+            color={itemsCheckout[index].MauSac}
+            size={itemsCheckout[index].Size}
+            price={itemsCheckout[index].GiaTien}
+            number={itemsCheckout[index].SoLuong}
+            style={{
+              marginVertical: 10
+            }}
+            show={false}
+            onPressDelete={() => MoveNext()}
+          /> : null}
 
         <TouchableOpacity style={{
           flexDirection: 'row',
@@ -372,7 +399,12 @@ function CheckoutScreen({ navigation, route }) {
           <Button
             color={CUSTOM_COLOR.FlushOrange}
             title='CHECK OUT'
-            onPress={() => AddDonHang()}
+            onPress={promotion && delivery && choosePayment ? () => AddDonHang() : () => {
+              Alert.alert('Warning', 'Please provide enough information!', [{
+                text: 'Cancle',
+
+              }])
+            }}
           />
         </View>
 
