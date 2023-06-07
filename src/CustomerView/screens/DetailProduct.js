@@ -10,7 +10,7 @@ import { IM_MauAo } from "../assets/images";
 import Button from "../components/Button";
 import StarRating from "../components/StarRating";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { async } from "@firebase/util";
 import { Firestore, firebase } from "../../../Firebase/firebase";
 
@@ -22,6 +22,8 @@ function DetailProduct({ navigation, route }) {
     const [numProduct, setNumProduct] = useState(1)
     const [chooseColor, setChooseColor] = useState()
     const [chooseSize, setChooseSize] = useState()
+    const [itemsCheckout, setItemsCheckout] = useState([])
+    const [totalMoney, setTotalMoney] = useState()
 
     const setDataGioHang = async () => {
         const docRef = await addDoc(collection(Firestore, "GIOHANG"), {
@@ -33,7 +35,7 @@ function DetailProduct({ navigation, route }) {
             Size: chooseSize,
             HinhAnhSP: item.HinhAnhSP,
             TenSP: item.TenSP,
-            GiaSP: GiaSP
+            GiaSP: item.GiaSP
 
         });
 
@@ -55,6 +57,40 @@ function DetailProduct({ navigation, route }) {
         );
 
     }
+
+    const setBuyNow = async () => {
+        const docRef = await addDoc(collection(Firestore, "GIOHANG"), {
+            MaND: firebase.auth().currentUser.uid,
+            MaSP: item.MaSP,
+            SoLuong: numProduct,
+            GiaTien: item.GiaSP * numProduct,
+            MauSac: chooseColor,
+            Size: chooseSize,
+            HinhAnhSP: item.HinhAnhSP,
+            TenSP: item.TenSP,
+            GiaSP: item.GiaSP
+
+        });
+
+        const updateRef = doc(Firestore, "GIOHANG", docRef.id);
+        await updateDoc(updateRef, {
+            MaGH: docRef.id
+        });
+
+        const unsub = onSnapshot(doc(Firestore, "GIOHANG", docRef.id), (doc) => {
+            const data = []
+            data.push(doc.data())
+            setItemsCheckout(data)
+
+            setTotalMoney(item.GiaSP * numProduct)
+
+        });
+
+
+
+    }
+
+    { itemsCheckout && totalMoney ? navigation.navigate('Checkout', { itemsCheckout, totalMoney }) : null }
 
     useEffect(() => {
         console.log(item.Size)
@@ -142,7 +178,7 @@ function DetailProduct({ navigation, route }) {
 
                 <Text
                     style={{
-                        marginHorizontal: 50,
+                        marginHorizontal: 10,
                         fontSize: 20,
                         color: CUSTOM_COLOR.Sunglow,
                         fontWeight: 'bold',
@@ -368,6 +404,7 @@ function DetailProduct({ navigation, route }) {
                 <Button
                     color={CUSTOM_COLOR.Sunshade}
                     title='BUY NOW'
+                    onPress={() => setBuyNow()}
                 />
             </View>
 

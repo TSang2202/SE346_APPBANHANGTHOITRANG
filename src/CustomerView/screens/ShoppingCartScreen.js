@@ -38,7 +38,7 @@ function ShoppingCartScreen({ navigation, route }) {
 
     }
     const updateCheck = (item) => {
-        console.log('11111')
+
         const updateItem = items.map((product) => {
             if (product.MaGH === item.MaGH) {
                 product.checkSelect = !item.checkSelect;
@@ -216,6 +216,7 @@ function ShoppingCartScreen({ navigation, route }) {
                             size={item.Size}
                             price={item.GiaTien}
                             number={item.SoLuong}
+                            show={true}
                             onPress={() => updateCheck(item)}
                             checkSelect={item.checkSelect}
                             onPressUp={() => UpNumber(item)}

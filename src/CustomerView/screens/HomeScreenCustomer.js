@@ -108,7 +108,7 @@ function HomeScreenCustomer({ navigation }) {
         <SearchInput
           placeholder='Search product'
           style={{
-            width: 290,
+            width: '70%',
             margin: 10
           }}
           onPressIn={() => {
