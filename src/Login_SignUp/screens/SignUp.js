@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -11,19 +11,19 @@ import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
-import { IMG_Rectangle182 } from '../assets/images/index.js';
+import {IMG_Rectangle182} from '../assets/images/index.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
 import HederContent from '../components/Header/HederContent.js';
 import CheckBox from '@react-native-community/checkbox';
 import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
-import { firebase } from '../../../Firebase/firebase.js';
-import { useNavigation } from '@react-navigation/native';
+import {firebase} from '../../../Firebase/firebase.js';
+import {useNavigation} from '@react-navigation/native';
 //import {  ref, set } from "firebase/database";
 //import {db} from '../../../Firebase/firebase';
 
 const SignUp = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const [status, setStatus] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
@@ -34,7 +34,7 @@ const SignUp = props => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const user = true;
+  const user = 'customer';
 
   const signUp = async (
     fullName,
@@ -44,7 +44,6 @@ const SignUp = props => {
     password,
     user,
   ) => {
-
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -74,7 +73,6 @@ const SignUp = props => {
 
                 MaND: firebase.auth().currentUser.uid,
                 LoaiND: user,
-
               });
           })
           .catch(error => {
@@ -111,7 +109,7 @@ const SignUp = props => {
           <HeaderTitlle title="Sign Up" />
         </View>
         <View style={[styles.bodyContainer, styles.unitContainer]}>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <TextInputCard
               title="Full name*"
               txtInput="Nguyen Van A"
@@ -119,38 +117,32 @@ const SignUp = props => {
             />
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <TextInputCard
-
               title="Email*"
-
               txtInput="abc@gmail.com"
               onChangeText={email => setEmail(email)}
               keyboardType="email-address"
             />
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <TextInputCard
-
               title="Phone number"
-
               txtInput="03333333333"
               onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
             />
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <TextInputCard
               title="Day of birth"
-
               txtInput="dd/mm/yy"
-
               onChangeText={birth => setBirth(birth)}
             />
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <PasswordCard
               title="Password*"
               txtInput="********"
@@ -158,7 +150,7 @@ const SignUp = props => {
             />
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <PasswordCard
               title="Confirm Password*"
               txtInput="********"
@@ -178,7 +170,7 @@ const SignUp = props => {
                     </View> */}
 
           <View
-            style={{ flex: 2, justifyContent: 'center', alignItems: 'flex-end' }}>
+            style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
             <HederContent content="I agree with this " />
           </View>
 
@@ -201,7 +193,6 @@ const SignUp = props => {
               text="Sign up now"
               onPress={() => {
                 if (password === confirmPassword) {
-
                   signUp(fullName, email, phoneNumber, birth, password, user);
 
                   navigation.navigate('Congratulation');
