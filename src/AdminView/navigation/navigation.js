@@ -19,12 +19,14 @@ import AddProduct from '../screens/AddProduct.js';
 import DeTailDelivery from '../screens/DeTailDelivery.js';
 import ReView from '../screens/ReView.js';
 import ChatScreenStaff from '../screens/ChatScreenStaff.js';
+import AddAccount from '../screens/AddAccount.js';
+
 const Stack = createNativeStackNavigator();
 function AdminStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Test"
+        // initialRouteName="AddAccount"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="OverView" component={OverView} />
         <Stack.Screen name="ViewShop1" component={ViewShop1} />
@@ -44,6 +46,8 @@ function AdminStackNavigator() {
         <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
         <Stack.Screen name="Review" component={ReView} />
         <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
+        <Stack.Screen name="AddAccount" component={AddAccount} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
