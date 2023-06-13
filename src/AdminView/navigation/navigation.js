@@ -27,7 +27,7 @@ function AdminStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Test"
+        initialRouteName="OverView"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="OverView" component={OverView} />
         <Stack.Screen name="ViewShop1" component={ViewShop1} />

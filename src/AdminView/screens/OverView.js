@@ -25,6 +25,9 @@ import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import ViewShop1 from './ViewShop1.js';
 import Button from '../../StaffView/components/Button';
 import ViewNow from '../../StaffView/components/ViewNow';
+import {IC_logout} from '../assets/icons/index.js';
+import {firebase, Firestore} from '../../../Firebase/firebase.js';
+
 export const Acount = {
   name: 'Nguyen Trung Tinh',
   avartar:
@@ -99,6 +102,17 @@ function OverView({navigation}) {
           <Image
             style={{width: '100%', height: '100%'}}
             source={notification}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.logoutContainer}
+          onPress={() => {
+            firebase.auth().signOut();
+          }}>
+          <Image
+            style={{width: '100%', height: '100%'}}
+            source={IC_logout}
             resizeMode="contain"
           />
         </TouchableOpacity>
@@ -291,7 +305,7 @@ const styles = StyleSheet.create({
   settingicon: {
     width: 42,
     height: 42,
-    marginLeft: '68%',
+    marginLeft: '57%',
     marginTop: '9%',
   },
   messengericon: {
@@ -304,6 +318,12 @@ const styles = StyleSheet.create({
     marginTop: '8.8%',
     width: 32,
     height: 32,
+    marginLeft: '3%',
+  },
+  logoutContainer: {
+    width: 30,
+    height: 30,
+    marginTop: '9%',
     marginLeft: '3%',
   },
   viewshop: {
