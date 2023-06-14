@@ -48,21 +48,21 @@ function App() {
     return null;
   }
 
-  // if (!user) {
-  //   return <MainNavigator />;
-  // } else {
-  //   getDataUser(firebase.auth().currentUser.email);
-  //   console.log(dataUser);
-  //   if (dataUser && dataUser.LoaiND === 'customer') {
-  //     return <CustomerBottomTab />;
-  //   } else if (dataUser && dataUser.LoaiND === 'user') {
-  //     return <StackNavigator />;
-  //   } else if (dataUser && dataUser.LoaiND === 'admin') {
-  //     return <AdminStackNavigator />;
-  //   }
-  // }
+  if (!user) {
+    return <MainNavigator />;
+  } else {
+    getDataUser(firebase.auth().currentUser.email);
+    console.log(dataUser);
+    if (dataUser && dataUser.LoaiND === 'customer') {
+      return <CustomerBottomTab />;
+    } else if (dataUser && dataUser.LoaiND === 'user') {
+      return <StackNavigator />;
+    } else if (dataUser && dataUser.LoaiND === 'admin') {
+      return <AdminStackNavigator />;
+    }
+  }
 
-  return <AdminStackNavigator />;
+  // return <AdminStackNavigator />;
 
 }
 

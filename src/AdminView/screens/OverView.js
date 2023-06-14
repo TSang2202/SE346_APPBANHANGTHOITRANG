@@ -431,7 +431,7 @@ const OverView = props => {
             </View>
             <View style={styles.unitContainer}>
               <FunctionCard
-                onPress={() => navigation.navigate('Chat')}
+                onPress={() => navigation.navigate('Order')}
                 source={IC_order}
                 text="My Order"
               />
@@ -454,7 +454,7 @@ const OverView = props => {
             </View>
             <View style={styles.unitContainer}>
               <FunctionCard
-                onPress={() => navigation.navigate('User')}
+                onPress={() => navigation.navigate('ManageUser')}
                 source={IC_user}
                 text="Manage User"
               />

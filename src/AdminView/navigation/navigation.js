@@ -19,6 +19,7 @@ import AddProduct from '../screens/AddProduct.js';
 import DeTailDelivery from '../screens/DeTailDelivery.js';
 import ReView from '../screens/ReView.js';
 import ChatScreenStaff from '../screens/ChatScreenStaff.js';
+import ManageUser from '../screens/ManageUser.js';
 import AddAccount from '../screens/AddAccount.js';
 import EditAccount from '../screens/EditAccount.js';
 
@@ -47,6 +48,7 @@ function AdminStackNavigator() {
         <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
         <Stack.Screen name="Review" component={ReView} />
         <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
+        <Stack.Screen name="ManageUser" component={ManageUser} />
         <Stack.Screen name="AddAccount" component={AddAccount} />
         <Stack.Screen name="EditAccount" component={EditAccount} />
       </Stack.Navigator>
