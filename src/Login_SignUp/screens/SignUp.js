@@ -56,7 +56,7 @@ const SignUp = props => {
           })
           .then(() => {
             alert('Verification email sent');
-            () => navigation.navigate('SignIn');
+            () => navigation.navigate('Congratulation');
           })
           .catch(error => {
             alert(error.message);
@@ -196,8 +196,8 @@ const SignUp = props => {
                 if (password === confirmPassword) {
                   signUp(fullName, email, phoneNumber, birth, password, user);
 
-                  // navigation.navigate('SignIn');
-                  navigation.navigate('Congratulation');
+                  navigation.navigate('SignIn');
+                  // navigation.navigate('Congratulation');
                 } else {
                   alert('Corfirm password not match with password');
                 }

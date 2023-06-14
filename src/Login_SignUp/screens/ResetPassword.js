@@ -5,6 +5,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
@@ -13,11 +14,50 @@ import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import HederContent from '../components/Header/HederContent.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
+import {firebase, Firestore} from '../../../Firebase/firebase.js';
 
 const ResetPassword = props => {
   const {navigation} = props;
-  3;
   const [status, setStatus] = useState('');
+
+  // const [oldPassword, setOldPassword] = useState('');
+  // const [newPassword, setNewPassword] = useState('');
+
+  const constructor = props => {
+    // super(props);
+    this.state = {
+      oldPassword: '',
+      newPassword: '',
+    };
+  };
+
+  const reauthenticate = oldPassword => {
+    var user = firebase.auth().currentUser;
+    var cred = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      oldPassword,
+    );
+    return user.reauthenticateWithCredential(cred);
+  };
+
+  const onChangePasswordPress = () => {
+    this.reauthenticate(this.state.oldPassword)
+      .then(() => {
+        var user = firebase.auth().currentUser;
+        user
+          .updatePassword(this.state.newPassword)
+          .then(() => {
+            Alert.alert('Your password has been changed');
+          })
+          .catch(error => {
+            Alert.alert(error.message);
+          });
+      })
+      .catch(error => {
+        Alert.alert(error.message);
+      });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderWithBack onPress={() => navigation.goBack()} />
@@ -29,11 +69,23 @@ const ResetPassword = props => {
 
       <View style={[styles.centerContainer, styles.unitContainer]}>
         <View style={{width: '100%', height: '50%'}}>
-          <PasswordCard title="New Password" txtInput="********" />
+          <PasswordCard
+            title="New Password"
+            txtInput="********"
+            onChangeText={text => {
+              this.setState({oldPassword: text});
+            }}
+          />
         </View>
 
         <View style={{width: '100%', height: '50%'}}>
-          <PasswordCard title="Confirm your new Password" txtInput="********" />
+          <PasswordCard
+            title="Confirm your new Password"
+            txtInput="********"
+            onChangeText={text => {
+              this.setState({newPassword: text});
+            }}
+          />
         </View>
       </View>
 
@@ -49,7 +101,8 @@ const ResetPassword = props => {
           <CustomButton
             type="primary"
             text="Continue"
-            onPress={() => navigation.navigate('SmartOTP')}
+            onPress={this.onChangePasswordPress}
+            // onPress={() => navigation.navigate('SmartOTP')}
           />
         </View>
       </View>
