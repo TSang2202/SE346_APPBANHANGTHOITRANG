@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import {createNavigationContainerRef} from '@react-navigation/native';
+import { createNavigationContainerRef } from '@react-navigation/native';
 import {
   settingicon,
   messenger,
@@ -59,7 +59,7 @@ const Order = [
     status: 'Review',
   },
 ];
-function OverView({navigation}) {
+function OverView({ navigation }) {
   return (
     <SafeAreaView
       style={{
@@ -68,14 +68,14 @@ function OverView({navigation}) {
         width: '100%',
         height: '100%',
       }}>
-      <View style={{width: '100%', height: '12%', flexDirection: 'row'}}>
+      <View style={{ width: '100%', height: '12%', flexDirection: 'row' }}>
         <TouchableOpacity
           style={styles.settingicon}
           onPress={() => {
             navigation.navigate('Setting');
           }}>
           <Image
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             source={settingicon}
             resizeMode="stretch"
           />
@@ -86,7 +86,7 @@ function OverView({navigation}) {
             navigation.navigate('Chat');
           }}>
           <Image
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             source={messenger}
             resizeMode="contain"
           />
@@ -97,7 +97,7 @@ function OverView({navigation}) {
             navigation.navigate('Notification');
           }}>
           <Image
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             source={notification}
             resizeMode="contain"
           />
@@ -110,9 +110,9 @@ function OverView({navigation}) {
           backgroundColor: CUSTOM_COLOR.SlateGray,
         }}
       />
-      <View style={{width: '100%', height: '17%', flexDirection: 'row'}}>
+      <View style={{ width: '100%', height: '17%', flexDirection: 'row' }}>
         <Image
-          source={{uri: Acount.avartar}}
+          source={{ uri: Acount.avartar }}
           style={{
             width: '21%',
             aspectRatio: 1,
@@ -123,14 +123,14 @@ function OverView({navigation}) {
           resizeMode="cover"
         />
         <View
-          style={{flexDirection: 'column', marginLeft: '3%', marginTop: '7%'}}>
+          style={{ flexDirection: 'column', marginLeft: '3%', marginTop: '7%' }}>
           <Text
             style={{
               fontFamily: FONT_FAMILY.Semibold,
               color: CUSTOM_COLOR.Black,
               fontWeight: 'bold',
             }}>
-            {Acount.name}
+            {Acount.name} sssss
           </Text>
           <Text
             style={{
@@ -144,7 +144,7 @@ function OverView({navigation}) {
         </View>
         <TouchableOpacity style={styles.viewshop}>
           <Text
-            style={{color: CUSTOM_COLOR.Red, alignItems: 'center'}}
+            style={{ color: CUSTOM_COLOR.Red, alignItems: 'center' }}
             onPress={() => navigation.navigate('ViewShop1')}>
             View Shop
           </Text>
@@ -157,8 +157,8 @@ function OverView({navigation}) {
           backgroundColor: CUSTOM_COLOR.SlateGray,
         }}
       />
-      <View style={{width: '100%', height: '20%'}}>
-        <View style={{flexDirection: 'row'}}>
+      <View style={{ width: '100%', height: '20%' }}>
+        <View style={{ flexDirection: 'row' }}>
           <Text
             style={{
               marginTop: '2%',
@@ -168,7 +168,7 @@ function OverView({navigation}) {
             }}>
             Order New
           </Text>
-          <TouchableOpacity style={{marginTop: '3%', marginLeft: '60%'}}>
+          <TouchableOpacity style={{ marginTop: '3%', marginLeft: '60%' }}>
             <Text
               style={{
                 fontSize: 12,
@@ -180,12 +180,12 @@ function OverView({navigation}) {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <FlatList
             horizontal={true}
             data={Order}
             keyExtractor={item => item.id}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               return <ViewNow number={item.number} status={item.status} />;
             }}
           />
@@ -198,7 +198,7 @@ function OverView({navigation}) {
           backgroundColor: CUSTOM_COLOR.SlateGray,
         }}
       />
-      <View style={{flexDirection: 'column', width: '100%', height: '40%'}}>
+      <View style={{ flexDirection: 'column', width: '100%', height: '40%' }}>
         <View
           style={{
             flexDirection: 'row',
@@ -216,7 +216,7 @@ function OverView({navigation}) {
             onPress={() => navigation.navigate('Promotion')}
           />
         </View>
-        <View style={{flexDirection: 'row', width: '100%', height: '10%'}}>
+        <View style={{ flexDirection: 'row', width: '100%', height: '10%' }}>
           <Text
             style={{
               color: CUSTOM_COLOR.Black,
@@ -256,7 +256,7 @@ function OverView({navigation}) {
           <Button source={chat} onPress={() => navigation.navigate('Chat')} />
           <Button source={user} onPress={() => navigation.navigate('User')} />
         </View>
-        <View style={{flexDirection: 'row', width: '100%'}}>
+        <View style={{ flexDirection: 'row', width: '100%' }}>
           <Text
             style={{
               color: CUSTOM_COLOR.Black,
