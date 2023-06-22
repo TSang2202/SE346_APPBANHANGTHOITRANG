@@ -149,7 +149,7 @@ function CheckoutScreen({ navigation, route }) {
         {itemsCheckout ?
 
           <ProductCheckOut
-            source={itemsCheckout[index].HinhAnhSP}
+            source={itemsCheckout[index].HinhAnhSP[0]}
             title={itemsCheckout[index].TenSP}
             color={itemsCheckout[index].MauSac}
             size={itemsCheckout[index].Size}

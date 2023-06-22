@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import { createNavigationContainerRef } from '@react-navigation/native';
+import {createNavigationContainerRef} from '@react-navigation/native';
 import {
   settingicon,
   messenger,
@@ -25,7 +25,7 @@ import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import ViewShop1 from './ViewShop1.js';
 import Button from '../../StaffView/components/Button';
 import ViewNow from '../../StaffView/components/ViewNow';
-import { firebase, Firestore } from '../../../Firebase/firebase.js';
+import {firebase, Firestore} from '../../../Firebase/firebase.js';
 import {
   IC_product,
   IC_order,
@@ -40,7 +40,7 @@ import {
 } from '../assets/icons/index.js';
 import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
-import { IC_Chat } from '../../CustomerView/assets/icons/index.js';
+import {IC_Chat} from '../../CustomerView/assets/icons/index.js';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -75,11 +75,9 @@ const Order = [
     number: 10,
     status: 'Review',
   },
-
-]
-
+];
 const OverView = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   return (
     // <SafeAreaView
     //   style={styles.container}>
@@ -314,31 +312,31 @@ const OverView = props => {
     <SafeAreaView style={styles.container}>
       <>
         <View style={styles.menuContainer}>
-          <View style={{ width: 32, height: 32 }}>
+          <View style={{width: 32, height: 32}}>
             <MenuIcon
               onPress={() => navigation.navigate('Setting')}
               source={IC_setting}
             />
           </View>
-          <View style={{ width: 10, height: '100%' }} />
-          <View style={{ width: 30, height: 30 }}>
+          <View style={{width: 10, height: '100%'}} />
+          <View style={{width: 30, height: 30}}>
             <MenuIcon
               onPress={() => navigation.navigate('Chat')}
               source={IC_messenger}
             />
           </View>
-          <View style={{ width: 5, height: '100%' }} />
-          <View style={{ width: 35, height: 35 }}>
+          <View style={{width: 5, height: '100%'}} />
+          <View style={{width: 35, height: 35}}>
             <MenuIcon
               onPress={() => navigation.navigate('Notification')}
               source={IC_notification}
             />
           </View>
-          <View style={{ width: 5, height: '100%' }} />
-          <View style={{ width: 32, height: 32 }}>
+          <View style={{width: 5, height: '100%'}} />
+          <View style={{width: 32, height: 32}}>
             <MenuIcon onPress={firebase.auth().signOut()} source={IC_logout} />
           </View>
-          <View style={{ width: 5, height: '100%' }} />
+          <View style={{width: 5, height: '100%'}} />
         </View>
       </>
 
@@ -347,10 +345,10 @@ const OverView = props => {
       <>
         <View style={styles.accountContainer}>
           <View style={styles.infoContainer}>
-            <View style={{ width: 10, height: '100%' }} />
+            <View style={{width: 10, height: '100%'}} />
             <View style={styles.avataContainer}>
               <Image
-                source={{ uri: Acount.avartar }}
+                source={{uri: Acount.avartar}}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -360,17 +358,17 @@ const OverView = props => {
                 }}
               />
             </View>
-            <View style={{ width: 15, height: '100%' }} />
-            <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+            <View style={{width: 15, height: '100%'}} />
+            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
               <Text style={styles.textViewStyles}>{Acount.name}</Text>
-              <View style={{ width: '100%', height: 5 }} />
+              <View style={{width: '100%', height: 5}} />
               <Text style={styles.textViewStyles}>ID:{Acount.id}</Text>
             </View>
           </View>
           <View style={styles.viewShopContainer}>
             <TouchableOpacity style={styles.butViewShopContainer}>
               <Text
-                style={{ color: CUSTOM_COLOR.Red }}
+                style={{color: CUSTOM_COLOR.Red}}
                 onPress={() => navigation.navigate('ViewShop1')}>
                 View Shop
               </Text>
@@ -383,7 +381,7 @@ const OverView = props => {
 
       <>
         <View style={styles.oderContainer}>
-          <View style={{ width: '100%', height: '5%' }} />
+          <View style={{width: '100%', height: '5%'}} />
           <View style={styles.textContainer}>
             <View
               style={{
@@ -411,7 +409,7 @@ const OverView = props => {
               horizontal={true}
               data={Order}
               keyExtractor={item => item.id}
-              renderItem={({ item }) => {
+              renderItem={({item}) => {
                 return <ViewNow number={item.number} status={item.status} />;
               }}
             />
@@ -463,10 +461,10 @@ const OverView = props => {
             </View>
             <View style={styles.unitContainer}>
               {/* <FunctionCard
-              onPress={() => navigation.navigate('Chat')}
-              source={IC_product}
-              text="My Product"
-            /> */}
+                onPress={() => navigation.navigate('Chat')}
+                source={IC_product}
+                text="My Product"
+              /> */}
             </View>
           </View>
         </View>

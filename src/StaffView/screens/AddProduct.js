@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import BackTo from '../components/BackTo'
 import CUSTOM_COLOR from '../constants/colors'
@@ -10,9 +10,10 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import CheckBox from 'react-native-check-box'
 import { Firestore, Storage } from '../../../Firebase/firebase'
 import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes, put } from "firebase/storage";
+import { ref, uploadBytes, put, getDownloadURL } from "firebase/storage";
 import { Dropdown } from 'react-native-element-dropdown';
 import { firebase, storage } from 'firebase'
+import { async } from '@firebase/util'
 
 
 
@@ -26,10 +27,12 @@ export default function AddProduct({ navigation }) {
 
 
   const [image, setImage] = useState([])
+
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState()
   const [amount, setAmount] = useState()
+  const [categorize, setCategorize] = useState()
 
   const [color, setColor] = useState([])
   const [size, setSize] = useState([
@@ -119,6 +122,7 @@ export default function AddProduct({ navigation }) {
     const colors = color.filter(item => item.checked == true)
     const sizes = size.filter(item => item.checked == true)
 
+    const imageUri = await UploadFile()
 
 
     const docRef = await addDoc(collection(Firestore, "SANPHAM"), {
@@ -132,16 +136,21 @@ export default function AddProduct({ navigation }) {
       TrangThai: 'OnWait',
       SoLuongDaBan: 0,
       SoLuotYeuThich: 0,
-      SoLuotXem: 0
+      SoLuotXem: 0,
+      HinhAnhSP: imageUri
     });
     console.log("Document written with ID: ", docRef.id);
 
     const updateId = await updateDoc(docRef, {
       MaSP: docRef.id
     })
+
+    Alert.alert("Notification", "Successfully added new products!", [{ text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' }])
   }
 
   useEffect(() => {
+
+
     //setColor([{ id: 1, title: 'red', checked: true }, { id: 2, title: 'blue', checked: false }])
     const getDataColor = async () => {
       const querySnapshot = await getDocs(collection(Firestore, "MAUSAC"));
@@ -184,11 +193,49 @@ export default function AddProduct({ navigation }) {
   }, [])
 
 
+  const UploadFile = async () => {
+    const data = [];
+    for (let index = 0; index < image.length; index++) {
+      try {
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = function () {
+            resolve(xhr.response);
+          };
+          xhr.onerror = function (e) {
+            console.log(e);
+            reject(new TypeError("Network request failed"));
+          };
+          xhr.responseType = "blob";
+          xhr.open("GET", image[index].uri, true);
+          xhr.send(null);
+        });
+        const storageRef = ref(Storage, `images/products/image-${Date.now()}`);
+        const snapshot = await uploadBytes(storageRef, blob);
+        console.log("Upload successfully!");
+        const url = await getDownloadURL(snapshot.ref);
+        console.log("Get URL successfully");
+        data.push(url);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+
+
+    console.log(data);
+
+    return data;
+  };
+
+
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: CUSTOM_COLOR.White }}>
       <BackTo
         onPress={() => { navigation.goBack() }}
         Info='Add Product'
+
+
 
       ></BackTo>
       <ScrollView style={{ backgroundColor: CUSTOM_COLOR.White }}>
