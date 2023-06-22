@@ -104,7 +104,7 @@ function TrendingScreen({ navigation }) {
                                 //justifyContent: 'space-around'
                             }}>
                                 <ProductView
-                                    source={item.HinhAnhSP}
+                                    source={item.HinhAnhSP[0]}
                                     title={item.TenSP}
                                     price={item.GiaSP}
                                 />
