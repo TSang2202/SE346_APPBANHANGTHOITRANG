@@ -82,7 +82,7 @@ const EditAccount = props => {
     <SafeAreaView style={styles.container}>
       <HeaderWithBack onPress={() => navigation.goBack()} />
       <View style={[styles.topContainer, styles.unitContainer]}>
-        <HeaderTitlle title="Add new account" />
+        <HeaderTitlle title="Edit account" />
       </View>
       <View style={[styles.bodyContainer, styles.unitContainer]}>
         <View style={{flex: 1}}>

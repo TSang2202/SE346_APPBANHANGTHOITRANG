@@ -61,6 +61,9 @@ function App() {
       return <AdminStackNavigator />;
     }
   }
+
+  // return <AdminStackNavigator />;
+
 }
 
 export default () => {

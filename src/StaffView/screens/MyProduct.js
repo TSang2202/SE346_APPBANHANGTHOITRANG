@@ -113,7 +113,7 @@ export default function MyProduct({ navigation }) {
 
     if (inventory == true) {
         return (
-            <SafeAreaView>
+            <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White }}>
                 <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 15 }}>
                     <BackTo
                         onPress={() => navigation.navigate('OverView')}
@@ -131,7 +131,7 @@ export default function MyProduct({ navigation }) {
                 </View>
                 <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
                     <Status
-                        title='My invantory'
+                        title='My inventory'
                         Color={CUSTOM_COLOR.DarkOrange}
                         botwidth={2}
                         borderColor={CUSTOM_COLOR.Red}
@@ -153,7 +153,7 @@ export default function MyProduct({ navigation }) {
                     >
                     </Status>
                 </View>
-                <View style={{ flexDirection: 'row', width: '100%', height: 450, marginTop: 10 }}>
+                <View style={{ flexDirection: 'row', width: '100%', height: '85%', marginTop: 10 }}>
                     <View>
                         <FlatList
                             horizontal='true'
@@ -161,7 +161,7 @@ export default function MyProduct({ navigation }) {
                             renderItem={({ item }) => {
                                 return (
                                     <MyProduct1
-                                        source={item.HinhAnhSP}
+                                        source={item.HinhAnhSP[0]}
                                         title={item.TenSP}
                                         price={item.GiaSP}
                                         soluongtonkho={item.SoLuongSP}
@@ -174,9 +174,13 @@ export default function MyProduct({ navigation }) {
                             }
                             }
                         ></FlatList>
+                        <View style={{ height: 90 }}></View>
                     </View>
+
                 </View>
-                <View style={{ width: '100%', marginTop: 15 }}>
+
+
+                <View style={{ width: '100%', position: 'absolute', bottom: 0, backgroundColor: CUSTOM_COLOR.White, paddingBottom: 20 }}>
                     <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                         <ButtonDetail
                             style={{ width: 250 }}
@@ -192,7 +196,7 @@ export default function MyProduct({ navigation }) {
     }
     if (Out == true) {
         return (
-            <SafeAreaView>
+            <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White }}>
                 <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 15 }}>
                     <BackTo
                         onPress={() => navigation.navigate('OverView')}
@@ -230,7 +234,7 @@ export default function MyProduct({ navigation }) {
                         countProduct={dataOnWait.length}>
                     </Status>
                 </View>
-                <View style={{ flexDirection: 'row', width: '100%', height: 450, marginTop: 10 }}>
+                <View style={{ flexDirection: 'row', width: '100%', height: '85%', marginTop: 10 }}>
                     <View>
                         <FlatList
                             horizontal='true'
@@ -238,7 +242,7 @@ export default function MyProduct({ navigation }) {
                             renderItem={({ item }) => {
                                 return (
                                     <MyProduct1
-                                        source={item.HinhAnhSP}
+                                        source={item.HinhAnhSP[0]}
                                         title={item.TenSP}
                                         price={item.GiaSP}
                                         soluongtonkho={item.SoLuongSP}
@@ -251,9 +255,11 @@ export default function MyProduct({ navigation }) {
                             }
                             }
                         ></FlatList>
+                        <View style={{ height: 90 }}></View>
                     </View>
                 </View>
-                <View style={{ width: '100%', marginTop: 15 }}>
+
+                <View style={{ width: '100%', position: 'absolute', bottom: 0, backgroundColor: CUSTOM_COLOR.White, paddingBottom: 20 }}>
                     <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                         <ButtonDetail
                             style={{ width: 250 }}
@@ -268,7 +274,7 @@ export default function MyProduct({ navigation }) {
     }
     if (Wait == true) {
         return (
-            <SafeAreaView>
+            <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White }}>
                 <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 15 }}>
                     <BackTo
                         onPress={() => navigation.navigate('OverView')}
@@ -306,7 +312,7 @@ export default function MyProduct({ navigation }) {
                         countProduct={dataOnWait.length}>
                     </Status>
                 </View>
-                <View style={{ flexDirection: 'row', width: '100%', height: 450, marginTop: 10 }}>
+                <View style={{ flexDirection: 'row', width: '100%', height: '85%', marginTop: 10 }}>
                     <View>
                         <FlatList
                             horizontal='true'
@@ -314,7 +320,7 @@ export default function MyProduct({ navigation }) {
                             renderItem={({ item }) => {
                                 return (
                                     <MyProduct1
-                                        source={item.HinhAnhSP}
+                                        source={item.HinhAnhSP[0]}
                                         title={item.TenSP}
                                         price={item.GiaSP}
                                         soluongtonkho={item.SoLuongSP}
@@ -329,6 +335,18 @@ export default function MyProduct({ navigation }) {
                             }
                             }
                         ></FlatList>
+                        <View style={{ height: 90 }}></View>
+                    </View>
+                </View>
+
+                <View style={{ width: '100%', position: 'absolute', bottom: 0, backgroundColor: CUSTOM_COLOR.White, paddingBottom: 20 }}>
+                    <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                        <ButtonDetail
+                            style={{ width: 250 }}
+                            color={CUSTOM_COLOR.DarkOrange}
+                            title='ADD A NEW PRODUCT'
+                            onPress={() => navigation.navigate('AddProduct')}
+                        ></ButtonDetail>
                     </View>
                 </View>
             </SafeAreaView>
