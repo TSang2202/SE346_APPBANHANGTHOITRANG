@@ -129,6 +129,8 @@ function DetailProduct({ navigation, route }) {
 
 
                 <View style={{ flexDirection: "row", alignItems: 'center', }} >
+                    <TouchableOpacity onPress={()=>{}}
+                    >
                     <Image
                         source={IC_Heart}
                         style={{
@@ -137,6 +139,7 @@ function DetailProduct({ navigation, route }) {
                         }}
                         resizeMode='stretch'
                     />
+                    </TouchableOpacity>
 
                     <Image
                         source={IC_ShoppingCart}
