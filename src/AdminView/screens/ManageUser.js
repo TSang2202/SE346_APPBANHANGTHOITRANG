@@ -83,11 +83,9 @@ const ManageUser = props => {
       </>
 
       <>
-        <View style={styles.listViewContainer} >
-            {/* Lay list nguoi dung ve hien thi */}
-            <AccountCard
-            onPress={() => navigation.navigate('EditAccount')}
-            ></AccountCard>
+        <View style={styles.listViewContainer}>
+          {/* Lay list nguoi dung ve hien thi */}
+          <AccountCard onPress={() => navigation.navigate('EditAccount')} />
         </View>
       </>
     </SafeAreaView>

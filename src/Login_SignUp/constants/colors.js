@@ -9,6 +9,7 @@ const CUSTOM_COLOR = {
   MineShaft: '#272727',
   FlushOrange: '#FF8400',
   Mercury: '#E9E9E9',
+  Sapphire: '#2A4BA0',
 };
 
 export default CUSTOM_COLOR;
