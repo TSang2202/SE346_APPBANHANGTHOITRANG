@@ -6,16 +6,58 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  Image,
+  Button,
+  TextInput,
   ImageBackground,
+  Platform,
 } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 import CustomHeader from '../components/CustomHeader';
+import PromotionButton from '../components/PromotionButton';
+import {Dropdown} from 'react-native-element-dropdown';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {border_add} from '../assets/images';
 import FONT_FAMILY from '../constants/fonts';
 
 const AddPromotion = props => {
   const {navigation} = props;
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [isFocus, setIsFocus] = useState(false);
+  const [danhMuc, setDanhMuc] = useState([]);
+  const [value, setValue] = useState(null);
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState('01/01/2023');
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'android');
+    setDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+    let fDate =
+      tempDate.getDate() +
+      '/' +
+      (tempDate.getMonth() + 1) +
+      '/' +
+      tempDate.getFullYear();
+    setText(fDate);
+
+    console.log(fDate);
+  };
+
+  const showMode = currentMode => {
+    setShow(true);
+    setMode(currentMode);
+    // if (Platform.OS === 'android') {
+    //   setShow(false);
+    //   // for iOS, add a button that closes the picker
+    // }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{width: '100%', height: 10}} />
@@ -57,17 +99,320 @@ const AddPromotion = props => {
               </View>
             </>
 
-            <></>
+            <View style={styles.spaceContainer} />
 
-            <></>
+            <>
+              <View style={[styles.inputContainer, {height: 90}]}>
+                <View style={{width: '100%', height: 10}} />
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <View
+                    style={[
+                      styles.unitTitleContainer,
+                      {justifyContent: 'flex-start'},
+                    ]}>
+                    <View style={{width: '10%', height: '100%'}} />
+                    <Text style={styles.titleInputStyle}>
+                      Name Of Promotions
+                    </Text>
+                    <Text
+                      style={[
+                        styles.titleInputStyle,
+                        {color: CUSTOM_COLOR.Red},
+                      ]}>
+                      {' '}
+                      *
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.unitTitleContainer,
+                      {justifyContent: 'flex-end'},
+                    ]}>
+                    <Text style={styles.titleInputStyle}>0/200</Text>
+                    <View style={{width: '10%', height: '100%'}} />
+                  </View>
+                </View>
+                {/* <View style={{width: '100%', height: 5}} /> */}
+                <View style={{flex: 2, flexDirection: 'row'}}>
+                  <View style={{width: '5%', height: '100%'}} />
+                  <TextInput
+                    style={{flex: 1, fontSize: 17}}
+                    onChangeText={text => setName(text)}
+                    value={name}
+                  />
+                  <View style={{width: '5%', height: '100%'}} />
+                </View>
+              </View>
+            </>
 
-            <></>
+            <View style={styles.spaceContainer} />
 
-            <></>
+            <>
+              <View style={[styles.inputContainer, {height: 120}]}>
+                <View style={{width: '100%', height: 10}} />
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <View
+                    style={[
+                      styles.unitTitleContainer,
+                      {justifyContent: 'flex-start'},
+                    ]}>
+                    <View style={{width: '10%', height: '100%'}} />
+                    <Text style={styles.titleInputStyle}>Description</Text>
+                    <Text
+                      style={[
+                        styles.titleInputStyle,
+                        {color: CUSTOM_COLOR.Red},
+                      ]}>
+                      {' '}
+                      *
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.unitTitleContainer,
+                      {justifyContent: 'flex-end'},
+                    ]}>
+                    <Text style={styles.titleInputStyle}>0/200</Text>
+                    <View style={{width: '10%', height: '100%'}} />
+                  </View>
+                </View>
+                {/* <View style={{width: '100%', height: 5}} /> */}
+                <View style={{flex: 2, flexDirection: 'row'}}>
+                  <View style={{width: '5%', height: '100%'}} />
+                  <TextInput
+                    style={{flex: 1, fontSize: 17}}
+                    onChangeText={text => setDescription(text)}
+                    value={description}
+                    multiline={true}
+                  />
+                  <View style={{width: '5%', height: '100%'}} />
+                </View>
+              </View>
+            </>
 
-            <></>
+            <View style={styles.spaceContainer} />
 
-            <></>
+            <>
+              <View style={[styles.comboxContainer, {height: 60}]}>
+                <View
+                  style={[
+                    styles.unitComboContainer,
+                    {justifyContent: 'flex-start', width: '40%'},
+                  ]}>
+                  <View style={{width: '12%', height: '100%'}} />
+                  <Text style={styles.titleInputStyle}>Type of promotion</Text>
+                  <Text
+                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    {' '}
+                    *
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.unitComboContainer,
+                    {
+                      justifyContent: 'flex-end',
+                      width: '60%',
+                    },
+                  ]}>
+                  <Dropdown
+                    style={[styles.comboType, isFocus && {borderColor: 'blue'}]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={danhMuc}
+                    search
+                    maxHeight={200}
+                    labelField="TenDM"
+                    valueField="key"
+                    placeholder={!isFocus ? 'Select item' : '...'}
+                    searchPlaceholder="Search..."
+                    value={value}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={item => {
+                      setValue(item.key);
+                      setIsFocus(false);
+                      setCategorize(item);
+                    }}
+                  />
+                  <View style={{width: '8%', height: '100%'}} />
+                </View>
+              </View>
+            </>
+
+            <View style={styles.spaceContainer} />
+
+            <>
+              <View style={[styles.dateContainer, {height: 120}]}>
+                <View style={styles.unitDateContainer}>
+                  <View
+                    style={[
+                      styles.unitComboContainer,
+                      {justifyContent: 'flex-start', width: '40%'},
+                    ]}>
+                    <View style={{width: '12%', height: '100%'}} />
+                    <Text style={styles.titleInputStyle}>Start date</Text>
+                    <Text
+                      style={[
+                        styles.titleInputStyle,
+                        {color: CUSTOM_COLOR.Red},
+                      ]}>
+                      {' '}
+                      *
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.unitComboContainer,
+                      {
+                        justifyContent: 'flex-end',
+                        width: '60%',
+                      },
+                    ]}>
+                    {/* https://www.youtube.com/watch?v=Imkw-xFFLeE */}
+                    <TouchableOpacity
+                      style={styles.dateStyle}
+                      onPress={() => {
+                        showMode('date');
+                      }}>
+                      <Text> {text}</Text>
+                    </TouchableOpacity>
+
+                    {show && (
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode="mode"
+                        display="default"
+                        onChange={onChange}
+                      />
+                    )}
+
+                    {/* <View style={styles.comboType}>
+                      <Button
+                        title="DatePicker"
+                        onPress={() => {
+                          showMode('date');
+                        }}
+                      />
+                    </View>
+
+                    {show && (
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode="mode"
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChange}
+                      />
+                    )} */}
+
+                    <View style={{width: '8%', height: '100%'}} />
+                  </View>
+                </View>
+
+                <View style={styles.unitDateContainer}>
+                  <View
+                    style={[
+                      styles.unitComboContainer,
+                      {justifyContent: 'flex-start', width: '40%'},
+                    ]}>
+                    <View style={{width: '12%', height: '100%'}} />
+                    <Text style={styles.titleInputStyle}>End date</Text>
+                    <Text
+                      style={[
+                        styles.titleInputStyle,
+                        {color: CUSTOM_COLOR.Red},
+                      ]}>
+                      {' '}
+                      *
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.unitComboContainer,
+                      {
+                        justifyContent: 'flex-end',
+                        width: '60%',
+                      },
+                    ]}>
+                    <TouchableOpacity
+                      style={styles.dateStyle}
+                      onPress={() => {
+                        showMode('date');
+                      }}>
+                      <Text> {text}</Text>
+                    </TouchableOpacity>
+
+                    {show && (
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode="mode"
+                        display="default"
+                        onChange={onChange}
+                      />
+                    )}
+                    <View style={{width: '8%', height: '100%'}} />
+                  </View>
+                </View>
+              </View>
+            </>
+
+            <View style={styles.spaceContainer} />
+
+            <>
+              <View style={[styles.comboxContainer, {height: 60}]}>
+                <View
+                  style={[
+                    styles.unitComboContainer,
+                    {justifyContent: 'flex-start', width: '40%'},
+                  ]}>
+                  <View style={{width: '12%', height: '100%'}} />
+                  <Text style={styles.titleInputStyle}>Discount</Text>
+                  <Text
+                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    {' '}
+                    *
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.unitComboContainer,
+                    {
+                      justifyContent: 'flex-end',
+                      width: '60%',
+                    },
+                  ]}>
+                  <TextInput
+                    style={styles.comboType}
+                    onChangeText={text => setName(text)}
+                    value={name}
+                  />
+                  <View style={{width: '8%', height: '100%'}} />
+                </View>
+              </View>
+            </>
+
+            <View style={styles.spaceContainer} />
+
+            <>
+              <View style={styles.buttonContainer}>
+                <PromotionButton
+                  type="secondary"
+                  text="Save"
+                  // onPress={() => {
+                  //   navigation.navigate('AddPromotion');
+                  // }}
+                />
+              </View>
+            </>
+
+            <View style={{width: '100%', height: 10}} />
+
           </ScrollView>
         </View>
       </>
@@ -88,15 +433,13 @@ const styles = StyleSheet.create({
     width: '90%',
     height: '85%',
     marginHorizontal: '5%',
-    // borderColor: 'red',
-    // borderWidth: 1,
   },
   addImageContainer: {
     width: '100%',
     height: 100,
-    borderRadius: 1,
-    borderWidth: 0.5,
-    borderColor: CUSTOM_COLOR.Black,
+    elevation: 1.5,
+    borderRadius: 0.5,
+    shadowColor: CUSTOM_COLOR.Black,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -109,6 +452,82 @@ const styles = StyleSheet.create({
     color: CUSTOM_COLOR.Black,
     fontFamily: FONT_FAMILY.Semibold,
     fontSize: 15,
+  },
+  spaceContainer: {
+    width: '100%',
+    height: 10,
+  },
+  inputContainer: {
+    width: '100%',
+    elevation: 1.5,
+    borderRadius: 0.5,
+    shadowColor: CUSTOM_COLOR.Black,
+    flexDirection: 'column',
+  },
+  unitTitleContainer: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  titleInputStyle: {},
+  comboxContainer: {
+    width: '100%',
+    elevation: 1.5,
+    borderRadius: 0.5,
+    shadowColor: CUSTOM_COLOR.Black,
+    flexDirection: 'row',
+  },
+  unitComboContainer: {
+    height: '100%',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  comboType: {
+    width: '85%',
+    height: '70%',
+    borderColor: CUSTOM_COLOR.MineShaft,
+    borderWidth: 0.5,
+    borderRadius: 1,
+    paddingHorizontal: '5%',
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  dateContainer: {
+    width: '100%',
+    elevation: 1.5,
+    borderRadius: 0.5,
+    shadowColor: CUSTOM_COLOR.Black,
+    flexDirection: 'column',
+  },
+  unitDateContainer: {
+    width: '100%',
+    height: 60,
+    flexDirection: 'row',
+  },
+  dateStyle: {
+    width: '85%',
+    height: '70%',
+    borderColor: CUSTOM_COLOR.MineShaft,
+    borderWidth: 0.5,
+    borderRadius: 1,
+    paddingHorizontal: '5%',
+    justifyContent: 'center',
+    // alignItems: 'center',
+  },
+  buttonContainer: {
+    width: '40%',
+    height: 60,
+    marginHorizontal: '30%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 export default AddPromotion;
