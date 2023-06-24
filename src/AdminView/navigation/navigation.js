@@ -22,13 +22,14 @@ import AddAccount from '../screens/AddAccount.js';
 import EditAccount from '../screens/EditAccount.js';
 import AdminOverView from '../screens/AdminOverView.js';
 import AddPromotion from '../screens/AddPromotion.js';
+import ImportProduct from '../screens/ImportProduct.js';
 
 const Stack = createNativeStackNavigator();
 function AdminStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="AddPromotion"
+        initialRouteName="AdminOverView"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="AdminOverView" component={AdminOverView} />
         <Stack.Screen name="ViewShop1" component={ViewShop1} />
@@ -51,6 +52,7 @@ function AdminStackNavigator() {
         <Stack.Screen name="AddAccount" component={AddAccount} />
         <Stack.Screen name="EditAccount" component={EditAccount} />
         <Stack.Screen name="AddPromotion" component={AddPromotion} />
+        <Stack.Screen name="ImportProduct" component={ImportProduct} />
       </Stack.Navigator>
     </NavigationContainer>
   );
