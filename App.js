@@ -57,13 +57,14 @@ function App() {
       return <CustomerBottomTab />;
     } else if (dataUser && dataUser.LoaiND === 'user') {
       return <StackNavigator />;
-    } else if (dataUser && dataUser.LoaiND === 'admin') {
+    }
+    // if (dataUser && dataUser.LoaiND === 'admin')
+    else {
       return <AdminStackNavigator />;
     }
   }
 
   // return <AdminStackNavigator />;
-
 }
 
 export default () => {
