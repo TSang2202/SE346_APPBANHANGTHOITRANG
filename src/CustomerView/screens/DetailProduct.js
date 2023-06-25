@@ -100,10 +100,54 @@ function DetailProduct({ navigation, route }) {
     //
     const LovePress = () =>{
         setlove(!love)
+        setDataYeuThich()
+
+    }
+    const setDataYeuThich = async () =>{
+        if(love == true){
+            const docRef = await addDoc(collection(Firestore, "YEUTHICH"), {
+                MaND: firebase.auth().currentUser.uid,
+                MaSP: item.MaSP
+            });
+        }
+        else{
+            const query = firebase.firestore().collection
+                                .where('MaND', '==', firebase.auth().currentUser.uid)
+                                .where('MaSP', '==', item.MaSP);
+            query.get().then((querySnapshot) =>{
+                querySnapshot.forEach((doc) => {
+                    doc.ref.delete().then(() => {
+                      console.log(`Document ${doc.id} đã bị xóa thành công`);
+                    }).catch((error) => {
+                      console.error(`Lỗi khi xóa document ${doc.id}: `, error);
+                    });
+                  });
+            }).catch((error) => {
+            console.error('Lỗi khi lấy documents từ Firestore: ', error);
+            });
+        }
+    }
+    const getstatusYeuThich = async () => {
+        const q = query(collection(Firestore, "YEUTHICH"), where("MaND", "==", firebase.auth().currentUser.uid));
+        const querySnapshot = await getDocs(q);
+        const items = [];
+
+
+        querySnapshot.forEach(documentSnapshot => {
+          items.push({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+          });
+        });
+        for(let i = 0; i < items.length; i++){
+            if(items[i].MaSP == item.MaSP)
+                setlove(true);
+        }
     }
 
     useEffect(() => {
         console.log(item.Size)
+        getstatusYeuThich()
     }, [])
     
     return (
@@ -139,7 +183,7 @@ function DetailProduct({ navigation, route }) {
                 <View style={{ flexDirection: "row", alignItems: 'center', }} >
                     <TouchableOpacity onPress={LovePress}
                     >
-                    { love ? (<Image
+                    {love ? (<Image
                         source={IC_Heart_Red}
                         style={{
                             margin: 10,
