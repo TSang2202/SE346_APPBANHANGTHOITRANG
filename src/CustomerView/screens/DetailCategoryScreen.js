@@ -20,17 +20,19 @@ function DetailCategoryScreen({ navigation, route }) {
 
         const querySnapshot = await getDocs(q);
 
-        const items = [];
+        const data = [];
 
 
         querySnapshot.forEach(documentSnapshot => {
-            items.push({
+            data.push({
                 ...documentSnapshot.data(),
-                key: documentSnapshot.id,
+                // key: documentSnapshot.id,
             });
         });
 
-        setItems(items);
+        console.log(item.MaDM)
+
+        setItems(data);
     }
 
     useEffect(() => {
@@ -71,7 +73,7 @@ function DetailCategoryScreen({ navigation, route }) {
                         width: '70%'
                     }} />
 
-                <View style={{
+                <TouchableOpacity style={{
                     backgroundColor: CUSTOM_COLOR.Mercury,
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -82,7 +84,7 @@ function DetailCategoryScreen({ navigation, route }) {
                     <Image
                         source={IC_ShoppingCart}
                     />
-                </View>
+                </TouchableOpacity>
             </View>
 
             <View style={{
@@ -100,7 +102,7 @@ function DetailCategoryScreen({ navigation, route }) {
                     marginHorizontal: 20,
                     fontWeight: 'bold',
                     marginBottom: 0
-                }}>{item.SoLuongSP} sản phẩm</Text>
+                }}>{items.length} sản phẩm</Text>
             </View>
 
             <View style={{
@@ -125,7 +127,7 @@ function DetailCategoryScreen({ navigation, route }) {
                         )
                     }}
                     numColumns={2}
-                    keyExtractor={(item) => item.MaDM}
+                //keyExtractor={(item) => item.MASP}
                 />
 
             </View>
