@@ -17,7 +17,8 @@ const CUSTOM_COLOR = {
   LavenderBlush: '#CDC1C5',
   DarkOrange: '#CD6600',
   DarkBlue: '#143F6B',
-  LightBlue: '#36648B'
+  LightBlue: '#36648B',
+  SilverChalice: '#9D9D9D'
 
 };
 

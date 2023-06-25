@@ -4,7 +4,7 @@ import { IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../assets/ic
 import { IM_AnhGiay2 } from "../assets/images";
 import Message from "../components/Message";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, query, where, onSnapshot, Timestamp, addDoc, updateDoc, orderBy } from "firebase/firestore";
+import { collection, query, where, onSnapshot, Timestamp, addDoc, updateDoc, orderBy, doc, getDoc } from "firebase/firestore";
 import { Firestore } from "../../../Firebase/firebase";
 import { async } from "@firebase/util";
 import { set } from "firebase/database";
@@ -16,6 +16,7 @@ function ChatScreen({ navigation, route }) {
 
     const [message, setMessage] = useState([])
     const [chat, setChat] = useState('')
+    const [dataChat, setDataChat] = useState()
 
 
     const getDataMessage = async () => {
@@ -27,17 +28,34 @@ function ChatScreen({ navigation, route }) {
             });
             console.log(data);
             setMessage(data)
+
+
         });
     }
 
+    const getSoLuongChuaDoc = async () => {
+        const chatDocRef = doc(Firestore, "CHAT", chatUser.MaChat);
+
+        const docSnapshot = await getDoc(chatDocRef);
+
+        if (docSnapshot.exists()) {
+            console.log("Current data: ", docSnapshot.data().SoLuongChuaDoc);
+            return docSnapshot.data().SoLuongChuaDoc;
+        }
+
+        // Trả về giá trị mặc định của hàm, nếu không có dữ liệu trả về từ getDoc()
+        return 0;
+    }
+
     const SendMessage = async () => {
-        console.log(1)
+
         const currentTime = new Date();
         const docRef = await addDoc(collection(Firestore, "CHITIETCHAT"), {
             NoiDung: chat,
             LaNguoiMua: true,
             ThoiGian: Timestamp.fromDate(currentTime),
-            MaChat: chatUser.MaChat
+            MaChat: chatUser.MaChat,
+
         });
         console.log("Document written with ID: ", docRef.id);
 
@@ -45,11 +63,21 @@ function ChatScreen({ navigation, route }) {
             MaCTChat: docRef.id
         })
 
+        const chatDocRef = doc(Firestore, "CHAT", chatUser.MaChat);
+
+        const soLuongChuaDoc = await getSoLuongChuaDoc();
+
+        const updateChat = await updateDoc(chatDocRef, {
+            SoLuongChuaDoc: soLuongChuaDoc + 1,
+            ThoiGian: Timestamp.fromDate(currentTime)
+        })
+
         setChat('')
     }
 
     useEffect(() => {
         getDataMessage();
+
         console.log(chatUser)
     }, [])
 
@@ -91,7 +119,7 @@ function ChatScreen({ navigation, route }) {
                     marginHorizontal: '5%',
                     fontSize: 17,
                     fontWeight: 'bold'
-                }}>Fauget</Text>
+                }}>Fauget  </Text>
 
             </View>
 
@@ -104,7 +132,7 @@ function ChatScreen({ navigation, route }) {
 
                     return (
                         <Message
-                            key={message.MaCTChat}
+                            key={index}
                             content={message.NoiDung}
                             time={`${hour}:${minute}`}
                             isRight={message.LaNguoiMua}

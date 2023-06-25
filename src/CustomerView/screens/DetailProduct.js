@@ -187,7 +187,9 @@ function DetailProduct({ navigation, route }) {
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'center'
-                        }}>
+                        }}
+                            key={image}
+                        >
                             <Image
                                 source={{ uri: image }}
                                 style={{
@@ -374,8 +376,9 @@ function DetailProduct({ navigation, route }) {
                 }}>
                     {item.Size.filter(size => size.checked == true).map(size => (
                         <TouchableWithoutFeedback style={{
-                            ...styles.btnSize,
-                            marginHorizontal: 20
+                            ...styles.sizeCircle,
+                            width: 45,
+                            marginHorizontal: 5
                         }}>
                             <Text>{size.title}</Text>
                         </TouchableWithoutFeedback>
@@ -564,7 +567,7 @@ function DetailProduct({ navigation, route }) {
                             <FlatList
 
                                 data={item.Size}
-                                numColumns={4}
+                                numColumns={3}
                                 renderItem={({ item }) => {
                                     return item.checked == true ?
                                         <TouchableOpacity style={{

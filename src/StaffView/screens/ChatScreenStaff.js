@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, Keyboard } from "react-native";
-import { IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../assets/icons";
+import { IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../../CustomerView/assets/icons";
 import { IM_AnhGiay2 } from "../assets/images";
 import Message from "../components/Message";
 import CUSTOM_COLOR from "../constants/colors";
@@ -30,6 +30,20 @@ function ChatScreenStaff({ navigation, route }) {
         });
     }
 
+    const getSoLuongChuaDocCuaCustomer = async () => {
+        const chatDocRef = doc(Firestore, "CHAT", chatUser.MaChat);
+
+        const docSnapshot = await getDoc(chatDocRef);
+
+        if (docSnapshot.exists()) {
+            console.log("Current data: ", docSnapshot.data().SoLuongChuaDocCuaCustomer);
+            return docSnapshot.data().SoLuongChuaDocCuaCustomer;
+        }
+
+        // Trả về giá trị mặc định của hàm, nếu không có dữ liệu trả về từ getDoc()
+        return 0;
+    }
+
     const SendMessage = async () => {
         console.log(1)
         const currentTime = new Date();
@@ -44,6 +58,16 @@ function ChatScreenStaff({ navigation, route }) {
         const updateId = await updateDoc(docRef, {
             MaCTChat: docRef.id
         })
+
+        const chatDocRef = doc(Firestore, "CHAT", chatUser.MaChat);
+
+        const soLuongChuaDocCuaCustomer = await getSoLuongChuaDocCuaCustomer();
+
+        const updateChat = await updateDoc(chatDocRef, {
+            SoLuongChuaDocCuaCustomer: soLuongChuaDocCuaCustomer + 1,
+            ThoiGian: Timestamp.fromDate(currentTime)
+        })
+
 
         setChat('')
     }
@@ -103,10 +127,10 @@ function ChatScreenStaff({ navigation, route }) {
 
                     return (
                         <Message
-                            key={message.MaCTChat}
+                            key={index}
                             content={message.NoiDung}
                             time={`${hour}:${minute}`}
-                            isRight={message.LaNguoiMua}
+                            isRight={!message.LaNguoiMua}
                         />
                     )
                 })}
@@ -164,7 +188,8 @@ function ChatScreenStaff({ navigation, route }) {
                         style={{
                             width: 22,
                             height: 20,
-                            marginLeft: '2%'
+                            marginLeft: '2%',
+
                         }}
                         source={IC_Camera}
                     />
@@ -201,7 +226,7 @@ function ChatScreenStaff({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: CUSTOM_COLOR.White
+        // backgroundColor: CUSTOM_COLOR.White
 
     },
 

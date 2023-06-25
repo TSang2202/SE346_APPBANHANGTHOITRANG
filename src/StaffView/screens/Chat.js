@@ -7,7 +7,7 @@ import CUSTOM_COLOR from '../constants/colors'
 import UserChat from '../components/UserChat'
 import Size from '../constants/size'
 import { Firestore } from '../../../Firebase/firebase'
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, query, where, onSnapshot, orderBy, querySnapshot, docs, updateDoc } from "firebase/firestore";
 import { async } from '@firebase/util'
 
 import PropTypes from 'deprecated-react-native-prop-types';
@@ -19,62 +19,109 @@ export default function Chat({ navigation }) {
 
   const getUser = async (item) => {
 
-    item = item.trim();
+    //item = item.trim();
 
-    const docRef = doc(Firestore, "NGUOIDUNG", item);
+    const docRef = doc(Firestore, "NGUOIDUNG", item.MaND);
     const docSnap = await getDoc(docRef);
 
-    //console.log("item:", item);
-    //console.log(docSnap.data())
+
+    const q = query(collection(Firestore, "CHITIETCHAT"), orderBy("ThoiGian", "asc"), where("MaChat", "==", item.MaChat));
+    const querySnapshot = await getDocs(q);
+    const dataChiTietChat = querySnapshot.docs.map((doc) => doc.data());
+
+    const chiTietChat = {
+      NoiDungMessageMoi: !dataChiTietChat ? "Không có gì" : dataChiTietChat[dataChiTietChat.length - 1],
+
+    }
+
     const user = {
-      ...docSnap.data()
+      ...docSnap.data(),
+      ...chiTietChat
     }
 
     return user;
   }
 
 
+
+  // const getDataChat = async () => {
+  //   const querySnapshot = await getDocs(collection(Firestore, "CHAT"));
+
+  //   const promises = [];
+
+  //   for (const documentSnapshot of querySnapshot.docs) {
+
+  //     const promise = getUser(documentSnapshot.data().MaND);
+  //     promises.push(promise);
+
+  //   }
+  //   const dataUser = await Promise.all(promises);
+
+  //   const data = []
+
+  //   dataUser.map((user, index) => {
+  //     const documentSnapshot = querySnapshot.docs[index];
+
+  //     data.push({
+  //       ...documentSnapshot.data(),
+  //       ...user
+  //     })
+  //   });
+
+  //   setUser(data)
+
+  // }
+
   const getDataChat = async () => {
-    const querySnapshot = await getDocs(collection(Firestore, "CHAT"));
-
-    const promises = [];
-
-    for (const documentSnapshot of querySnapshot.docs) {
-
-      const promise = getUser(documentSnapshot.data().MaND);
-      promises.push(promise);
-      //console.log(promises)
-    }
-    const dataUser = await Promise.all(promises);
+    const q = query(collection(Firestore, "CHAT"), orderBy("ThoiGian", "desc"));
 
 
-    const data = []
 
-    // querySnapshot.forEach( (documentSnapshot) => {
 
-    //   const dataUser = await getUser(documentSnapshot.data().MaND)
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      //const promises = [];
+      const data = []
+      // querySnapshot.forEach((doc) => {
+      //   if (doc.exists) {
+      //     const promise = getUser(doc.data().MaND);
+      //     promises.push(promise);
+      //   } else {
+      //     console.log("Document does not exist");
+      //   }
+      //   // const promise = getUser(doc.data().MaND);
 
-    //   console.log(dataUser)
-    //   data.push({
-    //     ...documentSnapshot.data(),
-    //     //...docSnap.data(),
-    //   })
+      //   // promises.push(promise);
+      //   // //console.log(promises)
+      // });
 
-    // })
+      const promises = querySnapshot.docs.map(doc => {
+        return getUser(doc.data());
+      });
 
-    dataUser.map((user, index) => {
-      const documentSnapshot = querySnapshot.docs[index];
-      //console.log(user)
-      data.push({
-        ...documentSnapshot.data(),
-        ...user
-      })
+      console.log(promises)
+      const dataUser = await Promise.all(promises);
+
+      dataUser.map((user, index) => {
+        const documentSnapshot = querySnapshot.docs[index];
+
+        data.push({
+          ...documentSnapshot.data(),
+          ...user
+        })
+      });
+
+      setUser(data)
+
+
     });
 
-    setUser(data)
+
+
 
 
   }
+
+
 
   useEffect(() => {
 
@@ -88,6 +135,14 @@ export default function Chat({ navigation }) {
     // console.log(users)
 
   }, [])
+
+  const setSoLuongChuaDoc = async (item) => {
+    const chatUpdateRef = doc(Firestore, "CHAT", item.MaChat);
+
+    await updateDoc(chatUpdateRef, {
+      SoLuongChuaDoc: 0
+    });
+  }
 
   return (
     <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight }}>
@@ -119,15 +174,31 @@ export default function Chat({ navigation }) {
 
       <FlatList
         data={users}
-        renderItem={({ item }) => (
-          <UserChat
-            //key={item.MaChat}
-            source={item.Avatar}
-            name={item.TenND}
-            message='You:What are you doing? - 12:40PM'
-            onPress={() => navigation.navigate('ChatScreenStaff', { item })}
-          ></UserChat>
-        )}
+        renderItem={({ item }) => {
+
+          console.log(item.NoiDungMessageMoi)
+
+          const hour = item.NoiDungMessageMoi ? item.ThoiGian.toDate().getHours() : null;
+          const minute = item.NoiDungMessageMoi ? item.ThoiGian.toDate().getMinutes() : null;
+
+          return (
+            <UserChat
+              //key={item.MaChat}
+              source={item.Avatar}
+              name={item.TenND}
+              message={!item.NoiDungMessageMoi ? "Customer just created an account" : item.NoiDungMessageMoi.NoiDung}
+              onPress={() => {
+
+                setSoLuongChuaDoc(item)
+
+                navigation.navigate('ChatScreenStaff', { item })
+              }}
+
+              time={!item.NoiDungMessageMoi ? null : `${hour}:${minute}`}
+              notification={!item.NoiDungMessageMoi ? 0 : item.SoLuongChuaDoc}
+            ></UserChat>
+          )
+        }}
         keyExtractor={(item) => item.MaChat}
       />
 
