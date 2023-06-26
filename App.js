@@ -66,19 +66,16 @@ function App() {
 
   // return <AdminStackNavigator />;
 
-  const [userUid, setUserUid] = useState('');
   const [userType, setUserType] = useState('');
   const [userStatus, setUserStatus] = useState(false);
 
-  // useEffect(() => {
-  //   checkUserStatus();
-  // }, []);
-
-  const fetchUserUid = async () => {
+  const fetchUserType = async () => {
     try {
       const user = firebase.auth().currentUser;
       const collectionRef = firebase.firestore().collection('NGUOIDUNG');
-      const snapshot = await collectionRef.where('MaND', '==', user.uid).get();
+      const snapshot = await collectionRef
+        .where('Email', '==', user.email)
+        .get();
 
       if (snapshot.empty) {
         console.log('No matching documents found.');
@@ -86,7 +83,6 @@ function App() {
       }
 
       snapshot.forEach(doc => {
-        setUserUid(doc.MaND);
         setUserType(doc.userType);
       });
     } catch (error) {
@@ -106,25 +102,10 @@ function App() {
     });
   };
 
-  // useEffect(() => {
-  //   const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-  //     if (user) {
-  //       // Người dùng đã đăng nhập
-  //       setIsLoggedIn(true);
-  //     } else {
-  //       // Người dùng chưa đăng nhập
-  //       setIsLoggedIn(false);
-  //     }
-  //   });
-
-  //   // Clean up subscription khi component bị hủy
-  //   return () => unsubscribe();
-  // }, []);
   checkUserStatus();
 
   if (userStatus) {
-    fetchUserUid();
-    setUserType();
+    fetchUserType();
     if (userType === 'customer') {
       return <CustomerBottomTab />;
     } else if (userType === 'admin') {
