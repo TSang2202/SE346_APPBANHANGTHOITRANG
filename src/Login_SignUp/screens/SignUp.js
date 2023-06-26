@@ -6,6 +6,7 @@ import {
   Text,
   ImageBackground,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
@@ -33,57 +34,154 @@ const SignUp = props => {
   const [birth, setBirth] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [userType, setuserType] = useState('customer');
 
-  const user = 'customer';
+  // const db = firebase.firestore();
+  // const handleDataPush = (fullName, email, phoneNumber, birth, user, maND) => {
+  //   const newData = {
+  //     // Your data object
+  //     TenND: fullName,
+  //     Email: email,
+  //     Phone: phoneNumber,
+  //     NgaySinh: birth,
+  //     // MaND: firebase.auth().currentUser.uid,
+  //     MaND: maND,
+  //     LoaiND: user,
+  //   };
 
-  const signUp = async (
-    fullName,
-    email,
-    phoneNumber,
-    birth,
-    password,
-    user,
-  ) => {
-    await firebase
+  //   db.collection('NGUOIDUNG')
+  //     .add(newData)
+  //     .then(docRef => {
+  //       console.log('Data pushed successfully with ID:', docRef.maND);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error pushing data:', error);
+  //     });
+  // };
+
+  const signUp = (fullName, email, phoneNumber, birth, password, userType) => {
+    firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        firebase
-          .auth()
-          .currentUser.sendEmailVerification({
-            handleCodeInApp: true,
-            url: 'http://shoppingapp-ada07.firebaseapp.com',
-          })
-          .then(() => {
-            alert('Verification email sent');
-            () => navigation.navigate('Congratulation');
-          })
-          .catch(error => {
-            alert(error.message);
-          })
-          .then(() => {
-            firebase
-              .firestore()
-              .collection('NGUOIDUNG')
-              .doc(firebase.auth().currentUser.uid)
-              .set({
-                TenND: fullName,
-                Email: email,
-                Phone: phoneNumber,
-                NgaySinh: birth,
+      .then(userCredential => {
+        const user = userCredential.user;
 
-                MaND: firebase.auth().currentUser.uid,
-                LoaiND: user,
-              });
-          })
-          .catch(error => {
-            alert(error.message);
-          });
+        // Push user data to Firebase Realtime Database or Cloud Firestore
+        const userData = {
+          TenND: fullName,
+          Email: user.email,
+          Phone: phoneNumber,
+          NgaySinh: birth,
+          MaND: firebase.auth().currentUser.uid,
+          LoaiND: userType,
+          // Additional user data fields
+        };
+
+        // // Push user data to Realtime Database
+        // firebase
+        //   .database()
+        //   .ref('users/' + user.uid)
+        //   .set(userData);
+
+        // // or
+
+        // Push user data to Cloud Firestore
+        firebase
+          .firestore()
+          .collection('NGUOIDUNG')
+          .doc(user.uid)
+          .set(userData);
+        // Sign-up and data push successful
+        console.log('Sign-up successful');
       })
       .catch(error => {
-        alert(error.message);
+        // Handle sign-up error
+        Alert.alert('Error', error.message);
       });
   };
+
+  // const signUp = (fullName, email, phoneNumber, birth, password, user) => {
+  //   firebase
+  //     .auth()
+  //     .createUserWithEmailAndPassword(email, password)
+  //     .then(() => {
+  //       // Sign-up successful
+  //       console.log('Sign-up successful');
+  //       // handleDataPush(
+  //       //   fullName,
+  //       //   email,
+  //       //   phoneNumber,
+  //       //   birth,
+  //       //   user,
+  //       //   firebase.auth().currentUser.uid,
+  //       // );
+  //       firebase
+  //         .firestore()
+  //         .collection('NGUOIDUNG')
+  //         .doc(firebase.auth().currentUser.uid)
+  //         .set({
+  //           TenND: fullName,
+  //           Email: email,
+  //           Phone: phoneNumber,
+  //           NgaySinh: birth,
+  //           MaND: firebase.auth().currentUser.uid,
+  //           LoaiND: user,
+  //         });
+  //     })
+  //     .catch(error => {
+  //       // Handle sign-up error
+  //       Alert.alert('Error', error.message);
+  //     });
+  // };
+
+  // const signUp = async (
+  //   fullName,
+  //   email,
+  //   phoneNumber,
+  //   birth,
+  //   password,
+  //   user,
+  // ) => {
+  //   await firebase
+  //     .auth()
+  //     .createUserWithEmailAndPassword(email, password)
+  //     .then(() => {
+  //       firebase
+  //         .auth()
+  //         .currentUser.sendEmailVerification({
+  //           handleCodeInApp: true,
+  //           url: 'http://shoppingapp-ada07.firebaseapp.com',
+  //         })
+  //         .then(() => {
+  //           alert('Verification email sent');
+  //           () => navigation.navigate('Congratulation');
+  //         })
+  //         .catch(error => {
+  //           alert(error.message);
+  //         })
+  //         .then(() => {
+  //           firebase
+  //             .firestore()
+  //             .collection('NGUOIDUNG')
+  //             .doc(firebase.auth().currentUser.uid)
+  //             .set({
+  //               TenND: fullName,
+  //               Email: email,
+  //               Phone: phoneNumber,
+  //               NgaySinh: birth,
+
+  //               MaND: firebase.auth().currentUser.uid,
+  //               LoaiND: user,
+  //             });
+  //         })
+  //         .catch(error => {
+  //           alert(error.message);
+  //         });
+  //     })
+  //     .catch(error => {
+  //       alert(error.message);
+  //     });
+  // };
 
   // const username = 'Sang'
   // const email = 'thachsang2202@gmail.com'
@@ -194,7 +292,14 @@ const SignUp = props => {
               text="Sign up now"
               onPress={() => {
                 if (password === confirmPassword) {
-                  signUp(fullName, email, phoneNumber, birth, password, user);
+                  signUp(
+                    fullName,
+                    email,
+                    phoneNumber,
+                    birth,
+                    password,
+                    userType,
+                  );
 
                   navigation.navigate('SignIn');
                   // navigation.navigate('Congratulation');
