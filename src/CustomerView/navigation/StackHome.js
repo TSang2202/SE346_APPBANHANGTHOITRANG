@@ -15,16 +15,18 @@ import DetailCategoryScreen from '../screens/DetailCategoryScreen';
 import PromotionScreen from '../screens/PromotionScreen';
 import DeliveryScreen from '../screens/DeliveryScreen';
 import ChangePassword from '../screens/ChangePassword';
+import ChangeProfile from '../screens/ChangeProfile';
 
 const Stack = createNativeStackNavigator();
 
 function StackHome() {
   return (
     <Stack.Navigator
-      initialRouteName="HomeScreen"
+      initialRouteName="ChangeProfile"
       screenOptions={{
         headerShown: false,
       }}>
+      <Stack.Screen name="ChangeProfile" component={ChangeProfile} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="HomeScreen" component={HomeScreenCustomer} />
       <Stack.Screen name="DetailProduct" component={DetailProduct} />
