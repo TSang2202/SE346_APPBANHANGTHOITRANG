@@ -25,7 +25,6 @@ import {useNavigation} from '@react-navigation/native';
 
 const SignUp = props => {
   const {navigation} = props;
-  const [status, setStatus] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   const [fullName, setFullName] = useState('');
@@ -36,69 +35,88 @@ const SignUp = props => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userType, setuserType] = useState('customer');
 
-  // const db = firebase.firestore();
-  // const handleDataPush = (fullName, email, phoneNumber, birth, user, maND) => {
-  //   const newData = {
-  //     // Your data object
-  //     TenND: fullName,
-  //     Email: email,
-  //     Phone: phoneNumber,
-  //     NgaySinh: birth,
-  //     // MaND: firebase.auth().currentUser.uid,
-  //     MaND: maND,
-  //     LoaiND: user,
-  //   };
+  const pushUserData = async (
+    fullName,
+    email,
+    phoneNumber,
+    birth,
+    userType,
+    uid,
+  ) => {
+    try {
+      const collectionRef = firebase.firestore().collection('NGUOIDUNG');
 
-  //   db.collection('NGUOIDUNG')
-  //     .add(newData)
-  //     .then(docRef => {
-  //       console.log('Data pushed successfully with ID:', docRef.maND);
+      await collectionRef.doc(uid).set({
+        TenND: fullName,
+        Email: email,
+        Phone: phoneNumber,
+        NgaySinh: birth,
+        MaND: uid,
+        LoaiND: userType,
+      });
+
+      console.log('User data pushed successfully!');
+    } catch (error) {
+      console.log('Error pushing user data:', error.message);
+    }
+  };
+
+  const signUp = async (
+    fullName,
+    email,
+    phoneNumber,
+    birth,
+    password,
+    userType,
+  ) => {
+    try {
+      const response = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+      // const {uid} = response.user;
+      const uid = response.user.uid;
+      pushUserData(fullName, email, phoneNumber, birth, userType, uid);
+
+      console.log('User signed up successfully!', uid);
+    } catch (error) {
+      console.log('Error signing up:', error.message);
+    }
+  };
+
+  // const signUp = (fullName, email, phoneNumber, birth, password, userType) => {
+  //   firebase
+  //     .auth()
+  //     .createUserWithEmailAndPassword(email, password)
+  //     .then(userCredential => {
+  //       const user = userCredential.user;
+
+  //       // Push user data to Firebase Realtime Database or Cloud Firestore
+  //       const userData = {
+  //         TenND: fullName,
+  //         Email: user.email,
+  //         Phone: phoneNumber,
+  //         NgaySinh: birth,
+  //         MaND: firebase.auth().currentUser.uid,
+  //         LoaiND: userType,
+  //         // Additional user data fields
+  //       };
+
+  //       // Push user data to Cloud Firestore
+  //       firebase
+  //         .firestore()
+  //         .collection('NGUOIDUNG')
+  //         .doc(user.uid)
+  //         .set(userData);
+  //       // Sign-up and data push successful
+  //       console.log('Sign-up successful');
+  //       Alert.alert('Notification', 'Sign-up successful');
+  //       navigation.navigate('SignIn');
   //     })
   //     .catch(error => {
-  //       console.error('Error pushing data:', error);
+  //       // Handle sign-up error
+  //       Alert.alert('Error', error.message);
   //     });
   // };
-
-  const signUp = (fullName, email, phoneNumber, birth, password, userType) => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        const user = userCredential.user;
-
-        // Push user data to Firebase Realtime Database or Cloud Firestore
-        const userData = {
-          TenND: fullName,
-          Email: user.email,
-          Phone: phoneNumber,
-          NgaySinh: birth,
-          MaND: firebase.auth().currentUser.uid,
-          LoaiND: userType,
-          // Additional user data fields
-        };
-
-        // // Push user data to Realtime Database
-        // firebase
-        //   .database()
-        //   .ref('users/' + user.uid)
-        //   .set(userData);
-
-        // // or
-
-        // Push user data to Cloud Firestore
-        firebase
-          .firestore()
-          .collection('NGUOIDUNG')
-          .doc(user.uid)
-          .set(userData);
-        // Sign-up and data push successful
-        console.log('Sign-up successful');
-      })
-      .catch(error => {
-        // Handle sign-up error
-        Alert.alert('Error', error.message);
-      });
-  };
 
   // const signUp = (fullName, email, phoneNumber, birth, password, user) => {
   //   firebase
@@ -300,9 +318,7 @@ const SignUp = props => {
                     password,
                     userType,
                   );
-
                   navigation.navigate('SignIn');
-                  // navigation.navigate('Congratulation');
                 } else {
                   alert('Corfirm password not match with password');
                 }
