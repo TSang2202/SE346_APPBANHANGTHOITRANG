@@ -22,7 +22,7 @@ const Stack = createNativeStackNavigator();
 function StackHome() {
   return (
     <Stack.Navigator
-      initialRouteName="ChangeProfile"
+      initialRouteName="HomeScreen"
       screenOptions={{
         headerShown: false,
       }}>

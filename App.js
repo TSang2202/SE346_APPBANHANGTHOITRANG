@@ -49,29 +49,29 @@ function App() {
     return null;
   }
 
-  // if (!user) {
-  //   return <MainNavigator />;
-  // } else {
-  //   getDataUser(firebase.auth().currentUser.email);
-  //   console.log(dataUser);
-  //   if (dataUser && dataUser.LoaiND === 'customer') {
-  //     return <CustomerBottomTab />;
-  //   } else if (dataUser && dataUser.LoaiND === 'user') {
-  //     return <StackNavigator />;
-  //   }
-  //   // if (dataUser && dataUser.LoaiND === 'admin')
-  //   else {
-  //     return <AdminStackNavigator />;
-  //   }
-  // }
+  if (!user) {
+    return <MainNavigator />;
+  } else {
+    getDataUser(firebase.auth().currentUser.email);
+    console.log(dataUser);
+    if (dataUser && dataUser.LoaiND === 'customer') {
+      return <CustomerBottomTab />;
+    } else if (dataUser && dataUser.LoaiND === 'user') {
+      return <StackNavigator />;
+    }
+    // if (dataUser && dataUser.LoaiND === 'admin')
+    else {
+      return <AdminStackNavigator />;
+    }
+  }
 
   // return <AdminStackNavigator />;.
 
-  return (
-    <NavigationContainer>
-      <StackHome />
-    </NavigationContainer>
-  );
+  // return (
+  //   <NavigationContainer>
+  //     <StackHome />
+  //   </NavigationContainer>
+  // );
 }
 
 export default () => {
