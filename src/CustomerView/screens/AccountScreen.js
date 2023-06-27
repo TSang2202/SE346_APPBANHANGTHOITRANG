@@ -238,6 +238,9 @@ function AccountScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('ChangeProfile');
+        }}
         style={{
           ...styles.option,
         }}>
