@@ -5,23 +5,30 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { CurvedTransition } from "react-native-reanimated";
 import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
-import { IC_Back, IC_Cancle, IC_Down, IC_Heart, IC_ShoppingCart, IC_StartCorner, IC_StartFull } from "../assets/icons";
+import { IC_Back, IC_Cancle, IC_Down, IC_Heart, IC_Heart_Red, IC_ShoppingCart, IC_StartCorner, IC_StartFull } from "../assets/icons";
 import { IM_MauAo } from "../assets/images";
 import Button from "../components/Button";
 import StarRating from "../components/StarRating";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { async } from "@firebase/util";
 import { Firestore, firebase } from "../../../Firebase/firebase";
+import Swiper from 'react-native-swiper'
 
 
 function DetailProduct({ navigation, route }) {
 
+    //
+    const [love, setlove] = useState(false)
+    //
     const { item } = route.params
     const [chooseStyle, setChooseStyle] = useState(false)
     const [numProduct, setNumProduct] = useState(1)
     const [chooseColor, setChooseColor] = useState()
     const [chooseSize, setChooseSize] = useState()
+    const [itemsCheckout, setItemsCheckout] = useState([])
+    const [totalMoney, setTotalMoney] = useState()
+    const [seeDetails, setSeeDetails] = useState(false)
 
     const setDataGioHang = async () => {
         const docRef = await addDoc(collection(Firestore, "GIOHANG"), {
@@ -32,7 +39,8 @@ function DetailProduct({ navigation, route }) {
             MauSac: chooseColor,
             Size: chooseSize,
             HinhAnhSP: item.HinhAnhSP,
-            TenSP: item.TenSP
+            TenSP: item.TenSP,
+            GiaSP: item.GiaSP
 
         });
 
@@ -55,10 +63,49 @@ function DetailProduct({ navigation, route }) {
 
     }
 
+    const setBuyNow = async () => {
+        const docRef = await addDoc(collection(Firestore, "GIOHANG"), {
+            MaND: firebase.auth().currentUser.uid,
+            MaSP: item.MaSP,
+            SoLuong: numProduct,
+            GiaTien: item.GiaSP * numProduct,
+            MauSac: chooseColor,
+            Size: chooseSize,
+            HinhAnhSP: item.HinhAnhSP,
+            TenSP: item.TenSP,
+            GiaSP: item.GiaSP
+
+        });
+
+        const updateRef = doc(Firestore, "GIOHANG", docRef.id);
+        await updateDoc(updateRef, {
+            MaGH: docRef.id
+        });
+
+        const unsub = onSnapshot(doc(Firestore, "GIOHANG", docRef.id), (doc) => {
+            const data = []
+            data.push(doc.data())
+            setItemsCheckout(data)
+
+            setTotalMoney(item.GiaSP * numProduct)
+
+        });
+
+
+
+    }
+
+    { itemsCheckout && totalMoney ? navigation.navigate('Checkout', { itemsCheckout, totalMoney }) : null }
+
+    //
+    const LovePress = () =>{
+        setlove(!love)
+    }
+
     useEffect(() => {
         console.log(item.Size)
     }, [])
-
+    
     return (
         <View style={{
             ...styles.container,
@@ -90,14 +137,29 @@ function DetailProduct({ navigation, route }) {
 
 
                 <View style={{ flexDirection: "row", alignItems: 'center', }} >
-                    <Image
+                    <TouchableOpacity onPress={LovePress}
+                    >
+                    { love ? (<Image
+                        source={IC_Heart_Red}
+                        style={{
+                            margin: 10,
+                            width: 33,
+                            height: 33,
+
+                        }}
+                        resizeMode='contain'
+                    />):
+                    (<Image
                         source={IC_Heart}
                         style={{
                             margin: 10,
-
+                            width: 28,
+                            height: 28,
                         }}
-                        resizeMode='stretch'
-                    />
+                        resizeMode='contain'
+                    />)
+                    }
+                    </TouchableOpacity>
 
                     <Image
                         source={IC_ShoppingCart}
@@ -114,13 +176,34 @@ function DetailProduct({ navigation, route }) {
 
 
             <View style={{ width: '100%', height: '40%', alignItems: 'center', justifyContent: 'center' }}>
-                <Image
-                    source={{ uri: item.HinhAnhSP }}
-                    style={{
-                        width: 240,
-                        height: 240, borderRadius: 20
-                    }}
-                />
+
+                <Swiper
+                    loop
+                    autoplay
+                >
+
+                    {item.HinhAnhSP.map((image) => (
+
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center'
+                        }}
+                            key={image}
+                        >
+                            <Image
+                                source={{ uri: image }}
+                                style={{
+                                    width: 300,
+                                    height: 300, borderRadius: 20
+                                }}
+                            />
+
+                        </View>
+                    ))}
+
+                </Swiper>
+
+
             </View>
 
             <View style={{
@@ -141,7 +224,7 @@ function DetailProduct({ navigation, route }) {
 
                 <Text
                     style={{
-                        marginHorizontal: 50,
+                        marginHorizontal: 10,
                         fontSize: 20,
                         color: CUSTOM_COLOR.Sunglow,
                         fontWeight: 'bold',
@@ -277,41 +360,30 @@ function DetailProduct({ navigation, route }) {
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-evenly',
+                justifyContent: 'flex-start',
                 marginTop: 10,
                 marginVertical: '1%'
             }}>
                 <Text style={{
                     ...styles.textLarge,
-                    marginLeft: 25
+                    marginLeft: 35
+
                 }}>Size</Text>
 
                 <View style={{
                     flexDirection: 'row',
 
                 }}>
+                    {item.Size.filter(size => size.checked == true).map(size => (
+                        <TouchableWithoutFeedback style={{
+                            ...styles.sizeCircle,
+                            width: 45,
+                            marginHorizontal: 5
+                        }}>
+                            <Text>{size.title}</Text>
+                        </TouchableWithoutFeedback>
+                    ))}
 
-                    <TouchableWithoutFeedback style={{
-                        ...styles.btnSize
-                    }}>
-                        <Text>{item.Size[0].title}</Text>
-                    </TouchableWithoutFeedback>
-
-
-                    <TouchableWithoutFeedback style={{
-                        ...styles.btnSize
-                    }}>
-                        <Text>{item.Size[1].title}</Text>
-                    </TouchableWithoutFeedback>
-
-
-
-
-                    <TouchableWithoutFeedback style={{
-                        ...styles.btnSize
-                    }}>
-                        <Text>{item.Size[2].title}</Text>
-                    </TouchableWithoutFeedback>
 
 
 
@@ -321,15 +393,17 @@ function DetailProduct({ navigation, route }) {
 
                 </View>
 
-                <TouchableOpacity
-                    onPress={() => setChooseStyle(true)}
-                >
-                    <Text style={{
-                        fontStyle: 'italic'
-                    }}>How can I choose my size?</Text>
-                </TouchableOpacity>
+
             </View>
 
+            <TouchableOpacity
+                onPress={() => setChooseStyle(true)}
+                style={{ alignSelf: 'flex-end', marginHorizontal: 20 }}
+            >
+                <Text style={{
+                    fontStyle: 'italic'
+                }}>How can I choose my size?</Text>
+            </TouchableOpacity>
 
             <View
                 style={{
@@ -344,13 +418,22 @@ function DetailProduct({ navigation, route }) {
                     See product details
                 </Text>
 
-                <TouchableWithoutFeedback styles={{
+                <TouchableOpacity styles={{
 
-                }}>
+                }}
+                    onPress={() => setSeeDetails(!seeDetails)}
+                >
                     <Image source={IC_Down} />
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
             </View>
-
+            {seeDetails ?
+                <View>
+                    <Text style={{
+                        marginHorizontal: 35
+                    }}>{item.MoTaSP}</Text>
+                </View>
+                :
+                null}
             <View style={{
                 flexDirection: 'row', justifyContent: 'center',
                 marginVertical: '3%'
@@ -367,6 +450,7 @@ function DetailProduct({ navigation, route }) {
                 <Button
                     color={CUSTOM_COLOR.Sunshade}
                     title='BUY NOW'
+                    onPress={() => setBuyNow()}
                 />
             </View>
 
@@ -483,7 +567,7 @@ function DetailProduct({ navigation, route }) {
                             <FlatList
 
                                 data={item.Size}
-                                numColumns={4}
+                                numColumns={3}
                                 renderItem={({ item }) => {
                                     return item.checked == true ?
                                         <TouchableOpacity style={{
@@ -516,6 +600,7 @@ function DetailProduct({ navigation, route }) {
                         <Button
                             title='DONE'
                             color={CUSTOM_COLOR.Carnation}
+                            onPress={() => setChooseStyle(false)}
                         />
 
                     </View>

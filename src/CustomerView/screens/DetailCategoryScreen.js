@@ -20,17 +20,19 @@ function DetailCategoryScreen({ navigation, route }) {
 
         const querySnapshot = await getDocs(q);
 
-        const items = [];
+        const data = [];
 
 
         querySnapshot.forEach(documentSnapshot => {
-            items.push({
+            data.push({
                 ...documentSnapshot.data(),
-                key: documentSnapshot.id,
+                // key: documentSnapshot.id,
             });
         });
 
-        setItems(items);
+        console.log(item.MaDM)
+
+        setItems(data);
     }
 
     useEffect(() => {
@@ -68,10 +70,10 @@ function DetailCategoryScreen({ navigation, route }) {
                 <SearchInput
                     style={{
                         marginVertical: 10,
-                        width: 300
+                        width: '70%'
                     }} />
 
-                <View style={{
+                <TouchableOpacity style={{
                     backgroundColor: CUSTOM_COLOR.Mercury,
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -82,7 +84,7 @@ function DetailCategoryScreen({ navigation, route }) {
                     <Image
                         source={IC_ShoppingCart}
                     />
-                </View>
+                </TouchableOpacity>
             </View>
 
             <View style={{
@@ -100,7 +102,7 @@ function DetailCategoryScreen({ navigation, route }) {
                     marginHorizontal: 20,
                     fontWeight: 'bold',
                     marginBottom: 0
-                }}>{item.SoLuongSP} sản phẩm</Text>
+                }}>{items.length} sản phẩm</Text>
             </View>
 
             <View style={{
@@ -110,20 +112,22 @@ function DetailCategoryScreen({ navigation, route }) {
                     data={items}
                     renderItem={({ item }) => {
                         return (
-                            <TouchableWithoutFeedback style={{
+                            <TouchableOpacity style={{
                                 flexDirection: 'row',
                                 //justifyContent: 'space-around'
-                            }}>
+                            }}
+                                onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+                            >
                                 <ProductView
-                                    source={item.HinhAnhSP}
+                                    source={item.HinhAnhSP[0]}
                                     title={item.TenSP}
                                     price={item.GiaSP}
                                 />
-                            </TouchableWithoutFeedback>
+                            </TouchableOpacity>
                         )
                     }}
                     numColumns={2}
-                    keyExtractor={(item) => item.MaDM}
+                //keyExtractor={(item) => item.MASP}
                 />
 
             </View>

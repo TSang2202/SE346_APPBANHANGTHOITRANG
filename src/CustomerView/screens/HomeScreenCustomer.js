@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, } from "react-native";
+import { Badge } from 'react-native-elements';
 import { Firestore, firebase } from "../../../Firebase/firebase";
 import { IC_Chat, IC_ShoppingCart } from "../assets/icons";
 import { IM_GiayNam, IM_MauAo, IM_PhuKien, IM_SaleImage, IM_ThoiTrangNam, IM_ThoiTrangNu } from "../assets/images";
@@ -7,7 +8,7 @@ import Categories from "../components/Categories";
 import ProductCard from "../components/ProductCard";
 import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc, onSnapshot, Timestamp } from "firebase/firestore";
 import { async } from "@firebase/util";
 import ProductView from "../components/ProductView";
 
@@ -23,6 +24,7 @@ function HomeScreenCustomer({ navigation }) {
   const [chatUser, setChatUser] = useState()
   const [loadingChatUser, setLoadingChatUser] = useState(false)
   const [idUser, setIdUser] = useState()
+  const [badgeCart, setBadgeCart] = useState(0);
 
   const getDataTrending = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
@@ -65,22 +67,55 @@ function HomeScreenCustomer({ navigation }) {
   const getDataChatUser = async () => {
     const q = query(collection(Firestore, "CHAT"), where("MaND", "==", firebase.auth().currentUser.uid));
 
-    const querySnapshot = await getDocs(q);
+    // const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.size == 0) {
-      const docRef = await addDoc(collection(Firestore, "CHAT"), {
-        MaND: firebase.auth().currentUser.uid
+    // if (querySnapshot.size == 0) {
+    //   const currentTime = new Date();
+    //   const docRef = await addDoc(collection(Firestore, "CHAT"), {
+    //     MaND: firebase.auth().currentUser.uid,
+    //     ThoiGian: Timestamp.fromDate(currentTime)
+    //   });
+
+    //   const updateRef = doc(Firestore, "CHAT", docRef.id);
+    //   await updateDoc(updateRef, {
+    //     MaChat: docRef.id
+    //   });
+
+    //   setLoadingChatUser(true)
+    // }
+    // querySnapshot.forEach((doc) => {
+    //   setChatUser(doc.data())
+    // });
+
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      if (querySnapshot.size == 0) {
+        const currentTime = new Date();
+        const docRef = await addDoc(collection(Firestore, "CHAT"), {
+          MaND: firebase.auth().currentUser.uid,
+          ThoiGian: Timestamp.fromDate(currentTime)
+        });
+
+        const updateRef = doc(Firestore, "CHAT", docRef.id);
+        await updateDoc(updateRef, {
+          MaChat: docRef.id
+        });
+
+        setLoadingChatUser(true)
+      }
+      querySnapshot.forEach((doc) => {
+        setChatUser(doc.data())
       });
+    });
+  }
 
-      const updateRef = doc(Firestore, "CHAT", docRef.id);
-      await updateDoc(updateRef, {
-        MaChat: docRef.id
+  const getBadgeCart = () => {
+    const q = query(collection(Firestore, "GIOHANG"), where("MaND", "==", firebase.auth().currentUser.uid));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
       });
-
-      setLoadingChatUser(true)
-    }
-    querySnapshot.forEach((doc) => {
-      setChatUser(doc.data())
+      setBadgeCart(data.length)
     });
   }
 
@@ -91,6 +126,7 @@ function HomeScreenCustomer({ navigation }) {
     getDataDanhMuc();
     getDataChatUser()
     setIdUser(firebase.auth().currentUser.uid)
+    getBadgeCart();
 
     console.log(chatUser)
 
@@ -98,6 +134,14 @@ function HomeScreenCustomer({ navigation }) {
     // return () => clearInterval(interval); // Xóa interval khi component bị unmount
   }, [loadingChatUser]);
 
+
+  const setSoLuongChuaDocCuaCustomer = async () => {
+    const chatUpdateRef = doc(Firestore, "CHAT", chatUser.MaChat);
+
+    await updateDoc(chatUpdateRef, {
+      SoLuongChuaDocCuaCustomer: 0
+    });
+  }
 
   return (
 
@@ -108,13 +152,14 @@ function HomeScreenCustomer({ navigation }) {
         <SearchInput
           placeholder='Search product'
           style={{
-            width: 290,
+            width: '70%',
             margin: 10
           }}
           onPressIn={() => {
             navigation.navigate('Searching')
           }}
         />
+
         <TouchableOpacity style={{
           backgroundColor: CUSTOM_COLOR.Mercury,
           alignItems: 'center',
@@ -124,10 +169,20 @@ function HomeScreenCustomer({ navigation }) {
           borderRadius: 10
         }}
           onPress={() => {
+
+            setSoLuongChuaDocCuaCustomer()
             navigation.navigate('Chat', { chatUser })
 
           }}
         >
+
+          {chatUser && chatUser.SoLuongChuaDocCuaCustomer != 0 ?
+
+            <Badge value={chatUser.SoLuongChuaDocCuaCustomer} status="error"
+              containerStyle={{ position: 'absolute', top: -5, right: -5 }}
+            />
+            : null}
+
           <Image
             source={IC_Chat}
           />
@@ -146,6 +201,10 @@ function HomeScreenCustomer({ navigation }) {
             navigation.navigate('ShoppingCard', { idUser })
           }}
         >
+          {badgeCart != 0 ?
+            <Badge value={badgeCart} status="error"
+              containerStyle={{ position: 'absolute', top: -5, right: -5 }}
+            /> : null}
           <Image
             source={IC_ShoppingCart}
           />
@@ -189,7 +248,7 @@ function HomeScreenCustomer({ navigation }) {
                 onPress={() => { navigation.navigate('DetailProduct', { item }) }}
               >
                 <ProductView
-                  source={item.HinhAnhSP}
+                  source={item.HinhAnhSP[0]}
                   title={item.TenSP}
                   price={item.GiaSP}
                 />

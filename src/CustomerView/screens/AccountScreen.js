@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -23,32 +22,31 @@ import {
   IC_Theme,
   IC_Wallet,
 } from '../assets/icons';
-import { IM_AnhGiay2 } from '../assets/images';
+import {IM_AnhGiay2} from '../assets/images';
 import CUSTOM_COLOR from '../constants/colors';
-import { firebase, Firestore } from '../../../Firebase/firebase.js';
-import { useNavigation } from '@react-navigation/native';
-import { doc, getDoc } from "firebase/firestore";
-import { async } from "@firebase/util";
+import {firebase, Firestore} from '../../../Firebase/firebase.js';
+import {useNavigation} from '@react-navigation/native';
+import {doc, getDoc} from 'firebase/firestore';
+import {async} from '@firebase/util';
 function AccountScreen() {
   const navigation = useNavigation();
-  const hanleSignOut = () => { };
+  const hanleSignOut = () => {};
 
-  const [user, setUser] = useState()
+  const [user, setUser] = useState();
 
   const getUser = async () => {
-    const docRef = doc(Firestore, "NGUOIDUNG", firebase.auth().currentUser.uid);
+    const docRef = doc(Firestore, 'NGUOIDUNG', firebase.auth().currentUser.uid);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      setUser(docSnap.data())
+      setUser(docSnap.data());
     } else {
-
     }
-  }
+  };
   useEffect(() => {
-    getUser()
-    console.log(user)
-  }, [])
+    getUser();
+    console.log(user);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -240,6 +238,9 @@ function AccountScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('ChangeProfile');
+        }}
         style={{
           ...styles.option,
         }}>
@@ -267,6 +268,9 @@ function AccountScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('ChangePassword');
+        }}
         style={{
           ...styles.option,
         }}>
@@ -374,4 +378,3 @@ const styles = StyleSheet.create({
 });
 
 export default AccountScreen;
-

@@ -20,6 +20,7 @@ function ShoppingCartScreen({ navigation, route }) {
     const [items, setItems] = useState([])
     const [checkChooseAll, setCheckChooseAll] = useState(false)
     const [totalMoney, setTotalMoney] = useState(0)
+    const [itemsCheckout, setItemsCheckout] = useState([])
 
     const getDataCart = () => {
         const q = query(collection(Firestore, "GIOHANG"), where("MaND", "==", idUser));
@@ -37,8 +38,9 @@ function ShoppingCartScreen({ navigation, route }) {
 
     }
     const updateCheck = (item) => {
+
         const updateItem = items.map((product) => {
-            if (product.MaSP === item.MaSP) {
+            if (product.MaGH === item.MaGH) {
                 product.checkSelect = !item.checkSelect;
             }
             if (product.checkSelect == false) setCheckChooseAll(false)
@@ -56,6 +58,8 @@ function ShoppingCartScreen({ navigation, route }) {
         setTotalMoney(sum)
 
         setItems(updateItem)
+
+        LoadItemsCheckout()
     }
 
     const ChooseAll = () => {
@@ -82,20 +86,34 @@ function ShoppingCartScreen({ navigation, route }) {
 
 
         setItems(updateItem)
+
+        LoadItemsCheckout()
+    }
+
+    const resetTotalMoney = () => {
+        const sum = items.reduce((total, product) => {
+            if (product.checkSelect) return total + product.GiaTien
+            else return total
+        }, 0)
+
+        setTotalMoney(sum)
     }
 
     const updateNumber = async (item) => {
         const updateRef = doc(Firestore, "GIOHANG", item.MaGH);
         await updateDoc(updateRef, {
-            SoLuong: item.SoLuong
+            SoLuong: item.SoLuong,
+            GiaTien: item.GiaTien
         });
     }
 
 
     const UpNumber = (item) => {
+
         const updateItem = items.map((product) => {
             if (item.MaGH === product.MaGH) {
                 product.SoLuong += 1
+                product.GiaTien = product.SoLuong * product.GiaSP
                 updateNumber(item)
             }
 
@@ -103,12 +121,14 @@ function ShoppingCartScreen({ navigation, route }) {
         })
 
         setItems(updateItem)
+        resetTotalMoney()
     }
 
     const DownNumber = (item) => {
         const updateItem = items.map((product) => {
             if (item.MaGH === product.MaGH && item.SoLuong > 1) {
                 product.SoLuong -= 1
+                product.GiaTien = product.SoLuong * product.GiaSP
                 updateNumber(item)
             }
 
@@ -116,11 +136,20 @@ function ShoppingCartScreen({ navigation, route }) {
         })
 
         setItems(updateItem)
+        resetTotalMoney()
     }
 
     const DeleteProduct = async (item) => {
         await deleteDoc(doc(Firestore, "GIOHANG", item.MaGH));
         getDataCart()
+    }
+
+    const LoadItemsCheckout = () => {
+        const data = items.filter((product) => product.checkSelect == true)
+
+        setItemsCheckout(data)
+
+
     }
 
 
@@ -181,13 +210,14 @@ function ShoppingCartScreen({ navigation, route }) {
                             style={{
                                 marginVertical: 10
                             }}
-                            source={item.HinhAnhSP}
+                            source={item.HinhAnhSP[0]}
                             title={item.TenSP}
                             color={item.MauSac}
                             size={item.Size}
                             price={item.GiaTien}
                             number={item.SoLuong}
-                            onPressChoose={() => updateCheck(item)}
+                            show={true}
+                            onPress={() => updateCheck(item)}
                             checkSelect={item.checkSelect}
                             onPressUp={() => UpNumber(item)}
                             onPressDown={() => DownNumber(item)}
@@ -267,7 +297,13 @@ function ShoppingCartScreen({ navigation, route }) {
                 <Button
                     title='CHECK OUT'
                     color={CUSTOM_COLOR.FlushOrange}
-                    onPress={() => navigation.navigate('Checkout')}
+                    onPress={() => {
+
+                        if (itemsCheckout.length > 0)
+                            navigation.navigate('Checkout', { itemsCheckout, totalMoney })
+
+
+                    }}
                 />
             </View>
 
