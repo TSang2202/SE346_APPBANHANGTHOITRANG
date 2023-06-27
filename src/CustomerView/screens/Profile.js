@@ -1,10 +1,32 @@
 import { StyleSheet, Text, View, TouchableWithoutFeedback, TouchableOpacity, Image, ImageBackground } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { Acount } from './OverView'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CUSTOM_COLOR from '../../StaffView/constants/colors'
 import BackTo from '../../StaffView/components/BackTo'
+import { collection, addDoc, doc, updateDoc, onSnapshot, getDocs, where } from "firebase/firestore";
+import { async } from "@firebase/util";
+import { Firestore, firebase } from "../../../Firebase/firebase";
+import { query } from "firebase/database";
 function Profile({navigation, routes}){
+    const [data, setdata] = useState([]);
+    const getData = async ()=>{
+      const q = query(collection(Firestore, "NGUOIDUNG"), where("MaND", "==", firebase.auth().currentUser.uid ));
+
+        const querySnapshot = await getDocs(q);
+
+        const items = [];
+
+
+        querySnapshot.forEach(documentSnapshot => {
+            items.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+
+    setdata(items);
+    }
     
     const changeBackground = ()=>{}
     const changeAvatar = ()=>{}
@@ -24,7 +46,7 @@ function Profile({navigation, routes}){
           <Text style = {{fontStyle: 'italic', fontSize: 12}}>Change Background</Text>
         </TouchableOpacity>
         <View style = {{alignItems: 'center', flexDirection: 'column'}}>
-        <Image source={{uri: Acount.avartar}}
+        <Image source={{uri: items.Avatar}}
         resizeMode='contain'
         style = {{width: '21%', aspectRatio: 1,borderRadius: 55, marginTop: 5}}
         ></Image>
@@ -37,23 +59,23 @@ function Profile({navigation, routes}){
       </ImageBackground>
       <View style = {styles.viewstyle}>
           <Text style = {{marginLeft: 15}}>Name</Text>
-          <Text style = {{marginRight: 15}}>{Acount.name}</Text>
+          <Text style = {{marginRight: 15}}>{items.TenND}</Text>
       </View>
       <View style = {styles.viewstyle}>
           <Text style = {{marginLeft: 15}}>Day Of Birth</Text>
-          <Text style = {{marginRight: 15}}>{Acount.day}</Text>
+          <Text style = {{marginRight: 15}}>{items.NgaySinh}</Text>
         </View>
         <View style = {styles.viewstyle}>
           <Text style = {{marginLeft: 15}}>Sex</Text>
-          <Text style = {{marginRight: 15}}>{Acount.sex}</Text>
+          <Text style = {{marginRight: 15}}>{items.GioiTinh}</Text>
         </View>
         <View style = {styles.viewstyle}>
           <Text style = {{marginLeft: 15}}>Phone</Text>
-          <Text style = {{marginRight: 15}}>{Acount.phone}</Text>
+          <Text style = {{marginRight: 15}}>{items.Phone}</Text>
         </View>
         <View style = {styles.viewstyle}>
           <Text style = {{marginLeft: 15}}>Address</Text>
-          <Text style = {{ marginRight: 15}}>{Acount.address}</Text>
+          <Text style = {{ marginRight: 15}}>{items.DiaChi}</Text>
         </View>
       </SafeAreaView>
     )
