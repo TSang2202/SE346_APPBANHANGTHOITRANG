@@ -1,9 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback} from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { IC_Back, IC_ShoppingCart } from "../assets/icons";
 import { IM_AnhGiay1, IM_AnhGiay2, IM_AnhGiay3, IM_AnhGiay4 } from "../assets/images";
 import ProductView from "../components/ProductView";
-import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
 
 const datas = [
@@ -69,12 +68,11 @@ function SearchingScreen({navigation}) {
                     />  
                 </TouchableOpacity>
 
-                <SearchInput
-                    style = {{
+                <Search       
+                style = {{
                         marginVertical: 10,
                         width: 300
                     }}/>
-
                 <View style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
                 alignItems: 'center',
                 justifyContent: 'center', 
