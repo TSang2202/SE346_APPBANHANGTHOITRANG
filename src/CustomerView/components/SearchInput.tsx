@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, TouchableWithoutFeedback } from "react-native";
-import { SearchIcon } from "../assets/icons/index.js";
+import { Image, TextInput, View } from "react-native";
+import { SearchIcon } from "../assets/icons";
 import CUSTOM_COLOR from "../constants/colors";
 
 const SearchInput = (props: any) =>{
@@ -23,7 +23,7 @@ const SearchInput = (props: any) =>{
           width: 20,
           height: 20
         }}
-        source = {SearchIcon}
+        source={SearchIcon}
        
       />
       <TextInput style = {{width: '70%', height: 30, borderWidth: 0, padding:5}}
