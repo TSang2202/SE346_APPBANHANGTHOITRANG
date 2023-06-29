@@ -21,18 +21,6 @@ import {doc, getDoc} from 'firebase/firestore';
 const SignIn = props => {
   const {navigation} = props;
 
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-
-  // const loginUser = async (email, password) => {
-  //   try {
-  //     await firebase.auth().signInWithEmailAndPassword(email, password);
-
-  //   } catch (error) {
-  //     alert(error.message);
-  //   }
-  // };
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -46,35 +34,6 @@ const SignIn = props => {
       console.log('Error signing in:', error.message);
     }
   };
-
-  // const loginUser = (email, password) => {
-  //   firebase
-  //     .auth()
-  //     .signInWithEmailAndPassword(email, password)
-  //     .then(() => {
-  //       // Sign-in successful
-  //       console.log('Sign-in successful');
-  //       Alert.alert('Sign-in successful');
-  //     })
-  //     .catch(error => {
-  //       // Handle sign-in error
-  //       Alert.alert('Error', error.message);
-  //     });
-  // };
-
-  // const [dataUser, setDataUser] = useState();
-
-  // const getDataUser = async userId => {
-  //   const docRef = doc(Firestore, 'NGUOIDUNG', userId);
-  //   const docSnap = await getDoc(docRef);
-
-  //   if (docSnap.exists()) {
-  //     console.log('Document data:', docSnap.data());
-  //     setDataUser(docSnap.data());
-  //   } else {
-  //     console.log('No such document!');
-  //   }
-  // };
 
   return (
     <SafeAreaView style={styles.container}>
