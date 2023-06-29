@@ -5,7 +5,7 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { CurvedTransition } from "react-native-reanimated";
 import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
-import { IC_Back, IC_Cancle, IC_Down, IC_Heart, IC_ShoppingCart, IC_StartCorner, IC_StartFull } from "../assets/icons";
+import { IC_Back, IC_Cancle, IC_Down, IC_Heart, IC_Heart_Red, IC_ShoppingCart, IC_StartCorner, IC_StartFull } from "../assets/icons";
 import { IM_MauAo } from "../assets/images";
 import Button from "../components/Button";
 import StarRating from "../components/StarRating";
@@ -18,6 +18,9 @@ import Swiper from 'react-native-swiper'
 
 function DetailProduct({ navigation, route }) {
 
+    //
+    const [love, setlove] = useState(false)
+    //
     const { item } = route.params
     const [chooseStyle, setChooseStyle] = useState(false)
     const [numProduct, setNumProduct] = useState(1)
@@ -94,10 +97,15 @@ function DetailProduct({ navigation, route }) {
 
     { itemsCheckout && totalMoney ? navigation.navigate('Checkout', { itemsCheckout, totalMoney }) : null }
 
+    //
+    const LovePress = () =>{
+        setlove(!love)
+    }
+
     useEffect(() => {
         console.log(item.Size)
     }, [])
-
+    
     return (
         <View style={{
             ...styles.container,
@@ -129,14 +137,29 @@ function DetailProduct({ navigation, route }) {
 
 
                 <View style={{ flexDirection: "row", alignItems: 'center', }} >
-                    <Image
+                    <TouchableOpacity onPress={LovePress}
+                    >
+                    { love ? (<Image
+                        source={IC_Heart_Red}
+                        style={{
+                            margin: 10,
+                            width: 33,
+                            height: 33,
+
+                        }}
+                        resizeMode='contain'
+                    />):
+                    (<Image
                         source={IC_Heart}
                         style={{
                             margin: 10,
-
+                            width: 28,
+                            height: 28,
                         }}
-                        resizeMode='stretch'
-                    />
+                        resizeMode='contain'
+                    />)
+                    }
+                    </TouchableOpacity>
 
                     <Image
                         source={IC_ShoppingCart}

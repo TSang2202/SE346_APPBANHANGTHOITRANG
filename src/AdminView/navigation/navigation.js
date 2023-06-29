@@ -1,7 +1,6 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import OverView from '../screens/OverView.js';
 import ViewShop1 from '../screens/ViewShop1.js';
 import ViewShop2 from '../screens/ViewShop2.js';
 import Chat from '../screens/Chat.js';
@@ -9,7 +8,6 @@ import Setting from '../screens/Setting.js';
 import Notification from '../screens/Notification.js';
 import Order from '../screens/Order.js';
 import Report from '../screens/Report.js';
-import User from '../screens/User.js';
 import Promotion from '../screens/Promotion.js';
 import DeTailsChat from '../screens/DeTailsChat.js';
 import MyProduct from '../screens/MyProduct.js';
@@ -22,21 +20,23 @@ import ChatScreenStaff from '../screens/ChatScreenStaff.js';
 import ManageUser from '../screens/ManageUser.js';
 import AddAccount from '../screens/AddAccount.js';
 import EditAccount from '../screens/EditAccount.js';
+import AdminOverView from '../screens/AdminOverView.js';
+import AddPromotion from '../screens/AddPromotion.js';
+import ImportProduct from '../screens/ImportProduct.js';
 
 const Stack = createNativeStackNavigator();
 function AdminStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="OverView"
+        initialRouteName="AdminOverView"
         screenOptions={{headerShown: false}}>
-        <Stack.Screen name="OverView" component={OverView} />
+        <Stack.Screen name="AdminOverView" component={AdminOverView} />
         <Stack.Screen name="ViewShop1" component={ViewShop1} />
         <Stack.Screen name="ViewShop2" component={ViewShop2} />
         <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="Setting" component={Setting} />
         <Stack.Screen name="Notification" component={Notification} />
-        <Stack.Screen name="User" component={User} />
         <Stack.Screen name="Order" component={Order} />
         <Stack.Screen name="Report" component={Report} />
         <Stack.Screen name="Promotion" component={Promotion} />
@@ -51,16 +51,11 @@ function AdminStackNavigator() {
         <Stack.Screen name="ManageUser" component={ManageUser} />
         <Stack.Screen name="AddAccount" component={AddAccount} />
         <Stack.Screen name="EditAccount" component={EditAccount} />
+        <Stack.Screen name="AddPromotion" component={AddPromotion} />
+        <Stack.Screen name="ImportProduct" component={ImportProduct} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-const MainNavigator = () => {
-  return (
-    <NavigationContainer>
-      <AdminStackNavigator />
-    </NavigationContainer>
-  );
-};
 export default AdminStackNavigator;
