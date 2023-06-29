@@ -103,12 +103,12 @@ function App() {
 
   const getPropertyValue = async uid => {
     try {
-      const docRef = firebase.firestore().collection('NGUOIDUNG').doc('uid');
+      const docRef = firebase.firestore().collection('NGUOIDUNG').doc(uid);
       const doc = await docRef.get();
 
       if (doc.exists) {
         const data = doc.data();
-        setUserType(data.userType);
+        setUserType(data.LoaiND);
         // const userType = data.userType;
         console.log('userType:', userType);
       } else {
