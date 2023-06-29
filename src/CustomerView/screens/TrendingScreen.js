@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
-import { IC_Back, IC_ShoppingCart } from "../assets/icons";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { FlatList, Image, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
-import { collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
+import { IC_Back, IC_ShoppingCart } from "../assets/icons";
 import ProductView from "../components/ProductView";
-import SearchInput from "../components/SearchInput";
+
+import Search from "../../StaffView/components/Search";
 import CUSTOM_COLOR from "../constants/colors";
 
 
@@ -63,7 +64,7 @@ function TrendingScreen({ navigation }) {
                     />
                 </TouchableOpacity>
 
-                <SearchInput
+                <Search
                     style={{
                         marginVertical: 10,
                         width: 300

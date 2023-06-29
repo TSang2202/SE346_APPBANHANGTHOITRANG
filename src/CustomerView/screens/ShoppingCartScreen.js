@@ -1,16 +1,11 @@
+import { collection, deleteDoc, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
-import { IC_Back, IC_ShoppingCart, IC_Delete } from "../assets/icons";
-import { IM_AnhGiay1, IM_AnhGiay2, IM_AnhGiay3, IM_AnhGiay4 } from "../assets/images";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { Firestore } from "../../../Firebase/firebase";
+import { IC_Back } from "../assets/icons";
 import Button from "../components/Button";
 import ProductCheckOut from "../components/ProductCheckOut";
-import ProductView from "../components/ProductView";
-import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, doc, setDoc, getDocs, query, where, onSnapshot, updateDoc, deleteDoc } from "firebase/firestore";
-import { Firestore } from "../../../Firebase/firebase";
-import { product } from "../../StaffView/assets/icons";
-import { async } from "@firebase/util";
 
 
 function ShoppingCartScreen({ navigation, route }) {

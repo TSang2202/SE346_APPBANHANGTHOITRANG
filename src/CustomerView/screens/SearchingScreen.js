@@ -4,7 +4,6 @@ import { IC_Back, IC_ShoppingCart } from "../assets/icons";
 import { IM_AnhGiay1, IM_AnhGiay2, IM_AnhGiay3, IM_AnhGiay4 } from "../assets/images";
 import ProductView from "../components/ProductView";
 import CUSTOM_COLOR from "../constants/colors";
-
 const datas = [
     {
         id: '1',
@@ -68,11 +67,6 @@ function SearchingScreen({navigation}) {
                     />  
                 </TouchableOpacity>
 
-                <Search       
-                style = {{
-                        marginVertical: 10,
-                        width: 300
-                    }}/>
                 <View style = {{backgroundColor: CUSTOM_COLOR.Mercury, 
                 alignItems: 'center',
                 justifyContent: 'center', 

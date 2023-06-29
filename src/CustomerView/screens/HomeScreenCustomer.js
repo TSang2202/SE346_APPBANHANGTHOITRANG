@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, } from "react-native";
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Badge } from 'react-native-elements';
 import { Firestore, firebase } from "../../../Firebase/firebase";
 import { IC_Chat, IC_ShoppingCart } from "../assets/icons";
-import { IM_GiayNam, IM_MauAo, IM_PhuKien, IM_SaleImage, IM_ThoiTrangNam, IM_ThoiTrangNu } from "../assets/images";
+import { IM_SaleImage } from "../assets/images";
 import Categories from "../components/Categories";
-import ProductCard from "../components/ProductCard";
-import SearchInput from "../components/SearchInput";
-import CUSTOM_COLOR from "../constants/colors";
-import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc, onSnapshot, Timestamp } from "firebase/firestore";
-import { async } from "@firebase/util";
+
+import { Timestamp, addDoc, collection, doc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import ProductView from "../components/ProductView";
+
+import CUSTOM_COLOR from "../constants/colors";
 
 //import { get } from "firebase/database";
 
@@ -149,16 +148,7 @@ function HomeScreenCustomer({ navigation }) {
       nestedScrollEnabled={true}
     >
       <View style={{ flexDirection: 'row' }}>
-        <SearchInput
-          placeholder='Search product'
-          style={{
-            width: '70%',
-            margin: 10
-          }}
-          onPressIn={() => {
-            navigation.navigate('Searching')
-          }}
-        />
+       
 
         <TouchableOpacity style={{
           backgroundColor: CUSTOM_COLOR.Mercury,
