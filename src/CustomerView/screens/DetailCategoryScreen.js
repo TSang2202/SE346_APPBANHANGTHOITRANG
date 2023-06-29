@@ -4,7 +4,7 @@ import { FlatList, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
 
 import ProductView from "../components/ProductView";
-
+import SearchComponent from '../components/SearchComponent';
 function DetailCategoryScreen({ navigation, route }) {
     const { item } = route.params;
     const [items, setItems] = useState([]);
@@ -44,7 +44,7 @@ function DetailCategoryScreen({ navigation, route }) {
     return (
         <View style={{ flex: 1 }}>
             <View style={{ flexDirection: "row" }}>
-                
+                <SearchComponent></SearchComponent>
             </View>
             <FlatList
                 data={items}

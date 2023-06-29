@@ -1,16 +1,14 @@
-import { View, Text, Image, ScrollView, TouchableOpacity, FlatList } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import Search from '../components/Search'
+import { collection, doc, getDoc, getDocs } from "firebase/firestore"
+import React, { useEffect, useState } from 'react'
+import { FlatList, Image, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Acount } from './OverView'
-import CUSTOM_COLOR from '../constants/colors'
-import UserChat from '../components/UserChat'
-import Size from '../constants/size'
 import { Firestore } from '../../../Firebase/firebase'
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
-import { async } from '@firebase/util'
 
-import PropTypes from 'deprecated-react-native-prop-types';
+import UserChat from '../components/UserChat'
+import CUSTOM_COLOR from '../constants/colors'
+import Size from '../constants/size'
+import { Acount } from './OverView'
+
 
 
 export default function Chat({ navigation }) {
@@ -98,9 +96,7 @@ export default function Chat({ navigation }) {
         ></Image>
         <Text style={{ fontWeight: 'bold', fontSize: 40, marginLeft: 10, color: CUSTOM_COLOR.Black }}>Chat</Text>
       </View>
-      <Search
-        placeholder='Search'
-      ></Search>
+
 
 
       {/* {

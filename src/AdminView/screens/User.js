@@ -1,17 +1,12 @@
-import { StyleSheet, Text, View, Image, SafeAreaView } from 'react-native';
 import React from 'react';
+import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 import FONT_FAMILY from '../constants/fonts';
 //Acount la du lieu mau ve tai khoan
-import { Acount } from './OverView';
-import { settingicon } from '../assets/icons';
-import Search from '../components/Search';
-import Button from '../components/Button';
-import ButtonDetail from '../components/ButtonDetail';
-import { FlatList } from 'react-native-gesture-handler';
-import OneStaff from '../components/OneStaff';
 import { IM_AnhGiay1 } from '../../CustomerView/assets/images';
 import HeaderWithBack from '../components/HeaderWithBack';
+import OneStaff from '../components/OneStaff';
+import { Acount } from './OverView';
 
 export default function User({ navigation }) {
   //const { navigation } = props;

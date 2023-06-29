@@ -1,44 +1,30 @@
+import React from 'react';
 import {
-  View,
-  Text,
+  FlatList,
+  Image,
   SafeAreaView,
   StyleSheet,
-  Image,
+  Text,
   TouchableOpacity,
-  FlatList,
+  View,
 } from 'react-native';
-import React from 'react';
-import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import {
-  settingicon,
-  messenger,
-  notification,
-  report,
-  product,
-  promotion,
-  order,
-  chat,
-  user,
-} from '../../StaffView/assets/icons/index.js';
-import FONT_FAMILY from '../../StaffView/constants/fonts.js';
-import ViewShop1 from './ViewShop1.js';
-import Button from '../../StaffView/components/Button';
+import { firebase } from '../../../Firebase/firebase.js';
 import ViewNow from '../../StaffView/components/ViewNow';
-import {firebase, Firestore} from '../../../Firebase/firebase.js';
+import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
+import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import {
-  IC_product,
-  IC_order,
-  IC_logout,
-  IC_promotions,
   IC_financial,
-  IC_user,
-  IC_setting,
+  IC_logout,
   IC_messenger,
   IC_notification,
+  IC_order,
+  IC_product,
+  IC_promotions,
+  IC_setting,
+  IC_user,
 } from '../assets/icons/index.js';
-import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
-import {IC_Chat} from '../../CustomerView/assets/icons/index.js';
+import MenuIcon from '../components/MenuIcon.js';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',

@@ -1,21 +1,20 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-  StyleSheet,
   SafeAreaView,
-  View,
+  StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import HeaderWithBack from '../components/HeaderWithBack.js';
-import HeaderTitlle from '../components/HeaderTitlle.js';
-import TextInputCard from '../components/TextInputCard.js';
+import { firebase } from '../../../Firebase/firebase.js';
 import CustomButton from '../components/CustomButton.js';
-import PasswordCard from '../components/PasswordCard.js';
+import HeaderTitlle from '../components/HeaderTitlle.js';
+import HeaderWithBack from '../components/HeaderWithBack.js';
 import HederContent from '../components/HederContent.js';
-import CheckBox from '@react-native-community/checkbox';
-import FONT_FAMILY from '../constants/fonts.js';
+import PasswordCard from '../components/PasswordCard.js';
+import TextInputCard from '../components/TextInputCard.js';
 import CUSTOM_COLOR from '../constants/colors.js';
-import {firebase} from '../../../Firebase/firebase.js';
+import FONT_FAMILY from '../constants/fonts.js';
 
 const EditAccount = props => {
   const {navigation} = props;

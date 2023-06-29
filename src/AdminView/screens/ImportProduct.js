@@ -1,18 +1,16 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-  StyleSheet,
   SafeAreaView,
-  View,
+  StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
+  View
 } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
-import {border_add} from '../assets/images';
-import {Dropdown} from 'react-native-element-dropdown';
-import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
+import FONT_FAMILY from '../constants/fonts.js';
 
 const ImportProduct = props => {
   const {navigation} = props;

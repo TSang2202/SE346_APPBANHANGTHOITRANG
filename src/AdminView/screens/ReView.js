@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { IC_Add, IC_Back, IC_Cancle, IC_Review, } from "../assets/icons";
-import { IM_AnhGiay1, IM_AnhGiay2 } from "../assets/images";
+import { IM_AnhGiay1 } from "../assets/images";
 import Button from "../components/Button";
 import Review from "../components/Review";
 import StarRating from "../components/StarRating";

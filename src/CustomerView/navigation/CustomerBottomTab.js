@@ -1,15 +1,15 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
-import {getFocusedRouteNameFromRoute, NavigationContainer} from '@react-navigation/native'
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import { Image, View } from "react-native";
 
-import { IC_Bell, IC_Heart, IC_Home, IC_User,} from "../assets/icons";
+import { IC_Bell, IC_Heart, IC_Home, IC_User, } from "../assets/icons";
 
 import CUSTOM_COLOR from "../constants/colors";
-import StackHome from "./StackHome";
-import NotificationScreen from "../screens/NotificationScreen";
-import FollowScreen from "../screens/FollowScreen";
 import AccountScreen from "../screens/AccountScreen";
+import FollowScreen from "../screens/FollowScreen";
+import NotificationScreen from "../screens/NotificationScreen";
+import StackHome from "./StackHome";
 
 
 

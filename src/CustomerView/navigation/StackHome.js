@@ -1,21 +1,21 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import ChangePassword from '../screens/ChangePassword';
+import ChangeProfile from '../screens/ChangeProfile';
 import ChatScreen from '../screens/ChatScreen';
 import CheckoutScreen from '../screens/CheckoutScreen';
 import DeliveryAddressScreen from '../screens/DeliveryAddressScreen';
+import DeliveryScreen from '../screens/DeliveryScreen';
+import DetailCategoryScreen from '../screens/DetailCategoryScreen';
 import DetailProduct from '../screens/DetailProduct';
 import HomeScreenCustomer from '../screens/HomeScreenCustomer';
 import PaymentCardScreen from '../screens/PaymentCardScreen';
 import PaymentMethodScreen from '../screens/PaymentMethodScreen';
+import PromotionScreen from '../screens/PromotionScreen';
+import ReviewScreen from '../screens/ReviewScreen';
 import SearchingScreen from '../screens/SearchingScreen';
 import ShoppingCartScreen from '../screens/ShoppingCartScreen';
 import TrendingScreen from '../screens/TrendingScreen';
-import ReviewScreen from '../screens/ReviewScreen';
-import DetailCategoryScreen from '../screens/DetailCategoryScreen';
-import PromotionScreen from '../screens/PromotionScreen';
-import DeliveryScreen from '../screens/DeliveryScreen';
-import ChangePassword from '../screens/ChangePassword';
-import ChangeProfile from '../screens/ChangeProfile';
 
 const Stack = createNativeStackNavigator();
 

@@ -1,18 +1,14 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore"
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import BackTo from '../components/BackTo'
-import { SearchIcon } from '../../CustomerView/assets/icons'
-import { FlatList, ScrollView, } from 'react-native-gesture-handler'
-import CUSTOM_COLOR from '../constants/colors'
-import Status from '../components/Status'
-import { Acount } from './OverView'
-import PerSon from '../components/PerSon'
-import { IM_MauAo } from '../assets/images'
-import OneOrder from '../components/OneOrder'
-import { collection, onSnapshot, query, doc, getDoc, querySnapshot, getDocs, where, updateDoc } from "firebase/firestore";
 import { Firestore } from '../../../Firebase/firebase'
-import { async } from '@firebase/util'
+import BackTo from '../components/BackTo'
+import OneOrder from '../components/OneOrder'
+import PerSon from '../components/PerSon'
+import Status from '../components/Status'
+import CUSTOM_COLOR from '../constants/colors'
 
 
 

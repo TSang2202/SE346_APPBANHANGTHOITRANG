@@ -1,13 +1,10 @@
-import React, {useState} from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { AirbnbRating, Rating } from "react-native-ratings";
-import { CurvedTransition } from "react-native-reanimated";
-import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
-import { backto, IC_Cancle, IC_Down, IC_Heart, IC_ShoppingCart } from "../assets/icons";
-import { IM_MauAo} from "../assets/images";
 import ButtonDetail from "../../StaffView/components/ButtonDetail";
 import StarRating from "../../StaffView/components/StartRating";
+import { IC_Down, backto } from "../assets/icons";
+import { IM_MauAo } from "../assets/images";
 import CUSTOM_COLOR from "../constants/colors";
 
 

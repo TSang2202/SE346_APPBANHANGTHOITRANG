@@ -1,16 +1,14 @@
+import { doc, getDoc } from "firebase/firestore"
+import React, { useEffect, useState } from 'react'
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import BackTo from '../components/BackTo'
-import CUSTOM_COLOR from '../constants/colors'
-import { Address, Delivery, Payment } from '../assets/icons'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Acount } from './OverView'
-import PerSon from '../components/PerSon'
-import { IM_MauAo } from '../assets/images'
-import ButtonDetail from '../components/ButtonDetail'
 import { Firestore } from '../../../Firebase/firebase'
-import { collection, onSnapshot, query, doc, getDoc, querySnapshot, getDocs, where, updateDoc } from "firebase/firestore";
+import { Address, Delivery, Payment } from '../assets/icons'
+import BackTo from '../components/BackTo'
+import ButtonDetail from '../components/ButtonDetail'
 import OneOrder from '../components/OneOrder'
+import PerSon from '../components/PerSon'
+import CUSTOM_COLOR from '../constants/colors'
 
 
 const DataDelivery = {

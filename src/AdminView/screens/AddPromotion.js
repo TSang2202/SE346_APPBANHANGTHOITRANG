@@ -1,21 +1,21 @@
-import React, {useState} from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useState } from 'react';
 import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  TextInput,
   ImageBackground,
   Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import CUSTOM_COLOR from '../constants/colors';
+import { Dropdown } from 'react-native-element-dropdown';
+import { border_add } from '../assets/images';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
-import {Dropdown} from 'react-native-element-dropdown';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import {border_add} from '../assets/images';
+import CUSTOM_COLOR from '../constants/colors';
 import FONT_FAMILY from '../constants/fonts';
 
 const AddPromotion = props => {

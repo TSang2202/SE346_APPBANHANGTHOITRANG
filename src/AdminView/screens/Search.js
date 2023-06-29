@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Search from '../components/Search'
+import { StyleSheet, View } from 'react-native'
 import MyProduct1 from '../components/MyProductOne'
-import { Data } from './MyProduct'
-import Size from '../constants/size'
+
 import CUSTOM_COLOR from '../constants/colors'
+import Size from '../constants/size'
+import { Data } from './MyProduct'
 export default function SearchSrc({navigation}) {
   return (
     <View style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: Size.DeviceHeight}}>

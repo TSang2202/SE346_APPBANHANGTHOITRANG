@@ -147,6 +147,7 @@ function HomeScreenCustomer({ navigation }) {
     <View style={{ backgroundColor: CUSTOM_COLOR.White }}
       nestedScrollEnabled={true}
     >
+
       <View style={{ flexDirection: 'row' }}>
 
 

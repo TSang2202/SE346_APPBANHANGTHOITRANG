@@ -1,30 +1,30 @@
+import React from 'react';
 import {
-  View,
-  Text,
+  FlatList,
+  Image,
   SafeAreaView,
   StyleSheet,
-  Image,
+  Text,
   TouchableOpacity,
-  FlatList,
+  View,
 } from 'react-native';
-import React from 'react';
+import { firebase } from '../../../Firebase/firebase.js';
+import ViewNow from '../../StaffView/components/ViewNow';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
-import ViewNow from '../../StaffView/components/ViewNow';
-import {firebase} from '../../../Firebase/firebase.js';
 import {
-  IC_product,
-  IC_order,
-  IC_logout,
-  IC_promotions,
   IC_financial,
-  IC_user,
-  IC_setting,
+  IC_logout,
   IC_messenger,
   IC_notification,
+  IC_order,
+  IC_product,
+  IC_promotions,
+  IC_setting,
+  IC_user,
 } from '../assets/icons/index.js';
-import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
+import MenuIcon from '../components/MenuIcon.js';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',

@@ -1,20 +1,16 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  StyleSheet,
+  Image,
   SafeAreaView,
-  View,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  Image,
+  View,
 } from 'react-native';
-import Search from '../components/Search';
-import ButtonDetail from '../components/ButtonDetail';
-import OneStaff from '../components/OneStaff';
-import {IM_AnhGiay1} from '../../CustomerView/assets/images';
-import HeaderWithBack from '../components/HeaderWithBack';
+import AccountCard from '../components/AccountCard';
+
 import CUSTOM_COLOR from '../constants/colors';
 import FONT_FAMILY from '../constants/fonts';
-import AccountCard from '../components/AccountCard';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',

@@ -1,17 +1,19 @@
-import { View, Text, SafeAreaView, 
-  StyleSheet,Image,TouchableOpacity,FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native'
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react';
+import {
+  FlatList,
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import Product from '../../StaffView/components/Product';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import FONT_FAMILY from '../../StaffView/constants/fonts.js';
-import Search from '../components/Search';
+import { backto } from '../assets/icons/index.js';
+import { IM_Giay1, IM_Giay2, IM_Giay3, IM_Giay4 } from '../assets/images/index.js';
+import ItemList from '../components/ItemList';
 import scale from '../constants/responsive.js';
 import { Acount } from './OverView.js';
-import Product from '../../StaffView/components/Product';
-import ItemList from '../components/ItemList';
-import { IM_Giay1,IM_Giay2,IM_Giay3,IM_Giay4 } from '../assets/images/index.js';
-import Size from '../constants/size.js';
-import { backto } from '../assets/icons/index.js';
 const datasdetail = [
   {
     id: '1',

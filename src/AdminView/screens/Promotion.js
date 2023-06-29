@@ -1,10 +1,9 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View, Image} from 'react-native';
-import CUSTOM_COLOR from '../constants/colors';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
 import PromotionCard from '../components/PromotionCard';
-import {IC_Momo} from '../../CustomerView/assets/icons';
+import CUSTOM_COLOR from '../constants/colors';
 
 const Promotion = props => {
   const {navigation} = props;

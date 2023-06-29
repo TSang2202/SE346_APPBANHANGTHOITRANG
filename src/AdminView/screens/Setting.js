@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, TouchableWithoutFeedback, TouchableOpacity, Image, ImageBackground } from 'react-native'
 import React from 'react'
-import { Acount } from './OverView'
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CUSTOM_COLOR from '../constants/colors'
 import BackTo from '../components/BackTo'
+import CUSTOM_COLOR from '../constants/colors'
+import { Acount } from './OverView'
 function Setting({navigation}){
     const changeBackground = ()=>{}
     const changeAvatar = ()=>{}

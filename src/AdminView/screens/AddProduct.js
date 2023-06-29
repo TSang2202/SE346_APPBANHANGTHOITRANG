@@ -1,18 +1,14 @@
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore"
 import React, { useEffect, useState } from 'react'
-import BackTo from '../components/BackTo'
-import CUSTOM_COLOR from '../constants/colors'
-import ButtonDetail from '../components/ButtonDetail'
-import { AddImage } from '../assets/images'
-import Search from '../components/Search'
-import Categorybutton from '../components/categorybutton'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import CheckBox from 'react-native-check-box'
-import { Firestore, Storage } from '../../../Firebase/firebase'
-import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes, put } from "firebase/storage";
-import { Dropdown } from 'react-native-element-dropdown';
-import { firebase, storage } from 'firebase'
+import { Dropdown } from 'react-native-element-dropdown'
+import { launchImageLibrary } from 'react-native-image-picker'
+import { Firestore } from '../../../Firebase/firebase'
+import { AddImage } from '../assets/images'
+import BackTo from '../components/BackTo'
+import ButtonDetail from '../components/ButtonDetail'
+import CUSTOM_COLOR from '../constants/colors'
 
 
 

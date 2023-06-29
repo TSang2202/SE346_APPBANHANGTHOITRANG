@@ -1,18 +1,16 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import BackTo from '../components/BackTo'
 import { SearchIcon } from '../../CustomerView/assets/icons'
-import { FlatList, ScrollView } from 'react-native-gesture-handler'
-import CUSTOM_COLOR from '../constants/colors'
+import BackTo from '../components/BackTo'
 import ButtonDetail from '../components/ButtonDetail'
-import Status from '../components/Status'
-import { IM_MauAo } from '../assets/images'
 import MyProduct1 from '../components/MyProductOne'
+import Status from '../components/Status'
+import CUSTOM_COLOR from '../constants/colors'
 
-import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
-import { Firestore, Storage } from '../../../Firebase/firebase'
-import { async } from '@firebase/util'
+import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore"
+import { Firestore } from '../../../Firebase/firebase'
 
 
 
