@@ -9,7 +9,7 @@ import Categories from "../components/Categories";
 import { Timestamp, addDoc, collection, doc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import ProductView from "../components/ProductView";
 import CUSTOM_COLOR from "../constants/colors";
-import Search from ;
+
 
 //import { get } from "firebase/database";
 
