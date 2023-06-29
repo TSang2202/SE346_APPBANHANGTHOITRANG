@@ -5,6 +5,8 @@ import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab';
 import StackNavigator from './src/StaffView/navigation/navigation';
 import AdminStackNavigator from './src/AdminView/navigation/navigation';
 import {doc, getDoc} from 'firebase/firestore';
+import {NavigationContainer} from '@react-navigation/native';
+import StackHome from './src/CustomerView/navigation/StackHome';
 
 function App() {
   // const [initializing, setInitializing] = useState(true);
@@ -154,6 +156,7 @@ function App() {
   } else if (userType === 'staff') {
     return <StackNavigator />;
   }
+
 }
 
 export default () => {
