@@ -3,8 +3,7 @@ import {firebase, Firestore} from './Firebase/firebase';
 import MainNavigator from './src/Login_SignUp/navigation/navigation';
 import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab';
 import StackNavigator from './src/StaffView/navigation/navigation';
-import AdminStackNavigator from './src/AdminView/navigation/navigation';
-import {doc, getDoc} from 'firebase/firestore';
+import AdminNavigationContainer from './src/AdminView/navigation/admin_navigation';
 
 function App() {
   const [userType, setUserType] = useState('');
@@ -59,10 +58,12 @@ function App() {
   if (userType === 'customer') {
     return <CustomerBottomTab />;
   } else if (userType === 'admin') {
-    return <AdminStackNavigator />;
+    return <AdminNavigationContainer />;
   } else if (userType === 'staff') {
     return <StackNavigator />;
   }
+
+  // return <AdminNavigationContainer />;
 }
 
 export default () => {

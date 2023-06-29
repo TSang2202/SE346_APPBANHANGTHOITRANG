@@ -6,7 +6,7 @@ import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import Search from '../components/Search';
 import scale from '../constants/responsive.js';
-import { Acount } from './OverView.js';
+import {Acount} from './AdminOverView';
 import Product from '../../StaffView/components/Product';
 import ItemList from '../components/ItemList';
 import { IM_Giay1,IM_Giay2,IM_Giay3,IM_Giay4 } from '../assets/images/index.js';
