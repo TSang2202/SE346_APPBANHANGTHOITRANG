@@ -64,6 +64,7 @@ const SignUp = props => {
       alert(error);
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground

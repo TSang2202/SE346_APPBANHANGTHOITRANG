@@ -19,9 +19,8 @@ import {
   IC_promotions,
   IC_financial,
   IC_user,
-  IC_setting,
   IC_messenger,
-  IC_notification,
+  IC_User,
 } from '../assets/icons/index.js';
 import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
@@ -67,10 +66,10 @@ const AdminOverView = props => {
     <SafeAreaView style={styles.container}>
       <>
         <View style={styles.menuContainer}>
-          <View style={{width: 32, height: 32}}>
+          <View style={{width: 32, height: 37}}>
             <MenuIcon
               onPress={() => navigation.navigate('Setting')}
-              source={IC_setting}
+              source={IC_User}
             />
           </View>
           <View style={{width: 10, height: '100%'}} />
@@ -80,18 +79,23 @@ const AdminOverView = props => {
               source={IC_messenger}
             />
           </View>
-          <View style={{width: 5, height: '100%'}} />
+          {/* <View style={{width: 5, height: '100%'}} />
           <View style={{width: 35, height: 35}}>
             <MenuIcon
               onPress={() => navigation.navigate('Notification')}
               source={IC_notification}
             />
-          </View>
+          </View> */}
           <View style={{width: 5, height: '100%'}} />
           <View style={{width: 32, height: 32}}>
-            <MenuIcon onPress={firebase.auth().signOut()} source={IC_logout} />
+            <MenuIcon
+              onPress={() => {
+                firebase.auth().signOut();
+              }}
+              source={IC_logout}
+            />
           </View>
-          <View style={{width: 5, height: '100%'}} />
+          <View style={{width: 10, height: '100%'}} />
         </View>
       </>
 
