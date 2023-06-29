@@ -8,6 +8,7 @@ const FONT_FAMILY = {
   Light: Montserrat + 'Light',
   MediumItalic: Montserrat + 'MediumItalic',
   Regular: Monoton + 'Regular',
+  SemiBoldItalic: Montserrat + 'SemiBoldItalic',
 };
 
 export default FONT_FAMILY;

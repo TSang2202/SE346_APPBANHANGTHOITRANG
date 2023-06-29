@@ -4,7 +4,6 @@ import MainNavigator from './src/Login_SignUp/navigation/navigation';
 import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab';
 import StackNavigator from './src/StaffView/navigation/navigation';
 import AdminNavigationContainer from './src/AdminView/navigation/admin_navigation';
-import {doc, getDoc} from 'firebase/firestore';
 
 function App() {
   const [userType, setUserType] = useState('');
