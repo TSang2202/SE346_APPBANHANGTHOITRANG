@@ -44,14 +44,10 @@ function DetailCategoryScreen({ navigation, route }) {
     return (
         <View style={{ flex: 1 }}>
             <View style={{ flexDirection: "row" }}>
-                <Search
-                    style={{ marginVertical: 10, width: "70%" }}
-                    value={searchValue}
-                    onSearch={handleSearch}
-                />
+                
             </View>
             <FlatList
-                data={filteredItems}
+                data={items}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={{

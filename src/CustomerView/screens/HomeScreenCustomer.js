@@ -9,6 +9,7 @@ import Categories from "../components/Categories";
 import { Timestamp, addDoc, collection, doc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import ProductView from "../components/ProductView";
 
+import Search from "../../StaffView/components/Search";
 import CUSTOM_COLOR from "../constants/colors";
 
 //import { get } from "firebase/database";
@@ -148,7 +149,9 @@ function HomeScreenCustomer({ navigation }) {
       nestedScrollEnabled={true}
     >
       <View style={{ flexDirection: 'row' }}>
-       
+        <Search>
+          
+        </Search>
 
         <TouchableOpacity style={{
           backgroundColor: CUSTOM_COLOR.Mercury,
