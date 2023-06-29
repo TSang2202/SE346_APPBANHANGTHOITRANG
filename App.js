@@ -63,6 +63,8 @@ function App() {
   } else if (userType === 'staff') {
     return <StackNavigator />;
   }
+
+  // return <AdminNavigationContainer />;
 }
 
 export default () => {

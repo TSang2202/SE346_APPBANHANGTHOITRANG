@@ -15,7 +15,11 @@ import {
 } from '../../Login_SignUp/assets/icons/index';
 
 const PasswordCard = props => {
-  const [isSecureEntry, setIsSecureEntry] = useState(true);
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!isPasswordVisible);
+  };
 
   return (
     <View style={styles.container}>
@@ -27,7 +31,7 @@ const PasswordCard = props => {
             style={styles.textinputStyle}
             placeholder={props.txtInput}
             // placeholderTextColor='CUSTOM_COLOR.Black'
-            secureTextEntry={isSecureEntry}
+            secureTextEntry={!isPasswordVisible}
             autoCapitalize="none"
             autoCorrect={false}
             onChangeText={props.onChangeText}
@@ -35,14 +39,17 @@ const PasswordCard = props => {
         </View>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity
-            onPress={() => {
-              setIsSecureEntry(!isSecureEntry);
-            }}>
-            {isSecureEntry === true ? (
-              <Image source={IC_visibility1} style={styles.iconStyle} />
-            ) : (
-              <Image source={IC_visibility} style={styles.iconStyle} />
-            )}
+            style={{
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onPress={togglePasswordVisibility}>
+            <Image
+              style={styles.iconStyle}
+              source={isPasswordVisible ? IC_visibility : IC_visibility1}
+            />
           </TouchableOpacity>
 
           {/* <Image
