@@ -29,7 +29,7 @@ const AddAccount = props => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const user = 'user';
+  const user = 'staff';
 
   const signUp = async (
     fullName,
@@ -171,7 +171,7 @@ const AddAccount = props => {
               if (password === confirmPassword) {
                 signUp(fullName, email, phoneNumber, birth, password, user);
 
-                navigation.navigate('User');
+                navigation.navigate('ManageUser');
               } else {
                 alert('Corfirm password not match with password');
               }
