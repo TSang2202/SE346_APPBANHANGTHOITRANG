@@ -6,7 +6,6 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  Button,
   TextInput,
   ImageBackground,
   Platform,
@@ -27,14 +26,44 @@ const AddPromotion = props => {
   const [danhMuc, setDanhMuc] = useState([]);
   const [value, setValue] = useState(null);
 
+  // const [date, setDate] = useState(new Date());
+  // const [mode, setMode] = useState('date');
+  // const [show, setShow] = useState(false);
+  // const [text, setText] = useState('01/01/2023');
+
+  // const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate || date;
+  //   setShow(Platform.OS === 'android');
+  //   setDate(currentDate);
+
+  //   let tempDate = new Date(currentDate);
+  //   let fDate =
+  //     tempDate.getDate() +
+  //     '/' +
+  //     (tempDate.getMonth() + 1) +
+  //     '/' +
+  //     tempDate.getFullYear();
+  //   setText(fDate);
+
+  //   console.log(fDate);
+  // };
+
+  // const showMode = currentMode => {
+  //   setShow(true);
+  //   setMode(currentMode);
+  //   // if (Platform.OS === 'android') {
+  //   //   setShow(false);
+  //   //   // for iOS, add a button that closes the picker
+  //   // }
+  // };
+
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
   const [text, setText] = useState('01/01/2023');
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'android');
+    setShowPicker(Platform.OS === 'ios'); // Hide picker for iOS after selection
     setDate(currentDate);
 
     let tempDate = new Date(currentDate);
@@ -49,13 +78,8 @@ const AddPromotion = props => {
     console.log(fDate);
   };
 
-  const showMode = currentMode => {
-    setShow(true);
-    setMode(currentMode);
-    // if (Platform.OS === 'android') {
-    //   setShow(false);
-    //   // for iOS, add a button that closes the picker
-    // }
+  const showDateTimePicker = () => {
+    setShowPicker(true);
   };
 
   return (
@@ -274,42 +298,17 @@ const AddPromotion = props => {
                     {/* https://www.youtube.com/watch?v=Imkw-xFFLeE */}
                     <TouchableOpacity
                       style={styles.dateStyle}
-                      onPress={() => {
-                        showMode('date');
-                      }}>
+                      onPress={showDateTimePicker}>
                       <Text> {text}</Text>
                     </TouchableOpacity>
-
-                    {show && (
+                    {showPicker && (
                       <DateTimePicker
-                        testID="dateTimePicker"
                         value={date}
-                        mode="mode"
-                        display="default"
+                        mode="date" // Can be "date", "time", or "datetime"
+                        display="default" // Can be "default", "spinner", or "calendar"
                         onChange={onChange}
                       />
                     )}
-
-                    {/* <View style={styles.comboType}>
-                      <Button
-                        title="DatePicker"
-                        onPress={() => {
-                          showMode('date');
-                        }}
-                      />
-                    </View>
-
-                    {show && (
-                      <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode="mode"
-                        is24Hour={true}
-                        display="default"
-                        onChange={onChange}
-                      />
-                    )} */}
-
                     <View style={{width: '8%', height: '100%'}} />
                   </View>
                 </View>
@@ -341,18 +340,14 @@ const AddPromotion = props => {
                     ]}>
                     <TouchableOpacity
                       style={styles.dateStyle}
-                      onPress={() => {
-                        showMode('date');
-                      }}>
+                      onPress={showDateTimePicker}>
                       <Text> {text}</Text>
                     </TouchableOpacity>
-
-                    {show && (
+                    {showPicker && (
                       <DateTimePicker
-                        testID="dateTimePicker"
                         value={date}
-                        mode="mode"
-                        display="default"
+                        mode="date" // Can be "date", "time", or "datetime"
+                        display="default" // Can be "default", "spinner", or "calendar"
                         onChange={onChange}
                       />
                     )}
@@ -412,7 +407,6 @@ const AddPromotion = props => {
             </>
 
             <View style={{width: '100%', height: 10}} />
-
           </ScrollView>
         </View>
       </>
