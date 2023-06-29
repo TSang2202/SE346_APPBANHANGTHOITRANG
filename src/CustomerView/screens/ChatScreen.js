@@ -1,13 +1,10 @@
+import { Timestamp, addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, Keyboard } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Firestore } from "../../../Firebase/firebase";
 import { IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../assets/icons";
-import { IM_AnhGiay2 } from "../assets/images";
 import Message from "../components/Message";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, query, where, onSnapshot, Timestamp, addDoc, updateDoc, orderBy, doc, getDoc } from "firebase/firestore";
-import { Firestore } from "../../../Firebase/firebase";
-import { async } from "@firebase/util";
-import { set } from "firebase/database";
 
 
 function ChatScreen({ navigation, route }) {

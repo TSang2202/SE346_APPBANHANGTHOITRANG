@@ -1,25 +1,22 @@
-import React, {useState} from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useState } from 'react';
 import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  ImageBackground,
   Image,
+  ImageBackground,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
-  Platform,
-  Button,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import CUSTOM_COLOR from '../../AdminView/constants/colors';
-import FONT_FAMILY from '../constants/fonts';
+import { Dropdown } from 'react-native-element-dropdown';
 import CustomHeader from '../../AdminView/components/CustomHeader';
-import {IMG_Rectangle} from '../../Login_SignUp/assets/images';
-import {IC_User} from '../assets/icons';
-import AccountInputCard from '../components/AccountInputCard';
-import {Dropdown} from 'react-native-element-dropdown';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import CUSTOM_COLOR from '../../AdminView/constants/colors';
+import { IMG_Rectangle } from '../../Login_SignUp/assets/images';
+import { IC_User } from '../assets/icons';
 
 const ChangeProfile = props => {
   const {navigation} = props;

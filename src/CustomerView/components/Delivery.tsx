@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 import CUSTOM_COLOR from "../constants/colors";
-import CustomerBottomTab from "../navigation/CustomerBottomTab";
 
 
 const Delivery = (props: any) => {

@@ -1,19 +1,14 @@
 
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, Alert } from "react-native";
+import { addDoc, collection, doc, onSnapshot, updateDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { Alert, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { AirbnbRating, Rating } from "react-native-ratings";
-import { CurvedTransition } from "react-native-reanimated";
-import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
-import { IC_Back, IC_Cancle, IC_Down, IC_Heart, IC_Heart_Red, IC_ShoppingCart, IC_StartCorner, IC_StartFull } from "../assets/icons";
-import { IM_MauAo } from "../assets/images";
+import Swiper from 'react-native-swiper';
+import { Firestore, firebase } from "../../../Firebase/firebase";
+import { IC_Back, IC_Cancle, IC_Down, IC_Heart, IC_Heart_Red, IC_ShoppingCart } from "../assets/icons";
 import Button from "../components/Button";
 import StarRating from "../components/StarRating";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, addDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
-import { async } from "@firebase/util";
-import { Firestore, firebase } from "../../../Firebase/firebase";
-import Swiper from 'react-native-swiper'
 
 
 function DetailProduct({ navigation, route }) {

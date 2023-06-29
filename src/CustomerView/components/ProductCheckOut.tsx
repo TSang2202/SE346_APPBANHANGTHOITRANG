@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from "react-native";
+import React from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { IC_Delete, IC_Next } from "../assets/icons";
-import { IM_AnhGiay1 } from "../assets/images";
 import CUSTOM_COLOR from "../constants/colors";
 
 

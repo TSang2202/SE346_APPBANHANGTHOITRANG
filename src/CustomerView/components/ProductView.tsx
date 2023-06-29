@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image } from "react-native";
-import FONT_FAMILY from "../constants/fonts";
+import { Image, Text, View } from "react-native";
 import Size from "../constants/size";
 
 

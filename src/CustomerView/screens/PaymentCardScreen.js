@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
-import { IC_Back, IC_Bank, IC_Banking, IC_HandMoney, IC_Location, IC_Momo, IC_MyLocation } from "../assets/icons";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { IC_Back, IC_Bank } from "../assets/icons";
 import Button from "../components/Button";
 import InputData from "../components/InputData";
 import CUSTOM_COLOR from "../constants/colors";

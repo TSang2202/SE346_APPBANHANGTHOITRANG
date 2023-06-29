@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { doc, getDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import {
+  Image,
   StyleSheet,
   Text,
-  TextInput,
-  View,
-  Image,
-  FlatList,
   TouchableOpacity,
-  ViewComponent,
+  View
 } from 'react-native';
+import { Firestore, firebase } from '../../../Firebase/firebase.js';
 import {
   IC_Delivery,
   IC_Gift,
@@ -22,12 +22,8 @@ import {
   IC_Theme,
   IC_Wallet,
 } from '../assets/icons';
-import {IM_AnhGiay2} from '../assets/images';
+import { IM_AnhGiay2 } from '../assets/images';
 import CUSTOM_COLOR from '../constants/colors';
-import {firebase, Firestore} from '../../../Firebase/firebase.js';
-import {useNavigation} from '@react-navigation/native';
-import {doc, getDoc} from 'firebase/firestore';
-import {async} from '@firebase/util';
 function AccountScreen() {
   const navigation = useNavigation();
   const hanleSignOut = () => {};

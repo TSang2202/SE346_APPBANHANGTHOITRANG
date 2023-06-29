@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image } from "react-native";
+import { Image, Text, View } from "react-native";
 
 
 const ProductCard = (props: any) => {

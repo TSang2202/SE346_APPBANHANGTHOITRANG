@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
+import { Image, TouchableWithoutFeedback, View } from "react-native";
 import { IC_StartCorner, IC_StartFull } from "../assets/icons";
 
-import CUSTOM_COLOR from "../constants/colors";
 
 
 const StarRating = (props: any) =>{

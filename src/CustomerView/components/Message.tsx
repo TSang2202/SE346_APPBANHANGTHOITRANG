@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image } from "react-native";
+import { Text, View } from "react-native";
 import CUSTOM_COLOR from "../constants/colors";
-import CustomerBottomTab from "../navigation/CustomerBottomTab";
 
 
 const Message = (props: any) =>{

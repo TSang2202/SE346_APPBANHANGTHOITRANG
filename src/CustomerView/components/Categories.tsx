@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, ImageBackground } from "react-native";
+import { Image, Text, View } from "react-native";
 import CUSTOM_COLOR from "../constants/colors";
 
 

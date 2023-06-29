@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, ViewComponent } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { IC_Clock } from "../assets/icons";
 import CUSTOM_COLOR from "../constants/colors";
 import StarRating from "./StarRating";

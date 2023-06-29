@@ -1,16 +1,13 @@
-import { async } from "@firebase/util";
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { Timestamp, addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Firestore, firebase } from "../../../Firebase/firebase";
 import { IC_Back, IC_CheckGreen, IC_CheckGrey, IC_Location, IC_Next, IC_Visa } from "../assets/icons";
-import { IM_AnhGiay1 } from "../assets/images";
 import Button from "../components/Button";
 import Delivery from "../components/Delivery";
-import ProductCard from "../components/ProductCard";
 import ProductCheckOut from "../components/ProductCheckOut";
 import Promotion from "../components/Promotion";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, addDoc, Timestamp, doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 
 function CheckoutScreen({ navigation, route }) {

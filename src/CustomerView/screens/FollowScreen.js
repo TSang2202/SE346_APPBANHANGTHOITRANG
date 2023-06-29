@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
-import { IC_Heart, IC_Heart3X } from "../assets/icons";
-import Button from "../components/Button";
-import CUSTOM_COLOR from "../constants/colors";
-import { collection, addDoc, doc, updateDoc, onSnapshot, getDocs, where } from "firebase/firestore";
-import { async } from "@firebase/util";
-import { Firestore, firebase } from "../../../Firebase/firebase";
 import { query } from "firebase/database";
+import { collection, getDocs, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Firestore, firebase } from "../../../Firebase/firebase";
+import { IC_Heart3X } from "../assets/icons";
+import Button from "../components/Button";
 import ProductView from "../components/ProductView";
+import CUSTOM_COLOR from "../constants/colors";
 function FollowScreen() {
     const [data, setdata] = useState([]);
     const getDataYeuThich = async () => {

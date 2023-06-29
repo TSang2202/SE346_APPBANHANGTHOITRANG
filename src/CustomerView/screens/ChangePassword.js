@@ -1,20 +1,19 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  ImageBackground,
   Alert,
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  View,
 } from 'react-native';
+import { firebase } from '../../../Firebase/firebase.js';
+import { IMG_Rectangle182 } from '../../Login_SignUp/assets/images/index.js';
+import CustomButton from '../../Login_SignUp/components/Buttons/CustomButton.js';
+import PasswordCard from '../../Login_SignUp/components/Cards/PasswordCard.js';
+import HeaderTitlle from '../../Login_SignUp/components/Header/HeaderTitlle.js';
+import HeaderWithBack from '../../Login_SignUp/components/Header/HeaderWithBack.js';
 import CUSTOM_COLOR from '../../Login_SignUp/constants/colors.js';
 import FONT_FAMILY from '../../Login_SignUp/constants/fonts.js';
-import HeaderWithBack from '../../Login_SignUp/components/Header/HeaderWithBack.js';
-import HeaderTitlle from '../../Login_SignUp/components/Header/HeaderTitlle.js';
-import HederContent from '../../Login_SignUp/components/Header/HederContent.js';
-import PasswordCard from '../../Login_SignUp/components/Cards/PasswordCard.js';
-import CustomButton from '../../Login_SignUp/components/Buttons/CustomButton.js';
-import {firebase, Firestore} from '../../../Firebase/firebase.js';
-import {IMG_Rectangle182} from '../../Login_SignUp/assets/images/index.js';
 
 const ChangePassword = props => {
   const {navigation} = props;

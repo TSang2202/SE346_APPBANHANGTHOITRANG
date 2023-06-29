@@ -1,14 +1,10 @@
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, Keyboard } from "react-native";
-import { IC_Add, IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../assets/icons";
-import { IM_AnhGiay2 } from "../assets/images";
-import Message from "../components/Message";
-import CUSTOM_COLOR from "../constants/colors";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Firestore, firebase } from "../../../Firebase/firebase";
-import { async } from "@firebase/util";
-import { set } from "firebase/database";
+import { IC_Add, IC_Back } from "../assets/icons";
 import Delivery from "../components/Delivery";
+import CUSTOM_COLOR from "../constants/colors";
 
 
 

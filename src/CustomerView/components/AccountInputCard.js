@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Text, TextInput} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
-import FONT_FAMILY from '../constants/fonts';
 
 const AccountInputCard = props => {
   <View style={styles.inputContainer}>

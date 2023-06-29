@@ -4,8 +4,6 @@ import { FlatList, Image, Text, TouchableOpacity, TouchableWithoutFeedback, View
 import { Firestore } from "../../../Firebase/firebase";
 import { IC_Back, IC_ShoppingCart } from "../assets/icons";
 import ProductView from "../components/ProductView";
-
-import Search from "../../StaffView/components/Search";
 import CUSTOM_COLOR from "../constants/colors";
 
 
