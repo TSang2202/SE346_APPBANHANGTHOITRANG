@@ -13,14 +13,15 @@ import {Acount} from './AdminOverView';
 import CUSTOM_COLOR from '../constants/colors';
 import UserChat from '../components/UserChat';
 import Size from '../constants/size';
-import {Firestore} from '../../../Firebase/firebase';
+import {firebase, Firestore} from '../../../Firebase/firebase';
 import {doc, getDoc, getDocs, collection} from 'firebase/firestore';
 import {async} from '@firebase/util';
-
+import {IC_User} from '../assets/icons/index';
 import PropTypes from 'deprecated-react-native-prop-types';
 
 export default function Chat({navigation}) {
   const [users, setUser] = useState([]);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const getUser = async item => {
     item = item.trim();
@@ -81,7 +82,26 @@ export default function Chat({navigation}) {
     });
     getDataChat();
     // console.log(users)
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
+      setImageUrl(url),
+    );
   }, []);
+
+  const fetchImageUrl = async (documentId, fieldName) => {
+    try {
+      const documentSnapshot = await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .get();
+      const data = documentSnapshot.data();
+      const imageUrl = data[fieldName];
+      return imageUrl;
+    } catch (error) {
+      console.error('Error fetching image URL:', error);
+      return null;
+    }
+  };
 
   return (
     <SafeAreaView
@@ -93,7 +113,31 @@ export default function Chat({navigation}) {
           width: '100%',
           height: 70,
         }}>
-        <Image
+        {imageUrl ? (
+          <Image
+            source={{uri: imageUrl}}
+            style={{
+              aspectRatio: 1,
+              borderRadius: 55,
+              width: '15%',
+              marginLeft: 15,
+            }}
+          />
+        ) : (
+          <Image
+            source={IC_User}
+            style={{
+              aspectRatio: 1,
+              borderRadius: 55,
+              width: '15%',
+              marginLeft: 15,
+              borderColor: CUSTOM_COLOR.Black,
+              borderWidth: 1,
+            }}
+          />
+        )}
+
+        {/* <Image
           source={{uri: Acount.avartar}}
           style={{
             aspectRatio: 1,
@@ -101,7 +145,7 @@ export default function Chat({navigation}) {
             width: '15%',
             marginLeft: 15,
           }}
-        />
+        /> */}
         <Text
           style={{
             fontWeight: 'bold',
@@ -112,7 +156,10 @@ export default function Chat({navigation}) {
           Chat
         </Text>
       </View>
-      <Search placeholder="Search" />
+
+      <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
+        <Search placeholder="Search" />
+      </View>
 
       {/* {
           users ?
