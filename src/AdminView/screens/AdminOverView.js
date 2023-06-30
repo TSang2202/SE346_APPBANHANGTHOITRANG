@@ -1,3 +1,4 @@
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,7 +8,6 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React from 'react';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import ViewNow from '../../StaffView/components/ViewNow';
@@ -19,12 +19,13 @@ import {
   IC_promotions,
   IC_financial,
   IC_user,
-  IC_setting,
   IC_messenger,
-  IC_notification,
+  IC_User,
 } from '../assets/icons/index.js';
 import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
+import {Storage} from '../../../Firebase/firebase';
+import LoadingComponent from '../components/Loading';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -63,161 +64,247 @@ const Order = [
 
 const AdminOverView = props => {
   const {navigation} = props;
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      // Assume data is fetched here
+      const fetchedData = 'Sample Data';
+      setData(fetchedData);
+      setIsLoading(false);
+    }, 2000);
+
+    fetchUserData(firebase.auth().currentUser.uid);
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
+      setImageUrl(url),
+    );
+  }, []);
+
+  const fetchUserData = async userId => {
+    try {
+      const userRef = firebase.firestore().collection('NGUOIDUNG').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setUserData(userData);
+      } else {
+        console.log('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const fetchImageUrl = async (documentId, fieldName) => {
+    try {
+      const documentSnapshot = await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .get();
+      const data = documentSnapshot.data();
+      const imageUrl = data[fieldName];
+      return imageUrl;
+    } catch (error) {
+      console.error('Error fetching image URL:', error);
+      return null;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <>
-        <View style={styles.menuContainer}>
-          <View style={{width: 32, height: 32}}>
-            <MenuIcon
-              onPress={() => navigation.navigate('Setting')}
-              source={IC_setting}
-            />
-          </View>
-          <View style={{width: 10, height: '100%'}} />
-          <View style={{width: 30, height: 30}}>
-            <MenuIcon
-              onPress={() => navigation.navigate('Chat')}
-              source={IC_messenger}
-            />
-          </View>
-          <View style={{width: 5, height: '100%'}} />
+      {userData ? (
+        <>
+          <>
+            <View style={styles.menuContainer}>
+              <View style={{width: 32, height: 37}}>
+                <MenuIcon
+                  onPress={() => navigation.navigate('Setting')}
+                  source={IC_User}
+                />
+              </View>
+              <View style={{width: 10, height: '100%'}} />
+              <View style={{width: 30, height: 30}}>
+                <MenuIcon
+                  onPress={() => navigation.navigate('Chat')}
+                  source={IC_messenger}
+                />
+              </View>
+              {/* <View style={{width: 5, height: '100%'}} />
           <View style={{width: 35, height: 35}}>
             <MenuIcon
               onPress={() => navigation.navigate('Notification')}
               source={IC_notification}
             />
-          </View>
-          <View style={{width: 5, height: '100%'}} />
-          <View style={{width: 32, height: 32}}>
-            <MenuIcon onPress={firebase.auth().signOut()} source={IC_logout} />
-          </View>
-          <View style={{width: 5, height: '100%'}} />
-        </View>
-      </>
+          </View> */}
+              <View style={{width: 5, height: '100%'}} />
+              <View style={{width: 32, height: 32}}>
+                <MenuIcon
+                  onPress={() => {
+                    firebase.auth().signOut();
+                  }}
+                  source={IC_logout}
+                />
+              </View>
+              <View style={{width: 10, height: '100%'}} />
+            </View>
+          </>
 
-      <View style={styles.spaceContainer} />
+          <View style={styles.spaceContainer} />
 
-      <>
-        <View style={styles.accountContainer}>
-          <View style={styles.infoContainer}>
-            <View style={{width: 10, height: '100%'}} />
-            <View style={styles.avataContainer}>
-              <Image
-                source={{uri: Acount.avartar}}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 50,
-                  resizeMode: 'center',
-                }}
-              />
+          <>
+            <View style={styles.accountContainer}>
+              <View style={styles.infoContainer}>
+                <View style={{width: 10, height: '100%'}} />
+                <View style={styles.avataContainer}>
+                  {imageUrl ? (
+                    <Image
+                      source={{uri: imageUrl}}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        aspectRatio: 1,
+                        borderRadius: 50,
+                        resizeMode: 'center',
+                        borderColor: CUSTOM_COLOR.Black,
+                        borderWidth: 1,
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      source={IC_User}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        aspectRatio: 1,
+                        borderRadius: 50,
+                        resizeMode: 'center',
+                        borderColor: CUSTOM_COLOR.Black,
+                        borderWidth: 1,
+                      }}
+                    />
+                  )}
+                </View>
+                <View style={{width: 15, height: '100%'}} />
+                <View
+                  style={{flexDirection: 'column', justifyContent: 'center'}}>
+                  <Text style={[styles.textViewStyles, {fontSize: 20}]}>
+                    {userData.TenND}
+                  </Text>
+                  <View style={{width: '100%', height: 5}} />
+                  <Text style={[styles.textViewStyles, {fontSize: 15}]}>
+                    {userData.LoaiND}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.viewShopContainer}>
+                <TouchableOpacity style={styles.butViewShopContainer}>
+                  <Text
+                    style={{color: CUSTOM_COLOR.Red}}
+                    onPress={() => navigation.navigate('ViewShop1')}>
+                    View Shop
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={{width: 15, height: '100%'}} />
-            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-              <Text style={styles.textViewStyles}>{Acount.name}</Text>
-              <View style={{width: '100%', height: 5}} />
-              <Text style={styles.textViewStyles}>ID:{Acount.id}</Text>
-            </View>
-          </View>
-          <View style={styles.viewShopContainer}>
-            <TouchableOpacity style={styles.butViewShopContainer}>
-              <Text
-                style={{color: CUSTOM_COLOR.Red}}
-                onPress={() => navigation.navigate('ViewShop1')}>
-                View Shop
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </>
+          </>
 
-      <View style={styles.spaceContainer} />
+          <View style={styles.spaceContainer} />
 
-      <>
-        <View style={styles.oderContainer}>
-          <View style={{width: '100%', height: '5%'}} />
-          <View style={styles.textContainer}>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-              }}>
-              <Text style={styles.textViewStyles}>Order New</Text>
+          <>
+            <View style={styles.oderContainer}>
+              <View style={{width: '100%', height: '5%'}} />
+              <View style={styles.textContainer}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                  }}>
+                  <Text style={styles.textViewStyles}>Order New</Text>
+                </View>
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                  }}>
+                  <Text
+                    style={styles.textViewStyles}
+                    onPress={() => navigation.navigate('Order')}>
+                    View Now{' '}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.listOderConatiner}>
+                <FlatList
+                  horizontal={true}
+                  data={Order}
+                  keyExtractor={item => item.id}
+                  renderItem={({item}) => {
+                    return (
+                      <ViewNow number={item.number} status={item.status} />
+                    );
+                  }}
+                />
+              </View>
             </View>
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-              }}>
-              <Text
-                style={styles.textViewStyles}
-                onPress={() => navigation.navigate('Order')}>
-                View Now{' '}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.listOderConatiner}>
-            <FlatList
-              horizontal={true}
-              data={Order}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => {
-                return <ViewNow number={item.number} status={item.status} />;
-              }}
-            />
-          </View>
-        </View>
-      </>
+          </>
 
-      <View style={styles.spaceContainer} />
+          <View style={styles.spaceContainer} />
 
-      <>
-        <View style={styles.functionContainer}>
-          <View style={styles.unitContainer}>
-            <View style={styles.unitContainer}>
-              <FunctionCard
-                onPress={() => navigation.navigate('MyProduct')}
-                source={IC_product}
-                text="My Product"
-              />
+          <>
+            <View style={styles.functionContainer}>
+              <View style={styles.unitContainer}>
+                <View style={styles.unitContainer}>
+                  <FunctionCard
+                    onPress={() => navigation.navigate('MyProduct')}
+                    source={IC_product}
+                    text="My Product"
+                  />
+                </View>
+                <View style={styles.unitContainer}>
+                  <FunctionCard
+                    onPress={() => navigation.navigate('Order')}
+                    source={IC_order}
+                    text="My Order"
+                  />
+                </View>
+                <View style={styles.unitContainer}>
+                  <FunctionCard
+                    onPress={() => navigation.navigate('Promotion')}
+                    source={IC_promotions}
+                    text="Promotions"
+                  />
+                </View>
+              </View>
+              <View style={styles.unitContainer}>
+                <View style={styles.unitContainer}>
+                  <FunctionCard
+                    onPress={() => navigation.navigate('Report')}
+                    source={IC_financial}
+                    text="Financial Report"
+                  />
+                </View>
+                <View style={styles.unitContainer}>
+                  <FunctionCard
+                    onPress={() => navigation.navigate('ManageUser')}
+                    source={IC_user}
+                    text="Manage User"
+                  />
+                </View>
+                <View style={styles.unitContainer} />
+              </View>
             </View>
-            <View style={styles.unitContainer}>
-              <FunctionCard
-                onPress={() => navigation.navigate('Order')}
-                source={IC_order}
-                text="My Order"
-              />
-            </View>
-            <View style={styles.unitContainer}>
-              <FunctionCard
-                onPress={() => navigation.navigate('Promotion')}
-                source={IC_promotions}
-                text="Promotions"
-              />
-            </View>
-          </View>
-          <View style={styles.unitContainer}>
-            <View style={styles.unitContainer}>
-              <FunctionCard
-                onPress={() => navigation.navigate('Report')}
-                source={IC_financial}
-                text="Financial Report"
-              />
-            </View>
-            <View style={styles.unitContainer}>
-              <FunctionCard
-                onPress={() => navigation.navigate('ManageUser')}
-                source={IC_user}
-                text="Manage User"
-              />
-            </View>
-            <View style={styles.unitContainer} />
-          </View>
-        </View>
-      </>
+          </>
+        </>
+      ) : (
+        <LoadingComponent text="Loading data..." />
+      )}
     </SafeAreaView>
   );
 };

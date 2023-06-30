@@ -5,6 +5,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
@@ -14,64 +15,23 @@ import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import HederContent from '../components/Header/HederContent.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
-import {useNavigation} from '@react-navigation/native';
-
 import {firebase, Firestore} from '../../../Firebase/firebase.js';
-import CustomerBottomTab from '../../CustomerView/navigation/CustomerBottomTab.js';
-import StackNavigator from '../../StaffView/navigation/navigation.js';
 import {doc, getDoc} from 'firebase/firestore';
-import {NavigationContainer} from '@react-navigation/native';
 
 const SignIn = props => {
   const {navigation} = props;
-  const [status, setStatus] = useState('');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const loginUser = async (email, password) => {
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-
-      // getDataUser(firebase.auth().currentUser.uid);
-      // console.log(dataUser);
-      // if (firebase.auth().currentUser. === true) {
-      //   return <CustomerBottomTab />;
-      // } else {
-      //   return (
-      //     <NavigationContainer>
-      //       <StackNavigator />
-      //     </NavigationContainer>
-      //   );
-      // }
+      const response = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      console.log('User signed in successfully!', response.user.uid);
     } catch (error) {
-      alert(error.message);
-    }
-  };
-
-  const fogotPassword = email => {
-    firebase
-      .auth()
-      // .sendPasswordResetEmail(firebase.auth().currentUser.email)
-      .sendPasswordResetEmail(email)
-      .then(() => {
-        alert('Password reset email sent');
-      })
-      .catch(error => {
-        alert(error);
-      });
-  };
-  const [dataUser, setDataUser] = useState();
-
-  const getDataUser = async userId => {
-    const docRef = doc(Firestore, 'NGUOIDUNG', userId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log('Document data:', docSnap.data());
-      setDataUser(docSnap.data());
-    } else {
-      console.log('No such document!');
+      console.log('Error signing in:', error.message);
     }
   };
 
@@ -115,10 +75,7 @@ const SignIn = props => {
             text="Sign in"
             onPress={() => {
               loginUser(email, password);
-              // navigation.navigate('Done');
             }}
-
-            // onPress={() => navigation.navigate('SignIn')}
           />
         </View>
       </View>

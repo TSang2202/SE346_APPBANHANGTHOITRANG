@@ -28,8 +28,7 @@ const AddAccount = props => {
   const [birth, setBirth] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  const user = 'user';
+  const [userType, setuserType] = useState('customer');
 
   const signUp = async (
     fullName,
@@ -37,45 +36,31 @@ const AddAccount = props => {
     phoneNumber,
     birth,
     password,
-    user,
+    userType,
   ) => {
-    await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        firebase
-          .auth()
-          .currentUser.sendEmailVerification({
-            handleCodeInApp: true,
-            url: 'http://shoppingapp-ada07.firebaseapp.com',
-          })
-          .then(() => {
-            alert('Add account successful. Verification email sent');
-          })
-          .catch(error => {
-            alert(error.message);
-          })
-          .then(() => {
-            firebase
-              .firestore()
-              .collection('NGUOIDUNG')
-              .doc(firebase.auth().currentUser.uid)
-              .set({
-                TenND: fullName,
-                Email: email,
-                Phone: phoneNumber,
-                NgaySinh: birth,
-                MaND: firebase.auth().currentUser.uid,
-                LoaiND: user,
-              });
-          })
-          .catch(error => {
-            alert(error.message);
-          });
-      })
-      .catch(error => {
-        alert(error.message);
-      });
+    try {
+      const userCredentials = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+      console.log('User registered successfully:', userCredentials.user);
+
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(userCredentials.user.uid)
+        .set({
+          TenND: fullName,
+          Email: email,
+          Phone: phoneNumber,
+          NgaySinh: birth,
+          MaND: userCredentials.user.uid,
+          LoaiND: userType,
+        });
+      console.log('Push data user successfully:', userCredentials.user.uid);
+    } catch (error) {
+      console.log('Error registering user: ', error);
+      alert(error);
+    }
   };
 
   return (
@@ -169,9 +154,8 @@ const AddAccount = props => {
             text="Add new account"
             onPress={() => {
               if (password === confirmPassword) {
-                signUp(fullName, email, phoneNumber, birth, password, user);
-
-                navigation.navigate('User');
+                signUp(fullName, email, phoneNumber, birth, password, userType);
+                navigation.navigate('Congratulation');
               } else {
                 alert('Corfirm password not match with password');
               }

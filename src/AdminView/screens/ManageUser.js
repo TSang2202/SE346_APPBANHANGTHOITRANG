@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -13,8 +13,12 @@ import OneStaff from '../components/OneStaff';
 import {IM_AnhGiay1} from '../../CustomerView/assets/images';
 import HeaderWithBack from '../components/HeaderWithBack';
 import CUSTOM_COLOR from '../constants/colors';
-import FONT_FAMILY from '../constants/fonts';
+import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
 import AccountCard from '../components/AccountCard';
+import {firebase, Firestore} from '../../../Firebase/firebase';
+import LoadingComponent from '../components/Loading';
+import {Storage} from '../../../Firebase/firebase';
+import {IC_User} from '../assets/icons';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -31,63 +35,138 @@ export const Acount = {
 
 const ManageUser = props => {
   const {navigation} = props;
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      // Assume data is fetched here
+      const fetchedData = 'Sample Data';
+      setData(fetchedData);
+      setIsLoading(false);
+    }, 2000);
+
+    fetchUserData(firebase.auth().currentUser.uid);
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
+      setImageUrl(url),
+    );
+  }, []);
+
+  const fetchUserData = async userId => {
+    try {
+      const userRef = firebase.firestore().collection('NGUOIDUNG').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setUserData(userData);
+      } else {
+        console.log('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const fetchImageUrl = async (documentId, fieldName) => {
+    try {
+      const documentSnapshot = await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .get();
+      const data = documentSnapshot.data();
+      const imageUrl = data[fieldName];
+      return imageUrl;
+    } catch (error) {
+      console.error('Error fetching image URL:', error);
+      return null;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{width: '100%', height: 15}} />
 
-      <>
-        <View style={styles.accountContainer}>
-          <View style={styles.avataContainer}>
-            <Image
-              source={{uri: Acount.avartar}}
-              style={{
-                width: '100%',
-                height: '100%',
-                aspectRatio: 1,
-                borderRadius: 50,
-                resizeMode: 'center',
-              }}
-            />
+      {userData ? (
+        <>
+          <View style={styles.accountContainer}>
+            <View style={styles.avataContainer}>
+              {imageUrl ? (
+                <Image
+                  source={{uri: imageUrl}}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 50,
+                    resizeMode: 'center',
+                    borderColor: CUSTOM_COLOR.Black,
+                    borderWidth: 1,
+                  }}
+                />
+              ) : (
+                <Image
+                  source={IC_User}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 50,
+                    resizeMode: 'center',
+                    borderColor: CUSTOM_COLOR.Black,
+                    borderWidth: 1,
+                  }}
+                />
+              )}
+            </View>
+            <View style={{width: 15, height: '100%'}} />
+            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+              <Text style={[styles.textViewStyles, {fontSize: 20}]}>
+                {userData.TenND}
+              </Text>
+              <View style={{width: '100%', height: 5}} />
+              <Text style={[styles.textViewStyles, {fontSize: 15}]}>
+                {userData.LoaiND}
+              </Text>
+            </View>
           </View>
-          <View style={{width: 15, height: '100%'}} />
-          <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={styles.textViewStyles}>{Acount.name}</Text>
-            <View style={{width: '100%', height: 5}} />
-            <Text style={styles.textViewStyles}>ID:{Acount.id}</Text>
-          </View>
-        </View>
-      </>
+          <>
+            <View style={styles.searchContainer}>
+              <View style={{width: '5%', height: '100%'}} />
+              <View style={styles.searchViewContainer}>
+                <Search
+                  placeholder="Search"
+                  style={{
+                    width: 200,
+                    height: 35,
+                    backgroundColor: CUSTOM_COLOR.White,
+                  }}
+                />
+              </View>
+              <View style={{width: '5%', height: '100%'}} />
+              <TouchableOpacity style={styles.butAddContainer}>
+                <Text
+                  style={{color: CUSTOM_COLOR.White}}
+                  onPress={() => navigation.navigate('AddAccount')}>
+                  Add Account
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
 
-      <>
-        <View style={styles.searchContainer}>
-          <View style={{width: '5%', height: '100%'}} />
-          <View style={styles.searchViewContainer}>
-            <Search
-              placeholder="Search"
-              style={{
-                width: 200,
-                height: 35,
-                backgroundColor: CUSTOM_COLOR.White,
-              }}
-            />
-          </View>
-          <View style={{width: '5%', height: '100%'}} />
-          <TouchableOpacity style={styles.butAddContainer}>
-            <Text
-              style={{color: CUSTOM_COLOR.White}}
-              onPress={() => navigation.navigate('AddAccount')}>
-              Add Account
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </>
-
-      <>
-        <View style={styles.listViewContainer}>
-          {/* Lay list nguoi dung ve hien thi */}
-          <AccountCard onPress={() => navigation.navigate('EditAccount')} />
-        </View>
-      </>
+          <>
+            <View style={styles.listViewContainer}>
+              {/* Lay list nguoi dung ve hien thi */}
+              <AccountCard onPress={() => navigation.navigate('EditAccount')} />
+            </View>
+          </>
+        </>
+      ) : (
+        <LoadingComponent text="Loading data..." />
+      )}
     </SafeAreaView>
   );
 };
@@ -111,7 +190,6 @@ const styles = StyleSheet.create({
   },
   textViewStyles: {
     fontFamily: FONT_FAMILY.Semibold,
-    fontSize: 15,
     fontWeight: 'bold',
     color: CUSTOM_COLOR.Black,
   },
