@@ -111,11 +111,12 @@ function DetailProduct({ navigation, route }) {
     }
    const deleteYeuThich = async () => {
         try{
-            const collectionRef = firebase.firestore().collection('YEUTHICH');
+            const collectionRef = collection(Firestore, 'YEUTHICH');
             const q = query(collectionRef
                                 ,where('MaND', '==', firebase.auth().currentUser.uid)
                                 ,where('MaSP', '==', item.MaSP));
             const querySnapshot = await getDocs(q);
+            console.log(querySnapshot);
             querySnapshot.forEach((doc) => {
                 deleteDoc(doc.ref).then(() => {
                 console.log('Xóa tài liệu thành công');
@@ -124,7 +125,7 @@ function DetailProduct({ navigation, route }) {
                 });
             });
             } catch(error){
-
+                console.log(error);
             }
         
    }
@@ -135,7 +136,7 @@ function DetailProduct({ navigation, route }) {
         await SetLove();
         let check = love;
         console.log('jsssssss'+ check);
-        if(check == true){
+        if(check == false){
             addYeuThich()
         }
         else{
