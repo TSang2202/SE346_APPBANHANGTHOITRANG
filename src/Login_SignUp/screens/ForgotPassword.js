@@ -5,6 +5,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
@@ -26,10 +27,10 @@ const ForgotPassword = props => {
       // .sendPasswordResetEmail(firebase.auth().currentUser.email)
       .sendPasswordResetEmail(email)
       .then(() => {
-        alert('Password reset email sent');
+        navigation.navigate('Done');
       })
       .catch(error => {
-        alert(error);
+        Alert.alert('Error', error.message);
       });
   };
 
@@ -64,7 +65,6 @@ const ForgotPassword = props => {
             text="Continue"
             onPress={() => {
               fogotPassword(email);
-              navigation.navigate('Done');
               // onPress={() => navigation.navigate('SmartOTP')}
             }}
           />

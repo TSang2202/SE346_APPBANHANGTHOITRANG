@@ -7,6 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Alert,
+  Button,
 } from 'react-native';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
@@ -19,6 +20,7 @@ import CheckBox from '@react-native-community/checkbox';
 import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import {firebase} from '../../../Firebase/firebase.js';
+import CustomDialog from '../components/Cards/DialogCard.js';
 
 const SignUp = props => {
   const {navigation} = props;
@@ -31,6 +33,82 @@ const SignUp = props => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userType, setuserType] = useState('customer');
+  const [showDialog, setShowDialog] = useState(false);
+
+  const openDialog = () => {
+    setShowDialog(true);
+  };
+
+  const closeDialog = () => {
+    setShowDialog(false);
+  };
+
+  const isValidName = fullName => {
+    if (fullName === '') {
+      return false;
+    }
+    return true;
+  };
+
+  const isValidEmail = email => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPassword = password => {
+    // Password validation criteria
+    // Add your own password validation logic here
+    return password.length >= 8;
+  };
+
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const isValidForm = (fullName, email, password, corfirmPassword) => {
+    let isValid = true;
+
+    if (fullName === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your full name');
+    } else if (email === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your email');
+    } else if (password === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your password');
+    } else if (!isValidEmail(email)) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Your email is not valid');
+    } else if (!isValidPassword(password)) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Your password must be longer than 8 characters');
+    } else if (password != corfirmPassword) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Corfirm password not match with password');
+    } else if (corfirmPassword === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your corfirm password');
+    } else if (
+      fullName === '' &&
+      email === '' &&
+      password === '' &&
+      corfirmPassword === ''
+    ) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your information then click sign up');
+    } else {
+    }
+
+    setShowDialog(false);
+    return isValid;
+  };
 
   const signUp = async (
     fullName,
@@ -45,7 +123,7 @@ const SignUp = props => {
         .auth()
         .createUserWithEmailAndPassword(email, password);
       console.log('User registered successfully:', userCredentials.user);
-
+      navigation.navigate('Congratulation');
       await firebase
         .firestore()
         .collection('NGUOIDUNG')
@@ -61,7 +139,7 @@ const SignUp = props => {
       console.log('Push data user successfully:', userCredentials.user.uid);
     } catch (error) {
       console.log('Error registering user: ', error);
-      alert(error);
+      Alert.alert('Error', error.message);
     }
   };
 
@@ -80,6 +158,7 @@ const SignUp = props => {
             <TextInputCard
               title="Full name*"
               txtInput="Nguyen Van A"
+              value={fullName}
               onChangeText={fullName => setFullName(fullName)}
             />
           </View>
@@ -90,6 +169,7 @@ const SignUp = props => {
               txtInput="abc@gmail.com"
               onChangeText={email => setEmail(email)}
               keyboardType="email-address"
+              value={email}
             />
           </View>
 
@@ -97,6 +177,7 @@ const SignUp = props => {
             <TextInputCard
               title="Phone number"
               txtInput="03333333333"
+              value={phoneNumber}
               onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
             />
           </View>
@@ -105,6 +186,7 @@ const SignUp = props => {
             <TextInputCard
               title="Day of birth"
               txtInput="dd/mm/yy"
+              value={birth}
               onChangeText={birth => setBirth(birth)}
             />
           </View>
@@ -113,6 +195,7 @@ const SignUp = props => {
             <PasswordCard
               title="Password*"
               txtInput="********"
+              value={password}
               onChangeText={password => setPassword(password)}
             />
           </View>
@@ -121,6 +204,7 @@ const SignUp = props => {
             <PasswordCard
               title="Confirm Password*"
               txtInput="********"
+              value={confirmPassword}
               onChangeText={corfirmPassword =>
                 setConfirmPassword(corfirmPassword)
               }
@@ -159,7 +243,7 @@ const SignUp = props => {
               type="primary"
               text="Sign up now"
               onPress={() => {
-                if (password === confirmPassword) {
+                if (isValidForm(fullName, email, password, confirmPassword)) {
                   signUp(
                     fullName,
                     email,
@@ -168,9 +252,8 @@ const SignUp = props => {
                     password,
                     userType,
                   );
-                  navigation.navigate('Congratulation');
                 } else {
-                  alert('Corfirm password not match with password');
+                  Alert.alert('Error', errorMessage);
                 }
               }}
             />
