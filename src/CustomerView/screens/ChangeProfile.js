@@ -17,17 +17,16 @@ import FONT_FAMILY from '../constants/fonts';
 import CustomHeader from '../../AdminView/components/CustomHeader';
 import {IMG_Rectangle} from '../../Login_SignUp/assets/images';
 import {IC_User} from '../assets/icons';
-import {IC_user} from '../../AdminView/assets/icons';
 import {Dropdown} from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {firebase} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 import CustomButton from '../../Login_SignUp/components/Buttons/CustomButton';
+import ImagePicker from 'react-native-image-picker';
 
 const ChangeProfile = props => {
   const {navigation} = props;
   const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [birth, setBirth] = useState('');
   const [address, setAddress] = useState('');
@@ -38,6 +37,52 @@ const ChangeProfile = props => {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [text, setText] = useState('01/01/2023');
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [backgroundUrl, setBackgroundUrl] = useState(null);
+  const [imageUri, setImageUri] = useState('');
+
+  const selectImage = () => {
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      if (!response.didCancel && !response.error) {
+        uploadImage(response.uri);
+      }
+    });
+  };
+
+  const uploadImage = async uri => {
+    try {
+      const user = firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(firebase.auth().currentUser.uid);
+
+      const storageRef = firebase.storage().ref(`images/${user.id}`);
+      await storageRef.putFile(uri);
+
+      const downloadUrl = await storageRef.getDownloadURL();
+
+      await user.update({
+        Avatar: downloadUrl,
+      });
+
+      setImageUri(downloadUrl);
+
+      console.log('Image uploaded and profile updated successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -60,29 +105,6 @@ const ChangeProfile = props => {
     setShowPicker(true);
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [backgroundUrl, setBackgroundUrl] = useState(null);
-
-  useEffect(() => {
-    setTimeout(() => {
-      // Assume data is fetched here
-      const fetchedData = 'Sample Data';
-      setData(fetchedData);
-      setIsLoading(false);
-    }, 2000);
-
-    fetchUserData(firebase.auth().currentUser.uid);
-    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
-      setImageUrl(url),
-    );
-    fetchBackgroundUrl(firebase.auth().currentUser.uid, 'Background').then(
-      url => setBackgroundUrl(url),
-    );
-  }, []);
-
   const fetchUserData = async userId => {
     try {
       const userRef = firebase.firestore().collection('NGUOIDUNG').doc(userId);
@@ -93,6 +115,7 @@ const ChangeProfile = props => {
         setUserData(userData);
         setFullName(userData.TenND);
         setPhoneNumber(userData.Phone);
+        setAddress(userData.DiaChi);
       } else {
         console.log('User document does not exist');
       }
@@ -165,6 +188,39 @@ const ChangeProfile = props => {
     }
   };
 
+  const updateAddress = async (documentId, newData) => {
+    try {
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .update({
+          Address: newData,
+        });
+
+      console.log('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      // Assume data is fetched here
+      const fetchedData = 'Sample Data';
+      setData(fetchedData);
+      setIsLoading(false);
+    }, 2000);
+
+    fetchUserData(firebase.auth().currentUser.uid);
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
+      setImageUrl(url),
+    );
+    fetchBackgroundUrl(firebase.auth().currentUser.uid, 'Background').then(
+      url => setBackgroundUrl(url),
+    );
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       {userData ? (
@@ -186,7 +242,9 @@ const ChangeProfile = props => {
 
                 <>
                   <View style={styles.avataContainer}>
-                    <TouchableOpacity style={styles.avataStyle}>
+                    <TouchableOpacity
+                      style={styles.avataStyle}
+                      onPress={() => selectImage}>
                       {imageUrl ? (
                         <Image
                           source={{uri: imageUrl}}
@@ -230,9 +288,11 @@ const ChangeProfile = props => {
                           styles.unitTitleContainer,
                           {justifyContent: 'flex-end'},
                         ]}>
-                        <Text style={styles.titleInputStyle}>
-                          {fullName.length}
-                        </Text>
+                        {fullName ? (
+                          <Text style={styles.titleInputStyle}>
+                            {fullName.length}
+                          </Text>
+                        ) : null}
                         <View style={{width: '10%', height: '100%'}} />
                       </View>
                     </View>
@@ -381,7 +441,11 @@ const ChangeProfile = props => {
                           styles.unitTitleContainer,
                           {justifyContent: 'flex-end'},
                         ]}>
-                        <Text style={styles.titleInputStyle}>0/200</Text>
+                        {address ? (
+                          <Text style={styles.titleInputStyle}>
+                            {address.length}
+                          </Text>
+                        ) : null}
                         <View style={{width: '10%', height: '100%'}} />
                       </View>
                     </View>
@@ -389,7 +453,7 @@ const ChangeProfile = props => {
                       <View style={{width: '5%', height: '100%'}} />
                       <TextInput
                         style={{flex: 1, fontSize: 17}}
-                        onChangeText={text => setAddress(text)}
+                        onChangeText={setAddress}
                         value={address}
                       />
                       <View style={{width: '5%', height: '100%'}} />
@@ -424,9 +488,11 @@ const ChangeProfile = props => {
                           styles.unitTitleContainer,
                           {justifyContent: 'flex-end'},
                         ]}>
-                        <Text style={styles.titleInputStyle}>
-                          {phoneNumber.length}
-                        </Text>
+                        {phoneNumber ? (
+                          <Text style={styles.titleInputStyle}>
+                            {phoneNumber.length}
+                          </Text>
+                        ) : null}
                         <View style={{width: '10%', height: '100%'}} />
                       </View>
                     </View>
@@ -459,6 +525,10 @@ const ChangeProfile = props => {
                           updatePhoneNumber(
                             firebase.auth().currentUser.uid,
                             phoneNumber,
+                          );
+                          updateAddress(
+                            firebase.auth().currentUser.uid,
+                            address,
                           );
                         }}
                       />
