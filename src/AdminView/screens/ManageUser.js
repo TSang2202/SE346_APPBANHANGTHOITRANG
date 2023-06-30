@@ -49,7 +49,7 @@ const ManageUser = props => {
     }, 2000);
 
     fetchUserData(firebase.auth().currentUser.uid);
-    fetchImageUrl('NGUOIDUNG', firebase.auth().currentUser.uid).then(url =>
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
       setImageUrl(url),
     );
   }, []);
