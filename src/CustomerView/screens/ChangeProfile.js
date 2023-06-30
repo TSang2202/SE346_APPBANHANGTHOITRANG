@@ -251,7 +251,7 @@ const ChangeProfile = props => {
                         ]}>
                         {fullName ? (
                           <Text style={styles.titleInputStyle}>
-                            {fullName.length}
+                            {fullName.length}/50
                           </Text>
                         ) : null}
                         <View style={{width: '10%', height: '100%'}} />
@@ -404,7 +404,7 @@ const ChangeProfile = props => {
                         ]}>
                         {address ? (
                           <Text style={styles.titleInputStyle}>
-                            {address.length}
+                            {address.length}/150
                           </Text>
                         ) : null}
                         <View style={{width: '10%', height: '100%'}} />
@@ -451,7 +451,7 @@ const ChangeProfile = props => {
                         ]}>
                         {phoneNumber ? (
                           <Text style={styles.titleInputStyle}>
-                            {phoneNumber.length}
+                            {phoneNumber.length}/10
                           </Text>
                         ) : null}
                         <View style={{width: '10%', height: '100%'}} />
@@ -476,7 +476,7 @@ const ChangeProfile = props => {
                     <View style={styles.buttonContainer}>
                       <CustomButton
                         type="primary"
-                        text="Continue"
+                        text="Save"
                         onPress={() => {
                           navigation.goBack();
                           updateFullname(
