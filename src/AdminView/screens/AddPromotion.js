@@ -31,6 +31,8 @@ const AddPromotion = props => {
 
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const [dateStart, setDateStart] = useState('01/01/2023');
+  const [dateEnd, setDateEnd] = useState('01/01/2023');
   const [text, setText] = useState('01/01/2023');
   const [image, setImage] = useState();
   const [lengthName, setLengthName] = useState(0)
@@ -347,8 +349,9 @@ const AddPromotion = props => {
                     ]}>
                     <TextInput
                       style={styles.comboType}
-                      onChangeText={text => setName(text)}
+                      onChangeText={text => setDiscount(text)}
                       value={name}
+                      keyboardType='numeric'
                     />
                     <View style={{ width: '8%', height: '100%' }} />
                   </View>
@@ -389,7 +392,7 @@ const AddPromotion = props => {
                     <TouchableOpacity
                       style={styles.dateStyle}
                       onPress={showDateTimePicker}>
-                      <Text> {text}</Text>
+                      <Text> {dateStart}</Text>
                     </TouchableOpacity>
                     {showPicker && (
                       <DateTimePicker
@@ -430,8 +433,11 @@ const AddPromotion = props => {
                     ]}>
                     <TouchableOpacity
                       style={styles.dateStyle}
-                      onPress={showDateTimePicker}>
-                      <Text> {text}</Text>
+                      onPress={
+                        showDateTimePicker
+
+                      }>
+                      <Text> {dateEnd}</Text>
                     </TouchableOpacity>
                     {showPicker && (
                       <DateTimePicker
