@@ -5,6 +5,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import HeaderWithBack from '../components/HeaderWithBack.js';
 import HeaderTitlle from '../components/HeaderTitlle.js';
@@ -16,34 +17,90 @@ import CheckBox from '@react-native-community/checkbox';
 import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import {firebase} from '../../../Firebase/firebase.js';
+import RNPickerSelect from 'react-native-picker-select';
 
 const AddAccount = props => {
   const {navigation} = props;
   const [status, setStatus] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [birth, setBirth] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [userType, setuserType] = useState('customer');
+  const [userType, setuserType] = useState('staff');
+  const [avatar, setAvatar] = useState(
+    'https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fusers%2FuserCustomer.png?alt=media&token=16225e3a-c284-4a14-bdc6-710ae891f34b',
+  );
+  const [showDialog, setShowDialog] = useState(false);
+
+  const openDialog = () => {
+    setShowDialog(true);
+  };
+
+  const closeDialog = () => {
+    setShowDialog(false);
+  };
+
+  const isValidName = fullName => {
+    if (fullName === '') {
+      return false;
+    }
+    return true;
+  };
+
+  const isValidEmail = email => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return emailRegex.test(email);
+  };
+
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const isValidForm = (fullName, email) => {
+    let isValid = true;
+
+    if (fullName === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your full name');
+    } else if (email === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your email');
+    } else if (!isValidEmail(email)) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Your email is not valid');
+    } else if (fullName === '' && email === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your information then click sign up');
+    } else {
+    }
+
+    setShowDialog(false);
+    return isValid;
+  };
 
   const signUp = async (
     fullName,
     email,
     phoneNumber,
     birth,
-    password,
     userType,
+    avatar,
   ) => {
     try {
       const userCredentials = await firebase
         .auth()
-        .createUserWithEmailAndPassword(email, password);
+        .createUserWithEmailAndPassword(email, 'temporaryPassword');
       console.log('User registered successfully:', userCredentials.user);
-
+      await firebase.auth().sendPasswordResetEmail(email);
+      Alert.alert(
+        'Success',
+        'Account created. Please check your email for password reset instructions.',
+      );
       await firebase
         .firestore()
         .collection('NGUOIDUNG')
@@ -55,22 +112,29 @@ const AddAccount = props => {
           NgaySinh: birth,
           MaND: userCredentials.user.uid,
           LoaiND: userType,
+          Avatar: avatar,
         });
       console.log('Push data user successfully:', userCredentials.user.uid);
     } catch (error) {
       console.log('Error registering user: ', error);
-      alert(error);
+      Alert.alert('Success', error);
     }
+  };
+
+  const handleUserTypeSelection = value => {
+    setuserType(value);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <HeaderWithBack onPress={() => navigation.goBack()} />
+      <View style={{width: '100%', height: '2%'}} />
       <View style={[styles.topContainer, styles.unitContainer]}>
         <HeaderTitlle title="Add new account" />
       </View>
-      <View style={[styles.bodyContainer, styles.unitContainer]}>
-        <View style={{flex: 1}}>
+      <View style={{width: '100%', height: '2%'}} />
+      <View style={styles.bodyContainer}>
+        <View style={styles.textInputContainer}>
           <TextInputCard
             title="Full name*"
             txtInput="Nguyen Van A"
@@ -78,7 +142,7 @@ const AddAccount = props => {
           />
         </View>
 
-        <View style={{flex: 1}}>
+        <View style={styles.textInputContainer}>
           <TextInputCard
             title="Email*"
             txtInput="abc@gmail.com"
@@ -87,65 +151,49 @@ const AddAccount = props => {
           />
         </View>
 
-        <View style={{flex: 1}}>
-          <TextInputCard
-            title="Phone number"
-            txtInput="03333333333"
-            onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
-          />
-        </View>
-
-        <View style={{flex: 1}}>
-          <TextInputCard
-            title="Day of birth"
-            txtInput="dd/mm/yy"
-            onChangeText={birth => setBirth(birth)}
-          />
-        </View>
-
-        <View style={{flex: 1}}>
-          <PasswordCard
-            title="Password*"
-            txtInput="********"
-            onChangeText={password => setPassword(password)}
-          />
-        </View>
-
-        <View style={{flex: 1}}>
-          <PasswordCard
-            title="Confirm Password*"
-            txtInput="********"
-            onChangeText={corfirmPassword =>
-              setConfirmPassword(corfirmPassword)
-            }
-          />
-        </View>
-      </View>
-
-      <View style={[styles.checkContainer, styles.unitContainer]}>
-        {/* <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
-                        <CheckBox
-                            disabled={false}
-                            value={toggleCheckBox}
-                            onValueChange={(newValue) => setToggleCheckBox(newValue)}/>
-                    </View> */}
-
-        <View
-          style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
-          <HederContent content="I agree with this " />
-        </View>
-
         <View
           style={{
-            flex: 2,
-            justifyContent: 'center',
-            alignItems: 'flex-start',
+            width: '100%',
+            height: 210,
+            flexDirection: 'column',
           }}>
-          <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
-            <Text style={styles.policyStyles}>Policy</Text>
-          </TouchableOpacity>
+          <View style={[styles.unitUserTypeContainer, {flex: 1}]}>
+            <Text style={styles.titleStyle}>UserType*</Text>
+          </View>
+          <View style={[styles.unitUserTypeContainer, {flex: 3}]}>
+            <TouchableOpacity onPress={() => handleUserTypeSelection('Admin')}>
+              <View
+                style={
+                  userType === 'Admin' ? styles.selectedOption : styles.option
+                }>
+                <Text>Admin</Text>
+              </View>
+            </TouchableOpacity>
+            <View style={{width: '100%', height: 10}} />
+            <TouchableOpacity onPress={() => handleUserTypeSelection('Staff')}>
+              <View
+                style={
+                  userType === 'Staff' ? styles.selectedOption : styles.option
+                }>
+                <Text>Staff</Text>
+              </View>
+            </TouchableOpacity>
+            <View style={{width: '100%', height: 10}} />
+            <TouchableOpacity
+              onPress={() => handleUserTypeSelection('Customer')}>
+              <View
+                style={
+                  userType === 'Customer'
+                    ? styles.selectedOption
+                    : styles.option
+                }>
+                <Text>Customer</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
+      <View style={{width: '100%', height: '2%'}} />
 
       <View style={styles.containerBot}>
         <View style={styles.button}>
@@ -154,10 +202,13 @@ const AddAccount = props => {
             text="Add new account"
             onPress={() => {
               if (password === confirmPassword) {
-                signUp(fullName, email, phoneNumber, birth, password, userType);
-                navigation.navigate('Congratulation');
+                signUp(fullName, email, phoneNumber, birth, userType, avatar);
+                navigation.goBack();
               } else {
-                alert('Corfirm password not match with password');
+                Alert.alert(
+                  'Error',
+                  'Corfirm password not match with password',
+                );
               }
             }}
           />
@@ -167,6 +218,29 @@ const AddAccount = props => {
   );
 };
 const styles = StyleSheet.create({
+  textInputContainer: {
+    width: '100%',
+    height: 90,
+  },
+  option: {
+    borderWidth: 1,
+    borderColor: CUSTOM_COLOR.LightGray,
+    width: '100%',
+    height: 50,
+    borderRadius: 25,
+    paddingLeft: 15,
+    justifyContent: 'center',
+  },
+  selectedOption: {
+    borderWidth: 1,
+    borderColor: CUSTOM_COLOR.LightBlue,
+    width: '100%',
+    height: 50,
+    borderRadius: 25,
+    paddingLeft: 15,
+    justifyContent: 'center',
+    backgroundColor: CUSTOM_COLOR.LightGray,
+  },
   container: {
     flex: 1,
     backgroundColor: CUSTOM_COLOR.White,
@@ -182,20 +256,21 @@ const styles = StyleSheet.create({
     left: '3%',
   },
   bodyContainer: {
-    height: 480,
-    top: '0%',
+    width: '80%',
+    height: 400,
+    marginHorizontal: '10%',
   },
   checkContainer: {
     height: '4%',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   checkbox: {
     alignSelf: 'center',
   },
   containerBot: {
     width: '100%',
-    height: '7%',
-    bottom: '-1%',
+    height: 65,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -208,6 +283,16 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILY.Light,
     color: CUSTOM_COLOR.Black,
     fontWeight: 'bold',
+  },
+  unitUserTypeContainer: {
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  titleStyle: {
+    fontFamily: FONT_FAMILY.Medium,
+    fontSize: 20,
+    color: CUSTOM_COLOR.Black,
+    left: '5%',
   },
 });
 export default AddAccount;

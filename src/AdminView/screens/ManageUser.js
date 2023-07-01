@@ -6,6 +6,8 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  FlatList,
+  Alert,
 } from 'react-native';
 import Search from '../components/Search';
 import ButtonDetail from '../components/ButtonDetail';
@@ -19,6 +21,8 @@ import {firebase, Firestore} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 import {Storage} from '../../../Firebase/firebase';
 import {IC_User} from '../assets/icons';
+import {Avatar, ListItem} from 'react-native-elements';
+import {getAuth, deleteUser} from 'firebase/auth';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -36,15 +40,16 @@ export const Acount = {
 const ManageUser = props => {
   const {navigation} = props;
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(null);
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [userAvata, setUserAvata] = useState([]);
 
   useEffect(() => {
     setTimeout(() => {
       // Assume data is fetched here
-      const fetchedData = 'Sample Data';
-      setData(fetchedData);
+      // const fetchedData = 'Sample Data';
+      // setData(fetchedData);
       setIsLoading(false);
     }, 2000);
 
@@ -52,6 +57,37 @@ const ManageUser = props => {
     fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
       setImageUrl(url),
     );
+
+    const fetchUsers = async () => {
+      try {
+        const querySnapshot = await firebase
+          .firestore()
+          .collection('NGUOIDUNG')
+          .get();
+        const allUserData = querySnapshot.docs.map(doc => doc.data());
+        setUsers(allUserData);
+      } catch (error) {
+        console.error('Error retrieving users: ', error);
+      }
+    };
+
+    // const fetchUserAvata = async() => {
+    //   try {
+    //     const documentSnapshot = await firebase
+    //       .firestore()
+    //       .collection('NGUOIDUNG')
+    //       .get();
+    //     const data = documentSnapshot.data();
+    //     const imageUrl = data[Avatar];
+    //     return imageUrl;
+    //   } catch (error) {
+    //     console.error('Error fetching image URL:', error);
+    //     return null;
+    //   }
+
+    // }
+
+    fetchUsers();
   }, []);
 
   const fetchUserData = async userId => {
@@ -85,6 +121,51 @@ const ManageUser = props => {
       return null;
     }
   };
+
+  const handleUserPress = user => {
+    // Navigate to the edit screen with the selected user data
+    navigation.navigate('EditAccount', {user});
+  };
+
+  const handleDeleteUser = async uid => {
+    getAuth()
+      .deleteUser(uid)
+      .then(() => {
+        console.log('Successfully deleted user');
+      })
+      .catch(error => {
+        console.log('Error deleting user:', error);
+      });
+  };
+
+  const handleResetPassword = email => {
+    firebase
+      .auth()
+      // .sendPasswordResetEmail(firebase.auth().currentUser.email)
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        Alert.alert(
+          'Success',
+          'Email reset password sented. Please check your email for password reset instructions.',
+        );
+      })
+      .catch(error => {
+        Alert.alert('Error', error.message);
+      });
+  };
+
+  const renderUser = ({item}) => (
+    <TouchableOpacity onPress={() => handleUserPress(item)}>
+      <View style={{}}>
+        <AccountCard
+          source={{uri: item.Avatar}}
+          name={item.TenND}
+          userType={item.LoaiND}
+          onPress={() => handleResetPassword(item.Email)}
+        />
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -160,7 +241,12 @@ const ManageUser = props => {
           <>
             <View style={styles.listViewContainer}>
               {/* Lay list nguoi dung ve hien thi */}
-              <AccountCard onPress={() => navigation.navigate('EditAccount')} />
+              {/* <AccountCard onPress={() => navigation.navigate('EditAccount')} /> */}
+              <FlatList
+                data={users}
+                renderItem={renderUser}
+                keyExtractor={item => item.id}
+              />
             </View>
           </>
         </>

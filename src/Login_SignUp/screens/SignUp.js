@@ -25,7 +25,6 @@ import CustomDialog from '../components/Cards/DialogCard.js';
 const SignUp = props => {
   const {navigation} = props;
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -34,6 +33,9 @@ const SignUp = props => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userType, setuserType] = useState('customer');
   const [showDialog, setShowDialog] = useState(false);
+  const [avatar, setAvatar] = useState(
+    'https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fusers%2FuserCustomer.png?alt=media&token=16225e3a-c284-4a14-bdc6-710ae891f34b',
+  );
 
   const openDialog = () => {
     setShowDialog(true);
@@ -63,10 +65,20 @@ const SignUp = props => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const isValidForm = (fullName, email, password, corfirmPassword) => {
+  const isValidForm = (
+    fullName,
+    email,
+    password,
+    corfirmPassword,
+    toggleCheckBox,
+  ) => {
     let isValid = true;
 
-    if (fullName === '') {
+    if (!toggleCheckBox) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please check agree with policy');
+    } else if (fullName === '') {
       isValid = false;
       setShowDialog(true);
       setErrorMessage('Please enter your full name');
@@ -117,6 +129,7 @@ const SignUp = props => {
     birth,
     password,
     userType,
+    avatar,
   ) => {
     try {
       const userCredentials = await firebase
@@ -135,6 +148,7 @@ const SignUp = props => {
           NgaySinh: birth,
           MaND: userCredentials.user.uid,
           LoaiND: userType,
+          Avatar: avatar,
         });
       console.log('Push data user successfully:', userCredentials.user.uid);
     } catch (error) {
@@ -213,28 +227,15 @@ const SignUp = props => {
         </View>
 
         <View style={[styles.checkContainer, styles.unitContainer]}>
-          {/* <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
-                        <CheckBox
-                            disabled={false}
-                            value={toggleCheckBox}
-                            onValueChange={(newValue) => setToggleCheckBox(newValue)}/>
-                    </View> */}
-
-          <View
-            style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
-            <HederContent content="I agree with this " />
-          </View>
-
-          <View
-            style={{
-              flex: 2,
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-            }}>
-            <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
-              <Text style={styles.policyStyles}>Policy</Text>
-            </TouchableOpacity>
-          </View>
+          <CheckBox
+            disabled={false}
+            value={toggleCheckBox}
+            onValueChange={newValue => setToggleCheckBox(newValue)}
+          />
+          <HederContent content="I agree with this " />
+          <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
+            <Text style={styles.policyStyles}>Policy</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.containerBot}>
@@ -243,7 +244,15 @@ const SignUp = props => {
               type="primary"
               text="Sign up now"
               onPress={() => {
-                if (isValidForm(fullName, email, password, confirmPassword)) {
+                if (
+                  isValidForm(
+                    fullName,
+                    email,
+                    password,
+                    confirmPassword,
+                    toggleCheckBox,
+                  )
+                ) {
                   signUp(
                     fullName,
                     email,
@@ -251,6 +260,7 @@ const SignUp = props => {
                     birth,
                     password,
                     userType,
+                    avatar,
                   );
                 } else {
                   Alert.alert('Error', errorMessage);
@@ -284,6 +294,7 @@ const styles = StyleSheet.create({
   checkContainer: {
     height: '4%',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   checkbox: {
     alignSelf: 'center',
