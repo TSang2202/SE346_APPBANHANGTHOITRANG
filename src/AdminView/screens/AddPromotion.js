@@ -33,6 +33,8 @@ const AddPromotion = props => {
   const [lengthDescription, setLengthDescription] = useState(0);
   const [typeOfPromotion, setTpyeOfPromotion] = useState();
   const [discount, setDiscount] = useState();
+  const [pickerType, setPickerType] = useState('');
+
   const dataTypePromotion = [
     {
       id: 'GiamGia',
@@ -74,40 +76,60 @@ const AddPromotion = props => {
 
   const [startDate, setStartDate] = useState(new Date());
   const [startDateValues, setStartDateValuse] = useState('01/01/2023');
-
-  const onChangeStartDate = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setShowPicker(Platform.OS === 'ios'); // Hide picker for iOS after selection
-
-    let tempDate = new Date(currentDate);
-    let fDate =
-      tempDate.getDate() +
-      '/' +
-      (tempDate.getMonth() + 1) +
-      '/' +
-      tempDate.getFullYear();
-    console.log(fDate);
-    setStartDate(selectedDate);
-    setStartDateValuse(fDate);
-  };
-
   const [endDate, setEndDate] = useState(new Date());
   const [endDateValues, setEndDateValues] = useState('01/01/2023');
 
-  const onChangeEndDate = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setShowPicker(Platform.OS === 'ios'); // Hide picker for iOS after selection
+  useEffect(() => {
+    const getCurrentDate = () => {
+      const currentDate = startDate;
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '/' +
+        (tempDate.getMonth() + 1) +
+        '/' +
+        tempDate.getFullYear();
 
-    let tempDate = new Date(currentDate);
-    let fDate =
-      tempDate.getDate() +
-      '/' +
-      (tempDate.getMonth() + 1) +
-      '/' +
-      tempDate.getFullYear();
-    console.log(fDate);
-    setEndDate(selectedDate);
-    setEndDateValues(fDate);
+      console.log('Current date: ', fDate);
+      setStartDateValuse(fDate);
+      setEndDateValues(fDate);
+    };
+
+    getCurrentDate();
+  }, []);
+
+  const handleDateChange = (event, selected) => {
+    if (pickerType === 'start') {
+      const currentDate = selected;
+      setShowPicker(false);
+
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '/' +
+        (tempDate.getMonth() + 1) +
+        '/' +
+        tempDate.getFullYear();
+
+      console.log('Start date: ', fDate);
+      setStartDateValuse(fDate);
+      setStartDate(selected);
+    } else if (pickerType === 'end') {
+      const currentDate = selected;
+      setShowPicker(false);
+
+      setEndDate(currentDate);
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '/' +
+        (tempDate.getMonth() + 1) +
+        '/' +
+        tempDate.getFullYear();
+
+      console.log('End date: ', fDate);
+      setEndDateValues(fDate);
+    }
   };
 
   return (
@@ -123,7 +145,7 @@ const AddPromotion = props => {
         </View>
       </>
 
-      <View style={{width: '100%', height: 10}} />
+      {/* <View style={{width: '100%', height: 5}} /> */}
 
       <>
         <View style={styles.bodyContainer}>
@@ -386,20 +408,22 @@ const AddPromotion = props => {
                         width: '60%',
                       },
                     ]}>
-                    {/* https://www.youtube.com/watch?v=Imkw-xFFLeE */}
                     <TouchableOpacity
                       style={styles.dateStyle}
-                      onPress={showDateTimePicker}>
+                      onPress={() => {
+                        setShowPicker(true);
+                        setPickerType('start');
+                      }}>
                       <Text> {startDateValues}</Text>
                     </TouchableOpacity>
-                    {showPicker && (
+                    {/* {showPicker && (
                       <DateTimePicker
-                        value={startDate}
+                        value={pickerType === 'start' ? startDate : endDate}
                         mode="date" // Can be "date", "time", or "datetime"
                         display="default" // Can be "default", "spinner", or "calendar"
-                        onChange={onChangeStartDate}
+                        onChange={handleDateChange}
                       />
-                    )}
+                    )} */}
                     <View style={{width: '8%', height: '100%'}} />
                   </View>
                 </View>
@@ -431,15 +455,18 @@ const AddPromotion = props => {
                     ]}>
                     <TouchableOpacity
                       style={styles.dateStyle}
-                      onPress={showDateTimePicker}>
+                      onPress={() => {
+                        setShowPicker(true);
+                        setPickerType('end');
+                      }}>
                       <Text> {endDateValues}</Text>
                     </TouchableOpacity>
                     {showPicker && (
                       <DateTimePicker
-                        value={endDate}
+                        value={pickerType === 'start' ? startDate : endDate}
                         mode="date" // Can be "date", "time", or "datetime"
                         display="default" // Can be "default", "spinner", or "calendar"
-                        onChange={onChangeEndDate}
+                        onChange={handleDateChange}
                       />
                     )}
                     <View style={{width: '8%', height: '100%'}} />
