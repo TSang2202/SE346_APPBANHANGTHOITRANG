@@ -32,6 +32,7 @@ const SignIn = props => {
       console.log('User signed in successfully!', response.user.uid);
     } catch (error) {
       console.log('Error signing in:', error.message);
+      Alert.alert('Error', error.message);
     }
   };
 

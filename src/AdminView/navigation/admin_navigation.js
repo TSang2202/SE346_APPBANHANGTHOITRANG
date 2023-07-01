@@ -24,6 +24,7 @@ import Setting from '../screens/Setting';
 import ViewShop1 from '../screens/ViewShop1';
 import ViewShop2 from '../screens/ViewShop2';
 import ChangeProfile from '../screens/ChangeProfile';
+import ChangePassword from '../screens/ChangePassword';
 
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
@@ -54,6 +55,7 @@ function StackNavigator() {
       <Stack.Screen name="ViewShop1" component={ViewShop1} />
       <Stack.Screen name="ViewShop2" component={ViewShop2} />
       <Stack.Screen name="ChangeProfile" component={ChangeProfile} />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
 }

@@ -214,6 +214,15 @@ const ManageUser = props => {
               </Text>
             </View>
           </View>
+
+          <View
+            style={{
+              width: '100%',
+              height: 10,
+              backgroundColor: CUSTOM_COLOR.SlateGray,
+            }}
+          />
+
           <>
             <View style={styles.searchContainer}>
               <View style={{width: '5%', height: '100%'}} />
@@ -249,6 +258,7 @@ const ManageUser = props => {
               />
             </View>
           </>
+          <View style={{width: '100%', height: 20}}/>
         </>
       ) : (
         <LoadingComponent text="Loading data..." />
