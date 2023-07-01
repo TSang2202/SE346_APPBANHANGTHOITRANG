@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import HeaderWithBack from '../components/HeaderWithBack.js';
 import HeaderTitlle from '../components/HeaderTitlle.js';
@@ -18,6 +19,8 @@ import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import {firebase} from '../../../Firebase/firebase.js';
 import RNPickerSelect from 'react-native-picker-select';
+// import { Image } from 'react-native-elements';
+import {IC_Selected} from '../assets/icons/index.js';
 
 const AddAccount = props => {
   const {navigation} = props;
@@ -33,6 +36,7 @@ const AddAccount = props => {
   const [avatar, setAvatar] = useState(
     'https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fusers%2FuserCustomer.png?alt=media&token=16225e3a-c284-4a14-bdc6-710ae891f34b',
   );
+  const [address, setAddress] = useState('');
   const [showDialog, setShowDialog] = useState(false);
 
   const openDialog = () => {
@@ -90,6 +94,7 @@ const AddAccount = props => {
     birth,
     userType,
     avatar,
+    address
   ) => {
     try {
       const userCredentials = await firebase
@@ -113,6 +118,7 @@ const AddAccount = props => {
           MaND: userCredentials.user.uid,
           LoaiND: userType,
           Avatar: avatar,
+          DiaChi: address,
         });
       console.log('Push data user successfully:', userCredentials.user.uid);
     } catch (error) {
@@ -161,33 +167,105 @@ const AddAccount = props => {
             <Text style={styles.titleStyle}>UserType*</Text>
           </View>
           <View style={[styles.unitUserTypeContainer, {flex: 3}]}>
-            <TouchableOpacity onPress={() => handleUserTypeSelection('Admin')}>
+            <TouchableOpacity onPress={() => handleUserTypeSelection('admin')}>
               <View
                 style={
-                  userType === 'Admin' ? styles.selectedOption : styles.option
+                  userType === 'admin' ? styles.selectedOption : styles.option
                 }>
-                <Text>Admin</Text>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                  }}>
+                  <Text>Admin</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                  }}>
+                  <Image
+                    style={
+                      userType === 'admin'
+                        ? {width: 20, height: 20}
+                        : {width: 0, height: 0}
+                    }
+                    source={IC_Selected}
+                    resizeMode="cover"
+                  />
+                </View>
+                <View style={{width: 20, height: '100%'}} />
               </View>
             </TouchableOpacity>
             <View style={{width: '100%', height: 10}} />
-            <TouchableOpacity onPress={() => handleUserTypeSelection('Staff')}>
+            <TouchableOpacity onPress={() => handleUserTypeSelection('staff')}>
               <View
                 style={
-                  userType === 'Staff' ? styles.selectedOption : styles.option
+                  userType === 'staff' ? styles.selectedOption : styles.option
                 }>
-                <Text>Staff</Text>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                  }}>
+                  <Text>Staff</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                  }}>
+                  <Image
+                    style={
+                      userType === 'staff'
+                        ? {width: 20, height: 20}
+                        : {width: 0, height: 0}
+                    }
+                    source={IC_Selected}
+                    resizeMode="cover"
+                  />
+                </View>
+                <View style={{width: 20, height: '100%'}} />
               </View>
             </TouchableOpacity>
             <View style={{width: '100%', height: 10}} />
             <TouchableOpacity
-              onPress={() => handleUserTypeSelection('Customer')}>
+              onPress={() => handleUserTypeSelection('customer')}>
               <View
                 style={
-                  userType === 'Customer'
+                  userType === 'customer'
                     ? styles.selectedOption
                     : styles.option
                 }>
-                <Text>Customer</Text>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                  }}>
+                  <Text>Customer</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                  }}>
+                  <Image
+                    style={
+                      userType === 'customer'
+                        ? {width: 20, height: 20}
+                        : {width: 0, height: 0}
+                    }
+                    source={IC_Selected}
+                    resizeMode="cover"
+                  />
+                </View>
+                <View style={{width: 20, height: '100%'}} />
               </View>
             </TouchableOpacity>
           </View>
@@ -201,15 +279,30 @@ const AddAccount = props => {
             type="primary"
             text="Add new account"
             onPress={() => {
-              if (password === confirmPassword) {
-                signUp(fullName, email, phoneNumber, birth, userType, avatar);
+              if (isValidForm(fullName, email)) {
+                signUp(
+                  fullName,
+                  email,
+                  phoneNumber,
+                  birth,
+                  password,
+                  userType,
+                  avatar,
+                  address,
+                );
                 navigation.goBack();
               } else {
-                Alert.alert(
-                  'Error',
-                  'Corfirm password not match with password',
-                );
+                Alert.alert('Error', errorMessage);
               }
+              // if (password === confirmPassword) {
+              //   signUp(fullName, email, phoneNumber, birth, userType, avatar);
+              //   navigation.goBack();
+              // } else {
+              //   Alert.alert(
+              //     'Error',
+              //     'Corfirm password not match with password',
+              //   );
+              // }
             }}
           />
         </View>
@@ -230,6 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingLeft: 15,
     justifyContent: 'center',
+    flexDirection: 'row',
   },
   selectedOption: {
     borderWidth: 1,
@@ -240,6 +334,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     justifyContent: 'center',
     backgroundColor: CUSTOM_COLOR.LightGray,
+    flexDirection: 'row',
   },
   container: {
     flex: 1,

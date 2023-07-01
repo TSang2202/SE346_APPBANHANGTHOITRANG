@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -21,6 +21,7 @@ import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import {firebase} from '../../../Firebase/firebase.js';
 import CustomDialog from '../components/Cards/DialogCard.js';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const SignUp = props => {
   const {navigation} = props;
@@ -28,14 +29,53 @@ const SignUp = props => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [birth, setBirth] = useState('');
+  const [birth, setBirth] = useState('01/01/2023');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userType, setuserType] = useState('customer');
+  const [address, setAddress] = useState('');
   const [showDialog, setShowDialog] = useState(false);
   const [avatar, setAvatar] = useState(
     'https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fusers%2FuserCustomer.png?alt=media&token=16225e3a-c284-4a14-bdc6-710ae891f34b',
   );
+
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  useEffect(() => {
+    const getCurrentDate = () => {
+      const currentDate = date;
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '/' +
+        (tempDate.getMonth() + 1) +
+        '/' +
+        tempDate.getFullYear();
+
+      console.log('Current date: ', fDate);
+      setBirth(fDate);
+    };
+
+    getCurrentDate();
+  }, []);
+
+  const handleDateChange = (event, selected) => {
+    const currentDate = selected;
+    setShowPicker(false);
+
+    let tempDate = new Date(currentDate);
+    let fDate =
+      tempDate.getDate() +
+      '/' +
+      (tempDate.getMonth() + 1) +
+      '/' +
+      tempDate.getFullYear();
+
+    console.log('Date of birth: ', fDate);
+    setBirth(fDate);
+    setDate(selected);
+  };
 
   const openDialog = () => {
     setShowDialog(true);
@@ -130,6 +170,7 @@ const SignUp = props => {
     password,
     userType,
     avatar,
+    address,
   ) => {
     try {
       const userCredentials = await firebase
@@ -149,6 +190,7 @@ const SignUp = props => {
           MaND: userCredentials.user.uid,
           LoaiND: userType,
           Avatar: avatar,
+          DiaChi: address,
         });
       console.log('Push data user successfully:', userCredentials.user.uid);
     } catch (error) {
@@ -197,12 +239,25 @@ const SignUp = props => {
           </View>
 
           <View style={{flex: 1}}>
-            <TextInputCard
-              title="Day of birth"
-              txtInput="dd/mm/yy"
-              value={birth}
-              onChangeText={birth => setBirth(birth)}
-            />
+            <Text style={styles.titleStyle}>Date of birth</Text>
+
+            <View style={styles.dateContainer}>
+              <TouchableOpacity
+                style={styles.dateStyle}
+                onPress={() => {
+                  setShowPicker(true);
+                }}>
+                <Text> {birth}</Text>
+              </TouchableOpacity>
+              {showPicker && (
+                <DateTimePicker
+                  value={date}
+                  mode="date" // Can be "date", "time", or "datetime"
+                  display="spinner" // Can be "default", "spinner", or "calendar"
+                  onChange={handleDateChange}
+                />
+              )}
+            </View>
           </View>
 
           <View style={{flex: 1}}>
@@ -261,6 +316,7 @@ const SignUp = props => {
                     password,
                     userType,
                     avatar,
+                    address,
                   );
                 } else {
                   Alert.alert('Error', errorMessage);
@@ -315,6 +371,28 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILY.Light,
     color: CUSTOM_COLOR.Black,
     fontWeight: 'bold',
+  },
+  titleStyle: {
+    fontFamily: FONT_FAMILY.Medium,
+    fontSize: 20,
+    color: CUSTOM_COLOR.Black,
+    left: '5%',
+  },
+  dateContainer: {
+    width: '100%',
+    height: '50%',
+    backgroundColor: CUSTOM_COLOR.Alto,
+    borderRadius: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    // paddingLeft: '5%',
+  },
+  dateStyle: {
+    width: '100%',
+    height: '100%',
+    paddingHorizontal: '5%',
+    justifyContent: 'center',
+    // alignItems: 'center',
   },
 });
 export default SignUp;

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -16,15 +16,19 @@ import CUSTOM_COLOR from '../../AdminView/constants/colors';
 import FONT_FAMILY from '../constants/fonts';
 import CustomHeader from '../../AdminView/components/CustomHeader';
 import {IMG_Rectangle} from '../../Login_SignUp/assets/images';
-import {IC_User} from '../../CustomerView/assets/icons';
-import AccountInputCard from '../../CustomerView/components/AccountInputCard';
+import {IC_User} from '../assets/icons';
 import {Dropdown} from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {firebase} from '../../../Firebase/firebase';
+import LoadingComponent from '../components/Loading';
+import CustomButton from '../../Login_SignUp/components/Buttons/CustomButton';
+// import ImagePicker from 'react-native-image-picker';
+const ImagePicker = require('react-native-image-picker');
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const ChangeProfile = props => {
   const {navigation} = props;
   const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [birth, setBirth] = useState('');
   const [address, setAddress] = useState('');
@@ -35,11 +39,15 @@ const ChangeProfile = props => {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [text, setText] = useState('01/01/2023');
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [backgroundUrl, setBackgroundUrl] = useState(null);
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowPicker(Platform.OS === 'ios'); // Hide picker for iOS after selection
-    setDate(currentDate);
+    const currentDate = selectedDate;
+    setShowPicker(false);
 
     let tempDate = new Date(currentDate);
     let fDate =
@@ -48,276 +56,535 @@ const ChangeProfile = props => {
       (tempDate.getMonth() + 1) +
       '/' +
       tempDate.getFullYear();
-    setText(fDate);
 
-    console.log(fDate);
+    console.log('Date of birth: ', fDate);
+    setBirth(fDate);
+    setDate(selectedDate);
   };
 
   const showDateTimePicker = () => {
     setShowPicker(true);
   };
 
+  const fetchUserData = async userId => {
+    try {
+      const userRef = firebase.firestore().collection('NGUOIDUNG').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setUserData(userData);
+        setFullName(userData.TenND);
+        setPhoneNumber(userData.Phone);
+        setAddress(userData.DiaChi);
+        setBirth(userData.NgaySinh);
+      } else {
+        console.log('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const fetchImageUrl = async (documentId, fieldName) => {
+    try {
+      const documentSnapshot = await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .get();
+      const data = documentSnapshot.data();
+      const imageUrl = data[fieldName];
+      return imageUrl;
+    } catch (error) {
+      console.error('Error fetching image URL:', error);
+      return null;
+    }
+  };
+
+  const fetchBackgroundUrl = async (documentId, fieldName) => {
+    try {
+      const documentSnapshot = await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .get();
+      const data = documentSnapshot.data();
+      const backgroundUrl = data[fieldName];
+      return backgroundUrl;
+    } catch (error) {
+      console.error('Error fetching image URL:', error);
+      return null;
+    }
+  };
+
+  const updateFullname = async (documentId, newData) => {
+    try {
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .update({
+          TenND: newData,
+        });
+
+      console.log('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  const updatePhoneNumber = async (documentId, newData) => {
+    try {
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .update({
+          Phone: newData,
+        });
+
+      console.log('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  const updateAddress = async (documentId, newData) => {
+    try {
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .update({
+          DiaChi: newData,
+        });
+
+      console.log('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  const updateBirth = async (documentId, newData) => {
+    try {
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .update({
+          NgaySinh: newData,
+        });
+
+      console.log('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      // Assume data is fetched here
+      const fetchedData = 'Sample Data';
+      setData(fetchedData);
+      setIsLoading(false);
+    }, 2000);
+
+    fetchUserData(firebase.auth().currentUser.uid);
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
+      setImageUrl(url),
+    );
+    fetchBackgroundUrl(firebase.auth().currentUser.uid, 'Background').then(
+      url => setBackgroundUrl(url),
+    );
+
+    const getCurrentDate = () => {
+      const currentDate = date;
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '/' +
+        (tempDate.getMonth() + 1) +
+        '/' +
+        tempDate.getFullYear();
+
+      console.log('Current date: ', fDate);
+      setBirth(fDate);
+    };
+
+    getCurrentDate();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <>
-        <TouchableOpacity style={styles.backgroundContainer}>
-          <ImageBackground
-            source={IMG_Rectangle}
-            resizeMode="cover"
-            style={styles.image}>
-            <>
-              <View style={styles.headerContainer}>
-                <CustomHeader
-                  onPress={() => navigation.goBack()}
-                  title="Account/ Change Profile"
-                />
-              </View>
-            </>
-
-            <>
-              <View style={styles.avataContainer}>
-                <TouchableOpacity style={styles.avataStyle}>
-                  <Image source={IC_User} style={styles.avataStyle} />
-                </TouchableOpacity>
-              </View>
-            </>
-          </ImageBackground>
-        </TouchableOpacity>
-      </>
-      <View style={{width: '100%', height: '3%'}} />
-      <>
-        <View style={styles.bodyContainer}>
-          <ScrollView style={{width: '100%', height: '100%'}}>
-            <>
-              <View style={[styles.inputContainer, {height: 90}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
-                    ]}>
-                    <View style={{width: '10%', height: '100%'}} />
-                    <Text style={styles.titleInputStyle}>Full name</Text>
-                    <Text
-                      style={[
-                        styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
-                      ]}>
-                      {' '}
-                      *
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-end'},
-                    ]}>
-                    <Text style={styles.titleInputStyle}>0/200</Text>
-                    <View style={{width: '10%', height: '100%'}} />
-                  </View>
-                </View>
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
-                  <TextInput
-                    style={{flex: 1, fontSize: 17}}
-                    onChangeText={text => setFullName(text)}
-                    value={fullName}
-                  />
-                  <View style={{width: '5%', height: '100%'}} />
-                </View>
-              </View>
-            </>
-
-            <View style={{width: '100%', height: 15}} />
-
-            <>
-              <View style={[styles.inputContainer, {height: 90}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
-                    ]}>
-                    <View style={{width: '10%', height: '100%'}} />
-                    <Text style={styles.titleInputStyle}>Date of birth</Text>
-                    <Text
-                      style={[
-                        styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
-                      ]}>
-                      {' '}
-                      *
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-end'},
-                    ]}>
-                    <View style={{width: '10%', height: '100%'}} />
-                  </View>
-                </View>
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
-                  <TouchableOpacity
-                    style={styles.dateStyle}
-                    onPress={showDateTimePicker}>
-                    <Text> {text}</Text>
-                  </TouchableOpacity>
-                  {showPicker && (
-                    <DateTimePicker
-                      value={date}
-                      mode="date" // Can be "date", "time", or "datetime"
-                      display="spinner" // Can be "default", "spinner", or "calendar"
-                      onChange={onChange}
+      {userData ? (
+        <>
+          <>
+            <TouchableOpacity style={styles.backgroundContainer}>
+              <ImageBackground
+                source={backgroundUrl ? {uri: backgroundUrl} : IMG_Rectangle}
+                resizeMode="cover"
+                style={styles.image}>
+                <>
+                  <View style={styles.headerContainer}>
+                    <CustomHeader
+                      onPress={() => navigation.goBack()}
+                      title="Account/ Change Profile"
                     />
-                  )}
-                  <View style={{width: '5%', height: '100%'}} />
-                </View>
-              </View>
-            </>
-
-            <View style={{width: '100%', height: 15}} />
-
-            <>
-              <View style={[styles.inputContainer, {height: 90}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
-                    ]}>
-                    <View style={{width: '5%', height: '100%'}} />
-                    <Text style={styles.titleInputStyle}>Gender</Text>
-                    <Text
-                      style={[
-                        styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
-                      ]}>
-                      {' '}
-                      *
-                    </Text>
                   </View>
-                </View>
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
-                  <Dropdown
-                    style={[styles.comboType, isFocus && {borderColor: 'blue'}]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={danhMuc}
-                    search
-                    maxHeight={200}
-                    labelField="TenDM"
-                    valueField="key"
-                    placeholder={!isFocus ? 'Select item' : '...'}
-                    searchPlaceholder="Search..."
-                    value={value}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                      setValue(item.key);
-                      setIsFocus(false);
-                      setCategorize(item);
-                    }}
-                  />
-                </View>
-              </View>
-            </>
+                </>
 
-            <View style={{width: '100%', height: 15}} />
+                <>
+                  <View style={styles.avataContainer}>
+                    <TouchableOpacity
+                      style={styles.avataStyle}
+                      onPress={() => chooseImage}>
+                      {imageUrl ? (
+                        <Image
+                          source={{uri: imageUrl}}
+                          style={styles.avataStyle}
+                        />
+                      ) : (
+                        <Image source={IC_User} style={styles.avataStyle} />
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                </>
+              </ImageBackground>
+            </TouchableOpacity>
+          </>
+          <View style={{width: '100%', height: '3%'}} />
+          <>
+            <View style={styles.bodyContainer}>
+              <ScrollView style={{width: '100%', height: '100%'}}>
+                <>
+                  <View style={[styles.inputContainer, {height: 90}]}>
+                    <View style={{width: '100%', height: 10}} />
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-start'},
+                        ]}>
+                        <View style={{width: '10%', height: '100%'}} />
+                        <Text style={styles.titleInputStyle}>Full name</Text>
+                        <Text
+                          style={[
+                            styles.titleInputStyle,
+                            {color: CUSTOM_COLOR.Red},
+                          ]}>
+                          {' '}
+                          *
+                        </Text>
+                      </View>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-end'},
+                        ]}>
+                        {fullName ? (
+                          <Text style={styles.titleInputStyle}>
+                            {fullName.length}/50
+                          </Text>
+                        ) : null}
+                        <View style={{width: '10%', height: '100%'}} />
+                      </View>
+                    </View>
+                    <View style={{flex: 2, flexDirection: 'row'}}>
+                      <View style={{width: '5%', height: '100%'}} />
+                      <TextInput
+                        style={{flex: 1, fontSize: 17}}
+                        onChangeText={setFullName}
+                        value={fullName}
+                      />
+                      <View style={{width: '5%', height: '100%'}} />
+                    </View>
+                  </View>
+                </>
 
-            <>
-              <View style={[styles.inputContainer, {height: 90}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
-                    ]}>
-                    <View style={{width: '10%', height: '100%'}} />
-                    <Text style={styles.titleInputStyle}>Address</Text>
-                    <Text
-                      style={[
-                        styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
-                      ]}>
-                      {' '}
-                      *
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-end'},
-                    ]}>
-                    <Text style={styles.titleInputStyle}>0/200</Text>
-                    <View style={{width: '10%', height: '100%'}} />
-                  </View>
-                </View>
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
-                  <TextInput
-                    style={{flex: 1, fontSize: 17}}
-                    onChangeText={text => setAddress(text)}
-                    value={address}
-                  />
-                  <View style={{width: '5%', height: '100%'}} />
-                </View>
-              </View>
-            </>
+                <View style={{width: '100%', height: 15}} />
 
-            <View style={{width: '100%', height: 15}} />
+                <>
+                  <View style={[styles.inputContainer, {height: 90}]}>
+                    <View style={{width: '100%', height: 10}} />
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-start'},
+                        ]}>
+                        <View style={{width: '10%', height: '100%'}} />
+                        <Text style={styles.titleInputStyle}>
+                          Date of birth
+                        </Text>
+                        <Text
+                          style={[
+                            styles.titleInputStyle,
+                            {color: CUSTOM_COLOR.Red},
+                          ]}>
+                          {' '}
+                          *
+                        </Text>
+                      </View>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-end'},
+                        ]}>
+                        <View style={{width: '10%', height: '100%'}} />
+                      </View>
+                    </View>
+                    <View style={{flex: 2, flexDirection: 'row'}}>
+                      <View style={{width: '5%', height: '100%'}} />
+                      <TouchableOpacity
+                        style={styles.dateStyle}
+                        onPress={showDateTimePicker}>
+                        <Text> {birth}</Text>
+                      </TouchableOpacity>
+                      {showPicker && (
+                        <DateTimePicker
+                          value={date}
+                          mode="date" // Can be "date", "time", or "datetime"
+                          display="spinner" // Can be "default", "spinner", or "calendar"
+                          onChange={onChange}
+                        />
+                      )}
+                      <View style={{width: '5%', height: '100%'}} />
+                    </View>
+                  </View>
+                </>
 
-            <>
-              <View style={[styles.inputContainer, {height: 90}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
-                    ]}>
-                    <View style={{width: '10%', height: '100%'}} />
-                    <Text style={styles.titleInputStyle}>Phone number</Text>
-                    <Text
-                      style={[
-                        styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
-                      ]}>
-                      {' '}
-                      *
-                    </Text>
+                <View style={{width: '100%', height: 15}} />
+
+                <>
+                  <View style={[styles.inputContainer, {height: 90}]}>
+                    <View style={{width: '100%', height: 10}} />
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-start'},
+                        ]}>
+                        <View style={{width: '5%', height: '100%'}} />
+                        <Text style={styles.titleInputStyle}>Gender</Text>
+                        <Text
+                          style={[
+                            styles.titleInputStyle,
+                            {color: CUSTOM_COLOR.Red},
+                          ]}>
+                          {' '}
+                          *
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={{flex: 2, flexDirection: 'row'}}>
+                      <View style={{width: '5%', height: '100%'}} />
+                      <Dropdown
+                        style={[
+                          styles.comboType,
+                          isFocus && {borderColor: 'blue'},
+                        ]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={danhMuc}
+                        search
+                        maxHeight={200}
+                        labelField="TenDM"
+                        valueField="key"
+                        placeholder={!isFocus ? 'Select item' : '...'}
+                        searchPlaceholder="Search..."
+                        value={value}
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+                        onChange={item => {
+                          setValue(item.key);
+                          setIsFocus(false);
+                          setCategorize(item);
+                        }}
+                      />
+                    </View>
                   </View>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-end'},
-                    ]}>
-                    <Text style={styles.titleInputStyle}>0/200</Text>
-                    <View style={{width: '10%', height: '100%'}} />
+                </>
+
+                <View style={{width: '100%', height: 15}} />
+
+                <>
+                  <View style={[styles.inputContainer, {height: 90}]}>
+                    <View style={{width: '100%', height: 10}} />
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-start'},
+                        ]}>
+                        <View style={{width: '10%', height: '100%'}} />
+                        <Text style={styles.titleInputStyle}>Address</Text>
+                        <Text
+                          style={[
+                            styles.titleInputStyle,
+                            {color: CUSTOM_COLOR.Red},
+                          ]}>
+                          {' '}
+                          *
+                        </Text>
+                      </View>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-end'},
+                        ]}>
+                        {address ? (
+                          <Text style={styles.titleInputStyle}>
+                            {address.length}/150
+                          </Text>
+                        ) : null}
+                        <View style={{width: '10%', height: '100%'}} />
+                      </View>
+                    </View>
+                    <View style={{flex: 2, flexDirection: 'row'}}>
+                      <View style={{width: '5%', height: '100%'}} />
+                      <TextInput
+                        style={{flex: 1, fontSize: 17}}
+                        onChangeText={setAddress}
+                        value={address}
+                      />
+                      <View style={{width: '5%', height: '100%'}} />
+                    </View>
                   </View>
-                </View>
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
-                  <TextInput
-                    style={{flex: 1, fontSize: 17}}
-                    onChangeText={text => setPhoneNumber(text)}
-                    value={phoneNumber}
-                  />
-                  <View style={{width: '5%', height: '100%'}} />
-                </View>
-              </View>
-            </>
-          </ScrollView>
-        </View>
-      </>
+                </>
+
+                <View style={{width: '100%', height: 15}} />
+
+                <>
+                  <View style={[styles.inputContainer, {height: 90}]}>
+                    <View style={{width: '100%', height: 10}} />
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-start'},
+                        ]}>
+                        <View style={{width: '10%', height: '100%'}} />
+                        <Text style={styles.titleInputStyle}>Phone number</Text>
+                        <Text
+                          style={[
+                            styles.titleInputStyle,
+                            {color: CUSTOM_COLOR.Red},
+                          ]}>
+                          {' '}
+                          *
+                        </Text>
+                      </View>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-end'},
+                        ]}>
+                        {phoneNumber ? (
+                          <Text style={styles.titleInputStyle}>
+                            {phoneNumber.length}/10
+                          </Text>
+                        ) : null}
+                        <View style={{width: '10%', height: '100%'}} />
+                      </View>
+                    </View>
+                    <View style={{flex: 2, flexDirection: 'row'}}>
+                      <View style={{width: '5%', height: '100%'}} />
+                      <TextInput
+                        style={{flex: 1, fontSize: 17}}
+                        onChangeText={setPhoneNumber}
+                        value={phoneNumber}
+                      />
+                      <View style={{width: '5%', height: '100%'}} />
+                    </View>
+                  </View>
+                </>
+
+                <View style={{width: '100%', height: 15}} />
+
+                <>
+                  <View
+                    style={{
+                      height: 70,
+                      width: '100%',
+                      elevation: 1.5,
+                      borderRadius: 0.5,
+                      shadowColor: CUSTOM_COLOR.Black,
+                      flexDirection: 'row',
+                    }}>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-start'},
+                        ]}>
+                        <View style={{width: '10%', height: '100%'}} />
+                        <Text style={styles.titleInputStyle}>Password</Text>
+                        <Text
+                          style={[
+                            styles.titleInputStyle,
+                            {color: CUSTOM_COLOR.Red},
+                          ]}>
+                          {' '}
+                          *
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        flex: 2,
+                        justifyContent: 'center',
+                        alignItems: 'flex-end',
+                      }}>
+                      <TouchableOpacity
+                        style={styles.buttonChangePasswordContainer}>
+                        <Text
+                          style={{color: CUSTOM_COLOR.White}}
+                          onPress={() => navigation.navigate('ChangePassword')}>
+                          Change Password
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </>
+
+                <View style={{width: '100%', height: 15}} />
+
+                <>
+                  <View style={{width: '100%', height: 65}}>
+                    <View style={styles.buttonContainer}>
+                      <CustomButton
+                        type="primary"
+                        text="Save"
+                        onPress={() => {
+                          navigation.goBack();
+                          updateFullname(
+                            firebase.auth().currentUser.uid,
+                            fullName,
+                          );
+                          updatePhoneNumber(
+                            firebase.auth().currentUser.uid,
+                            phoneNumber,
+                          );
+                          updateAddress(
+                            firebase.auth().currentUser.uid,
+                            address,
+                          );
+                          updateBirth(firebase.auth().currentUser.uid, birth);
+                        }}
+                      />
+                    </View>
+                  </View>
+                </>
+              </ScrollView>
+            </View>
+          </>
+        </>
+      ) : (
+        <LoadingComponent text="Loading data..." />
+      )}
     </SafeAreaView>
   );
 };
@@ -344,14 +611,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  buttonChangePasswordContainer: {
+    width: '60%',
+    height: '70%',
+    marginRight: '5%',
+    backgroundColor: CUSTOM_COLOR.FlushOrange,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   avataStyle: {
     width: 100,
     height: 100,
-    aspectRatio: 1,
+    // aspectRatio: 1,
     borderRadius: 50,
     resizeMode: 'contain',
-    borderColor: CUSTOM_COLOR.White,
-    borderWidth: 0.5,
+    borderColor: CUSTOM_COLOR.Black,
+    borderWidth: 1,
   },
   bodyContainer: {
     width: '90%',
@@ -409,6 +685,14 @@ const styles = StyleSheet.create({
     // borderRadius: 1,
     // paddingHorizontal: '5%',
     justifyContent: 'center',
+  },
+  buttonContainer: {
+    width: '180%',
+    height: '100%',
+    bottom: '0%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: '-40%',
   },
 });
 export default ChangeProfile;

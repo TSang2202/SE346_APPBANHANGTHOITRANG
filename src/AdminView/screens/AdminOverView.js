@@ -123,7 +123,7 @@ const AdminOverView = props => {
             <View style={styles.menuContainer}>
               <View style={{width: 32, height: 37}}>
                 <MenuIcon
-                  onPress={() => navigation.navigate('Setting')}
+                  onPress={() => navigation.navigate('ChangeProfile')}
                   source={IC_User}
                 />
               </View>

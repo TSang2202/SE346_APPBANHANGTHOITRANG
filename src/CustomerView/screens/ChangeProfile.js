@@ -46,9 +46,8 @@ const ChangeProfile = props => {
   const [backgroundUrl, setBackgroundUrl] = useState(null);
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowPicker(Platform.OS === 'ios'); // Hide picker for iOS after selection
-    setDate(currentDate);
+    const currentDate = selectedDate;
+    setShowPicker(false);
 
     let tempDate = new Date(currentDate);
     let fDate =
@@ -57,9 +56,10 @@ const ChangeProfile = props => {
       (tempDate.getMonth() + 1) +
       '/' +
       tempDate.getFullYear();
-    setText(fDate);
 
-    console.log(fDate);
+    console.log('Date of birth: ', fDate);
+    setBirth(fDate);
+    setDate(selectedDate);
   };
 
   const showDateTimePicker = () => {
@@ -77,6 +77,7 @@ const ChangeProfile = props => {
         setFullName(userData.TenND);
         setPhoneNumber(userData.Phone);
         setAddress(userData.DiaChi);
+        setBirth(userData.NgaySinh);
       } else {
         console.log('User document does not exist');
       }
@@ -165,6 +166,22 @@ const ChangeProfile = props => {
     }
   };
 
+  const updateBirth = async (documentId, newData) => {
+    try {
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .update({
+          NgaySinh: newData,
+        });
+
+      console.log('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
       // Assume data is fetched here
@@ -180,6 +197,22 @@ const ChangeProfile = props => {
     fetchBackgroundUrl(firebase.auth().currentUser.uid, 'Background').then(
       url => setBackgroundUrl(url),
     );
+
+    const getCurrentDate = () => {
+      const currentDate = date;
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '/' +
+        (tempDate.getMonth() + 1) +
+        '/' +
+        tempDate.getFullYear();
+
+      console.log('Current date: ', fDate);
+      setBirth(fDate);
+    };
+
+    getCurrentDate();
   }, []);
 
   return (
@@ -306,7 +339,7 @@ const ChangeProfile = props => {
                       <TouchableOpacity
                         style={styles.dateStyle}
                         onPress={showDateTimePicker}>
-                        <Text> {text}</Text>
+                        <Text> {birth}</Text>
                       </TouchableOpacity>
                       {showPicker && (
                         <DateTimePicker
@@ -491,6 +524,7 @@ const ChangeProfile = props => {
                             firebase.auth().currentUser.uid,
                             address,
                           );
+                          updateBirth(firebase.auth().currentUser.uid, birth);
                         }}
                       />
                     </View>
