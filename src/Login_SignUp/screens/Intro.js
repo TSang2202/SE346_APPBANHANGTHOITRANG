@@ -20,7 +20,7 @@ const Intro = props => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 5000); // 5 seconds delay
+    }, 2000); // 2 seconds delay
 
     return () => clearTimeout(timer);
   }, []);

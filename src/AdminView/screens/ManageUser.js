@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Alert,
 } from 'react-native';
 import Search from '../components/Search';
 import ButtonDetail from '../components/ButtonDetail';
@@ -21,6 +22,7 @@ import LoadingComponent from '../components/Loading';
 import {Storage} from '../../../Firebase/firebase';
 import {IC_User} from '../assets/icons';
 import {Avatar, ListItem} from 'react-native-elements';
+import {getAuth, deleteUser} from 'firebase/auth';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -120,17 +122,49 @@ const ManageUser = props => {
     }
   };
 
+  const handleUserPress = user => {
+    // Navigate to the edit screen with the selected user data
+    navigation.navigate('EditAccount', {user});
+  };
+
+  const handleDeleteUser = async uid => {
+    getAuth()
+      .deleteUser(uid)
+      .then(() => {
+        console.log('Successfully deleted user');
+      })
+      .catch(error => {
+        console.log('Error deleting user:', error);
+      });
+  };
+
+  const handleResetPassword = email => {
+    firebase
+      .auth()
+      // .sendPasswordResetEmail(firebase.auth().currentUser.email)
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        Alert.alert(
+          'Success',
+          'Email reset password sented. Please check your email for password reset instructions.',
+        );
+      })
+      .catch(error => {
+        Alert.alert('Error', error.message);
+      });
+  };
+
   const renderUser = ({item}) => (
-    <View style={{}}>
-      {/* <Text>{item.TenND}</Text>
-      <Text>{item.LoaiND}</Text> */}
-      <AccountCard
-        source={{uri: item.Avatar}}
-        name={item.TenND}
-        userType={item.LoaiND}
-        onPress={() => navigation.navigate('EditAccount')}
-      />
-    </View>
+    <TouchableOpacity onPress={() => handleUserPress(item)}>
+      <View style={{}}>
+        <AccountCard
+          source={{uri: item.Avatar}}
+          name={item.TenND}
+          userType={item.LoaiND}
+          onPress={() => handleResetPassword(item.Email)}
+        />
+      </View>
+    </TouchableOpacity>
   );
 
   return (

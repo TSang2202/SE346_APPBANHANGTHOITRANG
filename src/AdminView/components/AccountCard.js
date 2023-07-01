@@ -30,7 +30,7 @@ const AccountCard = props => {
         </View>
         <TouchableOpacity style={styles.buttonContainer}>
           <Text style={{color: CUSTOM_COLOR.White}} onPress={props.onPress}>
-            Edit
+            Reset
           </Text>
         </TouchableOpacity>
       </View>

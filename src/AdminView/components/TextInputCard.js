@@ -17,6 +17,7 @@ const TextInputCard = props => {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={props.keyboardType}
+          value={props.value}
         />
       </View>
     </View>
