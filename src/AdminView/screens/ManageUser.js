@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  FlatList,
 } from 'react-native';
 import Search from '../components/Search';
 import ButtonDetail from '../components/ButtonDetail';
@@ -19,6 +20,7 @@ import {firebase, Firestore} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 import {Storage} from '../../../Firebase/firebase';
 import {IC_User} from '../assets/icons';
+import {Avatar, ListItem} from 'react-native-elements';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -36,15 +38,16 @@ export const Acount = {
 const ManageUser = props => {
   const {navigation} = props;
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(null);
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [userAvata, setUserAvata] = useState([]);
 
   useEffect(() => {
     setTimeout(() => {
       // Assume data is fetched here
-      const fetchedData = 'Sample Data';
-      setData(fetchedData);
+      // const fetchedData = 'Sample Data';
+      // setData(fetchedData);
       setIsLoading(false);
     }, 2000);
 
@@ -52,6 +55,37 @@ const ManageUser = props => {
     fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
       setImageUrl(url),
     );
+
+    const fetchUsers = async () => {
+      try {
+        const querySnapshot = await firebase
+          .firestore()
+          .collection('NGUOIDUNG')
+          .get();
+        const allUserData = querySnapshot.docs.map(doc => doc.data());
+        setUsers(allUserData);
+      } catch (error) {
+        console.error('Error retrieving users: ', error);
+      }
+    };
+
+    // const fetchUserAvata = async() => {
+    //   try {
+    //     const documentSnapshot = await firebase
+    //       .firestore()
+    //       .collection('NGUOIDUNG')
+    //       .get();
+    //     const data = documentSnapshot.data();
+    //     const imageUrl = data[Avatar];
+    //     return imageUrl;
+    //   } catch (error) {
+    //     console.error('Error fetching image URL:', error);
+    //     return null;
+    //   }
+
+    // }
+
+    fetchUsers();
   }, []);
 
   const fetchUserData = async userId => {
@@ -85,6 +119,19 @@ const ManageUser = props => {
       return null;
     }
   };
+
+  const renderUser = ({item}) => (
+    <View style={{}}>
+      {/* <Text>{item.TenND}</Text>
+      <Text>{item.LoaiND}</Text> */}
+      <AccountCard
+        source={{uri: item.Avatar}}
+        name={item.TenND}
+        userType={item.LoaiND}
+        onPress={() => navigation.navigate('EditAccount')}
+      />
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -160,7 +207,12 @@ const ManageUser = props => {
           <>
             <View style={styles.listViewContainer}>
               {/* Lay list nguoi dung ve hien thi */}
-              <AccountCard onPress={() => navigation.navigate('EditAccount')} />
+              {/* <AccountCard onPress={() => navigation.navigate('EditAccount')} /> */}
+              <FlatList
+                data={users}
+                renderItem={renderUser}
+                keyExtractor={item => item.id}
+              />
             </View>
           </>
         </>

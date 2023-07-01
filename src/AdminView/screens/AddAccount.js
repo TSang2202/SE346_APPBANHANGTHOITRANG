@@ -28,7 +28,7 @@ const AddAccount = props => {
   const [birth, setBirth] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [userType, setuserType] = useState('customer');
+  const [userType, setuserType] = useState('staff');
 
   const signUp = async (
     fullName,
