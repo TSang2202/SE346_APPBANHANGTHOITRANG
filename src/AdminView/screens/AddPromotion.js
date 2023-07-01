@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -9,57 +9,45 @@ import {
   TextInput,
   ImageBackground,
   Platform,
+  Image,
 } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {border_add} from '../assets/images';
+import { border_add } from '../assets/images';
 import FONT_FAMILY from '../constants/fonts';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const AddPromotion = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const [danhMuc, setDanhMuc] = useState([]);
   const [value, setValue] = useState(null);
 
-  // const [date, setDate] = useState(new Date());
-  // const [mode, setMode] = useState('date');
-  // const [show, setShow] = useState(false);
-  // const [text, setText] = useState('01/01/2023');
-
-  // const onChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || date;
-  //   setShow(Platform.OS === 'android');
-  //   setDate(currentDate);
-
-  //   let tempDate = new Date(currentDate);
-  //   let fDate =
-  //     tempDate.getDate() +
-  //     '/' +
-  //     (tempDate.getMonth() + 1) +
-  //     '/' +
-  //     tempDate.getFullYear();
-  //   setText(fDate);
-
-  //   console.log(fDate);
-  // };
-
-  // const showMode = currentMode => {
-  //   setShow(true);
-  //   setMode(currentMode);
-  //   // if (Platform.OS === 'android') {
-  //   //   setShow(false);
-  //   //   // for iOS, add a button that closes the picker
-  //   // }
-  // };
 
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [text, setText] = useState('01/01/2023');
+  const [image, setImage] = useState();
+  const [lengthName, setLengthName] = useState(0)
+  const [lengthDescription, setLengthDescription] = useState(0)
+  const [typeOfPromotion, setTpyeOfPromotion] = useState()
+  const [discount, setDiscount] = useState()
+
+  const dataTypePromotion = [
+    {
+      id: "GiamGia",
+      title: "Khuyến mãi giảm giá"
+    },
+    {
+      id: "MienPhiVanChuyen",
+      title: "Miễn phí vận chuyển"
+    }
+  ];
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -82,9 +70,39 @@ const AddPromotion = props => {
     setShowPicker(true);
   };
 
+  const selectImage = () => {
+
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+
+      selectionLimit: 5,
+      quality: 1,
+    };
+
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+
+        setImage(response.assets[0]);
+        console.log(image)
+
+      }
+    });
+
+
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
       <>
         <View style={styles.headerContainer}>
@@ -95,15 +113,19 @@ const AddPromotion = props => {
         </View>
       </>
 
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
       <>
         <View style={styles.bodyContainer}>
-          <ScrollView style={{width: '100%', height: '100%'}}>
+          <ScrollView style={{ width: '100%', height: '100%' }}>
             <>
               <View style={styles.addImageContainer}>
-                <View style={{width: 25, height: '100%'}} />
-                <TouchableOpacity style={{width: 75, height: 75}}>
+                <View style={{ width: 25, height: '100%' }} />
+                <TouchableOpacity style={{ width: 75, height: 75 }}
+
+                  onPress={selectImage}
+
+                >
                   <ImageBackground
                     style={{
                       width: '100%',
@@ -116,32 +138,46 @@ const AddPromotion = props => {
                     <Text style={styles.icAddStyle}>+</Text>
                   </ImageBackground>
                 </TouchableOpacity>
-                <View style={{width: 25, height: '100%'}} />
-                <Text style={styles.addImageTextStyles}>
-                  (Add picture or video)
-                </Text>
+                <View style={{ width: 25, height: '100%' }} />
+
+                {image ?
+                  <Image
+
+                    source={image}
+                    style={{
+                      height: 75,
+                      width: 75
+                    }}
+
+                  /> :
+                  <Text style={styles.addImageTextStyles}>
+                    (Add picture or video)
+                  </Text>
+                }
+
+
               </View>
             </>
 
             <View style={styles.spaceContainer} />
 
             <>
-              <View style={[styles.inputContainer, {height: 90}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={[styles.inputContainer, { height: 90 }]}>
+                <View style={{ width: '100%', height: 10 }} />
+                <View style={{ flex: 1, flexDirection: 'row' }}>
                   <View
                     style={[
                       styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
+                      { justifyContent: 'flex-start' },
                     ]}>
-                    <View style={{width: '10%', height: '100%'}} />
+                    <View style={{ width: '10%', height: '100%' }} />
                     <Text style={styles.titleInputStyle}>
                       Name Of Promotions
                     </Text>
                     <Text
                       style={[
                         styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        { color: CUSTOM_COLOR.Red },
                       ]}>
                       {' '}
                       *
@@ -150,21 +186,30 @@ const AddPromotion = props => {
                   <View
                     style={[
                       styles.unitTitleContainer,
-                      {justifyContent: 'flex-end'},
+                      { justifyContent: 'flex-end' },
                     ]}>
-                    <Text style={styles.titleInputStyle}>0/200</Text>
-                    <View style={{width: '10%', height: '100%'}} />
+                    <Text style={styles.titleInputStyle}>{lengthName}/100</Text>
+                    <View style={{ width: '10%', height: '100%' }} />
                   </View>
                 </View>
                 {/* <View style={{width: '100%', height: 5}} /> */}
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
+                <View style={{ flex: 2, flexDirection: 'row' }}>
+                  <View style={{ width: '5%', height: '100%' }} />
                   <TextInput
-                    style={{flex: 1, fontSize: 17}}
-                    onChangeText={text => setName(text)}
+                    style={{ flex: 1, fontSize: 17 }}
+                    onChangeText={text => {
+
+                      if (text.length < 100) {
+                        setName(text)
+                        setLengthName(text.length)
+                      }
+
+
+
+                    }}
                     value={name}
                   />
-                  <View style={{width: '5%', height: '100%'}} />
+                  <View style={{ width: '5%', height: '100%' }} />
                 </View>
               </View>
             </>
@@ -172,20 +217,20 @@ const AddPromotion = props => {
             <View style={styles.spaceContainer} />
 
             <>
-              <View style={[styles.inputContainer, {height: 120}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={[styles.inputContainer, { height: 120 }]}>
+                <View style={{ width: '100%', height: 10 }} />
+                <View style={{ flex: 1, flexDirection: 'row' }}>
                   <View
                     style={[
                       styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
+                      { justifyContent: 'flex-start' },
                     ]}>
-                    <View style={{width: '10%', height: '100%'}} />
+                    <View style={{ width: '10%', height: '100%' }} />
                     <Text style={styles.titleInputStyle}>Description</Text>
                     <Text
                       style={[
                         styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        { color: CUSTOM_COLOR.Red },
                       ]}>
                       {' '}
                       *
@@ -194,22 +239,31 @@ const AddPromotion = props => {
                   <View
                     style={[
                       styles.unitTitleContainer,
-                      {justifyContent: 'flex-end'},
+                      { justifyContent: 'flex-end' },
                     ]}>
-                    <Text style={styles.titleInputStyle}>0/200</Text>
-                    <View style={{width: '10%', height: '100%'}} />
+                    <Text style={styles.titleInputStyle}>{lengthDescription}/200</Text>
+                    <View style={{ width: '10%', height: '100%' }} />
                   </View>
                 </View>
                 {/* <View style={{width: '100%', height: 5}} /> */}
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
+                <View style={{ flex: 2, flexDirection: 'row' }}>
+                  <View style={{ width: '5%', height: '100%' }} />
                   <TextInput
-                    style={{flex: 1, fontSize: 17}}
-                    onChangeText={text => setDescription(text)}
+                    style={{ flex: 1, fontSize: 17 }}
+                    onChangeText={text => {
+
+                      if (text.length <= 200) {
+                        setDescription(text)
+                        setLengthDescription(text.length)
+                      }
+
+                    }
+
+                    }
                     value={description}
                     multiline={true}
                   />
-                  <View style={{width: '5%', height: '100%'}} />
+                  <View style={{ width: '5%', height: '100%' }} />
                 </View>
               </View>
             </>
@@ -217,16 +271,16 @@ const AddPromotion = props => {
             <View style={styles.spaceContainer} />
 
             <>
-              <View style={[styles.comboxContainer, {height: 60}]}>
+              <View style={[styles.comboxContainer, { height: 60 }]}>
                 <View
                   style={[
                     styles.unitComboContainer,
-                    {justifyContent: 'flex-start', width: '40%'},
+                    { justifyContent: 'flex-start', width: '40%' },
                   ]}>
-                  <View style={{width: '12%', height: '100%'}} />
+                  <View style={{ width: '12%', height: '100%' }} />
                   <Text style={styles.titleInputStyle}>Type of promotion</Text>
                   <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                     {' '}
                     *
                   </Text>
@@ -240,48 +294,84 @@ const AddPromotion = props => {
                     },
                   ]}>
                   <Dropdown
-                    style={[styles.comboType, isFocus && {borderColor: 'blue'}]}
+                    style={[styles.comboType, isFocus && { borderColor: 'blue' }]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
                     iconStyle={styles.iconStyle}
-                    data={danhMuc}
+                    data={dataTypePromotion}
                     search
                     maxHeight={200}
-                    labelField="TenDM"
-                    valueField="key"
+                    labelField="title"
+                    valueField="id"
                     placeholder={!isFocus ? 'Select item' : '...'}
                     searchPlaceholder="Search..."
                     value={value}
                     onFocus={() => setIsFocus(true)}
                     onBlur={() => setIsFocus(false)}
                     onChange={item => {
-                      setValue(item.key);
+                      setValue(item.id);
                       setIsFocus(false);
-                      setCategorize(item);
+                      setTpyeOfPromotion(item.id)
                     }}
                   />
-                  <View style={{width: '8%', height: '100%'}} />
+                  <View style={{ width: '8%', height: '100%' }} />
                 </View>
               </View>
+            </>
+
+            <>
+
+              {typeOfPromotion && typeOfPromotion === "GiamGia" ?
+                <View style={[styles.comboxContainer, { height: 60 }]}>
+                  <View
+                    style={[
+                      styles.unitComboContainer,
+                      { justifyContent: 'flex-start', width: '40%' },
+                    ]}>
+                    <View style={{ width: '12%', height: '100%' }} />
+                    <Text style={styles.titleInputStyle}>Discount</Text>
+                    <Text
+                      style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
+                      {' '}
+                      *
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.unitComboContainer,
+                      {
+                        justifyContent: 'flex-end',
+                        width: '60%',
+                      },
+                    ]}>
+                    <TextInput
+                      style={styles.comboType}
+                      onChangeText={text => setName(text)}
+                      value={name}
+                    />
+                    <View style={{ width: '8%', height: '100%' }} />
+                  </View>
+                </View>
+                : null}
             </>
 
             <View style={styles.spaceContainer} />
 
             <>
-              <View style={[styles.dateContainer, {height: 120}]}>
+              <View style={[styles.dateContainer, { height: 120 }]}>
                 <View style={styles.unitDateContainer}>
                   <View
                     style={[
                       styles.unitComboContainer,
-                      {justifyContent: 'flex-start', width: '40%'},
+                      { justifyContent: 'flex-start', width: '40%' },
                     ]}>
-                    <View style={{width: '12%', height: '100%'}} />
+                    <View style={{ width: '12%', height: '100%' }} />
                     <Text style={styles.titleInputStyle}>Start date</Text>
                     <Text
                       style={[
                         styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        { color: CUSTOM_COLOR.Red },
                       ]}>
                       {' '}
                       *
@@ -309,7 +399,7 @@ const AddPromotion = props => {
                         onChange={onChange}
                       />
                     )}
-                    <View style={{width: '8%', height: '100%'}} />
+                    <View style={{ width: '8%', height: '100%' }} />
                   </View>
                 </View>
 
@@ -317,14 +407,14 @@ const AddPromotion = props => {
                   <View
                     style={[
                       styles.unitComboContainer,
-                      {justifyContent: 'flex-start', width: '40%'},
+                      { justifyContent: 'flex-start', width: '40%' },
                     ]}>
-                    <View style={{width: '12%', height: '100%'}} />
+                    <View style={{ width: '12%', height: '100%' }} />
                     <Text style={styles.titleInputStyle}>End date</Text>
                     <Text
                       style={[
                         styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        { color: CUSTOM_COLOR.Red },
                       ]}>
                       {' '}
                       *
@@ -351,7 +441,7 @@ const AddPromotion = props => {
                         onChange={onChange}
                       />
                     )}
-                    <View style={{width: '8%', height: '100%'}} />
+                    <View style={{ width: '8%', height: '100%' }} />
                   </View>
                 </View>
               </View>
@@ -359,38 +449,7 @@ const AddPromotion = props => {
 
             <View style={styles.spaceContainer} />
 
-            <>
-              <View style={[styles.comboxContainer, {height: 60}]}>
-                <View
-                  style={[
-                    styles.unitComboContainer,
-                    {justifyContent: 'flex-start', width: '40%'},
-                  ]}>
-                  <View style={{width: '12%', height: '100%'}} />
-                  <Text style={styles.titleInputStyle}>Discount</Text>
-                  <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
-                    {' '}
-                    *
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    styles.unitComboContainer,
-                    {
-                      justifyContent: 'flex-end',
-                      width: '60%',
-                    },
-                  ]}>
-                  <TextInput
-                    style={styles.comboType}
-                    onChangeText={text => setName(text)}
-                    value={name}
-                  />
-                  <View style={{width: '8%', height: '100%'}} />
-                </View>
-              </View>
-            </>
+
 
             <View style={styles.spaceContainer} />
 
@@ -399,14 +458,14 @@ const AddPromotion = props => {
                 <PromotionButton
                   type="secondary"
                   text="Save"
-                  // onPress={() => {
-                  //   navigation.navigate('AddPromotion');
-                  // }}
+                // onPress={() => {
+                //   navigation.navigate('AddPromotion');
+                // }}
                 />
               </View>
             </>
 
-            <View style={{width: '100%', height: 10}} />
+            <View style={{ width: '100%', height: 10 }} />
           </ScrollView>
         </View>
       </>

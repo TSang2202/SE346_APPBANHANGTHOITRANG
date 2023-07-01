@@ -390,7 +390,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -512,7 +512,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -630,7 +630,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -752,7 +752,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}

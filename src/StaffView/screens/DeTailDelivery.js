@@ -52,14 +52,12 @@ export default function DeTailDelivery({ navigation, route }) {
   }, [isLoading]);
 
   return (
+
+
     <ScrollView style={{ backgroundColor: CUSTOM_COLOR.White }}>
 
 
-      <BackTo
-        style={{ marginTop: 20 }}
-        Info='Order/DeTails'
-        onPress={() => { navigation.goBack() }}
-      ></BackTo>
+
       <View style={{ width: '100%', height: 10, marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
       <View style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
         <View style={{ width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between' }}>
@@ -120,7 +118,7 @@ export default function DeTailDelivery({ navigation, route }) {
         <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
           <Text>Provisional: {item.TamTinh}</Text>
           <Text>Delivery fee: {item.PhiVanChuyen}</Text>
-          <Text>Discount</Text>
+          <Text>Discount: -{item.GiamGia}</Text>
           <Text>Total: {item.TongTien}</Text>
         </View>
       </View>
@@ -133,7 +131,30 @@ export default function DeTailDelivery({ navigation, route }) {
         ></PerSon>
 
         <View>
-          <FlatList
+
+          {item.DatHang.map((order, index) => {
+            return (
+              <View
+
+                key={index}>
+
+                <OneOrder
+
+                  source={order.SanPham.HinhAnhSP[0]}
+                  title={order.SanPham.TenSP}
+                  price={order.SanPham.GiaSP}
+                  number={order.SoLuong}
+                  color={order.MauSac}
+                  size={order.Size}
+                  totalPrice={order.ThanhTien}
+
+                ></OneOrder>
+
+              </View>
+            )
+          })}
+
+          {/* <FlatList
             data={item.DatHang}
             renderItem={({ item }) => {
 
@@ -142,7 +163,7 @@ export default function DeTailDelivery({ navigation, route }) {
                 <View>
 
                   <OneOrder
-                    source={item.SanPham.HinhAnhSP}
+                    source={item.SanPham.HinhAnhSP[0]}
                     title={item.SanPham.TenSP}
                     price={item.SanPham.GiaSP}
                     number={item.SoLuong}
@@ -155,9 +176,9 @@ export default function DeTailDelivery({ navigation, route }) {
                 </View>
               )
             }}
-          />
+          /> */}
         </View>
-        <View style={{ width: '100%', height: 50, marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+        {/* <View style={{ width: '100%', height: 50, marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
           <ButtonDetail
             title='Buyer Contact'
             color={CUSTOM_COLOR.DarkBlue}
@@ -170,7 +191,7 @@ export default function DeTailDelivery({ navigation, route }) {
             onPress={() => { }}
             style={styles.button}
           ></ButtonDetail>
-        </View>
+        </View> */}
         <View style={{ width: '100%', height: 50, flexDirection: 'row' }}>
           <TouchableOpacity
             onPress={() => { }}
