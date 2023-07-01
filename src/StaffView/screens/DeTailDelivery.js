@@ -51,13 +51,28 @@ export default function DeTailDelivery({ navigation, route }) {
     }
   }, [isLoading]);
 
-  return (
+  const Confirm = async () => {
 
+    navigation.goBack();
+    const confirmRef = doc(Firestore, "DONHANG", item.MaDH)
+
+    await updateDoc(confirmRef, {
+      TrangThai: item.TrangThai === "Confirm" ? "OnWait" : item.TrangThai === "OnWait" ? "Delivering" : item.TrangThai === "Delivering" ? "Delivered" : "Delivered"
+    })
+
+
+  }
+
+  return (
 
     <ScrollView style={{ backgroundColor: CUSTOM_COLOR.White }}>
 
 
-
+      <BackTo
+        style={{ marginTop: 20 }}
+        Info='Order/DeTails'
+        onPress={() => { navigation.goBack() }}
+      ></BackTo>
       <View style={{ width: '100%', height: 10, marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
       <View style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
         <View style={{ width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between' }}>
@@ -194,7 +209,7 @@ export default function DeTailDelivery({ navigation, route }) {
         </View> */}
         <View style={{ width: '100%', height: 50, flexDirection: 'row' }}>
           <TouchableOpacity
-            onPress={() => { }}
+            onPress={() => { Confirm(item) }}
             style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
           >
             <Text style={{ color: CUSTOM_COLOR.White, fontWeight: 'bold', fontSize: 20 }}>Confirm</Text>
