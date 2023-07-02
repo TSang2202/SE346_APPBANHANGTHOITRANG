@@ -18,17 +18,19 @@ const AccountCard = props => {
               aspectRatio: 1,
               borderRadius: 50,
               resizeMode: 'center',
+              borderWidth: 1,
+              borderColor: CUSTOM_COLOR.Black,
             }}
           />
         </View>
         <View style={styles.textViewContainer}>
           <Text style={styles.textViewStyles}>{props.name}</Text>
           <View style={{width: '100%', height: 5}} />
-          <Text style={styles.textViewStyles}>{props.position}</Text>
+          <Text style={styles.textViewStyles}>{props.userType}</Text>
         </View>
         <TouchableOpacity style={styles.buttonContainer}>
           <Text style={{color: CUSTOM_COLOR.White}} onPress={props.onPress}>
-            Edit
+            Reset
           </Text>
         </TouchableOpacity>
       </View>
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   accountContainer: {
-    width: '90%',
+    width: '95%',
     height: '80%',
     flexDirection: 'row',
     alignItems: 'center',

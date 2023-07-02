@@ -21,6 +21,7 @@ import {
   IC_user,
   IC_messenger,
   IC_User,
+  IC_Review,
 } from '../assets/icons/index.js';
 import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
@@ -123,7 +124,7 @@ const AdminOverView = props => {
             <View style={styles.menuContainer}>
               <View style={{width: 32, height: 37}}>
                 <MenuIcon
-                  onPress={() => navigation.navigate('Setting')}
+                  onPress={() => navigation.navigate('ChangeProfile')}
                   source={IC_User}
                 />
               </View>
@@ -297,7 +298,13 @@ const AdminOverView = props => {
                     text="Manage User"
                   />
                 </View>
-                <View style={styles.unitContainer} />
+                <View style={styles.unitContainer}>
+                  {/* <FunctionCard
+                    onPress={() => navigation.navigate('ReviewScreen')}
+                    source={IC_Review}
+                    text="Manage Review"
+                  /> */}
+                </View>
               </View>
             </View>
           </>

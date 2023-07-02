@@ -1,38 +1,56 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, View, Text, Image} from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  View,
+  Text,
+  Image,
+  ImageBackground,
+} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
 import {IMG_mditickcircle} from '../assets/images/index.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
+import {IMG_Rectangle182} from '../assets/images/index.js';
 
 const Done = props => {
   const {navigation} = props;
   const [status, setStatus] = useState('');
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.containerCenter}>
-        <Image
-          source={IMG_mditickcircle}
-          style={{width: '60%', height: '60%', resizeMode: 'contain'}}
-        />
-
-        <View style={styles.textView}>
-          <Text style={styles.topText}>COMPLETE!</Text>
-          <Text style={styles.botText}>
-            Email reset password has been sent. Please check your email.
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.containerBot}>
-        <View style={styles.button}>
-          <CustomButton
-            type="primary"
-            text="Continue"
-            onPress={() => navigation.navigate('SignIn')}
+      <ImageBackground
+        source={IMG_Rectangle182}
+        resizeMode="cover"
+        style={styles.container}>
+        <View style={styles.containerCenter}>
+          <Image
+            source={IMG_mditickcircle}
+            style={{width: '60%', height: '60%', resizeMode: 'contain'}}
           />
+          <View style={{width: '100%', height: 5}} />
+          <View style={styles.textView}>
+            <Text style={styles.topText}>COMPLETE!</Text>
+            <View style={{width: '100%', height: 5}} />
+            <Text style={styles.botText}>
+              Email reset password has been sent.
+            </Text>
+            <View style={{width: '100%', height: 3}} />
+            <Text style={styles.botText}>
+              Please check your email for password reset.
+            </Text>
+          </View>
         </View>
-      </View>
+
+        <View style={styles.containerBot}>
+          <View style={styles.button}>
+            <CustomButton
+              type="primary"
+              text="Continue"
+              onPress={() => navigation.navigate('SignIn')}
+            />
+          </View>
+        </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -62,7 +80,7 @@ const styles = StyleSheet.create({
   },
   botText: {
     fontFamily: FONT_FAMILY.Semibold,
-    fontSize: 15,
+    fontSize: 17,
     color: CUSTOM_COLOR.Black,
   },
   containerBot: {

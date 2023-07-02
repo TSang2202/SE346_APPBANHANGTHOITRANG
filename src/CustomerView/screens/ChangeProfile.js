@@ -9,8 +9,7 @@ import {
   Image,
   Text,
   TextInput,
-  Platform,
-  Button,
+  Alert,
 } from 'react-native';
 import CUSTOM_COLOR from '../../AdminView/constants/colors';
 import FONT_FAMILY from '../constants/fonts';
@@ -22,7 +21,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {firebase} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 import CustomButton from '../../Login_SignUp/components/Buttons/CustomButton';
-import ImagePicker from 'react-native-image-picker';
+// import ImagePicker from 'react-native-image-picker';
+const ImagePicker = require('react-native-image-picker');
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const ChangeProfile = props => {
   const {navigation} = props;
@@ -42,52 +43,10 @@ const ChangeProfile = props => {
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [backgroundUrl, setBackgroundUrl] = useState(null);
-  const [imageUri, setImageUri] = useState('');
-
-  const selectImage = () => {
-    const options = {
-      title: 'Select Image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-
-    ImagePicker.showImagePicker(options, response => {
-      if (!response.didCancel && !response.error) {
-        uploadImage(response.uri);
-      }
-    });
-  };
-
-  const uploadImage = async uri => {
-    try {
-      const user = firebase
-        .firestore()
-        .collection('NGUOIDUNG')
-        .doc(firebase.auth().currentUser.uid);
-
-      const storageRef = firebase.storage().ref(`images/${user.id}`);
-      await storageRef.putFile(uri);
-
-      const downloadUrl = await storageRef.getDownloadURL();
-
-      await user.update({
-        Avatar: downloadUrl,
-      });
-
-      setImageUri(downloadUrl);
-
-      console.log('Image uploaded and profile updated successfully!');
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
-  };
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowPicker(Platform.OS === 'ios'); // Hide picker for iOS after selection
-    setDate(currentDate);
+    const currentDate = selectedDate;
+    setShowPicker(false);
 
     let tempDate = new Date(currentDate);
     let fDate =
@@ -96,9 +55,10 @@ const ChangeProfile = props => {
       (tempDate.getMonth() + 1) +
       '/' +
       tempDate.getFullYear();
-    setText(fDate);
 
-    console.log(fDate);
+    console.log('Date of birth: ', fDate);
+    setBirth(fDate);
+    setDate(selectedDate);
   };
 
   const showDateTimePicker = () => {
@@ -116,6 +76,7 @@ const ChangeProfile = props => {
         setFullName(userData.TenND);
         setPhoneNumber(userData.Phone);
         setAddress(userData.DiaChi);
+        setBirth(userData.NgaySinh);
       } else {
         console.log('User document does not exist');
       }
@@ -195,7 +156,23 @@ const ChangeProfile = props => {
         .collection('NGUOIDUNG')
         .doc(documentId)
         .update({
-          Address: newData,
+          DiaChi: newData,
+        });
+
+      console.log('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  const updateBirth = async (documentId, newData) => {
+    try {
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .update({
+          NgaySinh: newData,
         });
 
       console.log('Profile updated successfully!');
@@ -219,6 +196,22 @@ const ChangeProfile = props => {
     fetchBackgroundUrl(firebase.auth().currentUser.uid, 'Background').then(
       url => setBackgroundUrl(url),
     );
+
+    const getCurrentDate = () => {
+      const currentDate = date;
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '/' +
+        (tempDate.getMonth() + 1) +
+        '/' +
+        tempDate.getFullYear();
+
+      console.log('Current date: ', fDate);
+      setBirth(fDate);
+    };
+
+    getCurrentDate();
   }, []);
 
   return (
@@ -244,7 +237,7 @@ const ChangeProfile = props => {
                   <View style={styles.avataContainer}>
                     <TouchableOpacity
                       style={styles.avataStyle}
-                      onPress={() => selectImage}>
+                      onPress={() => chooseImage}>
                       {imageUrl ? (
                         <Image
                           source={{uri: imageUrl}}
@@ -290,7 +283,7 @@ const ChangeProfile = props => {
                         ]}>
                         {fullName ? (
                           <Text style={styles.titleInputStyle}>
-                            {fullName.length}
+                            {fullName.length}/50
                           </Text>
                         ) : null}
                         <View style={{width: '10%', height: '100%'}} />
@@ -345,7 +338,7 @@ const ChangeProfile = props => {
                       <TouchableOpacity
                         style={styles.dateStyle}
                         onPress={showDateTimePicker}>
-                        <Text> {text}</Text>
+                        <Text> {birth}</Text>
                       </TouchableOpacity>
                       {showPicker && (
                         <DateTimePicker
@@ -443,7 +436,7 @@ const ChangeProfile = props => {
                         ]}>
                         {address ? (
                           <Text style={styles.titleInputStyle}>
-                            {address.length}
+                            {address.length}/150
                           </Text>
                         ) : null}
                         <View style={{width: '10%', height: '100%'}} />
@@ -490,7 +483,7 @@ const ChangeProfile = props => {
                         ]}>
                         {phoneNumber ? (
                           <Text style={styles.titleInputStyle}>
-                            {phoneNumber.length}
+                            {phoneNumber.length}/10
                           </Text>
                         ) : null}
                         <View style={{width: '10%', height: '100%'}} />
@@ -515,9 +508,8 @@ const ChangeProfile = props => {
                     <View style={styles.buttonContainer}>
                       <CustomButton
                         type="primary"
-                        text="Continue"
+                        text="Save"
                         onPress={() => {
-                          navigation.goBack();
                           updateFullname(
                             firebase.auth().currentUser.uid,
                             fullName,
@@ -530,6 +522,12 @@ const ChangeProfile = props => {
                             firebase.auth().currentUser.uid,
                             address,
                           );
+                          updateBirth(firebase.auth().currentUser.uid, birth);
+                          Alert.alert(
+                            'Sucess',
+                            'Your profile updated successfully!',
+                          );
+                          navigation.goBack();
                         }}
                       />
                     </View>

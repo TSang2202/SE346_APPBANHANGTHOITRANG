@@ -115,10 +115,14 @@ function ViewShop1({navigation}){
   return (
     <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
     <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
+    <View style={{width: '100%', height: 10}}/>
+    <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
     <Search
       placeholder = 'Search in the Shop'
       style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
     ></Search>
+
+    </View>
     <Image
       style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
       source={{uri: Acount.avartar}}
@@ -280,10 +284,14 @@ function ViewShop1({navigation}){
       return(
         <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White,width: '100%', height: '100%'}}>
         <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
+        <View style={{width: '100%', height: 10}}/>
+        <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
         <Search
           placeholder = 'Search in the Shop'
           style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
         ></Search>
+
+        </View>
         <Image
           style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
           source={{uri: Acount.avartar}}
@@ -303,7 +311,7 @@ function ViewShop1({navigation}){
             <Text style = {{marginTop: 5,color: CUSTOM_COLOR.DarkOrange, fontSize: 20}}>List Item</Text>
             </TouchableOpacity>
        </View>
-       <View>
+       <View style={{width: '100%', height: '65%'}}>
                 <FlatList
                     data={ListItem}
                     renderItem = {({item}) => {

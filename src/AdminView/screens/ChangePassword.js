@@ -18,7 +18,6 @@ import {IMG_Rectangle182} from '../../Login_SignUp/assets/images/index.js';
 
 const ChangePassword = props => {
   const {navigation} = props;
-  const [status, setStatus] = useState('');
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');

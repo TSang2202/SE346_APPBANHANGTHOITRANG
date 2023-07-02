@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     backgroundColor: CUSTOM_COLOR.White,
-    margin: 10,
+    // margin: 10,
   },
 });
 

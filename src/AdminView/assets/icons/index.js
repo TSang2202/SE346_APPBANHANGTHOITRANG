@@ -34,3 +34,5 @@ export {default as IC_edit} from '../icons/OverView/edit.png';
 export {default as IC_messenger} from '../icons/OverView/Messenger.png';
 export {default as IC_notification} from '../icons/OverView/notification.png';
 export {default as IC_User} from '../icons/OverView/Account.png';
+export {default as IC_Selected} from '../icons/Selected.png';
+export {default as IC_Review} from '../icons/Review.png';
