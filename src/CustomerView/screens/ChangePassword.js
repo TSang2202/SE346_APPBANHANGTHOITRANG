@@ -24,14 +24,6 @@ const ChangePassword = props => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  //   const constructor = props => {
-  //     // super(props);
-  //     this.state = {
-  //       oldPassword: '',
-  //       newPassword: '',
-  //     };
-  //   };
-
   const reauthenticate = oldPassword => {
     var user = firebase.auth().currentUser;
     var cred = firebase.auth.EmailAuthProvider.credential(
@@ -48,14 +40,14 @@ const ChangePassword = props => {
         user
           .updatePassword(newPassword)
           .then(() => {
-            Alert.alert('Your password has been changed');
+            Alert.alert('Sucess', 'Your password has been changed');
           })
           .catch(error => {
-            Alert.alert(error.message);
+            Alert.alert('Sucess', error.message);
           });
       })
       .catch(error => {
-        Alert.alert(error.message);
+        Alert.alert('Sucess', error.message);
       });
   };
 
@@ -69,10 +61,8 @@ const ChangePassword = props => {
         <HeaderWithBack onPress={() => navigation.goBack()} />
         <View style={[styles.topContainer, styles.unitContainer]}>
           <HeaderTitlle title="Change Password" />
-          {/* <HederContent content="Your dentify has been vertified" />
-        <HederContent content="Create your new password" /> */}
         </View>
-
+        <View style={{width: '100%', height: '5%'}} />
         <View style={[styles.centerContainer, styles.unitContainer]}>
           <View style={{flex: 1}}>
             <PasswordCard
@@ -102,30 +92,33 @@ const ChangePassword = props => {
         </View>
 
         <View style={[styles.botContainer, styles.unitContainer]}>
-          {/* <View
-          style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
-          <HederContent content="I lost my phone and I cant receive the code" />
-          <TouchableOpacity>
-            <Text style={styles.italicText}>Help center</Text>
-          </TouchableOpacity>
-        </View> */}
           <View style={{flex: 1, alignItems: 'center'}}>
             <CustomButton
               type="primary"
               text="Continue"
               onPress={() => {
-                //   onChangePasswordPress(newPassword);
-                if (newPassword === oldPassword) {
-                  alert('New password have been not match with old password');
-                } else if (newPassword === confirmPassword) {
-                  onChangePasswordPress(newPassword);
-                  navigation.goBack();
+                if (!reauthenticate(oldPassword)) {
+                  Alert.alert(
+                    'Error',
+                    'Your old password is  wrong. Please enter your password again.',
+                  );
                 } else {
-                  alert('Corfirm password not match with password');
+                  if (newPassword === oldPassword) {
+                    Alert.alert(
+                      'Error',
+                      'New password have been not match with old password',
+                    );
+                  } else if (newPassword === confirmPassword) {
+                    onChangePasswordPress(newPassword);
+                    navigation.goBack();
+                  } else {
+                    Alert.alert(
+                      'Error',
+                      'Corfirm password not match with password',
+                    );
+                  }
                 }
               }}
-              // onPress={this.onChangePasswordPress}
-              // onPress={() => navigation.navigate('SmartOTP')}
             />
           </View>
         </View>
@@ -145,12 +138,10 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     height: '10%',
-    top: '1%',
   },
   centerContainer: {
     flexDirection: 'column',
     height: 300,
-    top: '5%',
   },
   botContainer: {
     height: 70,

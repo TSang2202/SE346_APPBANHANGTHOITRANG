@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
@@ -15,6 +16,7 @@ import HederContent from '../components/Header/HederContent.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
 import {firebase} from '../../../Firebase/firebase.js';
+import {IMG_Rectangle182} from '../assets/images/index.js';
 
 const ForgotPassword = props => {
   const {navigation} = props;
@@ -36,40 +38,43 @@ const ForgotPassword = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderWithBack onPress={() => navigation.goBack()} />
-      <View style={[styles.topContainer, styles.unitContainer]}>
-        <HeaderTitlle title="Forgot Password" />
-        <HederContent content="Fill some Personal Information" />
-      </View>
-
-      <View style={[styles.centerContainer, styles.unitContainer]}>
-        <TextInputCard
-          title="Enter your account email"
-          txtInput="abc@gmail.com"
-          onChangeText={email => setEmail(email)}
-          keyboardType="email-address"
-        />
-      </View>
-
-      <View style={[styles.botContainer, styles.unitContainer]}>
-        <View
-          style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
-          <HederContent content="I lost my phone and I cant receive the code" />
-          <TouchableOpacity>
-            <Text style={styles.italicText}>Help center</Text>
-          </TouchableOpacity>
+      <ImageBackground
+        source={IMG_Rectangle182}
+        resizeMode="cover"
+        style={styles.container}>
+        <View style={{width: '100%', height: 20}} />
+        <HeaderWithBack onPress={() => navigation.goBack()} />
+        <View style={[styles.topContainer, styles.unitContainer]}>
+          <HeaderTitlle title="Forgot Password" />
+          {/* <HederContent content="Fill some Personal Information" /> */}
         </View>
-        <View style={{flex: 1, alignItems: 'center'}}>
-          <CustomButton
-            type="primary"
-            text="Continue"
-            onPress={() => {
-              fogotPassword(email);
-              // onPress={() => navigation.navigate('SmartOTP')}
-            }}
+
+        <View style={{width: '100%', height: '10%'}} />
+
+        <View style={[styles.centerContainer, styles.unitContainer]}>
+          <TextInputCard
+            title="Enter your account email"
+            txtInput="abc@gmail.com"
+            onChangeText={email => setEmail(email)}
+            keyboardType="email-address"
           />
         </View>
-      </View>
+
+        <View style={{width: '100%', height: '2%'}} />
+
+        <View style={[styles.botContainer, styles.unitContainer]}>
+          <View style={{flex: 1, alignItems: 'center'}}>
+            <CustomButton
+              type="primary"
+              text="Continue"
+              onPress={() => {
+                fogotPassword(email);
+                // onPress={() => navigation.navigate('SmartOTP')}
+              }}
+            />
+          </View>
+        </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -84,16 +89,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topContainer: {
-    height: 120,
-    top: '1%',
+    height: 60,
   },
   centerContainer: {
-    height: 120,
-    top: '7%',
+    height: 110,
   },
   botContainer: {
-    height: '17%',
-    bottom: '-30%',
+    height: 70,
   },
   italicText: {
     fontFamily: FONT_FAMILY.MediumItalic,

@@ -94,7 +94,7 @@ const AddAccount = props => {
     birth,
     userType,
     avatar,
-    address
+    address,
   ) => {
     try {
       const userCredentials = await firebase
@@ -285,7 +285,6 @@ const AddAccount = props => {
                   email,
                   phoneNumber,
                   birth,
-                  password,
                   userType,
                   avatar,
                   address,
