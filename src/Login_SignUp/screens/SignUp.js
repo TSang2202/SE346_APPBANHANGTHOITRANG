@@ -1,5 +1,5 @@
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   StyleSheet,
@@ -272,7 +272,9 @@ const SignUp = props => {
               onChangeText={birth => setBirth(birth)}
             />
 
-          <View style={{flex: 1}}>
+          </View>
+
+          <View style={{ flex: 1 }}>
             <Text style={styles.titleStyle}>Date of birth</Text>
 
             <View style={styles.dateContainer}>
