@@ -29,15 +29,15 @@ const UserChat = (props: any) => {
           <Text style={{
             marginTop: 5,
             fontStyle: 'italic',
-            fontWeight: props.notification == 0 ? 'normal' : "bold",
-            color: props.notification == 0 ? CUSTOM_COLOR.SilverChalice : CUSTOM_COLOR.Black
+            fontWeight: props.notification == 0 && !props.justCreate ? 'normal' : "bold",
+            color: props.notification == 0 && !props.justCreate ? CUSTOM_COLOR.SilverChalice : CUSTOM_COLOR.Black
 
           }}>{props.message} - {props.time}</Text>
         </View>
 
       </View>
 
-      {props.notification != 0 ?
+      {props.justCreate || props.notification != 0 ?
 
         <View style={{
           width: 20,
@@ -52,7 +52,7 @@ const UserChat = (props: any) => {
           <Text style={{
 
             color: CUSTOM_COLOR.White
-          }}>{props.notification}</Text>
+          }}>{props.justCreate ? "N" : props.notification}</Text>
 
         </View> : null}
 

@@ -368,7 +368,7 @@ const AddPromotion = props => {
                       styles.unitComboContainer,
                       {
                         justifyContent: 'flex-end',
-                        width: '60%',
+                        width: '50%',
                       },
                     ]}>
                     <TextInput
@@ -379,9 +379,68 @@ const AddPromotion = props => {
                     />
                     <View style={{ width: '8%', height: '100%' }} />
                   </View>
+
+                  <View
+                    style={[
+                      styles.unitComboContainer,
+                      { justifyContent: 'flex-start', width: '40%', },
+                    ]}>
+
+                    <Text style={[styles.titleInputStyle, { fontSize: 15 }]}>%</Text>
+
+                  </View>
+
                 </View>
               ) : null}
             </>
+
+            <View style={[styles.comboxContainer, { height: 60 }]}>
+              <View
+                style={[
+                  styles.unitComboContainer,
+                  { justifyContent: 'flex-start', width: '40%' },
+                ]}>
+                <View style={{ width: '12%', height: '100%' }} />
+                <Text style={styles.titleInputStyle}>Minimum Order </Text>
+                <Text
+                  style={[
+                    styles.titleInputStyle,
+                    { color: CUSTOM_COLOR.Red },
+                  ]}>
+                  {' '}
+                  *
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.unitComboContainer,
+                  {
+                    justifyContent: 'flex-end',
+                    width: '50%',
+                  },
+                ]}>
+                <TextInput
+                  style={styles.comboType}
+                  onChangeText={text => setDiscount(text)}
+                  value={name}
+                  keyboardType='numeric'
+                />
+                <View style={{ width: '8%', height: '100%' }} />
+              </View>
+
+              <View
+                style={[
+                  styles.unitComboContainer,
+                  { justifyContent: 'flex-start', width: '40%', },
+                ]}>
+
+                <Text style={[styles.titleInputStyle, { fontSize: 15 }]}>VNĐ</Text>
+
+              </View>
+
+
+
+            </View>
 
             <View style={styles.spaceContainer} />
 

@@ -67,43 +67,12 @@ function HomeScreenCustomer({ navigation }) {
   const getDataChatUser = async () => {
     const q = query(collection(Firestore, "CHAT"), where("MaND", "==", firebase.auth().currentUser.uid));
 
-    // const querySnapshot = await getDocs(q);
-
-    // if (querySnapshot.size == 0) {
-    //   const currentTime = new Date();
-    //   const docRef = await addDoc(collection(Firestore, "CHAT"), {
-    //     MaND: firebase.auth().currentUser.uid,
-    //     ThoiGian: Timestamp.fromDate(currentTime)
-    //   });
-
-    //   const updateRef = doc(Firestore, "CHAT", docRef.id);
-    //   await updateDoc(updateRef, {
-    //     MaChat: docRef.id
-    //   });
-
-    //   setLoadingChatUser(true)
-    // }
-    // querySnapshot.forEach((doc) => {
-    //   setChatUser(doc.data())
-    // });
 
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-      if (querySnapshot.size == 0) {
-        const currentTime = new Date();
-        const docRef = await addDoc(collection(Firestore, "CHAT"), {
-          MaND: firebase.auth().currentUser.uid,
-          ThoiGian: Timestamp.fromDate(currentTime)
-        });
 
-        const updateRef = doc(Firestore, "CHAT", docRef.id);
-        await updateDoc(updateRef, {
-          MaChat: docRef.id
-        });
-
-        setLoadingChatUser(true)
-      }
       querySnapshot.forEach((doc) => {
         setChatUser(doc.data())
+        console.log(doc.data())
       });
     });
   }
@@ -124,7 +93,7 @@ function HomeScreenCustomer({ navigation }) {
 
     getDataTrending();
     getDataDanhMuc();
-    getDataChatUser()
+    getDataChatUser();
     setIdUser(firebase.auth().currentUser.uid)
     getBadgeCart();
 
