@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
@@ -17,6 +18,7 @@ import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
 import {firebase, Firestore} from '../../../Firebase/firebase.js';
 import {doc, getDoc} from 'firebase/firestore';
+import {IMG_Rectangle182} from '../assets/images/index.js';
 
 const SignIn = props => {
   const {navigation} = props;
@@ -38,61 +40,74 @@ const SignIn = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderWithBack onPress={() => navigation.goBack()} />
-      <View style={[styles.unitContainer, {height: 100}]}>
-        <HeaderTitlle title="Sign in" />
-      </View>
-
-      <View style={[styles.unitContainer, styles.bodyContainer]}>
-        <View style={{flex: 2}}>
-          <TextInputCard
-            title="Email*"
-            txtInput="abc@gmail.com"
-            onChangeText={email => setEmail(email)}
-            keyboardType="email-address"
-          />
-        </View>
-
-        <View style={{flex: 2}}>
-          <PasswordCard
-            title="Pasword*"
-            txtInput="********"
-            onChangeText={password => setPassword(password)}
-          />
-        </View>
-
-        <View style={{flex: 1, alignItems: 'flex-end'}}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ForgotPassword')}>
-            <Text style={styles.contentStyle}>Forgot Password</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.containerBot}>
-        <View style={styles.button}>
-          <CustomButton
-            type="primary"
-            text="Sign in"
-            onPress={() => {
-              loginUser(email, password);
-            }}
-          />
-        </View>
-      </View>
-
-      <View style={[styles.unitContainer, styles.botContainer]}>
+      <ImageBackground
+        source={IMG_Rectangle182}
+        resizeMode="cover"
+        style={styles.container}>
+        <View style={{width: '100%', height: 10}} />
+        <HeaderWithBack onPress={() => navigation.goBack()} />
         <View
-          style={{flex: 5, justifyContent: 'center', alignItems: 'flex-end'}}>
-          <HederContent content="Don't you have an account ? " />
+          style={[styles.unitContainer, {height: 50}]}>
+          <HeaderTitlle title="Sign in" />
         </View>
-        <View
-          style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text style={styles.contentStyle}>Sign up</Text>
-          </TouchableOpacity>
+
+        <View style={{width: '100%', height: '5%'}} />
+
+        <View style={[styles.unitContainer, styles.bodyContainer]}>
+          <View style={{flex: 2}}>
+            <TextInputCard
+              title="Email*"
+              txtInput="abc@gmail.com"
+              onChangeText={email => setEmail(email)}
+              keyboardType="email-address"
+            />
+          </View>
+
+          <View style={{flex: 2}}>
+            <PasswordCard
+              title="Pasword*"
+              txtInput="********"
+              onChangeText={password => setPassword(password)}
+            />
+          </View>
+
+          <View style={{flex: 1, alignItems: 'flex-end'}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ForgotPassword')}>
+              <Text style={styles.contentStyle}>Forgot Password</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+
+        <View style={styles.containerBot}>
+          <View style={styles.button}>
+            <CustomButton
+              type="primary"
+              text="Sign in"
+              onPress={() => {
+                loginUser(email, password);
+              }}
+            />
+          </View>
+        </View>
+
+        <View style={[styles.unitContainer, styles.botContainer]}>
+          <View
+            style={{flex: 5, justifyContent: 'center', alignItems: 'flex-end'}}>
+            <HederContent content="Don't you have an account ? " />
+          </View>
+          <View
+            style={{
+              flex: 2,
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+            }}>
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+              <Text style={styles.contentStyle}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -107,13 +122,11 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     height: 270,
-    top: '0%',
     flexDirection: 'column',
   },
   containerBot: {
     width: '100%',
     height: '10%',
-    bottom: '-3%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -122,9 +135,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   botContainer: {
-    height: '15%',
-    bottom: '0%',
+    height: '5%',
     flexDirection: 'row',
+    // backgroundColor: 'red',
   },
   contentStyle: {
     fontFamily: FONT_FAMILY.Light,

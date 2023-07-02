@@ -9,8 +9,7 @@ import {
   Image,
   Text,
   TextInput,
-  Platform,
-  Button,
+  Alert,
 } from 'react-native';
 import CUSTOM_COLOR from '../../AdminView/constants/colors';
 import FONT_FAMILY from '../constants/fonts';
@@ -511,7 +510,6 @@ const ChangeProfile = props => {
                         type="primary"
                         text="Save"
                         onPress={() => {
-                          navigation.goBack();
                           updateFullname(
                             firebase.auth().currentUser.uid,
                             fullName,
@@ -525,6 +523,11 @@ const ChangeProfile = props => {
                             address,
                           );
                           updateBirth(firebase.auth().currentUser.uid, birth);
+                          Alert.alert(
+                            'Sucess',
+                            'Your profile updated successfully!',
+                          );
+                          navigation.goBack();
                         }}
                       />
                     </View>
