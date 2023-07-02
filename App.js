@@ -50,7 +50,7 @@ function App() {
   }
 
   if (!user) {
-    return <MainNavigator />;
+    return <MainNavigator/>;
   } else {
     getDataUser(firebase.auth().currentUser.email);
     console.log(dataUser);
