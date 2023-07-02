@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, TouchableWithoutFeedback } from "react-native";
+import { Image, TextInput, View } from "react-native";
 import { SearchIcon } from "../assets/icons/index.js";
 import CUSTOM_COLOR from "../constants/colors";
 
