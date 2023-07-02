@@ -44,55 +44,14 @@ export default function Chat({ navigation }) {
 
 
 
-  // const getDataChat = async () => {
-  //   const querySnapshot = await getDocs(collection(Firestore, "CHAT"));
-
-  //   const promises = [];
-
-  //   for (const documentSnapshot of querySnapshot.docs) {
-
-  //     const promise = getUser(documentSnapshot.data().MaND);
-  //     promises.push(promise);
-
-  //   }
-  //   const dataUser = await Promise.all(promises);
-
-  //   const data = []
-
-  //   dataUser.map((user, index) => {
-  //     const documentSnapshot = querySnapshot.docs[index];
-
-  //     data.push({
-  //       ...documentSnapshot.data(),
-  //       ...user
-  //     })
-  //   });
-
-  //   setUser(data)
-
-  // }
 
   const getDataChat = async () => {
     const q = query(collection(Firestore, "CHAT"), orderBy("ThoiGian", "desc"));
 
-
-
-
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-      //const promises = [];
-      const data = []
-      // querySnapshot.forEach((doc) => {
-      //   if (doc.exists) {
-      //     const promise = getUser(doc.data().MaND);
-      //     promises.push(promise);
-      //   } else {
-      //     console.log("Document does not exist");
-      //   }
-      //   // const promise = getUser(doc.data().MaND);
 
-      //   // promises.push(promise);
-      //   // //console.log(promises)
-      // });
+      const data = []
+
 
       const promises = querySnapshot.docs.map(doc => {
         return getUser(doc.data());
@@ -111,7 +70,7 @@ export default function Chat({ navigation }) {
       });
 
       setUser(data)
-
+      console.log(users)
 
     });
 
@@ -140,7 +99,8 @@ export default function Chat({ navigation }) {
     const chatUpdateRef = doc(Firestore, "CHAT", item.MaChat);
 
     await updateDoc(chatUpdateRef, {
-      SoLuongChuaDoc: 0
+      SoLuongChuaDoc: 0,
+      MoiKhoiTao: false
     });
   }
 
@@ -156,20 +116,6 @@ export default function Chat({ navigation }) {
       <Search
         placeholder='Search'
       ></Search>
-
-
-      {/* {
-          users ?
-            users.map((item) => (
-              <UserChat
-                key={item.MaChat}
-                source={item.Avatar}
-                name={item.TenND}
-                message='You:What are you doing? - 12:40PM'
-                onPress={() => navigation.navigate('ChatScreen')}
-              />
-            )) : <Text>aaaaaaaaaaaa</Text>
-        } */}
 
 
       <FlatList
@@ -196,6 +142,8 @@ export default function Chat({ navigation }) {
 
               time={!item.NoiDungMessageMoi ? null : `${hour}:${minute}`}
               notification={!item.NoiDungMessageMoi ? 0 : item.SoLuongChuaDoc}
+              //notification={item.SoLuongChuaDoc}
+              justCreate={!item.NoiDungMessageMoi ? item.MoiKhoiTao : item.MoiKhoiTao}
             ></UserChat>
           )
         }}

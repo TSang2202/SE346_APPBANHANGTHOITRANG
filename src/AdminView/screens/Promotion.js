@@ -1,16 +1,17 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View, Image} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
 import PromotionCard from '../components/PromotionCard';
-import {IC_Momo} from '../../CustomerView/assets/icons';
+import { IC_Momo } from '../../CustomerView/assets/icons';
+import { IM_MauAo } from '../assets/images';
 
 const Promotion = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
       <>
         <View style={styles.headerContainer}>
@@ -18,17 +19,24 @@ const Promotion = props => {
         </View>
       </>
 
-      <View style={{width: '100%', height: 5}} />
+      <View style={{ width: '100%', height: 5 }} />
 
       <>
         <View style={styles.listViewContainer}>
-          <PromotionCard />
+          <PromotionCard
+            source={IM_MauAo}
+            name={"Săn sale cuối năm"}
+            discount={"20%"}
+            minimum={"20000"}
+            start={"22/3/2022"}
+            end={"22/4/2023"}
+          />
 
           {/* flatlist */}
         </View>
       </>
 
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
       <>
         <View style={styles.buttonContainer}>
@@ -42,13 +50,13 @@ const Promotion = props => {
             />
           </View>
 
-          <View style={{width: '15%', height: '100%'}} />
+          <View style={{ width: '15%', height: '100%' }} />
 
           <View style={styles.unitButton}>
             <PromotionButton
               type="secondary"
               text="Delete"
-              onPress={() => {}}
+              onPress={() => { }}
             />
           </View>
         </View>

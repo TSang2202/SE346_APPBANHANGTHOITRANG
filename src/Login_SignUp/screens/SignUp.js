@@ -1,4 +1,6 @@
+
 import React, {useState, useEffect} from 'react';
+
 import {
   StyleSheet,
   SafeAreaView,
@@ -13,18 +15,23 @@ import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
-import {IMG_Rectangle182} from '../assets/images/index.js';
+import { IMG_Rectangle182 } from '../assets/images/index.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
 import HederContent from '../components/Header/HederContent.js';
 import CheckBox from '@react-native-community/checkbox';
 import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
-import {firebase} from '../../../Firebase/firebase.js';
+
+import { firebase, Firestore } from '../../../Firebase/firebase.js';
+import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc, onSnapshot, Timestamp } from "firebase/firestore";
+
+
 import CustomDialog from '../components/Cards/DialogCard.js';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+
 const SignUp = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -189,14 +196,33 @@ const SignUp = props => {
           NgaySinh: birth,
           MaND: userCredentials.user.uid,
           LoaiND: userType,
+
           Avatar: avatar,
           DiaChi: address,
+
         });
       console.log('Push data user successfully:', userCredentials.user.uid);
     } catch (error) {
       console.log('Error registering user: ', error);
+
       Alert.alert('Error', error.message);
+
     }
+
+    const currentTime = new Date();
+    const docRef = await addDoc(collection(Firestore, "CHAT"), {
+      MaND: firebase.auth().currentUser.uid,
+      ThoiGian: Timestamp.fromDate(currentTime),
+      SoLuongChuaDoc: 0,
+      SoLuongChuaDocCuaCustomer: 0,
+      MoiKhoiTao: true
+    });
+
+    const updateRef = doc(Firestore, "CHAT", docRef.id);
+    await updateDoc(updateRef, {
+      MaChat: docRef.id
+    });
+
   };
 
   return (
@@ -210,7 +236,7 @@ const SignUp = props => {
           <HeaderTitlle title="Sign Up" />
         </View>
         <View style={[styles.bodyContainer, styles.unitContainer]}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <TextInputCard
               title="Full name*"
               txtInput="Nguyen Van A"
@@ -219,7 +245,7 @@ const SignUp = props => {
             />
           </View>
 
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <TextInputCard
               title="Email*"
               txtInput="abc@gmail.com"
@@ -229,7 +255,7 @@ const SignUp = props => {
             />
           </View>
 
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <TextInputCard
               title="Phone number"
               txtInput="03333333333"
@@ -237,6 +263,14 @@ const SignUp = props => {
               onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
             />
           </View>
+
+
+          <View style={{ flex: 1 }}>
+            <TextInputCard
+              title="Day of birth"
+              txtInput="dd/mm/yy"
+              onChangeText={birth => setBirth(birth)}
+            />
 
           <View style={{flex: 1}}>
             <Text style={styles.titleStyle}>Date of birth</Text>
@@ -258,9 +292,10 @@ const SignUp = props => {
                 />
               )}
             </View>
+
           </View>
 
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <PasswordCard
               title="Password*"
               txtInput="********"
@@ -269,7 +304,7 @@ const SignUp = props => {
             />
           </View>
 
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <PasswordCard
               title="Confirm Password*"
               txtInput="********"
@@ -282,6 +317,30 @@ const SignUp = props => {
         </View>
 
         <View style={[styles.checkContainer, styles.unitContainer]}>
+
+          {/* <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
+                        <CheckBox
+                            disabled={false}
+                            value={toggleCheckBox}
+                            onValueChange={(newValue) => setToggleCheckBox(newValue)}/>
+                    </View> */}
+
+          <View
+            style={{ flex: 2, justifyContent: 'center', alignItems: 'flex-end' }}>
+            <HederContent content="I agree with this " />
+          </View>
+
+          <View
+            style={{
+              flex: 2,
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+            }}>
+            <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
+              <Text style={styles.policyStyles}>Policy</Text>
+            </TouchableOpacity>
+          </View>
+
           <CheckBox
             disabled={false}
             value={toggleCheckBox}
@@ -291,6 +350,7 @@ const SignUp = props => {
           <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
             <Text style={styles.policyStyles}>Policy</Text>
           </TouchableOpacity>
+
         </View>
 
         <View style={styles.containerBot}>

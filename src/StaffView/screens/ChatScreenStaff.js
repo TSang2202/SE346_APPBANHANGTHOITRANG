@@ -4,7 +4,7 @@ import { IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../../Custom
 import { IM_AnhGiay2 } from "../assets/images";
 import Message from "../components/Message";
 import CUSTOM_COLOR from "../constants/colors";
-import { collection, query, where, onSnapshot, Timestamp, addDoc, updateDoc, orderBy } from "firebase/firestore";
+import { collection, query, where, onSnapshot, Timestamp, addDoc, updateDoc, orderBy, doc, getDoc } from "firebase/firestore";
 import { Firestore } from "../../../Firebase/firebase";
 import { async } from "@firebase/util";
 import { set } from "firebase/database";
@@ -31,7 +31,7 @@ function ChatScreenStaff({ navigation, route }) {
     }
 
     const getSoLuongChuaDocCuaCustomer = async () => {
-        const chatDocRef = doc(Firestore, "CHAT", chatUser.MaChat);
+        const chatDocRef = doc(Firestore, "CHAT", item.MaChat);
 
         const docSnapshot = await getDoc(chatDocRef);
 
@@ -59,7 +59,7 @@ function ChatScreenStaff({ navigation, route }) {
             MaCTChat: docRef.id
         })
 
-        const chatDocRef = doc(Firestore, "CHAT", chatUser.MaChat);
+        const chatDocRef = doc(Firestore, "CHAT", item.MaChat);
 
         const soLuongChuaDocCuaCustomer = await getSoLuongChuaDocCuaCustomer();
 
