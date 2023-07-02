@@ -114,7 +114,7 @@ export default function MyProduct({ navigation }) {
             <SafeAreaView>
                 <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 15 }}>
                     <BackTo
-                        onPress={() => navigation.navigate('OverView')}
+                        onPress={() => navigation.goBack()}
                         Info='My Product'
                     ></BackTo>
                     <TouchableOpacity
@@ -193,7 +193,7 @@ export default function MyProduct({ navigation }) {
             <SafeAreaView>
                 <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 15 }}>
                     <BackTo
-                        onPress={() => navigation.navigate('OverView')}
+                        onPress={() => navigation.navigate('AdminOverView')}
                         Info='My Product'
                     ></BackTo>
                     <TouchableOpacity
@@ -269,7 +269,7 @@ export default function MyProduct({ navigation }) {
             <SafeAreaView>
                 <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 15 }}>
                     <BackTo
-                        onPress={() => navigation.navigate('OverView')}
+                        onPress={() => navigation.navigate('AdminOverView')}
                         Info='My Product'
                     ></BackTo>
                     <TouchableOpacity

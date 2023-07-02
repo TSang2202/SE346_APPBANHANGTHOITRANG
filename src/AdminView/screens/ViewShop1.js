@@ -13,7 +13,16 @@ import { backto } from '../assets/icons/index.js';
 import { IM_Giay1, IM_Giay2, IM_Giay3, IM_Giay4 } from '../assets/images/index.js';
 import ItemList from '../components/ItemList';
 import scale from '../constants/responsive.js';
+<<<<<<< HEAD
 import { Acount } from './OverView.js';
+=======
+import {Acount} from './AdminOverView';
+import Product from '../../StaffView/components/Product';
+import ItemList from '../components/ItemList';
+import { IM_Giay1,IM_Giay2,IM_Giay3,IM_Giay4 } from '../assets/images/index.js';
+import Size from '../constants/size.js';
+import { backto } from '../assets/icons/index.js';
+>>>>>>> 177924d405042b61b36f665660704ab987df99ba
 const datasdetail = [
   {
     id: '1',
@@ -117,10 +126,14 @@ function ViewShop1({navigation}){
   return (
     <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
     <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
+    <View style={{width: '100%', height: 10}}/>
+    <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
     <Search
       placeholder = 'Search in the Shop'
       style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
     ></Search>
+
+    </View>
     <Image
       style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
       source={{uri: Acount.avartar}}
@@ -282,10 +295,14 @@ function ViewShop1({navigation}){
       return(
         <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White,width: '100%', height: '100%'}}>
         <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
+        <View style={{width: '100%', height: 10}}/>
+        <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
         <Search
           placeholder = 'Search in the Shop'
           style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
         ></Search>
+
+        </View>
         <Image
           style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
           source={{uri: Acount.avartar}}
@@ -305,7 +322,7 @@ function ViewShop1({navigation}){
             <Text style = {{marginTop: 5,color: CUSTOM_COLOR.DarkOrange, fontSize: 20}}>List Item</Text>
             </TouchableOpacity>
        </View>
-       <View>
+       <View style={{width: '100%', height: '65%'}}>
                 <FlatList
                     data={ListItem}
                     renderItem = {({item}) => {

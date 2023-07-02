@@ -1,16 +1,37 @@
+<<<<<<< HEAD
 import React from 'react';
+=======
+import React, {useState, useEffect} from 'react';
+>>>>>>> 177924d405042b61b36f665660704ab987df99ba
 import {
   Image,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
+<<<<<<< HEAD
   View,
+=======
+  Image,
+  FlatList,
+  Alert,
+>>>>>>> 177924d405042b61b36f665660704ab987df99ba
 } from 'react-native';
 import AccountCard from '../components/AccountCard';
 
 import CUSTOM_COLOR from '../constants/colors';
+<<<<<<< HEAD
 import FONT_FAMILY from '../constants/fonts';
+=======
+import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
+import AccountCard from '../components/AccountCard';
+import {firebase, Firestore} from '../../../Firebase/firebase';
+import LoadingComponent from '../components/Loading';
+import {Storage} from '../../../Firebase/firebase';
+import {IC_User} from '../assets/icons';
+import {Avatar, ListItem} from 'react-native-elements';
+import {getAuth, deleteUser} from 'firebase/auth';
+>>>>>>> 177924d405042b61b36f665660704ab987df99ba
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -27,63 +48,230 @@ export const Acount = {
 
 const ManageUser = props => {
   const {navigation} = props;
+  const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [userAvata, setUserAvata] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      // Assume data is fetched here
+      // const fetchedData = 'Sample Data';
+      // setData(fetchedData);
+      setIsLoading(false);
+    }, 2000);
+
+    fetchUserData(firebase.auth().currentUser.uid);
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
+      setImageUrl(url),
+    );
+
+    const fetchUsers = async () => {
+      try {
+        const querySnapshot = await firebase
+          .firestore()
+          .collection('NGUOIDUNG')
+          .get();
+        const allUserData = querySnapshot.docs.map(doc => doc.data());
+        setUsers(allUserData);
+      } catch (error) {
+        console.error('Error retrieving users: ', error);
+      }
+    };
+
+    // const fetchUserAvata = async() => {
+    //   try {
+    //     const documentSnapshot = await firebase
+    //       .firestore()
+    //       .collection('NGUOIDUNG')
+    //       .get();
+    //     const data = documentSnapshot.data();
+    //     const imageUrl = data[Avatar];
+    //     return imageUrl;
+    //   } catch (error) {
+    //     console.error('Error fetching image URL:', error);
+    //     return null;
+    //   }
+
+    // }
+
+    fetchUsers();
+  }, []);
+
+  const fetchUserData = async userId => {
+    try {
+      const userRef = firebase.firestore().collection('NGUOIDUNG').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setUserData(userData);
+      } else {
+        console.log('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const fetchImageUrl = async (documentId, fieldName) => {
+    try {
+      const documentSnapshot = await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .get();
+      const data = documentSnapshot.data();
+      const imageUrl = data[fieldName];
+      return imageUrl;
+    } catch (error) {
+      console.error('Error fetching image URL:', error);
+      return null;
+    }
+  };
+
+  const handleUserPress = user => {
+    // Navigate to the edit screen with the selected user data
+    navigation.navigate('EditAccount', {user});
+  };
+
+  const handleDeleteUser = async uid => {
+    getAuth()
+      .deleteUser(uid)
+      .then(() => {
+        console.log('Successfully deleted user');
+      })
+      .catch(error => {
+        console.log('Error deleting user:', error);
+      });
+  };
+
+  const handleResetPassword = email => {
+    firebase
+      .auth()
+      // .sendPasswordResetEmail(firebase.auth().currentUser.email)
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        Alert.alert(
+          'Success',
+          'Email reset password sented. Please check your email for password reset instructions.',
+        );
+      })
+      .catch(error => {
+        Alert.alert('Error', error.message);
+      });
+  };
+
+  const renderUser = ({item}) => (
+    <TouchableOpacity onPress={() => handleUserPress(item)}>
+      <View style={{}}>
+        <AccountCard
+          source={{uri: item.Avatar}}
+          name={item.TenND}
+          userType={item.LoaiND}
+          onPress={() => handleResetPassword(item.Email)}
+        />
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{width: '100%', height: 15}} />
 
-      <>
-        <View style={styles.accountContainer}>
-          <View style={styles.avataContainer}>
-            <Image
-              source={{uri: Acount.avartar}}
-              style={{
-                width: '100%',
-                height: '100%',
-                aspectRatio: 1,
-                borderRadius: 50,
-                resizeMode: 'center',
-              }}
-            />
+      {userData ? (
+        <>
+          <View style={styles.accountContainer}>
+            <View style={styles.avataContainer}>
+              {imageUrl ? (
+                <Image
+                  source={{uri: imageUrl}}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 50,
+                    resizeMode: 'center',
+                    borderColor: CUSTOM_COLOR.Black,
+                    borderWidth: 1,
+                  }}
+                />
+              ) : (
+                <Image
+                  source={IC_User}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 50,
+                    resizeMode: 'center',
+                    borderColor: CUSTOM_COLOR.Black,
+                    borderWidth: 1,
+                  }}
+                />
+              )}
+            </View>
+            <View style={{width: 15, height: '100%'}} />
+            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+              <Text style={[styles.textViewStyles, {fontSize: 20}]}>
+                {userData.TenND}
+              </Text>
+              <View style={{width: '100%', height: 5}} />
+              <Text style={[styles.textViewStyles, {fontSize: 15}]}>
+                {userData.LoaiND}
+              </Text>
+            </View>
           </View>
-          <View style={{width: 15, height: '100%'}} />
-          <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={styles.textViewStyles}>{Acount.name}</Text>
-            <View style={{width: '100%', height: 5}} />
-            <Text style={styles.textViewStyles}>ID:{Acount.id}</Text>
-          </View>
-        </View>
-      </>
 
-      <>
-        <View style={styles.searchContainer}>
-          <View style={{width: '5%', height: '100%'}} />
-          <View style={styles.searchViewContainer}>
-            <Search
-              placeholder="Search"
-              style={{
-                width: 200,
-                height: 35,
-                backgroundColor: CUSTOM_COLOR.White,
-              }}
-            />
-          </View>
-          <View style={{width: '5%', height: '100%'}} />
-          <TouchableOpacity style={styles.butAddContainer}>
-            <Text
-              style={{color: CUSTOM_COLOR.White}}
-              onPress={() => navigation.navigate('AddAccount')}>
-              Add Account
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </>
+          <View
+            style={{
+              width: '100%',
+              height: 10,
+              backgroundColor: CUSTOM_COLOR.SlateGray,
+            }}
+          />
 
-      <>
-        <View style={styles.listViewContainer}>
-          {/* Lay list nguoi dung ve hien thi */}
-          <AccountCard onPress={() => navigation.navigate('EditAccount')} />
-        </View>
-      </>
+          <>
+            <View style={styles.searchContainer}>
+              <View style={{width: '5%', height: '100%'}} />
+              <View style={styles.searchViewContainer}>
+                <Search
+                  placeholder="Search"
+                  style={{
+                    width: 200,
+                    height: 35,
+                    backgroundColor: CUSTOM_COLOR.White,
+                  }}
+                />
+              </View>
+              <View style={{width: '5%', height: '100%'}} />
+              <TouchableOpacity style={styles.butAddContainer}>
+                <Text
+                  style={{color: CUSTOM_COLOR.White}}
+                  onPress={() => navigation.navigate('AddAccount')}>
+                  Add Account
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+
+          <>
+            <View style={styles.listViewContainer}>
+              {/* Lay list nguoi dung ve hien thi */}
+              {/* <AccountCard onPress={() => navigation.navigate('EditAccount')} /> */}
+              <FlatList
+                data={users}
+                renderItem={renderUser}
+                keyExtractor={item => item.id}
+              />
+            </View>
+          </>
+          <View style={{width: '100%', height: 20}}/>
+        </>
+      ) : (
+        <LoadingComponent text="Loading data..." />
+      )}
     </SafeAreaView>
   );
 };
@@ -107,7 +295,6 @@ const styles = StyleSheet.create({
   },
   textViewStyles: {
     fontFamily: FONT_FAMILY.Semibold,
-    fontSize: 15,
     fontWeight: 'bold',
     color: CUSTOM_COLOR.Black,
   },

@@ -1,32 +1,20 @@
-<<<<<<< HEAD
-import DateTimePicker from '@react-native-community/datetimepicker';
-import React, { useState } from 'react';
-=======
 import React, {useState, useEffect} from 'react';
->>>>>>> 177924d405042b61b36f665660704ab987df99ba
 import {
-  Image,
-  ImageBackground,
-  Platform,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
+  SafeAreaView,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  ImageBackground,
+  Image,
   Text,
   TextInput,
-<<<<<<< HEAD
-  TouchableOpacity,
-  View
-=======
-  Alert,
->>>>>>> 177924d405042b61b36f665660704ab987df99ba
+  Platform,
+  Button,
 } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-import CustomHeader from '../../AdminView/components/CustomHeader';
-<<<<<<< HEAD
 import CUSTOM_COLOR from '../../AdminView/constants/colors';
-import { IMG_Rectangle } from '../../Login_SignUp/assets/images';
-import { IC_User } from '../assets/icons';
-=======
+import FONT_FAMILY from '../constants/fonts';
+import CustomHeader from '../../AdminView/components/CustomHeader';
 import {IMG_Rectangle} from '../../Login_SignUp/assets/images';
 import {IC_User} from '../assets/icons';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -37,7 +25,6 @@ import CustomButton from '../../Login_SignUp/components/Buttons/CustomButton';
 // import ImagePicker from 'react-native-image-picker';
 const ImagePicker = require('react-native-image-picker');
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
->>>>>>> 177924d405042b61b36f665660704ab987df99ba
 
 const ChangeProfile = props => {
   const {navigation} = props;
@@ -518,12 +505,61 @@ const ChangeProfile = props => {
                 <View style={{width: '100%', height: 15}} />
 
                 <>
+                  <View
+                    style={{
+                      height: 70,
+                      width: '100%',
+                      elevation: 1.5,
+                      borderRadius: 0.5,
+                      shadowColor: CUSTOM_COLOR.Black,
+                      flexDirection: 'row',
+                    }}>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View
+                        style={[
+                          styles.unitTitleContainer,
+                          {justifyContent: 'flex-start'},
+                        ]}>
+                        <View style={{width: '10%', height: '100%'}} />
+                        <Text style={styles.titleInputStyle}>Password</Text>
+                        <Text
+                          style={[
+                            styles.titleInputStyle,
+                            {color: CUSTOM_COLOR.Red},
+                          ]}>
+                          {' '}
+                          *
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        flex: 2,
+                        justifyContent: 'center',
+                        alignItems: 'flex-end',
+                      }}>
+                      <TouchableOpacity
+                        style={styles.buttonChangePasswordContainer}>
+                        <Text
+                          style={{color: CUSTOM_COLOR.White}}
+                          onPress={() => navigation.navigate('ChangePassword')}>
+                          Change Password
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </>
+
+                <View style={{width: '100%', height: 15}} />
+
+                <>
                   <View style={{width: '100%', height: 65}}>
                     <View style={styles.buttonContainer}>
                       <CustomButton
                         type="primary"
                         text="Save"
                         onPress={() => {
+                          navigation.goBack();
                           updateFullname(
                             firebase.auth().currentUser.uid,
                             fullName,
@@ -537,11 +573,6 @@ const ChangeProfile = props => {
                             address,
                           );
                           updateBirth(firebase.auth().currentUser.uid, birth);
-                          Alert.alert(
-                            'Sucess',
-                            'Your profile updated successfully!',
-                          );
-                          navigation.goBack();
                         }}
                       />
                     </View>
@@ -577,6 +608,15 @@ const styles = StyleSheet.create({
   avataContainer: {
     width: '100%',
     height: '67%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonChangePasswordContainer: {
+    width: '60%',
+    height: '70%',
+    marginRight: '5%',
+    backgroundColor: CUSTOM_COLOR.FlushOrange,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },

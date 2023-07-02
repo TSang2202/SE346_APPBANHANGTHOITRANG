@@ -81,6 +81,7 @@ const WellcomeCardEnd = props => {
               }}>
               <TouchableOpacity onPress={props.onPress1}>
                 <Text style={[styles.botContentStyle, {fontWeight: 'bold'}]}>
+                  {' '}
                   Sign in
                 </Text>
               </TouchableOpacity>

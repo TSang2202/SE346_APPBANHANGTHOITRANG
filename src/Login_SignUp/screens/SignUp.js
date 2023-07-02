@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -6,6 +6,8 @@ import {
   Text,
   ImageBackground,
   TouchableOpacity,
+  Alert,
+  Button,
 } from 'react-native';
 import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import HeaderTitlle from '../components/Header/HeaderTitlle.js';
@@ -18,23 +20,147 @@ import CheckBox from '@react-native-community/checkbox';
 import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 import {firebase} from '../../../Firebase/firebase.js';
-import {useNavigation} from '@react-navigation/native';
-//import {  ref, set } from "firebase/database";
-//import {db} from '../../../Firebase/firebase';
+import CustomDialog from '../components/Cards/DialogCard.js';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const SignUp = props => {
   const {navigation} = props;
-  const [status, setStatus] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [birth, setBirth] = useState('');
+  const [birth, setBirth] = useState('01/01/2023');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [userType, setuserType] = useState('customer');
+  const [address, setAddress] = useState('');
+  const [showDialog, setShowDialog] = useState(false);
+  const [avatar, setAvatar] = useState(
+    'https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fusers%2FuserCustomer.png?alt=media&token=16225e3a-c284-4a14-bdc6-710ae891f34b',
+  );
 
-  const user = 'customer';
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  useEffect(() => {
+    const getCurrentDate = () => {
+      const currentDate = date;
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '/' +
+        (tempDate.getMonth() + 1) +
+        '/' +
+        tempDate.getFullYear();
+
+      console.log('Current date: ', fDate);
+      setBirth(fDate);
+    };
+
+    getCurrentDate();
+  }, []);
+
+  const handleDateChange = (event, selected) => {
+    const currentDate = selected;
+    setShowPicker(false);
+
+    let tempDate = new Date(currentDate);
+    let fDate =
+      tempDate.getDate() +
+      '/' +
+      (tempDate.getMonth() + 1) +
+      '/' +
+      tempDate.getFullYear();
+
+    console.log('Date of birth: ', fDate);
+    setBirth(fDate);
+    setDate(selected);
+  };
+
+  const openDialog = () => {
+    setShowDialog(true);
+  };
+
+  const closeDialog = () => {
+    setShowDialog(false);
+  };
+
+  const isValidName = fullName => {
+    if (fullName === '') {
+      return false;
+    }
+    return true;
+  };
+
+  const isValidEmail = email => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPassword = password => {
+    // Password validation criteria
+    // Add your own password validation logic here
+    return password.length >= 8;
+  };
+
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const isValidForm = (
+    fullName,
+    email,
+    password,
+    corfirmPassword,
+    toggleCheckBox,
+  ) => {
+    let isValid = true;
+
+    if (!toggleCheckBox) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please check agree with policy');
+    } else if (fullName === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your full name');
+    } else if (email === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your email');
+    } else if (password === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your password');
+    } else if (!isValidEmail(email)) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Your email is not valid');
+    } else if (!isValidPassword(password)) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Your password must be longer than 8 characters');
+    } else if (password != corfirmPassword) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Corfirm password not match with password');
+    } else if (corfirmPassword === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your corfirm password');
+    } else if (
+      fullName === '' &&
+      email === '' &&
+      password === '' &&
+      corfirmPassword === ''
+    ) {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your information then click sign up');
+    } else {
+    }
+
+    setShowDialog(false);
+    return isValid;
+  };
 
   const signUp = async (
     fullName,
@@ -42,62 +168,36 @@ const SignUp = props => {
     phoneNumber,
     birth,
     password,
-    user,
+    userType,
+    avatar,
+    address,
   ) => {
-    await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        firebase
-          .auth()
-          .currentUser.sendEmailVerification({
-            handleCodeInApp: true,
-            url: 'http://shoppingapp-ada07.firebaseapp.com',
-          })
-          .then(() => {
-            alert('Verification email sent');
-            () => navigation.navigate('Congratulation');
-          })
-          .catch(error => {
-            alert(error.message);
-          })
-          .then(() => {
-            firebase
-              .firestore()
-              .collection('NGUOIDUNG')
-              .doc(firebase.auth().currentUser.uid)
-              .set({
-                TenND: fullName,
-                Email: email,
-                Phone: phoneNumber,
-                NgaySinh: birth,
-
-                MaND: firebase.auth().currentUser.uid,
-                LoaiND: user,
-              });
-          })
-          .catch(error => {
-            alert(error.message);
-          });
-      })
-      .catch(error => {
-        alert(error.message);
-      });
+    try {
+      const userCredentials = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+      console.log('User registered successfully:', userCredentials.user);
+      navigation.navigate('Congratulation');
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(userCredentials.user.uid)
+        .set({
+          TenND: fullName,
+          Email: email,
+          Phone: phoneNumber,
+          NgaySinh: birth,
+          MaND: userCredentials.user.uid,
+          LoaiND: userType,
+          Avatar: avatar,
+          DiaChi: address,
+        });
+      console.log('Push data user successfully:', userCredentials.user.uid);
+    } catch (error) {
+      console.log('Error registering user: ', error);
+      Alert.alert('Error', error.message);
+    }
   };
-
-  // const username = 'Sang'
-  // const email = 'thachsang2202@gmail.com'
-
-  // function create()
-  // {
-  //     set(ref(db, 'users/' + username), {
-  //     username: username,
-  //     email: email,
-
-  //     }).then(()=>{
-  //         Alert('data update');
-  //     }).catch((error) => Alert(error))
-  // }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -114,6 +214,7 @@ const SignUp = props => {
             <TextInputCard
               title="Full name*"
               txtInput="Nguyen Van A"
+              value={fullName}
               onChangeText={fullName => setFullName(fullName)}
             />
           </View>
@@ -124,6 +225,7 @@ const SignUp = props => {
               txtInput="abc@gmail.com"
               onChangeText={email => setEmail(email)}
               keyboardType="email-address"
+              value={email}
             />
           </View>
 
@@ -131,22 +233,38 @@ const SignUp = props => {
             <TextInputCard
               title="Phone number"
               txtInput="03333333333"
+              value={phoneNumber}
               onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
             />
           </View>
 
           <View style={{flex: 1}}>
-            <TextInputCard
-              title="Day of birth"
-              txtInput="dd/mm/yy"
-              onChangeText={birth => setBirth(birth)}
-            />
+            <Text style={styles.titleStyle}>Date of birth</Text>
+
+            <View style={styles.dateContainer}>
+              <TouchableOpacity
+                style={styles.dateStyle}
+                onPress={() => {
+                  setShowPicker(true);
+                }}>
+                <Text> {birth}</Text>
+              </TouchableOpacity>
+              {showPicker && (
+                <DateTimePicker
+                  value={date}
+                  mode="date" // Can be "date", "time", or "datetime"
+                  display="spinner" // Can be "default", "spinner", or "calendar"
+                  onChange={handleDateChange}
+                />
+              )}
+            </View>
           </View>
 
           <View style={{flex: 1}}>
             <PasswordCard
               title="Password*"
               txtInput="********"
+              value={password}
               onChangeText={password => setPassword(password)}
             />
           </View>
@@ -155,6 +273,7 @@ const SignUp = props => {
             <PasswordCard
               title="Confirm Password*"
               txtInput="********"
+              value={confirmPassword}
               onChangeText={corfirmPassword =>
                 setConfirmPassword(corfirmPassword)
               }
@@ -163,28 +282,15 @@ const SignUp = props => {
         </View>
 
         <View style={[styles.checkContainer, styles.unitContainer]}>
-          {/* <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
-                        <CheckBox
-                            disabled={false}
-                            value={toggleCheckBox}
-                            onValueChange={(newValue) => setToggleCheckBox(newValue)}/>
-                    </View> */}
-
-          <View
-            style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
-            <HederContent content="I agree with this " />
-          </View>
-
-          <View
-            style={{
-              flex: 2,
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-            }}>
-            <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
-              <Text style={styles.policyStyles}>Policy</Text>
-            </TouchableOpacity>
-          </View>
+          <CheckBox
+            disabled={false}
+            value={toggleCheckBox}
+            onValueChange={newValue => setToggleCheckBox(newValue)}
+          />
+          <HederContent content="I agree with this " />
+          <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
+            <Text style={styles.policyStyles}>Policy</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.containerBot}>
@@ -193,13 +299,27 @@ const SignUp = props => {
               type="primary"
               text="Sign up now"
               onPress={() => {
-                if (password === confirmPassword) {
-                  signUp(fullName, email, phoneNumber, birth, password, user);
-
-                  navigation.navigate('SignIn');
-                  // navigation.navigate('Congratulation');
+                if (
+                  isValidForm(
+                    fullName,
+                    email,
+                    password,
+                    confirmPassword,
+                    toggleCheckBox,
+                  )
+                ) {
+                  signUp(
+                    fullName,
+                    email,
+                    phoneNumber,
+                    birth,
+                    password,
+                    userType,
+                    avatar,
+                    address,
+                  );
                 } else {
-                  alert('Corfirm password not match with password');
+                  Alert.alert('Error', errorMessage);
                 }
               }}
             />
@@ -230,6 +350,7 @@ const styles = StyleSheet.create({
   checkContainer: {
     height: '4%',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   checkbox: {
     alignSelf: 'center',
@@ -250,6 +371,28 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILY.Light,
     color: CUSTOM_COLOR.Black,
     fontWeight: 'bold',
+  },
+  titleStyle: {
+    fontFamily: FONT_FAMILY.Medium,
+    fontSize: 20,
+    color: CUSTOM_COLOR.Black,
+    left: '5%',
+  },
+  dateContainer: {
+    width: '100%',
+    height: '50%',
+    backgroundColor: CUSTOM_COLOR.Alto,
+    borderRadius: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    // paddingLeft: '5%',
+  },
+  dateStyle: {
+    width: '100%',
+    height: '100%',
+    paddingHorizontal: '5%',
+    justifyContent: 'center',
+    // alignItems: 'center',
   },
 });
 export default SignUp;

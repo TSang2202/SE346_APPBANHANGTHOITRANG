@@ -9,6 +9,13 @@ import { IC_Back, IC_Cancle, IC_Down, IC_Heart, IC_Heart_Red, IC_ShoppingCart } 
 import Button from "../components/Button";
 import StarRating from "../components/StarRating";
 import CUSTOM_COLOR from "../constants/colors";
+<<<<<<< HEAD
+=======
+import { collection, addDoc, doc, updateDoc, onSnapshot, query, deleteDoc, where, getDocs } from "firebase/firestore";
+import { async } from "@firebase/util";
+import { Firestore, firebase } from "../../../Firebase/firebase";
+import Swiper from 'react-native-swiper'
+>>>>>>> 177924d405042b61b36f665660704ab987df99ba
 
 
 function DetailProduct({ navigation, route }) {
@@ -57,7 +64,7 @@ function DetailProduct({ navigation, route }) {
         );
 
     }
-
+    
     const setBuyNow = async () => {
         const docRef = await addDoc(collection(Firestore, "GIOHANG"), {
             MaND: firebase.auth().currentUser.uid,
@@ -93,12 +100,73 @@ function DetailProduct({ navigation, route }) {
     { itemsCheckout && totalMoney ? navigation.navigate('Checkout', { itemsCheckout, totalMoney }) : null }
 
     //
-    const LovePress = () =>{
-        setlove(!love)
-    }
+    const addYeuThich = async () => {
+        try{
+            const docRef = await addDoc(collection(Firestore, "YEUTHICH"), {
+                MaND: firebase.auth().currentUser.uid,
+                MaSP: item.MaSP
+            });
+        } catch(error){
 
+        }
+        
+    }
+   const deleteYeuThich = async () => {
+        try{
+            const collectionRef = collection(Firestore, 'YEUTHICH');
+            const q = query(collectionRef
+                                ,where('MaND', '==', firebase.auth().currentUser.uid)
+                                ,where('MaSP', '==', item.MaSP));
+            const querySnapshot = await getDocs(q);
+            console.log(querySnapshot);
+            querySnapshot.forEach((doc) => {
+                deleteDoc(doc.ref).then(() => {
+                console.log('Xóa tài liệu thành công');
+                }).catch((error) => {
+                console.error('Lỗi khi xóa tài liệu:', error);
+                });
+            });
+            } catch(error){
+                console.log(error);
+            }
+        
+   }
+   const SetLove = async () =>{
+        setlove(!love);
+   }
+    const setDataYeuThich = async () => {
+        await SetLove();
+        let check = love;
+        console.log('jsssssss'+ check);
+        if(check == false){
+            addYeuThich()
+        }
+        else{
+           deleteYeuThich()
+        }
+    }
+    const getstatusYeuThich = async () => {
+        const q = query(collection(Firestore, "YEUTHICH"), where("MaND", "==", firebase.auth().currentUser.uid));
+        const querySnapshot = await getDocs(q);
+        const items = [];
+
+        querySnapshot.forEach(documentSnapshot => {
+          items.push({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+          });
+        });
+        for(let i = 0; i < items.length; i++){
+            if(items[i].MaSP == item.MaSP)
+            {
+                setlove(true);
+            }
+                
+        }
+    }
     useEffect(() => {
         console.log(item.Size)
+        getstatusYeuThich();
     }, [])
     
     return (
@@ -132,7 +200,9 @@ function DetailProduct({ navigation, route }) {
 
 
                 <View style={{ flexDirection: "row", alignItems: 'center', }} >
-                    <TouchableOpacity onPress={LovePress}
+                    <TouchableOpacity onPress={() => {
+                        setDataYeuThich();
+                    }}
                     >
                     { love ? (<Image
                         source={IC_Heart_Red}

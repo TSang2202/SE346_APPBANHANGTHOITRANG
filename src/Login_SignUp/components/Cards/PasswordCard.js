@@ -12,19 +12,22 @@ import FONT_FAMILY from '../../constants/fonts.js';
 import {IC_visibility1, IC_visibility} from '../../assets/icons/index.js';
 
 const PasswordCard = props => {
-  const [isSecureEntry, setIsSecureEntry] = useState(true);
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!isPasswordVisible);
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.titleStyle}>{props.title}</Text>
-
       <View style={styles.textInputContainer}>
         <View style={{flex: 5}}>
           <TextInput
             style={styles.textinputStyle}
             placeholder={props.txtInput}
             // placeholderTextColor='CUSTOM_COLOR.Black'
-            secureTextEntry={isSecureEntry}
+            secureTextEntry={!isPasswordVisible}
             autoCapitalize="none"
             autoCorrect={false}
             onChangeText={props.onChangeText}
@@ -32,14 +35,17 @@ const PasswordCard = props => {
         </View>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity
-            onPress={() => {
-              setIsSecureEntry(!isSecureEntry);
-            }}>
-            {isSecureEntry === true ? (
-              <Image source={IC_visibility1} style={styles.iconStyle} />
-            ) : (
-              <Image source={IC_visibility} style={styles.iconStyle} />
-            )}
+            style={{
+              width: '80%',
+              height: '80%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onPress={togglePasswordVisibility}>
+            <Image
+              style={styles.iconStyle}
+              source={isPasswordVisible ? IC_visibility : IC_visibility1}
+            />
           </TouchableOpacity>
 
           {/* <Image
