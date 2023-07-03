@@ -1,11 +1,11 @@
-import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import React from 'react';
 import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
 import CUSTOM_COLOR from '../../Login_SignUp/constants/colors';
 
 class PromotionButton extends React.Component {
   render() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.button} onPress={this.props.onPress}>
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
+    marginHorizontal: 10
   },
   button: {
     width: '100%',

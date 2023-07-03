@@ -23,12 +23,16 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import moment from 'moment';
 import { isBefore } from 'date-fns';
 import { async } from '@firebase/util';
-import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { ref, uploadBytes, put, getDownloadURL } from "firebase/storage";
 import { Firestore, Storage } from '../../../Firebase/firebase'
+import dayjs from 'dayjs';
 
-const AddPromotion = props => {
-  const { navigation } = props;
+function EditPromotion({ navigation, route }) {
+
+
+  const { item } = route.params
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isFocus, setIsFocus] = useState(false);
@@ -110,16 +114,18 @@ const AddPromotion = props => {
     }
   };
 
-  const setData = async () => {
+  const updateData = async () => {
 
 
     if (!KiemTraNhapLieu()) {
       Alert.alert("Notification", "Please fill in the information completely and accurately!", [{ text: 'OK', style: 'cancel' }]);
       return;
     }
-    const imageUri = await UploadFile()
+    const imageUri = typeof image === 'string' ? image : await UploadFile()
 
-    const docRef = await addDoc(collection(Firestore, "KHUYENMAI"), {
+    const docRef = doc(Firestore, "KHUYENMAI", item.MaKM);
+
+    const updateId = await updateDoc(docRef, {
       TenKM: name,
       HinhAnhKM: imageUri,
       ChiTietKM: description,
@@ -128,14 +134,16 @@ const AddPromotion = props => {
       NgayKetThuc: endDate,
       TiLe: discount / 100,
       DonToiThieu: minimumOrder
-    });
-    console.log("Document written with ID: ", docRef.id);
-
-    const updateId = await updateDoc(docRef, {
-      MaKM: docRef.id
     })
 
-    Alert.alert("Notification", "Successfully added new promotions!", [{ text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' }])
+    Alert.alert("Notification", "Successfully update promotions!", [{ text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' }])
+  }
+
+  const deleteData = async () => {
+    await deleteDoc(doc(Firestore, "KHUYENMAI", item.MaKM));
+
+    Alert.alert("Notification", "Successfully delete promotions!", [{ text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' }])
+
   }
 
   const isNumeric = (input) => {
@@ -169,22 +177,61 @@ const AddPromotion = props => {
 
   useEffect(() => {
 
-    const getCurrentDate = () => {
-      const currentDate = startDate;
-      let tempDate = new Date(currentDate);
-      let fDate =
-        tempDate.getDate() +
-        '/' +
-        (tempDate.getMonth() + 1) +
-        '/' +
-        tempDate.getFullYear();
+    console.log(item)
+    setName(item.TenKM)
+    setDescription(item.ChiTietKM)
+    if (item.Loai === "GiamGia") {
+      setValue(item.Loai)
+      setTpyeOfPromotion(item.Loai)
+      setDiscount((item.TiLe * 100).toString())
+    } else {
+      setValue(item.Loai)
+      setTpyeOfPromotion(item.Loai)
+    }
+    setMinimumOrder(item.DonToiThieu.toString())
+    setStartDate(item.NgayBatDau.toDate())
+    setEndDate(item.NgayKetThuc.toDate())
+    setImage(item.HinhAnhKM)
 
-      console.log('Current date: ', fDate);
-      setStartDateValuse(fDate);
-      setEndDateValues(fDate);
-    };
 
-    getCurrentDate();
+    setLengthName(item.TenKM.length)
+    setLengthDescription(item.ChiTietKM.length)
+
+
+
+    const timestampBD = item.NgayBatDau.toDate();
+    const dateBD = dayjs(timestampBD);
+
+    const dayBD = dateBD.date();
+    const monthBD = dateBD.month();
+    const yearBD = dateBD.year();
+
+    const timestampKT = item.NgayKetThuc.toDate();
+    const dateKT = dayjs(timestampKT);
+
+    const dayKT = dateKT.date();
+    const monthKT = dateKT.month();
+    const yearKT = dateKT.year();
+
+    setStartDateValuse(`${dayBD}/${monthBD}/${yearBD}`)
+    setEndDateValues(`${dayKT}/${monthKT}/${yearKT}`)
+
+    // const getCurrentDate = () => {
+    //   const currentDate = startDate;
+    //   let tempDate = new Date(currentDate);
+    //   let fDate =
+    //     tempDate.getDate() +
+    //     '/' +
+    //     (tempDate.getMonth() + 1) +
+    //     '/' +
+    //     tempDate.getFullYear();
+
+    //   console.log('Current date: ', fDate);
+    //   setStartDateValuse(fDate);
+    //   setEndDateValues(fDate);
+    // };
+
+    // getCurrentDate();
   }, []);
 
   const handleDateChange = (event, selected) => {
@@ -229,7 +276,7 @@ const AddPromotion = props => {
         <View style={styles.headerContainer}>
           <CustomHeader
             onPress={() => navigation.goBack()}
-            title="Promotion/ Add new promotion"
+            title="Edit promotion"
           />
         </View>
       </>
@@ -261,7 +308,7 @@ const AddPromotion = props => {
 
                 {image ? (
                   <Image
-                    source={image}
+                    source={typeof image === "string" ? { uri: image } : image}
                     style={{
                       height: 75,
                       width: 75,
@@ -638,11 +685,16 @@ const AddPromotion = props => {
                   type="secondary"
                   text="Save"
                   onPress={() => {
-                    setData();
+                    updateData();
                   }}
                 />
-
-
+                <PromotionButton
+                  type="secondary"
+                  text="Delete"
+                  onPress={() => {
+                    deleteData();
+                  }}
+                />
               </View>
             </>
 
@@ -757,11 +809,12 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   buttonContainer: {
-    width: '40%',
-    height: 60,
-    marginHorizontal: '30%',
+    width: '100%',
+    height: 50,
+    //marginHorizontal: '30%',
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row'
   },
 });
-export default AddPromotion;
+export default EditPromotion;
