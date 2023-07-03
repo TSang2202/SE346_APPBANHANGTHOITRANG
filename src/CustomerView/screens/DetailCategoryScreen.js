@@ -5,8 +5,8 @@ import { Firestore } from "../../../Firebase/firebase";
 import { IC_Back, IC_ShoppingCart } from "../assets/icons";
 import ProductView from "../components/ProductView";
 import SearchInput from "../components/SearchInput";
+import SortDropDown from "../components/SortDropDown";
 import CUSTOM_COLOR from "../constants/colors";
-
 
 function DetailCategoryScreen({ navigation, route }) {
 
@@ -15,10 +15,14 @@ function DetailCategoryScreen({ navigation, route }) {
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredItems, setFilteredItems] = useState([]);
+    const [sortType, setSortType] = useState("");
 
 
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm);
+    };
+    const handleSort = (type) => {
+        setSortType(type);
     };
 
     const getDataCategory = async () => {
@@ -31,7 +35,17 @@ function DetailCategoryScreen({ navigation, route }) {
             ...documentSnapshot.data(),
             });
         });
-        
+        let sortedItems = data;
+
+        if (sortType === "a-z") {
+            sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+        } else if (sortType === "z-a") {
+            sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+        } else if (sortType === "low-to-high") {
+            sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
+        } else if (sortType === "high-to-low") {
+            sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
+        }
         console.log(item.MaDM);
         
         let filteredItems = data;
@@ -51,7 +65,7 @@ function DetailCategoryScreen({ navigation, route }) {
     
     useEffect(() => {
         getDataCategory();
-    }, [searchTerm]); // Gọi lại hàm getDataCategory mỗi khi searchTerm thay đổi
+    }, [searchTerm, sortType]); // Gọi lại hàm getDataCategory mỗi khi searchTerm thay đổi
     return (
         <View style={{
             flex: 1
@@ -109,7 +123,9 @@ function DetailCategoryScreen({ navigation, route }) {
                     marginBottom: 0
                 }}>{items.length} sản phẩm</Text>
             </View>
-
+            <SortDropDown
+                onSelectSort={handleSort}
+            />
             <View style={{
                 height: '80%'
             }}>
