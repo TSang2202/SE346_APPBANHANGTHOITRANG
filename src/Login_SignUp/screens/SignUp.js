@@ -1,37 +1,41 @@
+import React, { useEffect, useState } from 'react';
 
-import React, { useState, useEffect } from 'react';
+
+
+import CheckBox from '@react-native-community/checkbox';
 
 import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
   Alert,
-  Button,
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import HeaderWithBack from '../components/Header/HeaderWithBack.js';
-import HeaderTitlle from '../components/Header/HeaderTitlle.js';
-import TextInputCard from '../components/Cards/TextInputCard.js';
-import CustomButton from '../components/Buttons/CustomButton.js';
 import { IMG_Rectangle182 } from '../assets/images/index.js';
+import CustomButton from '../components/Buttons/CustomButton.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
+import TextInputCard from '../components/Cards/TextInputCard.js';
+import HeaderTitlle from '../components/Header/HeaderTitlle.js';
+import HeaderWithBack from '../components/Header/HeaderWithBack.js';
 import HederContent from '../components/Header/HederContent.js';
-import CheckBox from '@react-native-community/checkbox';
-import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
+import FONT_FAMILY from '../constants/fonts.js';
 
+import {
+  addDoc,
+  collection,
+  doc,
+  Timestamp,
+  updateDoc
+} from 'firebase/firestore';
 import { firebase, Firestore } from '../../../Firebase/firebase.js';
-import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc, onSnapshot, Timestamp } from "firebase/firestore";
 
-
-import CustomDialog from '../components/Cards/DialogCard.js';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-
 const SignUp = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -64,7 +68,12 @@ const SignUp = props => {
       setBirth(fDate);
     };
 
-    getCurrentDate();
+    getCurrentDate('');
+    setFullName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setToggleCheckBox(false);
   }, []);
 
   const handleDateChange = (event, selected) => {
@@ -121,10 +130,15 @@ const SignUp = props => {
   ) => {
     let isValid = true;
 
-    if (!toggleCheckBox) {
+    if (
+      fullName === '' &&
+      email === '' &&
+      password === '' &&
+      corfirmPassword === ''
+    ) {
       isValid = false;
       setShowDialog(true);
-      setErrorMessage('Please check agree with policy');
+      setErrorMessage('Please enter your information then click sign up');
     } else if (fullName === '') {
       isValid = false;
       setShowDialog(true);
@@ -153,16 +167,10 @@ const SignUp = props => {
       isValid = false;
       setShowDialog(true);
       setErrorMessage('Please enter your corfirm password');
-    } else if (
-      fullName === '' &&
-      email === '' &&
-      password === '' &&
-      corfirmPassword === ''
-    ) {
+    } else if (!toggleCheckBox) {
       isValid = false;
       setShowDialog(true);
-      setErrorMessage('Please enter your information then click sign up');
-    } else {
+      setErrorMessage('Please check agree with policy');
     }
 
     setShowDialog(false);
@@ -196,33 +204,28 @@ const SignUp = props => {
           NgaySinh: birth,
           MaND: userCredentials.user.uid,
           LoaiND: userType,
-
           Avatar: avatar,
           DiaChi: address,
-
         });
       console.log('Push data user successfully:', userCredentials.user.uid);
     } catch (error) {
       console.log('Error registering user: ', error);
-
       Alert.alert('Error', error.message);
-
     }
 
     const currentTime = new Date();
-    const docRef = await addDoc(collection(Firestore, "CHAT"), {
+    const docRef = await addDoc(collection(Firestore, 'CHAT'), {
       MaND: firebase.auth().currentUser.uid,
       ThoiGian: Timestamp.fromDate(currentTime),
       SoLuongChuaDoc: 0,
       SoLuongChuaDocCuaCustomer: 0,
-      MoiKhoiTao: true
+      MoiKhoiTao: true,
     });
 
-    const updateRef = doc(Firestore, "CHAT", docRef.id);
+    const updateRef = doc(Firestore, 'CHAT', docRef.id);
     await updateDoc(updateRef, {
-      MaChat: docRef.id
+      MaChat: docRef.id,
     });
-
   };
 
   return (
@@ -236,33 +239,34 @@ const SignUp = props => {
           <HeaderTitlle title="Sign Up" />
         </View>
         <View style={[styles.bodyContainer, styles.unitContainer]}>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <TextInputCard
               title="Full name*"
               txtInput="Nguyen Van A"
-              value={fullName}
+              // value={fullName}
               onChangeText={fullName => setFullName(fullName)}
             />
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <TextInputCard
               title="Email*"
               txtInput="abc@gmail.com"
               onChangeText={email => setEmail(email)}
               keyboardType="email-address"
-              value={email}
+              // value={email}
             />
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <TextInputCard
               title="Phone number"
               txtInput="03333333333"
-              value={phoneNumber}
+              // value={phoneNumber}
               onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
             />
           </View>
+
 
 
           <View style={{ flex: 1 }}>
@@ -275,6 +279,7 @@ const SignUp = props => {
           </View>
 
           <View style={{ flex: 1 }}>
+
             <Text style={styles.titleStyle}>Date of birth</Text>
 
             <View style={styles.dateContainer}>
@@ -294,97 +299,71 @@ const SignUp = props => {
                 />
               )}
             </View>
-
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <PasswordCard
               title="Password*"
               txtInput="********"
-              value={password}
+              // value={password}
               onChangeText={password => setPassword(password)}
             />
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <PasswordCard
               title="Confirm Password*"
               txtInput="********"
-              value={confirmPassword}
+              // value={confirmPassword}
               onChangeText={corfirmPassword =>
                 setConfirmPassword(corfirmPassword)
               }
             />
           </View>
-        </View>
 
-        <View style={[styles.checkContainer, styles.unitContainer]}>
-
-          {/* <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-end'}}>
-                        <CheckBox
-                            disabled={false}
-                            value={toggleCheckBox}
-                            onValueChange={(newValue) => setToggleCheckBox(newValue)}/>
-                    </View> */}
-
-          <View
-            style={{ flex: 2, justifyContent: 'center', alignItems: 'flex-end' }}>
+          <View style={[styles.checkContainer, styles.unitContainer]}>
+            <CheckBox
+              disabled={false}
+              value={toggleCheckBox}
+              onValueChange={newValue => setToggleCheckBox(newValue)}
+            />
             <HederContent content="I agree with this " />
-          </View>
-
-          <View
-            style={{
-              flex: 2,
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-            }}>
             <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
               <Text style={styles.policyStyles}>Policy</Text>
             </TouchableOpacity>
           </View>
 
-          <CheckBox
-            disabled={false}
-            value={toggleCheckBox}
-            onValueChange={newValue => setToggleCheckBox(newValue)}
-          />
-          <HederContent content="I agree with this " />
-          <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
-            <Text style={styles.policyStyles}>Policy</Text>
-          </TouchableOpacity>
-
-        </View>
-
-        <View style={styles.containerBot}>
-          <View style={styles.button}>
-            <CustomButton
-              type="primary"
-              text="Sign up now"
-              onPress={() => {
-                if (
-                  isValidForm(
-                    fullName,
-                    email,
-                    password,
-                    confirmPassword,
-                    toggleCheckBox,
-                  )
-                ) {
-                  signUp(
-                    fullName,
-                    email,
-                    phoneNumber,
-                    birth,
-                    password,
-                    userType,
-                    avatar,
-                    address,
-                  );
-                } else {
-                  Alert.alert('Error', errorMessage);
-                }
-              }}
-            />
+          <View style={styles.containerBot}>
+            <View style={styles.button}>
+              <CustomButton
+                type="primary"
+                text="Sign up now"
+                onPress={() => {
+                  if (
+                    isValidForm(
+                      fullName,
+                      email,
+                      password,
+                      confirmPassword,
+                      toggleCheckBox,
+                    )
+                  ) {
+                    signUp(
+                      fullName,
+                      email,
+                      phoneNumber,
+                      birth,
+                      password,
+                      userType,
+                      avatar,
+                      address,
+                    );
+                  } else {
+                    Alert.alert('Error', errorMessage);
+                  }
+                }}
+              />
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -406,7 +385,7 @@ const styles = StyleSheet.create({
     left: '3%',
   },
   bodyContainer: {
-    height: 480,
+    height: 550,
     top: '0%',
   },
   checkContainer: {
@@ -419,7 +398,7 @@ const styles = StyleSheet.create({
   },
   containerBot: {
     width: '100%',
-    height: '7%',
+    height: '10%',
     bottom: '-1%',
     alignItems: 'center',
     justifyContent: 'center',
