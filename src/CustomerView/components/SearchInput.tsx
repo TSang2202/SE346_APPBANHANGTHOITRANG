@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     height: 40,
     marginTop: 10,
     marginLeft: 20,
-    marginRight : 20,
+    marginRight : 10,
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     padding: 8,
     fontSize: 13,
-    width: 160,
+    width: 180,
   },
   button: {
     height:40,
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 14,
+    marginTop: 2,
   },
 });
 

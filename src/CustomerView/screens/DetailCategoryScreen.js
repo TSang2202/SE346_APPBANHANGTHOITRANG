@@ -47,10 +47,11 @@ function DetailCategoryScreen({ navigation, route }) {
     };
     useEffect(() => {
         getDataCategory();
-        console.log(items)
-        // const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
-        // return () => clearInterval(interval); // Xóa interval khi component bị unmount
-    }, [searchTerm]);
+      }, []); // Gọi lại hàm getDataCategory khi component được tạo lần đầu
+    
+    useEffect(() => {
+        getDataCategory();
+    }, [searchTerm]); // Gọi lại hàm getDataCategory mỗi khi searchTerm thay đổi
     return (
         <View style={{
             flex: 1
