@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-
-
+import React, {useEffect, useState} from 'react';
 
 import CheckBox from '@react-native-community/checkbox';
 
@@ -11,9 +9,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { IMG_Rectangle182 } from '../assets/images/index.js';
+import {IMG_Rectangle182} from '../assets/images/index.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';
@@ -28,9 +26,9 @@ import {
   collection,
   doc,
   Timestamp,
-  updateDoc
+  updateDoc,
 } from 'firebase/firestore';
-import { firebase, Firestore } from '../../../Firebase/firebase.js';
+import {firebase, Firestore} from '../../../Firebase/firebase.js';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -267,19 +265,7 @@ const SignUp = props => {
             />
           </View>
 
-
-
-          <View style={{ flex: 1 }}>
-            <TextInputCard
-              title="Day of birth"
-              txtInput="dd/mm/yy"
-              onChangeText={birth => setBirth(birth)}
-            />
-
-          </View>
-
-          <View style={{ flex: 1 }}>
-
+          <View style={{flex: 1}}>
             <Text style={styles.titleStyle}>Date of birth</Text>
 
             <View style={styles.dateContainer}>
@@ -385,7 +371,7 @@ const styles = StyleSheet.create({
     left: '3%',
   },
   bodyContainer: {
-    height: 550,
+    height: 570,
     top: '0%',
   },
   checkContainer: {

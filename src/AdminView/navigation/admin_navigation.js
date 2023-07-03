@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AddAccount from '../screens/AddAccount';
 import AddProduct from '../screens/AddProduct';
 import AddPromotion from '../screens/AddPromotion';
@@ -32,7 +32,7 @@ function StackNavigator() {
   return (
     <Stack.Navigator
       initialRouteName="AdminOverView"
-      screenOptions={{ headerShown: false }}>
+      screenOptions={{headerShown: false}}>
       <Stack.Screen name="AddAccount" component={AddAccount} />
       <Stack.Screen name="AddProduct" component={AddProduct} />
       <Stack.Screen name="AddPromotion" component={AddPromotion} />
@@ -51,7 +51,7 @@ function StackNavigator() {
       <Stack.Screen name="Promotion" component={Promotion} />
       <Stack.Screen name="Report" component={Report} />
       <Stack.Screen name="ReviewScreen" component={ReviewScreen} />
-      <Stack.Screen name="SearchSrc" component={SearchSrc} />
+      <Stack.Screen name="Search" component={SearchSrc} />
       <Stack.Screen name="Setting" component={Setting} />
       <Stack.Screen name="ViewShop1" component={ViewShop1} />
       <Stack.Screen name="ViewShop2" component={ViewShop2} />
