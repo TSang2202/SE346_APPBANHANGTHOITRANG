@@ -1,40 +1,68 @@
-import React from "react";
-import { Image, TextInput, View } from "react-native";
-import { SearchIcon } from "../assets/icons/index.js";
+import React, { useState } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import CUSTOM_COLOR from "../constants/colors";
 
-const SearchInput = (props: any) =>{
+interface SearchInputProps {
+  onSearch: (searchTerm: string) => void;
+}
 
-  return(
-    <View style = {{
-      flexDirection: 'row', 
-      borderWidth: 1, 
-      alignItems: 'center',
-      padding: 10,
-      borderRadius: 20,
-      height: 40,
-      //width: 320,
-      backgroundColor: CUSTOM_COLOR.Mercury,
-      ...props.style
-        }}>
-      <Image
-        style = {{
-          marginRight: 5,
-          width: 20,
-          height: 20
-        }}
-        source = {SearchIcon}
-       
-      />
-      <TextInput style = {{width: '70%', height: 30, borderWidth: 0, padding:5}}
-        placeholder = {props.placeholder}
-        onChangeText = {props.onChangeText}
-        onPressIn = {props.onPressIn}
-      />
-      
+const SearchInput: React.FC<SearchInputProps> = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = () => {
+    onSearch(searchTerm);
+    setSearchTerm("");
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
+        <TextInput
+          value={searchTerm}
+          onChangeText={setSearchTerm}
+          placeholder="Nhập từ khóa..."
+          style={styles.input}
+        />
+        <TouchableOpacity onPress={handleSearch} style={styles.button}>
+          <Text style={styles.buttonText}>Tìm kiếm</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-  )
-   
+  );
 };
 
-export default SearchInput
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 10,
+  },
+  inputContainer: {
+    height: 40,
+    marginTop: 10,
+    marginLeft: 20,
+    marginRight : 10,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+  },
+  input: {
+    marginLeft: 10,
+    padding: 8,
+    fontSize: 13,
+    width: 180,
+  },
+  button: {
+    height:40,
+    padding: 8,
+    backgroundColor: CUSTOM_COLOR.Black,
+    borderRadius: 4,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 14,
+    marginTop: 2,
+  },
+});
+
+export default SearchInput;

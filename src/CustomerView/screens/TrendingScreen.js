@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
-import { IC_Back, IC_ShoppingCart } from "../assets/icons";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
-import { collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
+import { IC_Back, IC_ShoppingCart } from "../assets/icons";
 import ProductView from "../components/ProductView";
 import SearchInput from "../components/SearchInput";
+import SortDropdown from "../components/SortDropDown";
 import CUSTOM_COLOR from "../constants/colors";
-
 
 function TrendingScreen({ navigation }) {
 
     const [trending, setTrending] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredItems, setFilteredItems] = useState([]);
+    const [sortType, setSortType] = useState("");
+
+    const handleSearch = (searchTerm) => {
+        setSearchTerm(searchTerm);
+    };
+    const handleSort = (type) => {
+        setSortType(type);
+    };
 
     const getDataTrending = async () => {
         //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
@@ -28,8 +38,28 @@ function TrendingScreen({ navigation }) {
                 key: documentSnapshot.id,
             });
         });
+        let sortedItems = items;
 
-        setTrending(items);
+        if (sortType === "a-z") {
+            sortedItems = items.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+        } else if (sortType === "z-a") {
+            sortedItems = items.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+        } else if (sortType === "low-to-high") {
+            sortedItems = items.sort((a, b) => a.GiaSP - b.GiaSP);
+        } else if (sortType === "high-to-low") {
+            sortedItems = items.sort((a, b) => b.GiaSP - a.GiaSP);
+        }
+
+        let filteredItems = items;
+        if (searchTerm != null) {
+            filteredItems = items.filter(item =>
+            item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+            ); 
+        }
+        else {
+            setTrending(items);
+        }
+        setTrending(filteredItems);
     }
 
     useEffect(() => {
@@ -37,10 +67,9 @@ function TrendingScreen({ navigation }) {
 
         getDataTrending();
 
-
         // const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
         // return () => clearInterval(interval); // Xóa interval khi component bị unmount
-    }, []);
+    }, [searchTerm, sortType]);
     return (
         <View style={{
             flex: 1
@@ -64,10 +93,8 @@ function TrendingScreen({ navigation }) {
                 </TouchableOpacity>
 
                 <SearchInput
-                    style={{
-                        marginVertical: 10,
-                        width: 300
-                    }} />
+                onSearch = {handleSearch}
+                />
 
                 <View style={{
                     backgroundColor: CUSTOM_COLOR.Mercury,
@@ -91,7 +118,9 @@ function TrendingScreen({ navigation }) {
                     marginBottom: 10
                 }}>Trending now</Text>
             </View>
-
+            <SortDropdown
+                onSelectSort={handleSort}
+            />
             <View style={{
                 height: '80%'
             }}>
@@ -99,16 +128,18 @@ function TrendingScreen({ navigation }) {
                     data={trending}
                     renderItem={({ item }) => {
                         return (
-                            <TouchableWithoutFeedback style={{
+                            <TouchableOpacity style={{
                                 flexDirection: 'row',
                                 //justifyContent: 'space-around'
-                            }}>
+                            }}
+                                onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+                            >
                                 <ProductView
                                     source={item.HinhAnhSP[0]}
                                     title={item.TenSP}
                                     price={item.GiaSP}
                                 />
-                            </TouchableWithoutFeedback>
+                            </TouchableOpacity>
                         )
                     }}
                     numColumns={2}

@@ -1,41 +1,34 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  Alert,
-  Button,
-} from 'react-native';
-import HeaderWithBack from '../components/Header/HeaderWithBack.js';
-import HeaderTitlle from '../components/Header/HeaderTitlle.js';
-import TextInputCard from '../components/Cards/TextInputCard.js';
-import CustomButton from '../components/Buttons/CustomButton.js';
-import {IMG_Rectangle182} from '../assets/images/index.js';
-import PasswordCard from '../components/Cards/PasswordCard.js';
-import HederContent from '../components/Header/HederContent.js';
 import CheckBox from '@react-native-community/checkbox';
-import FONT_FAMILY from '../constants/fonts.js';
-import CUSTOM_COLOR from '../constants/colors.js';
-
-import {firebase, Firestore} from '../../../Firebase/firebase.js';
 import {
+  Alert,
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { IMG_Rectangle182 } from '../assets/images/index.js';
+import CustomButton from '../components/Buttons/CustomButton.js';
+import PasswordCard from '../components/Cards/PasswordCard.js';
+import TextInputCard from '../components/Cards/TextInputCard.js';
+import HeaderTitlle from '../components/Header/HeaderTitlle.js';
+import HeaderWithBack from '../components/Header/HeaderWithBack.js';
+import HederContent from '../components/Header/HederContent.js';
+import CUSTOM_COLOR from '../constants/colors.js';
+import FONT_FAMILY from '../constants/fonts.js';
+
+import {
+  addDoc,
   collection,
   doc,
-  setDoc,
-  getDocs,
-  query,
-  where,
-  addDoc,
-  updateDoc,
-  onSnapshot,
   Timestamp,
+  updateDoc
 } from 'firebase/firestore';
+import { firebase, Firestore } from '../../../Firebase/firebase.js';
 
-import CustomDialog from '../components/Cards/DialogCard.js';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const SignUp = props => {
