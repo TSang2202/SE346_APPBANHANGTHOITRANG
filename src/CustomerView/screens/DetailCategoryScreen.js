@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
-import { IC_Back, IC_ShoppingCart } from "../assets/icons";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
-import { collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
+import { IC_Back, IC_ShoppingCart } from "../assets/icons";
 import ProductView from "../components/ProductView";
 import SearchInput from "../components/SearchInput";
 import CUSTOM_COLOR from "../constants/colors";
@@ -13,38 +13,44 @@ function DetailCategoryScreen({ navigation, route }) {
     const { item } = route.params
 
     const [items, setItems] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredItems, setFilteredItems] = useState([]);
+
+
+    const handleSearch = (searchTerm) => {
+        setSearchTerm(searchTerm);
+    };
 
     const getDataCategory = async () => {
-
-        const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", item.MaDM));
-
+    const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", item.MaDM));
         const querySnapshot = await getDocs(q);
-
         const data = [];
-
-
+        
         querySnapshot.forEach(documentSnapshot => {
             data.push({
-                ...documentSnapshot.data(),
-                // key: documentSnapshot.id,
+            ...documentSnapshot.data(),
             });
         });
-
-        console.log(item.MaDM)
-
-        setItems(data);
-    }
-
+        
+        console.log(item.MaDM);
+        
+        let filteredItems = data;
+        if (searchTerm != null) {
+            filteredItems = data.filter(item =>
+            item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+            ); 
+        }
+        else {
+            setItems(data);
+        }
+        setItems(filteredItems);
+    };
     useEffect(() => {
-
-
         getDataCategory();
         console.log(items)
-
-
         // const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
         // return () => clearInterval(interval); // Xóa interval khi component bị unmount
-    }, []);
+    }, [searchTerm]);
     return (
         <View style={{
             flex: 1
@@ -68,10 +74,8 @@ function DetailCategoryScreen({ navigation, route }) {
                 </TouchableOpacity>
 
                 <SearchInput
-                    style={{
-                        marginVertical: 10,
-                        width: '70%'
-                    }} />
+                onSearch = {handleSearch}
+                />
 
                 <TouchableOpacity style={{
                     backgroundColor: CUSTOM_COLOR.Mercury,
@@ -131,9 +135,6 @@ function DetailCategoryScreen({ navigation, route }) {
                 />
 
             </View>
-
-
-
         </View>
 
     )
