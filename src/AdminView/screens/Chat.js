@@ -1,28 +1,29 @@
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
   FlatList,
+  Image,
+  Text,
+  View
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Firestore, firebase } from '../../../Firebase/firebase';
+import { IC_User } from '../assets/icons/index';
 import Search from '../components/Search';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Acount} from './AdminOverView';
-import CUSTOM_COLOR from '../constants/colors';
 import UserChat from '../components/UserChat';
+import CUSTOM_COLOR from '../constants/colors';
 import Size from '../constants/size';
-import {firebase, Firestore} from '../../../Firebase/firebase';
-import {doc, getDoc, getDocs, collection} from 'firebase/firestore';
-import {async} from '@firebase/util';
-import {IC_User} from '../assets/icons/index';
-import PropTypes from 'deprecated-react-native-prop-types';
 
-export default function Chat({navigation}) {
+
+export default function Chat({ navigation }) {
   const [users, setUser] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
 
+  const handleSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+  };
   const getUser = async item => {
     item = item.trim();
 
@@ -40,16 +41,13 @@ export default function Chat({navigation}) {
 
   const getDataChat = async () => {
     const querySnapshot = await getDocs(collection(Firestore, 'CHAT'));
-
     const promises = [];
-
     for (const documentSnapshot of querySnapshot.docs) {
       const promise = getUser(documentSnapshot.data().MaND);
       promises.push(promise);
       //console.log(promises)
     }
     const dataUser = await Promise.all(promises);
-
     const data = [];
 
     // querySnapshot.forEach( (documentSnapshot) => {
@@ -72,8 +70,16 @@ export default function Chat({navigation}) {
         ...user,
       });
     });
-
-    setUser(data);
+    let filteredItems = data;
+        if (searchTerm != null) {
+            filteredItems = data.filter(item =>
+            item.TenND.toLowerCase().includes(searchTerm.toLowerCase())
+            ); 
+        }
+        else {
+            setUser(data);
+        }
+        setUser(filteredItems);
   };
 
   useEffect(() => {
@@ -85,7 +91,7 @@ export default function Chat({navigation}) {
     fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
       setImageUrl(url),
     );
-  }, []);
+  }, [searchTerm]);
 
   const fetchImageUrl = async (documentId, fieldName) => {
     try {
@@ -105,7 +111,7 @@ export default function Chat({navigation}) {
 
   return (
     <SafeAreaView
-      style={{backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight}}>
+      style={{ backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight }}>
       <View
         style={{
           flexDirection: 'row',
@@ -115,7 +121,7 @@ export default function Chat({navigation}) {
         }}>
         {imageUrl ? (
           <Image
-            source={{uri: imageUrl}}
+            source={{ uri: imageUrl }}
             style={{
               aspectRatio: 1,
               borderRadius: 55,
@@ -157,8 +163,10 @@ export default function Chat({navigation}) {
         </Text>
       </View>
 
-      <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
-        <Search placeholder="Search" />
+      <View style={{ width: '90%', height: 50, marginHorizontal: '5%' }}>
+        <Search
+          onSearch={handleSearch}
+        />
       </View>
 
       {/* {
@@ -176,13 +184,13 @@ export default function Chat({navigation}) {
 
       <FlatList
         data={users}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <UserChat
             //key={item.MaChat}
             source={item.Avatar}
             name={item.TenND}
             message="You:What are you doing? - 12:40PM"
-            onPress={() => navigation.navigate('ChatScreenStaff', {item})}
+            onPress={() => navigation.navigate('ChatScreenStaff', { item })}
           />
         )}
         keyExtractor={item => item.MaChat}

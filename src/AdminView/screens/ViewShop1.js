@@ -1,17 +1,35 @@
-import { View, Text, SafeAreaView, 
-  StyleSheet,Image,TouchableOpacity,FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native'
-import React from 'react'
-import { useState } from 'react';
-import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import FONT_FAMILY from '../../StaffView/constants/fonts.js';
-import Search from '../components/Search';
-import scale from '../constants/responsive.js';
-import {Acount} from './AdminOverView';
+import React, { useState } from 'react';
+import {
+  FlatList,
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import Product from '../../StaffView/components/Product';
-import ItemList from '../components/ItemList';
-import { IM_Giay1,IM_Giay2,IM_Giay3,IM_Giay4 } from '../assets/images/index.js';
-import Size from '../constants/size.js';
+import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import { backto } from '../assets/icons/index.js';
+import { IM_Giay1, IM_Giay2, IM_Giay3, IM_Giay4 } from '../assets/images/index.js';
+import ItemList from '../components/ItemList';
+import Search from '../components/Search';
+import SortDropdown from '../components/SortDropDown';
+import scale from '../constants/responsive.js';
+import { Acount } from './AdminOverView';
+
+const [searchTerm, setSearchTerm] = useState(''); // State để lưu trữ từ khóa tìm kiếm
+const [searchResults, setSearchResults] = useState([]); // State để lưu trữ kết quả tìm kiếm
+
+const handleSearch = (searchTerm) => {
+  setSearchTerm(searchTerm);
+
+  // Lọc dữ liệu từ datas dựa trên từ khóa tìm kiếm
+  const filteredData = datas.filter((data) =>
+    data.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  setSearchResults(filteredData);
+};
 const datasdetail = [
   {
     id: '1',
@@ -118,8 +136,7 @@ function ViewShop1({navigation}){
     <View style={{width: '100%', height: 10}}/>
     <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
     <Search
-      placeholder = 'Search in the Shop'
-      style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
+    onSearch={handleSearch}
     ></Search>
 
     </View>
@@ -140,123 +157,23 @@ function ViewShop1({navigation}){
     style = {{width: '50%', height: '100%', alignItems: 'center', color: CUSTOM_COLOR.Black}}>
     <Text style = {{marginTop: 5, fontSize: 20}}>List Item</Text>
     </TouchableOpacity>
+    
   </View>
+  <SortDropdown/>
     <View style = {{
                 flexDirection: 'row',
                 marginBottom: 10,
                 justifyContent: 'space-between', 
                 marginHorizontal: 10,
                 marginTop: 14,
-           }}>
-                <View style = {{
-                    elevation: 3,
-                    shadowColor: CUSTOM_COLOR.Black,
-                    width: 90,
-                    borderRadius: 20,
-                    backgroundColor: CUSTOM_COLOR.White,
-                    padding: 5,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  
-                }}>
-                    <Text style={{
-                        fontSize: 15,
-                        color: CUSTOM_COLOR.Black
-                    }}>Related</Text>
-                </View>
-
-                <View style = {{
-                    elevation: 3,
-                    shadowColor: CUSTOM_COLOR.Black,
-                    width: 90,
-                    borderRadius: 20,
-                    backgroundColor: CUSTOM_COLOR.White,
-                    padding: 5,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text style={{
-                        fontSize: 15,
-                        color: CUSTOM_COLOR.Black
-                    }}>Newest</Text>
-                </View>
-
-                <View style = {{
-                    elevation: 3,
-                    shadowColor: CUSTOM_COLOR.Black,
-                    width: 90,
-                    borderRadius: 20,
-                    backgroundColor: CUSTOM_COLOR.White,
-                    padding: 5,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text style={{
-                        fontSize: 15,
-                        color: CUSTOM_COLOR.Black
-                    }}>Top seller</Text>
-                </View>
-
-                <View style = {{
-                    elevation: 3,
-                    shadowColor: CUSTOM_COLOR.Black,
-                    width: 90,
-                    borderRadius: 20,
-                    backgroundColor: CUSTOM_COLOR.White,
-                    padding: 5,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text style={{
-                        fontSize: 15,
-                        color: CUSTOM_COLOR.Black
-                    }}>Price</Text>
-                </View>
-
+          }}>
+          
       </View>
-      <View style = {{
-                flexDirection: 'row',
-                marginBottom: 10,
-                alignItems: 'center',
-                marginHorizontal: 10,
-                justifyContent: 'space-evenly',
-                marginTop: 3,
-           }}>
-              <View style = {{
-                    elevation: 3,
-                    shadowColor: CUSTOM_COLOR.Black,
-                    width: 90,
-                    borderRadius: 20,
-                    backgroundColor: CUSTOM_COLOR.White,
-                    padding: 5,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text style={{
-                        fontSize: 15,
-                        color: CUSTOM_COLOR.Black
-                    }}>Rating</Text>
-                </View>
-                <View style = {{
-                    elevation: 3,
-                    shadowColor: CUSTOM_COLOR.Black,
-                    width: 90,
-                    borderRadius: 20,
-                    backgroundColor: CUSTOM_COLOR.White,
-                    padding: 5,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text style={{
-                        fontSize: 15,
-                        color: CUSTOM_COLOR.Black
-                    }}>Discount</Text>
-                </View>
-      </View>
+      
     <View style = {{width: '100%', height: 300}}>
                 <FlatList
-                     nestedScrollEnabled={true}
-                    data={datas}
+                    nestedScrollEnabled={true}
+                    data={searchResults}
                     renderItem = {({item}) => {
                         return(
                             //<TouchableOpacity
@@ -339,10 +256,7 @@ function ViewShop1({navigation}){
           return(
             <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
             <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
-            <Search
-              placeholder = 'Search in the Shop'
-              style = {{width: '80%', height: 35, backgroundColor: CUSTOM_COLOR.White}}
-            ></Search>
+            <Search onSearch={handleSearch}></Search>
             <Image
               style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
               source={{uri: Acount.avartar}}
@@ -359,12 +273,13 @@ function ViewShop1({navigation}){
                   resizeMode='contain'
                   source={backto}
                   style={{width:'100%',height:'100%'}}
-               ></Image>
+              ></Image>
             </TouchableOpacity>
             <Text style = {{color: CUSTOM_COLOR.Black, fontSize: 18, marginLeft: 10}}>List Item/ {ListItem[0].namelist}</Text>
             </View>
+            <SortDropdown/>
             <View>
-               <FlatList
+              <FlatList
                     horizontal={false} 
                     data={datasdetail}
                     numColumns={2}
