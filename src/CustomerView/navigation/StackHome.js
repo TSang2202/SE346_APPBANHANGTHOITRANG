@@ -16,7 +16,8 @@ import PromotionScreen from '../screens/PromotionScreen';
 import DeliveryScreen from '../screens/DeliveryScreen';
 import ChangePassword from '../screens/ChangePassword';
 import ChangeProfile from '../screens/ChangeProfile';
-
+import Order from '../screens/MyOrder';
+import DeTailDelivery from '../screens/DetailDelivery';
 const Stack = createNativeStackNavigator();
 
 function StackHome() {
@@ -42,6 +43,8 @@ function StackHome() {
       <Stack.Screen name="DetailCategory" component={DetailCategoryScreen} />
       <Stack.Screen name="Promotion" component={PromotionScreen} />
       <Stack.Screen name="Delivery" component={DeliveryScreen} />
+      <Stack.Screen name="MyOrder" component={Order} />
+      <Stack.Screen name="DetailDelivery" component={DeTailDelivery} />
     </Stack.Navigator>
   );
 }
