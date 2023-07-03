@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import {createNavigationContainerRef} from '@react-navigation/native';
+import { createNavigationContainerRef } from '@react-navigation/native';
 import {
   settingicon,
   messenger,
@@ -25,8 +25,11 @@ import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import ViewShop1 from './ViewShop1.js';
 import Button from '../../StaffView/components/Button';
 import ViewNow from '../../StaffView/components/ViewNow';
-import {IC_logout} from '../assets/icons/index.js';
-import {firebase, Firestore} from '../../../Firebase/firebase.js';
+import { IC_logout } from '../assets/icons/index.js';
+import { firebase, Firestore } from '../../../Firebase/firebase.js';
+import FunctionCard from '../../AdminView/components/FunctionCard.js';
+import { IC_financial, IC_messenger, IC_order, IC_product, IC_promotions, IC_User, IC_user } from '../../AdminView/assets/icons/index.js';
+import MenuIcon from '../../AdminView/components/MenuIcon.js';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -62,7 +65,63 @@ const Order = [
     status: 'Review',
   },
 ];
-function OverView({navigation}) {
+function OverView({ navigation }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      // Assume data is fetched here
+      const fetchedData = 'Sample Data';
+      setData(fetchedData);
+      setIsLoading(false);
+    }, 2000);
+
+    fetchUserData(firebase.auth().currentUser.uid);
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
+      setImageUrl(url),
+    );
+
+    console.log(userData)
+    console.log(imageUrl)
+  }, []);
+
+  const fetchUserData = async userId => {
+    try {
+      const userRef = firebase.firestore().collection('NGUOIDUNG').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setUserData(userData);
+      } else {
+        console.log('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const fetchImageUrl = async (documentId, fieldName) => {
+    try {
+      const documentSnapshot = await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .get();
+      const data = documentSnapshot.data();
+      const imageUrl = data[fieldName];
+      return imageUrl;
+    } catch (error) {
+      console.error('Error fetching image URL:', error);
+      return null;
+    }
+
+    ;
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -71,14 +130,47 @@ function OverView({navigation}) {
         width: '100%',
         height: '100%',
       }}>
-      <View style={{width: '100%', height: '12%', flexDirection: 'row'}}>
+
+      <View style={styles.menuContainer}>
+        <View style={{ width: 32, height: 37, marginHorizontal: 5 }}>
+          <MenuIcon
+            onPress={() => navigation.navigate('Setting')}
+            source={IC_User}
+          />
+        </View>
+        <View style={{ width: 10, height: '100%' }} />
+        <View style={{ width: 30, height: 30, marginHorizontal: 5 }}>
+          <MenuIcon
+            onPress={() => navigation.navigate('Chat')}
+            source={IC_messenger}
+          />
+        </View>
+        {/* <View style={{width: 5, height: '100%'}} />
+          <View style={{width: 35, height: 35}}>
+            <MenuIcon
+              onPress={() => navigation.navigate('Notification')}
+              source={IC_notification}
+            />
+          </View> */}
+        <View style={{ width: 5, height: '100%' }} />
+        <View style={{ width: 32, height: 32, marginHorizontal: 5 }}>
+          <MenuIcon
+            onPress={() => {
+              firebase.auth().signOut();
+            }}
+            source={IC_logout}
+          />
+        </View>
+        <View style={{ width: 10, height: '100%' }} />
+      </View>
+      {/* <View style={{ width: '100%', height: '12%', flexDirection: 'row' }}>
         <TouchableOpacity
           style={styles.settingicon}
           onPress={() => {
             navigation.navigate('Setting');
           }}>
           <Image
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             source={settingicon}
             resizeMode="stretch"
           />
@@ -89,7 +181,7 @@ function OverView({navigation}) {
             navigation.navigate('Chat');
           }}>
           <Image
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             source={messenger}
             resizeMode="contain"
           />
@@ -100,7 +192,7 @@ function OverView({navigation}) {
             navigation.navigate('Notification');
           }}>
           <Image
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             source={notification}
             resizeMode="contain"
           />
@@ -111,13 +203,13 @@ function OverView({navigation}) {
             firebase.auth().signOut();
           }}>
           <Image
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             source={IC_logout}
             resizeMode="contain"
           />
         </TouchableOpacity>
 
-      </View>
+      </View> */}
       <View
         style={{
           width: '100%',
@@ -125,27 +217,41 @@ function OverView({navigation}) {
           backgroundColor: CUSTOM_COLOR.SlateGray,
         }}
       />
-      <View style={{width: '100%', height: '17%', flexDirection: 'row'}}>
-        <Image
-          source={{uri: Acount.avartar}}
-          style={{
-            width: '21%',
-            aspectRatio: 1,
-            borderRadius: 55,
-            marginTop: '3%',
-            marginLeft: '3%',
-          }}
-          resizeMode="cover"
-        />
+      <View style={{ width: '100%', height: '17%', flexDirection: 'row' }}>
+
+        {imageUrl ?
+          <Image
+            source={{ uri: imageUrl }}
+            style={{
+              width: '21%',
+              aspectRatio: 1,
+              borderRadius: 55,
+              marginTop: '3%',
+              marginLeft: '3%',
+            }}
+            resizeMode="cover"
+          /> :
+          <Image
+            source={IC_User}
+            style={{
+              width: '21%',
+              aspectRatio: 1,
+              borderRadius: 55,
+              marginTop: '3%',
+              marginLeft: '3%',
+            }}
+            resizeMode="cover"
+          />
+        }
         <View
-          style={{flexDirection: 'column', marginLeft: '3%', marginTop: '7%'}}>
+          style={{ flexDirection: 'column', marginLeft: '3%', marginTop: '7%' }}>
           <Text
             style={{
               fontFamily: FONT_FAMILY.Semibold,
               color: CUSTOM_COLOR.Black,
               fontWeight: 'bold',
             }}>
-            {Acount.name}
+            {userData ? userData.TenND : null}
           </Text>
           <Text
             style={{
@@ -154,16 +260,18 @@ function OverView({navigation}) {
               color: CUSTOM_COLOR.Black,
               fontWeight: 'bold',
             }}>
-            ID:{Acount.id}
+            Staff
           </Text>
         </View>
-        <TouchableOpacity style={styles.viewshop}>
-          <Text
-            style={{color: CUSTOM_COLOR.Red, alignItems: 'center'}}
-            onPress={() => navigation.navigate('ViewShop1')}>
-            View Shop
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.viewShopContainer}>
+          <TouchableOpacity style={styles.butViewShopContainer}>
+            <Text
+              style={{ color: CUSTOM_COLOR.Red }}
+              onPress={() => navigation.navigate('ViewShop1')}>
+              View Shop
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View
         style={{
@@ -172,8 +280,8 @@ function OverView({navigation}) {
           backgroundColor: CUSTOM_COLOR.SlateGray,
         }}
       />
-      <View style={{width: '100%', height: '20%'}}>
-        <View style={{flexDirection: 'row'}}>
+      <View style={{ width: '100%', height: '20%' }}>
+        <View style={{ flexDirection: 'row' }}>
           <Text
             style={{
               marginTop: '2%',
@@ -183,7 +291,7 @@ function OverView({navigation}) {
             }}>
             Order New
           </Text>
-          <TouchableOpacity style={{marginTop: '3%', marginLeft: '60%'}}>
+          <TouchableOpacity style={{ marginTop: '3%', marginLeft: '60%' }}>
             <Text
               style={{
                 fontSize: 12,
@@ -195,12 +303,12 @@ function OverView({navigation}) {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <FlatList
             horizontal={true}
             data={Order}
             keyExtractor={item => item.id}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               return <ViewNow number={item.number} status={item.status} />;
             }}
           />
@@ -213,8 +321,57 @@ function OverView({navigation}) {
           backgroundColor: CUSTOM_COLOR.SlateGray,
         }}
       />
-      <View style={{flexDirection: 'column', width: '100%', height: '40%'}}>
-        <View
+
+      <View style={styles.functionContainer}>
+        <View style={styles.unitContainer}>
+          <View style={styles.unitContainer}>
+            <FunctionCard
+              onPress={() => navigation.navigate('MyProduct')}
+              source={IC_product}
+              text="My Product"
+            />
+          </View>
+          <View style={styles.unitContainer}>
+            <FunctionCard
+              onPress={() => navigation.navigate('Order')}
+              source={IC_order}
+              text="My Order"
+            />
+          </View>
+          <View style={styles.unitContainer}>
+            <FunctionCard
+              onPress={() => navigation.navigate('Promotion')}
+              source={IC_promotions}
+              text="Promotions"
+            />
+          </View>
+        </View>
+        <View style={styles.unitContainer}>
+          <View style={styles.unitContainer}>
+            <FunctionCard
+              onPress={() => navigation.navigate('Report')}
+              source={IC_financial}
+              text="Financial Report"
+            />
+          </View>
+          <View style={styles.unitContainer}>
+            <FunctionCard
+              onPress={() => navigation.navigate('ManageUser')}
+              source={IC_user}
+              text="Manage User"
+            />
+          </View>
+          <View style={styles.unitContainer}>
+            {/* <FunctionCard
+                    onPress={() => navigation.navigate('ReviewScreen')}
+                    source={IC_Review}
+                    text="Manage Review"
+                  /> */}
+          </View>
+        </View>
+      </View>
+      {/* <View style={{flexDirection: 'column', width: '100%', height: '40%'}}> */}
+      {/* <View
           style={{
             flexDirection: 'row',
             width: '100%',
@@ -230,8 +387,8 @@ function OverView({navigation}) {
             source={promotion}
             onPress={() => navigation.navigate('Promotion')}
           />
-        </View>
-        <View style={{flexDirection: 'row', width: '100%', height: '10%'}}>
+        </View> */}
+      {/* <View style={{flexDirection: 'row', width: '100%', height: '10%'}}>
           <Text
             style={{
               color: CUSTOM_COLOR.Black,
@@ -256,8 +413,8 @@ function OverView({navigation}) {
             }}>
             Promotions
           </Text>
-        </View>
-        <View
+        </View> */}
+      {/* <View
           style={{
             flexDirection: 'row',
             width: '100%',
@@ -269,9 +426,9 @@ function OverView({navigation}) {
             onPress={() => navigation.navigate('Report')}
           />
           <Button source={chat} onPress={() => navigation.navigate('Chat')} />
-          {/* <Button source={user} onPress={() => navigation.navigate('User')} /> */}
-        </View>
-        <View style={{flexDirection: 'row', width: '100%'}}>
+        
+        </View> */}
+      {/* <View style={{flexDirection: 'row', width: '100%'}}>
           <Text
             style={{
               color: CUSTOM_COLOR.Black,
@@ -288,16 +445,9 @@ function OverView({navigation}) {
             }}>
             Messenger
           </Text>
-          {/* <Text
-            style={{
-              color: CUSTOM_COLOR.Black,
-              marginTop: '-3%',
-              marginLeft: '13%',
-            }}>
-            Manage User
-          </Text> */}
-        </View>
-      </View>
+       
+        </View> */}
+      {/* </View> */}
     </SafeAreaView>
   );
 }
@@ -338,6 +488,38 @@ const styles = StyleSheet.create({
   },
   textstyle: {
     marginTop: '5%',
+  },
+  functionContainer: {
+    flex: 10,
+    flexDirection: 'column',
+  },
+  unitContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  viewShopContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    marginHorizontal: 20
+  },
+  butViewShopContainer: {
+    width: 100,
+    height: 40,
+    borderColor: CUSTOM_COLOR.FlushOrange,
+    borderRadius: 5,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginEnd: 20
+  },
+  menuContainer: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
 });
 
