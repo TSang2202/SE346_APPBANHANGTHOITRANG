@@ -296,13 +296,13 @@ const styles = StyleSheet.create({
   },
   searchViewContainer: {
     width: '60%',
-    height: '60%',
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
   butAddContainer: {
     width: '25%',
-    height: '60%',
+    height: 45,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: CUSTOM_COLOR.FlushOrange,
