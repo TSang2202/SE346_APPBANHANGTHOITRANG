@@ -496,6 +496,7 @@ const ChangeProfile = props => {
                         style={{flex: 1, fontSize: 17}}
                         onChangeText={setPhoneNumber}
                         value={phoneNumber}
+                        keyboardType="phone-pad"
                       />
                       <View style={{width: '5%', height: '100%'}} />
                     </View>

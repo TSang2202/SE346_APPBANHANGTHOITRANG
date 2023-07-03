@@ -6,17 +6,22 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  SafeAreaView,
+  ImageBackground,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import BackTo from '../components/BackTo';
 import CUSTOM_COLOR from '../constants/colors';
 import ButtonDetail from '../components/ButtonDetail';
 import {AddImage} from '../assets/images';
+import FONT_FAMILY from '../constants/fonts';
+import {border_add} from '../assets/images';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Search from '../components/Search';
 import Categorybutton from '../components/categorybutton';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import CheckBox from 'react-native-check-box';
 import {Firestore, Storage} from '../../../Firebase/firebase';
+import CustomHeader from '../components/CustomHeader';
 import {
   collection,
   doc,
@@ -40,6 +45,8 @@ export default function AddProduct({navigation}) {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState();
   const [amount, setAmount] = useState();
+  const [lengthName, setLengthName] = useState(0);
+  const [lengthDescription, setLengthDescription] = useState(0);
 
   const [color, setColor] = useState([]);
   const [size, setSize] = useState([
@@ -178,277 +185,489 @@ export default function AddProduct({navigation}) {
   }, []);
 
   return (
-    <View
-      style={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: CUSTOM_COLOR.White,
-      }}>
-      <BackTo
-        onPress={() => {
-          navigation.goBack();
-        }}
-        Info="Add Product"
-      />
-      <ScrollView style={{backgroundColor: CUSTOM_COLOR.White}}>
-        <View
-          style={{
-            width: '100%',
-            height: 130,
-            marginTop: 10,
-            elevation: 2,
-            borderRadius: 0.5,
-            shadowColor: CUSTOM_COLOR.Black,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <TouchableOpacity
-            style={{width: 90, height: 90, marginTop: 10, marginHorizontal: 20}}
-            onPress={selectImage}>
-            <Image
-              style={{width: '100%', height: '100%'}}
-              source={AddImage}
-              resizeMode="cover"
+    <SafeAreaView style={{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
+      <View
+        style={{
+          width: '90%',
+          height: '100%',
+          marginHorizontal: '5%',
+          backgroundColor: CUSTOM_COLOR.White,
+        }}>
+        <>
+          <View style={{width: '100%', height: 60}}>
+            <CustomHeader
+              onPress={() => navigation.goBack()}
+              title="Product / Add product"
             />
-          </TouchableOpacity>
-          {image ? (
-            <ScrollView horizontal={true}>
-              {image.map(img => (
-                <Image
-                  key={img.uri}
-                  source={{uri: img.uri}}
-                  style={{height: 90, width: 90, margin: 5}}
+          </View>
+        </>
+
+        <ScrollView style={{backgroundColor: CUSTOM_COLOR.White}}>
+          <View style={{width: '100%', height: 10}} />
+          <>
+            <View style={styles.addImageContainer}>
+              <View style={{width: 20, height: '100%'}} />
+              <TouchableOpacity
+                style={{width: 75, height: 75}}
+                onPress={selectImage}>
+                <ImageBackground
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  source={border_add}
+                  resizeMode="cover">
+                  <Text style={styles.icAddStyle}>+</Text>
+                </ImageBackground>
+              </TouchableOpacity>
+              <View style={{width: 20, height: '100%'}} />
+              {image ? (
+                <ScrollView horizontal={true}>
+                  {image.map(img => (
+                    <Image
+                      key={img.uri}
+                      source={{uri: img.uri}}
+                      style={{height: 90, width: 90, margin: 5}}
+                    />
+                  ))}
+                </ScrollView>
+              ) : (
+                <Text style={{marginLeft: 30}}>(Add picture or video)</Text>
+              )}
+            </View>
+          </>
+
+          <View style={{width: '100%', height: 10}} />
+
+          <>
+            <View style={[styles.inputContainer, {height: 90}]}>
+              <View style={{width: '100%', height: 10}} />
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-start'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                  <Text style={styles.titleInputStyle}>Name Of Product</Text>
+                  <Text
+                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    {' '}
+                    *
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-end'},
+                  ]}>
+                  <Text style={styles.titleInputStyle}>{lengthName}/200</Text>
+                  <View style={{width: '10%', height: '100%'}} />
+                </View>
+              </View>
+              <View style={{width: '100%', height: 5}} />
+              <View style={{flex: 2, flexDirection: 'row'}}>
+                <View style={{width: '5%', height: '100%'}} />
+                <TextInput
+                  style={{flex: 1, fontSize: 17}}
+                  onChangeText={text => {
+                    if (text.length < 200) {
+                      setName(text);
+                      setLengthName(text.length);
+                    }
+                  }}
+                  value={name}
                 />
-              ))}
-            </ScrollView>
-          ) : (
-            <Text style={{marginLeft: 30}}>(Add picture or video)</Text>
-          )}
-        </View>
-        <View
-          style={{
-            width: '100%',
-            height: 90,
-            marginTop: 10,
-            elevation: 2,
-            borderRadius: 0.5,
-            shadowColor: CUSTOM_COLOR.Black,
-            flexDirection: 'column',
-          }}>
-          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 15}}>
-            <Text>Name Of Product</Text>
-            <Text style={{color: CUSTOM_COLOR.Red}}> *</Text>
-            <Text style={{marginLeft: 220}}>0/200</Text>
-          </View>
-          <TextInput
-            style={{marginLeft: 15}}
-            onChangeText={text => setName(text)}
-            value={name}
-          />
-        </View>
+                <View style={{width: '5%', height: '100%'}} />
+              </View>
+            </View>
+          </>
 
-        <View
-          style={{
-            width: '100%',
-            height: 130,
-            marginTop: 10,
-            flexDirection: 'column',
-            elevation: 2,
-            borderRadius: 0.5,
-            shadowColor: CUSTOM_COLOR.Black,
-          }}>
-          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 15}}>
-            <Text>Description</Text>
-            <Text style={{color: CUSTOM_COLOR.Red}}> *</Text>
-            <Text style={{marginLeft: 260}}>0/200</Text>
-          </View>
-          <TextInput
-            style={{marginLeft: 15}}
-            onChangeText={text => setDescription(text)}
-            value={description}
-            multiline={true}
-          />
-        </View>
+          <View style={{width: '100%', height: 10}} />
 
-        <View
-          style={{
-            width: '100%',
-            height: 90,
-            marginTop: 10,
-            elevation: 2,
-            flexDirection: 'column',
-            borderRadius: 0.5,
-            shadowColor: CUSTOM_COLOR.Black,
-          }}>
-          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 15}}>
-            <Text>Price</Text>
-            <Text style={{color: CUSTOM_COLOR.Red}}> *</Text>
-          </View>
-          <View style={{flexDirection: 'row'}}>
-            <TextInput
-              style={{marginLeft: 15, width: 200}}
-              onChangeText={text => setPrice(text)}
-              value={price}
-              keyboardType="numeric"
-            />
-            <Text style={{marginLeft: 150, marginTop: 12}}>VND</Text>
-          </View>
-        </View>
+          <>
+            <View style={[styles.inputContainer, {height: 100}]}>
+              <View style={{width: '100%', height: 10}} />
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-start'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                  <Text style={styles.titleInputStyle}>Description</Text>
+                  <Text
+                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    {' '}
+                    *
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-end'},
+                  ]}>
+                  <Text style={styles.titleInputStyle}>
+                    {lengthDescription}/500
+                  </Text>
+                  <View style={{width: '10%', height: '100%'}} />
+                </View>
+              </View>
+              <View style={{width: '100%', height: 5}} />
+              <View style={{flex: 2, flexDirection: 'row'}}>
+                <View style={{width: '5%', height: '100%'}} />
+                <TextInput
+                  style={{flex: 1, fontSize: 17}}
+                  onChangeText={text => {
+                    if (text.length <= 500) {
+                      setDescription(text);
+                      setLengthDescription(text.length);
+                    }
+                  }}
+                  value={description}
+                  multiline={true}
+                />
+                <View style={{width: '5%', height: '100%'}} />
+              </View>
+            </View>
+          </>
 
-        <View
-          style={{
-            width: '100%',
-            height: 90,
-            marginTop: 10,
-            elevation: 2,
-            flexDirection: 'column',
-            borderRadius: 0.5,
-            shadowColor: CUSTOM_COLOR.Black,
-          }}>
-          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 15}}>
-            <Text>Color</Text>
-            <Text style={{color: CUSTOM_COLOR.Red}}> *</Text>
-          </View>
-          <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
-            {color
-              ? color.map(item => (
-                  <CheckBox
-                    key={item.key}
-                    style={{flex: 1, padding: 10}}
-                    onClick={() => {
-                      //setChecked(!checked)
-                      handleCheckColor(item.key);
-                    }}
-                    isChecked={item.checked}
-                    leftText={item.TenMau}
-                    leftTextStyle={{fontSize: 15, marginHorizontal: 5}}
-                  />
-                ))
-              : null}
-          </ScrollView>
-        </View>
+          <View style={{width: '100%', height: 10}} />
 
-        <View
-          style={{
-            width: '100%',
-            height: 90,
-            marginTop: 10,
-            elevation: 2,
-            flexDirection: 'column',
-            borderRadius: 0.5,
-            shadowColor: CUSTOM_COLOR.Black,
-          }}>
-          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 15}}>
-            <Text>Size</Text>
-            <Text style={{color: CUSTOM_COLOR.Red}}> *</Text>
-          </View>
-          <ScrollView style={{flexDirection: 'row'}} horizontal={true}>
-            {size
-              ? size.map(item => (
-                  <CheckBox
-                    key={item.id}
-                    style={{flex: 1, padding: 10}}
-                    isChecked={item.checked}
-                    leftText={item.title}
-                    leftTextStyle={{fontSize: 15, marginHorizontal: 5}}
-                    onClick={() => {
-                      handleCheckSize(item.id);
-                    }}
-                  />
-                ))
-              : null}
-          </ScrollView>
-        </View>
+          <>
+            <View style={[styles.inputContainer, {height: 90}]}>
+              <View style={{width: '100%', height: 10}} />
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-start'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                  <Text style={styles.titleInputStyle}>Price</Text>
+                  <Text
+                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    {' '}
+                    *
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-end'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                </View>
+              </View>
+              <View style={{flex: 2, flexDirection: 'row'}}>
+                <View style={{width: '5%', height: '100%'}} />
+                <TextInput
+                  style={{flex: 1, fontSize: 17}}
+                  onChangeText={text => setPrice(text)}
+                  value={price}
+                  keyboardType="numeric"
+                />
+                <View
+                  style={{
+                    width: '20%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={styles.titleInputStyle}>VNĐ</Text>
+                </View>
+              </View>
+            </View>
+          </>
 
-        <View
-          style={{
-            width: '100%',
-            height: 90,
-            marginTop: 10,
-            elevation: 2,
-            borderRadius: 0.5,
-            flexDirection: 'column',
-            shadowColor: CUSTOM_COLOR.Black,
-          }}>
-          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 15}}>
-            <Text>Amount</Text>
-            <Text style={{color: CUSTOM_COLOR.Red}}> *</Text>
-          </View>
-          <TextInput
-            style={{marginLeft: 15}}
-            onChangeText={text => setAmount(text)}
-            value={amount}
-            keyboardType="numeric"
-          />
-        </View>
-        <View
-          style={{
-            width: '100%',
-            height: 200,
-            marginTop: 10,
-            elevation: 2,
-            flexDirection: 'column',
-            borderRadius: 0.5,
-            shadowColor: CUSTOM_COLOR.Black,
-          }}>
-          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 15}}>
-            <Text>Categorize</Text>
-            <Text style={{color: CUSTOM_COLOR.Red}}> *</Text>
-          </View>
+          <View style={{width: '100%', height: 10}} />
 
-          <View>
-            <Dropdown
-              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={danhMuc}
-              search
-              maxHeight={200}
-              labelField="TenDM"
-              valueField="key"
-              placeholder={!isFocus ? 'Select item' : '...'}
-              searchPlaceholder="Search..."
-              value={value}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={item => {
-                setValue(item.key);
-                setIsFocus(false);
-                setCategorize(item);
-              }}
-            />
-          </View>
-        </View>
-        <View style={{alignItems: 'center', width: '100%', marginTop: 30}}>
-          <ButtonDetail
-            title="Add now"
-            style={{width: 150, height: 50}}
-            onPress={() => {
-              setData();
-            }}
-            color={CUSTOM_COLOR.DarkOrange}
-          />
-        </View>
-      </ScrollView>
-    </View>
+          <>
+            <View style={[styles.inputContainer, {height: 90}]}>
+              <View style={{width: '100%', height: 10}} />
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-start'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                  <Text style={styles.titleInputStyle}>Color</Text>
+                  <Text
+                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    {' '}
+                    *
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-end'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                </View>
+              </View>
+              <View style={{flex: 2, flexDirection: 'row'}}>
+                <View style={{width: '3%', height: '100%'}} />
+                <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
+                  {color
+                    ? color.map(item => (
+                        <CheckBox
+                          key={item.key}
+                          style={{flex: 1, padding: 10}}
+                          onClick={() => {
+                            //setChecked(!checked)
+                            handleCheckColor(item.key);
+                          }}
+                          isChecked={item.checked}
+                          leftText={item.TenMau}
+                          leftTextStyle={{fontSize: 15, marginHorizontal: 5}}
+                        />
+                      ))
+                    : null}
+                </ScrollView>
+                <View
+                  style={{
+                    width: '5%',
+                    height: '100%',
+                  }}
+                />
+              </View>
+            </View>
+          </>
+
+          <View style={{width: '100%', height: 10}} />
+
+          <>
+            <View style={[styles.inputContainer, {height: 90}]}>
+              <View style={{width: '100%', height: 10}} />
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-start'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                  <Text style={styles.titleInputStyle}>Size</Text>
+                  <Text
+                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    {' '}
+                    *
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-end'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                </View>
+              </View>
+              <View style={{flex: 2, flexDirection: 'row'}}>
+                <View style={{width: '3%', height: '100%'}} />
+                <ScrollView style={{flexDirection: 'row'}} horizontal={true}>
+                  {size
+                    ? size.map(item => (
+                        <CheckBox
+                          key={item.id}
+                          style={{flex: 1, padding: 10}}
+                          isChecked={item.checked}
+                          leftText={item.title}
+                          leftTextStyle={{fontSize: 15, marginHorizontal: 5}}
+                          onClick={() => {
+                            handleCheckSize(item.id);
+                          }}
+                        />
+                      ))
+                    : null}
+                </ScrollView>
+                <View
+                  style={{
+                    width: '5%',
+                    height: '100%',
+                  }}
+                />
+              </View>
+            </View>
+          </>
+
+          <View style={{width: '100%', height: 10}} />
+
+          <>
+            <View style={[styles.inputContainer, {height: 90}]}>
+              <View style={{width: '100%', height: 10}} />
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-start'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                  <Text style={styles.titleInputStyle}>Amount</Text>
+                  <Text
+                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    {' '}
+                    *
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-end'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                </View>
+              </View>
+              <View style={{flex: 2, flexDirection: 'row'}}>
+                <View style={{width: '5%', height: '100%'}} />
+                <TextInput
+                  style={{flex: 1, fontSize: 17}}
+                  onChangeText={text => setAmount(text)}
+                  value={amount}
+                  keyboardType="numeric"
+                />
+                <View
+                  style={{
+                    width: '20%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={styles.titleInputStyle}>%</Text>
+                </View>
+              </View>
+            </View>
+          </>
+
+          <View style={{width: '100%', height: 10}} />
+
+          <>
+            <View style={[styles.inputContainer, {height: 90}]}>
+              <View style={{width: '100%', height: 10}} />
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-start'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                  <Text style={styles.titleInputStyle}>Categorize</Text>
+                  <Text
+                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    {' '}
+                    *
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.unitTitleContainer,
+                    {justifyContent: 'flex-end'},
+                  ]}>
+                  <View style={{width: '10%', height: '100%'}} />
+                </View>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}>
+                <View style={{width: '5%', height: '100%'}} />
+                <Dropdown
+                  style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={danhMuc}
+                  search
+                  maxHeight={200}
+                  labelField="TenDM"
+                  valueField="key"
+                  placeholder={!isFocus ? 'Select item' : '...'}
+                  searchPlaceholder="Search..."
+                  value={value}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={item => {
+                    setValue(item.key);
+                    setIsFocus(false);
+                    setCategorize(item);
+                  }}
+                />
+                <View
+                  style={{
+                    width: '5%',
+                    height: '100%',
+                  }}
+                />
+              </View>
+            </View>
+          </>
+
+          <View style={{width: '100%', height: 10}} />
+
+          <>
+            <View
+              style={{
+                width: '100%',
+                height: 70,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ButtonDetail
+                title="Add now"
+                style={{width: 150, height: 50}}
+                onPress={() => {
+                  setData();
+                }}
+                color={CUSTOM_COLOR.DarkOrange}
+              />
+            </View>
+          </>
+          <View style={{width: '100%', height: 10}} />
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  addImageContainer: {
+    width: '100%',
+    height: 100,
+    elevation: 1.5,
+    borderRadius: 0.5,
+    shadowColor: CUSTOM_COLOR.Black,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icAddStyle: {
+    color: CUSTOM_COLOR.FlushOrange,
+    fontFamily: FONT_FAMILY.Medium,
+    fontSize: 50,
+  },
+  addImageTextStyles: {
+    color: CUSTOM_COLOR.Black,
+    fontFamily: FONT_FAMILY.Semibold,
+    fontSize: 15,
+  },
   container: {
     backgroundColor: 'white',
     padding: 16,
   },
   dropdown: {
-    height: 40,
+    width: '90%',
+    height: '80%',
+    // height: 40,
     borderColor: 'gray',
     borderWidth: 0.5,
     borderRadius: 20,
-    paddingHorizontal: 10,
-    marginHorizontal: 20,
-    marginTop: 10,
+    paddingHorizontal: 15,
+    // marginHorizontal: 20,
+    // marginTop: 10,
   },
   icon: {
     marginRight: 5,
@@ -476,4 +695,17 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 14,
   },
+  inputContainer: {
+    width: '100%',
+    elevation: 1.5,
+    borderRadius: 0.5,
+    shadowColor: CUSTOM_COLOR.Black,
+    flexDirection: 'column',
+  },
+  unitTitleContainer: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  titleInputStyle: {},
 });

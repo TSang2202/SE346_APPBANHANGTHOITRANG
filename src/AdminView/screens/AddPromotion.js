@@ -10,7 +10,7 @@ import {
   ImageBackground,
   Platform,
   Image,
-  Alert
+  Alert,
 } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 import CustomHeader from '../components/CustomHeader';
@@ -20,14 +20,22 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {border_add} from '../assets/images';
 import FONT_FAMILY from '../constants/fonts';
 
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import moment from 'moment';
-import { isBefore } from 'date-fns';
-import { async } from '@firebase/util';
-import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes, put, getDownloadURL } from "firebase/storage";
-import { Firestore, Storage } from '../../../Firebase/firebase'
-
+import {isBefore} from 'date-fns';
+import {async} from '@firebase/util';
+import {
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  updateDoc,
+} from 'firebase/firestore';
+import {ref, uploadBytes, put, getDownloadURL} from 'firebase/storage';
+import {Firestore, Storage} from '../../../Firebase/firebase';
 
 const AddPromotion = props => {
   const {navigation} = props;
@@ -85,7 +93,6 @@ const AddPromotion = props => {
     });
   };
 
-
   const UploadFile = async () => {
     try {
       const blob = await new Promise((resolve, reject) => {
@@ -95,17 +102,17 @@ const AddPromotion = props => {
         };
         xhr.onerror = function (e) {
           console.log(e);
-          reject(new TypeError("Network request failed"));
+          reject(new TypeError('Network request failed'));
         };
-        xhr.responseType = "blob";
-        xhr.open("GET", image.uri, true);
+        xhr.responseType = 'blob';
+        xhr.open('GET', image.uri, true);
         xhr.send(null);
       });
       const storageRef = ref(Storage, `images/products/image-${Date.now()}`);
       const snapshot = await uploadBytes(storageRef, blob);
-      console.log("Upload successfully!");
+      console.log('Upload successfully!');
       const url = await getDownloadURL(snapshot.ref);
-      console.log("Get URL successfully");
+      console.log('Get URL successfully');
       return url;
     } catch (error) {
       console.log(error);
@@ -113,15 +120,17 @@ const AddPromotion = props => {
   };
 
   const setData = async () => {
-
-
     if (!KiemTraNhapLieu()) {
-      Alert.alert("Notification", "Please fill in the information completely and accurately!", [{ text: 'OK', style: 'cancel' }]);
+      Alert.alert(
+        'Notification',
+        'Please fill in the information completely and accurately!',
+        [{text: 'OK', style: 'cancel'}],
+      );
       return;
     }
-    const imageUri = await UploadFile()
+    const imageUri = await UploadFile();
 
-    const docRef = await addDoc(collection(Firestore, "KHUYENMAI"), {
+    const docRef = await addDoc(collection(Firestore, 'KHUYENMAI'), {
       TenKM: name,
       HinhAnhKM: imageUri,
       ChiTietKM: description,
@@ -129,40 +138,49 @@ const AddPromotion = props => {
       NgayBatDau: startDate,
       NgayKetThuc: endDate,
       TiLe: discount / 100,
-      DonToiThieu: minimumOrder
+      DonToiThieu: minimumOrder,
     });
-    console.log("Document written with ID: ", docRef.id);
+    console.log('Document written with ID: ', docRef.id);
 
     const updateId = await updateDoc(docRef, {
-      MaKM: docRef.id
-    })
+      MaKM: docRef.id,
+    });
 
-    Alert.alert("Notification", "Successfully added new promotions!", [{ text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' }])
-  }
+    Alert.alert('Notification', 'Successfully added new promotions!', [
+      {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
+    ]);
+  };
 
-  const isNumeric = (input) => {
+  const isNumeric = input => {
     return /^-?\d+$/.test(input);
-  }
+  };
 
-  const isValidDatetime = (input) => {
+  const isValidDatetime = input => {
     // Kiểm tra xem dữ liệu có phải là một datetime hợp lệ hay không
     return moment(input, 'YYYY-MM-DD HH:mm:ss', true).isValid();
-  }
+  };
   const KiemTraNhapLieu = () => {
     if (!image || !name || !description || !typeOfPromotion || !minimumOrder) {
-      console.log(1)
-      return false
-    } else if (typeOfPromotion === "GiamGia" && (!discount || !isNumeric(discount) || (discount < 0 || discount > 100))) {
-      console.log(2)
-      return false
+      console.log(1);
+      return false;
+    } else if (
+      typeOfPromotion === 'GiamGia' &&
+      (!discount || !isNumeric(discount) || discount < 0 || discount > 100)
+    ) {
+      console.log(2);
+      return false;
     } else if (!isNumeric(minimumOrder) || minimumOrder <= 0) {
-      console.log(3)
-      return false
-    } else if (!isValidDatetime(startDate) || !isValidDatetime(endDate) || !isBefore(startDate, endDate)) {
-      return false
+      console.log(3);
+      return false;
+    } else if (
+      !isValidDatetime(startDate) ||
+      !isValidDatetime(endDate) ||
+      !isBefore(startDate, endDate)
+    ) {
+      return false;
     }
-    return true
-  }
+    return true;
+  };
 
   const [startDate, setStartDate] = useState(new Date());
   const [startDateValues, setStartDateValuse] = useState('01/01/2023');
@@ -170,7 +188,6 @@ const AddPromotion = props => {
   const [endDateValues, setEndDateValues] = useState('01/01/2023');
 
   useEffect(() => {
-
     const getCurrentDate = () => {
       const currentDate = startDate;
       let tempDate = new Date(currentDate);
@@ -462,10 +479,8 @@ const AddPromotion = props => {
                     <TextInput
                       style={styles.comboType}
                       onChangeText={text => setDiscount(text)}
-
                       value={discount}
-                      keyboardType='numeric'
-
+                      keyboardType="numeric"
                     />
                     <View style={{width: '8%', height: '100%'}} />
                   </View>
@@ -507,11 +522,9 @@ const AddPromotion = props => {
                 ]}>
                 <TextInput
                   style={styles.comboType}
-
                   onChangeText={text => setMinimumOrder(text)}
                   value={minimumOrder}
-                  keyboardType='numeric'
-
+                  keyboardType="numeric"
                 />
                 <View style={{width: '8%', height: '100%'}} />
               </View>
@@ -632,14 +645,10 @@ const AddPromotion = props => {
                 <PromotionButton
                   type="secondary"
                   text="Save"
-
                   onPress={() => {
                     setData();
                   }}
-
                 />
-
-
               </View>
             </>
 
@@ -754,9 +763,9 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   buttonContainer: {
-    width: '40%',
-    height: 60,
-    marginHorizontal: '30%',
+    width: '100%',
+    height: 55,
+    // marginHorizontal: '5%',
     justifyContent: 'center',
     alignItems: 'center',
   },
