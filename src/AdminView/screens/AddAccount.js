@@ -64,7 +64,11 @@ const AddAccount = props => {
   const isValidForm = (fullName, email) => {
     let isValid = true;
 
-    if (fullName === '') {
+    if (fullName === '' && email === '') {
+      isValid = false;
+      setShowDialog(true);
+      setErrorMessage('Please enter your information then click sign up');
+    } else if (fullName === '') {
       isValid = false;
       setShowDialog(true);
       setErrorMessage('Please enter your full name');
@@ -76,11 +80,6 @@ const AddAccount = props => {
       isValid = false;
       setShowDialog(true);
       setErrorMessage('Your email is not valid');
-    } else if (fullName === '' && email === '') {
-      isValid = false;
-      setShowDialog(true);
-      setErrorMessage('Please enter your information then click sign up');
-    } else {
     }
 
     setShowDialog(false);
