@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
+
+
 import CheckBox from '@react-native-community/checkbox';
+
 import {
   Alert,
   ImageBackground,
@@ -264,7 +267,19 @@ const SignUp = props => {
             />
           </View>
 
-          <View style={{flex: 1}}>
+
+
+          <View style={{ flex: 1 }}>
+            <TextInputCard
+              title="Day of birth"
+              txtInput="dd/mm/yy"
+              onChangeText={birth => setBirth(birth)}
+            />
+
+          </View>
+
+          <View style={{ flex: 1 }}>
+
             <Text style={styles.titleStyle}>Date of birth</Text>
 
             <View style={styles.dateContainer}>
