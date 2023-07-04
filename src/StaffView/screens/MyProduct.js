@@ -40,50 +40,43 @@ export default function MyProduct({ navigation }) {
 
     const getDadaOnWait = async () => {
         const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "OnWait"));
-        const querySnapshot = await getDocs(q);
 
-        const data = []
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const data = [];
+            querySnapshot.forEach((doc) => {
+                data.push(doc.data());
+            });
 
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            data.push({ ...doc.data() })
-
+            setDataOnWait(data)
         });
 
-        setDataOnWait(data)
+
     }
 
     const getDadaOutOfStock = async () => {
         const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "OutOfStock"));
-        const querySnapshot = await getDocs(q);
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const data = [];
+            querySnapshot.forEach((doc) => {
+                data.push(doc.data());
+            });
 
-        const data = []
-
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            data.push({ ...doc.data() })
-
+            setDataOutOfStock(data)
         });
 
-        setDataOutOfStock(data)
     }
 
     const getDadaInventory = async () => {
         const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "Inventory"));
-        const querySnapshot = await getDocs(q);
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const data = [];
+            querySnapshot.forEach((doc) => {
+                data.push(doc.data());
+            });
 
-        const data = []
-
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            data.push({ ...doc.data() })
-
+            setDataOutOfStock(data)
         });
 
-        setDataInventory(data)
     }
 
 
@@ -148,7 +141,7 @@ export default function MyProduct({ navigation }) {
                     <Status
                         Color={CUSTOM_COLOR.Black}
                         onPress={() => { setWait(true), setinventory(false) }}
-                        title='On Wait'
+                        title='Hidden'
                         countProduct={dataOnWait.length}
                     >
                     </Status>
@@ -230,7 +223,7 @@ export default function MyProduct({ navigation }) {
                     <Status
                         Color={CUSTOM_COLOR.Black}
                         onPress={() => { setWait(true), setOut(false) }}
-                        title='On Wait'
+                        title='Hidden'
                         countProduct={dataOnWait.length}>
                     </Status>
                 </View>
@@ -308,7 +301,7 @@ export default function MyProduct({ navigation }) {
                         botwidth={2}
                         borderColor={CUSTOM_COLOR.Red}
                         Color={CUSTOM_COLOR.DarkOrange}
-                        title='On Wait'
+                        title='Hidden'
                         countProduct={dataOnWait.length}>
                     </Status>
                 </View>
