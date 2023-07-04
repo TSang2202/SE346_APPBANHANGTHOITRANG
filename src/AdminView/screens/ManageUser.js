@@ -1,29 +1,27 @@
-import React, {useState, useEffect} from 'react';
+import { getAuth } from 'firebase/auth';
+import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
+  Alert,
+  FlatList,
+  Image,
   SafeAreaView,
-  View,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  Image,
-  FlatList,
-  Alert,
+  View,
 } from 'react-native';
-import Search from '../components/Search';
-import ButtonDetail from '../components/ButtonDetail';
-import OneStaff from '../components/OneStaff';
-import {IM_AnhGiay1} from '../../CustomerView/assets/images';
-import HeaderWithBack from '../components/HeaderWithBack';
-import CUSTOM_COLOR from '../constants/colors';
+import { firebase } from '../../../Firebase/firebase';
 import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
+import { IC_User } from '../assets/icons';
 import AccountCard from '../components/AccountCard';
-import {firebase, Firestore} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 import {Storage} from '../../../Firebase/firebase';
 import {IC_User} from '../assets/icons';
 import {Avatar, ListItem} from 'react-native-elements';
 import {getAuth, deleteUser} from 'firebase/auth';
 import SearchButton from '../components/SearchButton';
+import CUSTOM_COLOR from '../constants/colors';
+
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -45,7 +43,11 @@ const ManageUser = props => {
   const [imageUrl, setImageUrl] = useState(null);
   const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
-
+  const [searchTerm, setSearchTerm] = useState([]);
+  
+  const handleSearch = (searchTerm) =>{
+    setSearchTerm(searchTerm);
+  };
   useEffect(() => {
     setTimeout(() => {
       // Assume data is fetched here
@@ -53,12 +55,10 @@ const ManageUser = props => {
       // setData(fetchedData);
       setIsLoading(false);
     }, 2000);
-
     fetchUserData(firebase.auth().currentUser.uid);
     fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
       setImageUrl(url),
     );
-
     const fetchUsers = async () => {
       try {
         const querySnapshot = await firebase
@@ -66,12 +66,12 @@ const ManageUser = props => {
           .collection('NGUOIDUNG')
           .get();
         const allUserData = querySnapshot.docs.map(doc => doc.data());
+
         setUsers(allUserData);
       } catch (error) {
         console.error('Error retrieving users: ', error);
       }
     };
-
     // const fetchUserAvata = async() => {
     //   try {
     //     const documentSnapshot = await firebase
@@ -85,9 +85,7 @@ const ManageUser = props => {
     //     console.error('Error fetching image URL:', error);
     //     return null;
     //   }
-
     // }
-
     fetchUsers();
   }, []);
 
@@ -98,8 +96,9 @@ const ManageUser = props => {
 
       if (userDoc.exists) {
         const userData = userDoc.data();
-        setUserData(userData);
-      } else {
+        
+      } 
+      else {
         console.log('User document does not exist');
       }
     } catch (error) {
@@ -231,6 +230,10 @@ const ManageUser = props => {
 
           <>
             <View style={styles.searchContainer}>
+            <SearchButton 
+                  style = {styles.SearchButtonView}
+                  onSearch={handleSearch}
+              />
               <View style={{width: '5%', height: '100%'}} />
               <View style={styles.searchViewContainer}>
                 <Search
@@ -306,8 +309,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  SearchButtonView:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
   searchViewContainer: {
-    width: '60%',
+    width: '50%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
@@ -321,6 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOM_COLOR.FlushOrange,
     borderRadius: 5,
     borderWidth: 1,
+    marginRight: 20,
   },
   listViewContainer: {
     flex: 10,
