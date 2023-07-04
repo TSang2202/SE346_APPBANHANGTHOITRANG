@@ -1,35 +1,35 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import BackTo from '../components/BackTo';
-import {SearchIcon} from '../../CustomerView/assets/icons';
-import {FlatList, ScrollView} from 'react-native-gesture-handler';
-import CUSTOM_COLOR from '../constants/colors';
-import ButtonDetail from '../components/ButtonDetail';
-import Status from '../components/Status';
-import {IM_MauAo} from '../assets/images';
-import MyProduct1 from '../components/MyProductOne';
-
 import {
-  collection,
-  query,
-  where,
-  getDocs,
-  updateDoc,
-  doc,
+    collection,
+    doc,
+    getDocs,
+    query,
+    updateDoc,
+    where,
 } from 'firebase/firestore';
-import {Firestore, Storage} from '../../../Firebase/firebase';
-import {async} from '@firebase/util';
-
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Firestore } from '../../../Firebase/firebase';
+import { SearchIcon } from '../../CustomerView/assets/icons';
+import BackTo from '../components/BackTo';
+import ButtonDetail from '../components/ButtonDetail';
+import MyProduct1 from '../components/MyProductOne';
+import SearchButton from '../components/SearchButton';
+import Status from '../components/Status';
+import CUSTOM_COLOR from '../constants/colors';
 export default function MyProduct({navigation}) {
   const [inventory, setinventory] = useState(true);
   const [Out, setOut] = useState(false);
   const [Wait, setWait] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [dataOnWait, setDataOnWait] = useState([]);
   const [dataOutOfStock, setDataOutOfStock] = useState([]);
   const [dataInventory, setDataInventory] = useState([]);
 
+  const handleSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+  };
   const ConfirmProduct = item => {
     const confirmRef = doc(Firestore, 'SANPHAM', item.MaSP);
 
@@ -82,35 +82,44 @@ export default function MyProduct({navigation}) {
       where('TrangThai', '==', 'Inventory'),
     );
     const querySnapshot = await getDocs(q);
-
+  
     const data = [];
-
+  
     querySnapshot.forEach(doc => {
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, ' => ', doc.data());
-      data.push({...doc.data()});
+      data.push({ ...doc.data() });
     });
-
-    setDataInventory(data);
+  
+    let filteredItems = data;
+    if (searchTerm != null) {
+        filteredItems = data.filter(item =>
+        item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+        ); 
+    }
+    else {
+        setDataInventory(data);
+    }
+    setDataInventory(filteredItems);
   };
+  
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Screen A is focused');
-
       getDadaOnWait();
       getDadaOutOfStock();
       getDadaInventory();
-    });
-
+    },);
     getDadaOnWait();
     getDadaOutOfStock();
     getDadaInventory();
-
     //const interval = setInterval(() => getDadaOnWait(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
     // return () => clearInterval(interval); // Xóa interval khi component bị unmount
-  }, [dataOnWait.length, dataInventory.length, dataOutOfStock.length]);
-
+  },[dataOnWait.length, dataInventory.length, dataOutOfStock.length]);
+  useEffect(()=>{
+    getDadaInventory();
+  }, [searchTerm]);
   if (inventory == true) {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
@@ -125,13 +134,9 @@ export default function MyProduct({navigation}) {
             onPress={() => navigation.navigate('AdminOverView')}
             Info="My Product"
           />
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-            <Image
-              source={SearchIcon}
-              style={{width: 20, height: 20, marginLeft: '70%', marginTop: 10}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
+          <SearchButton
+            onSearch = {handleSearch}
+          />
         </View>
         <View
           style={{

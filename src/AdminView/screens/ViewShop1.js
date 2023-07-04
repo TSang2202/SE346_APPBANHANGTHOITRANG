@@ -13,10 +13,8 @@ import { backto } from '../assets/icons/index.js';
 import { IM_Giay1, IM_Giay2, IM_Giay3, IM_Giay4 } from '../assets/images/index.js';
 import ItemList from '../components/ItemList';
 import Search from '../components/Search';
-
 import SortDropdown from '../components/SortDropDown';
 import scale from '../constants/responsive.js';
-import { Acount } from './AdminOverView';
 const datasdetail = [
   {
     id: '1',
@@ -159,7 +157,7 @@ function ViewShop1({navigation}){
             </View>
             <Image
               style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
-              source={{uri: Acount.avartar}}
+              source = {require('../assets/images/Logo.png')}
               resizeMode='contain'
             ></Image>
             <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
@@ -224,7 +222,7 @@ function ViewShop1({navigation}){
         </View>
         <Image
           style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
-          source={{uri: Acount.avartar}}
+          source = {require('../assets/images/Logo.png')}
           resizeMode='contain'
         ></Image>
         <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
@@ -273,7 +271,7 @@ function ViewShop1({navigation}){
             <Search onSearch={handleSearch}/>
             <Image
               style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
-              source={{uri: Acount.avartar}}
+              source = {require('../assets/images/Logo.png')}
               resizeMode='contain'
             ></Image>
             <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
