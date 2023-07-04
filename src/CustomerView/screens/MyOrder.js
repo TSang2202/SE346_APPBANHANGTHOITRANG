@@ -11,7 +11,7 @@ import PerSon from '../../StaffView/components/PerSon'
 //import { IM_MauAo } from '../assets/images'
 import OneOrder from '../../StaffView/components/OneOrder'
 import { collection, onSnapshot, query, doc, getDoc, querySnapshot, getDocs, where, updateDoc } from "firebase/firestore";
-import { Firestore } from '../../../Firebase/firebase'
+import { Firestore, firebase } from '../../../Firebase/firebase'
 import { async } from '@firebase/util'
 
 
@@ -20,45 +20,27 @@ export default function Order({ navigation }) {
     const [onWait, setOnWait] = useState(false)
     const [delivering, setDelivering] = useState(false)
     const [delivered, setDelivered] = useState(false)
-    const [cancel, setCancel] = useState(false);
+    const [cancel, setCancel] = useState(false)
 
     const [donHangConfirm, setDonHangConfirm] = useState([])
     const [donHangOnWait, setDonHangOnWait] = useState([])
     const [donHangDelivering, setDonHangDelivering] = useState([])
     const [donHangDelivered, setDonHangDelivered] = useState([])
     const [donHangCancel, setDonHangCancel] = useState([])
-    // const ConfirmDonHang = async (item) => {
-    //     const confirmRef = doc(Firestore, "DONHANG", item.MaDH)
-
-    //     await updateDoc(confirmRef, {
-    //         TrangThai: "OnWait"
-    //     })
-
-    //     getDonHangConfirm();
-    // }
-
-    const OnWaitDonHang = async (item) => {
+    const CancelDonHang = async (item) => {
         const confirmRef = doc(Firestore, "DONHANG", item.MaDH)
-
 
         await updateDoc(confirmRef, {
             TrangThai: "Cancel"
         })
-
-        getDonHangOnWait();
     }
+    const ConfirmDonHang = async (item) => {
+        const confirmRef = doc(Firestore, "DONHANG", item.MaDH)
 
-    // const DeliveringDonHang = async (item) => {
-    //     const confirmRef = doc(Firestore, "DONHANG", item.MaDH)
-
-    //     await updateDoc(confirmRef, {
-    //         TrangThai: "Delivered"
-    //     })
-
-    //     getDonHangDelivering();
-    // }
-
-
+        await updateDoc(confirmRef, {
+            TrangThai: "Confirm"
+        })
+    }
 
     const getUsers = async (item) => {
         item = item.trim();
@@ -100,275 +82,314 @@ export default function Order({ navigation }) {
         return sanPham;
     }
 
-    const getDonHangCancel = async () => {
-        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Cancel"));
-        const querySnapshot = await getDocs(q)
-        const promises = [];
-        const promisesDatHang = []
-
-        for (const documentSnapshot of querySnapshot.docs) {
-            const promise = getUsers(documentSnapshot.data().MaND);
-            const datHang = getDatHang(documentSnapshot.data().MaDH)
-
-            promises.push(promise);
-            promisesDatHang.push(datHang)
-        }
-        const data = []
-
-        const dataUser = await Promise.all(promises);
-        const dataDatHang = await Promise.all(promisesDatHang)
-
-        const dataSanPham = []
-
-        for (const documentDatHang of dataDatHang) {
-            const promises = []
-            for (const documentSanPham of documentDatHang) {
-                const promise = getSanPham(documentSanPham.MaSP)
-                promises.push(promise)
-            }
-
-            const promiseSanPham = await Promise.all(promises);
-            dataSanPham.push(promiseSanPham)
-        }
-
-
-        dataDatHang.map((datHang, i) => {
-            datHang.map((sanPham, index) => {
-                dataDatHang[i][index] = {
-                    ...dataDatHang[i][index],
-                    SanPham: dataSanPham[i][index]
+    const getDonHangCancel = () => {
+        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Cancel")
+        ,where('MaND', '==', firebase.auth().currentUser.uid));
+    
+        const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+            const promises = [];
+            const promisesDatHang = [];
+    
+            querySnapshot.forEach((documentSnapshot) => {
+                const promise = getUsers(documentSnapshot.data().MaND);
+                const datHang = getDatHang(documentSnapshot.data().MaDH);
+    
+                promises.push(promise);
+                promisesDatHang.push(datHang);
+            });
+    
+            try {
+                const dataUser = await Promise.all(promises);
+                const dataDatHang = await Promise.all(promisesDatHang);
+                const dataSanPham = [];
+    
+                for (const documentDatHang of dataDatHang) {
+                    const promises = [];
+                    for (const documentSanPham of documentDatHang) {
+                        const promise = getSanPham(documentSanPham.MaSP);
+                        promises.push(promise);
+                    }
+                    const promiseSanPham = await Promise.all(promises);
+                    dataSanPham.push(promiseSanPham);
                 }
-            })
-        })
-
-        dataUser.map((user, index) => {
-            const documentSnapshot = querySnapshot.docs[index];
-            //console.log(user)
-            data.push({
-                ...documentSnapshot.data(),
-                ...user,
-                DatHang: dataDatHang[index]
-            })
-        });
-        setDonHangCancel(data)
-    }
-
-
-    const getDonHangConfirm = async () => {
-        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Confirm"));
-        const querySnapshot = await getDocs(q)
-        const promises = [];
-        const promisesDatHang = []
-
-        for (const documentSnapshot of querySnapshot.docs) {
-            const promise = getUsers(documentSnapshot.data().MaND);
-            const datHang = getDatHang(documentSnapshot.data().MaDH)
-
-            promises.push(promise);
-            promisesDatHang.push(datHang)
-        }
-        const data = []
-
-        const dataUser = await Promise.all(promises);
-        const dataDatHang = await Promise.all(promisesDatHang)
-
-        const dataSanPham = []
-
-        for (const documentDatHang of dataDatHang) {
-            const promises = []
-            for (const documentSanPham of documentDatHang) {
-                const promise = getSanPham(documentSanPham.MaSP)
-                promises.push(promise)
+    
+                dataDatHang.forEach((datHang, i) => {
+                    datHang.forEach((sanPham, index) => {
+                        dataDatHang[i][index] = {
+                            ...dataDatHang[i][index],
+                            SanPham: dataSanPham[i][index]
+                        };
+                    });
+                });
+    
+                const data = dataUser.map((user, index) => {
+                    const documentSnapshot = querySnapshot.docs[index];
+                    return {
+                        ...documentSnapshot.data(),
+                        ...user,
+                        DatHang: dataDatHang[index]
+                    };
+                });
+    
+                setDonHangCancel(data);
+            } catch (error) {
+                console.log("Error getting data: ", error);
             }
-
-            const promiseSanPham = await Promise.all(promises);
-            dataSanPham.push(promiseSanPham)
-        }
-
-
-        dataDatHang.map((datHang, i) => {
-            datHang.map((sanPham, index) => {
-                dataDatHang[i][index] = {
-                    ...dataDatHang[i][index],
-                    SanPham: dataSanPham[i][index]
-                }
-            })
-        })
-
-        dataUser.map((user, index) => {
-            const documentSnapshot = querySnapshot.docs[index];
-            //console.log(user)
-            data.push({
-                ...documentSnapshot.data(),
-                ...user,
-                DatHang: dataDatHang[index]
-            })
         });
-        setDonHangConfirm(data)
-    }
+    
+        return unsubscribe;
+        // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
+        // unsubscribe();
+    };
+    
+          
 
-
-
-    const getDonHangOnWait = async () => {
-        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "OnWait"));
-        const querySnapshot = await getDocs(q)
-        const promises = [];
-        const promisesDatHang = []
-
-        for (const documentSnapshot of querySnapshot.docs) {
-            const promise = getUsers(documentSnapshot.data().MaND);
-            const datHang = getDatHang(documentSnapshot.data().MaDH)
-
-            promises.push(promise);
-            promisesDatHang.push(datHang)
-        }
-        const data = []
-
-        const dataUser = await Promise.all(promises);
-        const dataDatHang = await Promise.all(promisesDatHang)
-
-        const dataSanPham = []
-
-        for (const documentDatHang of dataDatHang) {
-            const promises = []
-            for (const documentSanPham of documentDatHang) {
-                const promise = getSanPham(documentSanPham.MaSP)
-                promises.push(promise)
+      const getDonHangConfirm = () => {
+        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Confirm")
+        ,where('MaND', '==', firebase.auth().currentUser.uid));
+    
+        const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+            const promises = [];
+            const promisesDatHang = [];
+    
+            querySnapshot.forEach((documentSnapshot) => {
+                const promise = getUsers(documentSnapshot.data().MaND);
+                const datHang = getDatHang(documentSnapshot.data().MaDH);
+    
+                promises.push(promise);
+                promisesDatHang.push(datHang);
+            });
+    
+            try {
+                const dataUser = await Promise.all(promises);
+                const dataDatHang = await Promise.all(promisesDatHang);
+                const dataSanPham = [];
+    
+                for (const documentDatHang of dataDatHang) {
+                    const promises = [];
+                    for (const documentSanPham of documentDatHang) {
+                        const promise = getSanPham(documentSanPham.MaSP);
+                        promises.push(promise);
+                    }
+                    const promiseSanPham = await Promise.all(promises);
+                    dataSanPham.push(promiseSanPham);
+                }
+    
+                dataDatHang.forEach((datHang, i) => {
+                    datHang.forEach((sanPham, index) => {
+                        dataDatHang[i][index] = {
+                            ...dataDatHang[i][index],
+                            SanPham: dataSanPham[i][index]
+                        };
+                    });
+                });
+    
+                const data = dataUser.map((user, index) => {
+                    const documentSnapshot = querySnapshot.docs[index];
+                    return {
+                        ...documentSnapshot.data(),
+                        ...user,
+                        DatHang: dataDatHang[index]
+                    };
+                });
+    
+                setDonHangConfirm(data);
+            } catch (error) {
+                console.log("Error getting data: ", error);
             }
-
-            const promiseSanPham = await Promise.all(promises);
-            dataSanPham.push(promiseSanPham)
-        }
-
-
-        dataDatHang.map((datHang, i) => {
-            datHang.map((sanPham, index) => {
-                dataDatHang[i][index] = {
-                    ...dataDatHang[i][index],
-                    SanPham: dataSanPham[i][index]
-                }
-            })
-        })
-
-        dataUser.map((user, index) => {
-            const documentSnapshot = querySnapshot.docs[index];
-            //console.log(user)
-            data.push({
-                ...documentSnapshot.data(),
-                ...user,
-                DatHang: dataDatHang[index]
-            })
         });
-        setDonHangOnWait(data)
-    }
+    
+        return unsubscribe;
+        // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
+        // unsubscribe();
+    };
+    
+      
+      
+    
 
-
-    const getDonHangDelivering = async () => {
-        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivering"));
-        const querySnapshot = await getDocs(q)
-        const promises = [];
-        const promisesDatHang = []
-
-        for (const documentSnapshot of querySnapshot.docs) {
-            const promise = getUsers(documentSnapshot.data().MaND);
-            const datHang = getDatHang(documentSnapshot.data().MaDH)
-
-            promises.push(promise);
-            promisesDatHang.push(datHang)
-        }
-        const data = []
-
-        const dataUser = await Promise.all(promises);
-        const dataDatHang = await Promise.all(promisesDatHang)
-
-        const dataSanPham = []
-
-        for (const documentDatHang of dataDatHang) {
-            const promises = []
-            for (const documentSanPham of documentDatHang) {
-                const promise = getSanPham(documentSanPham.MaSP)
-                promises.push(promise)
+    const getDonHangOnWait = () => {
+        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "OnWait")
+        ,where('MaND', '==', firebase.auth().currentUser.uid));
+    
+        const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+            const promises = [];
+            const promisesDatHang = [];
+    
+            querySnapshot.forEach((documentSnapshot) => {
+                const promise = getUsers(documentSnapshot.data().MaND);
+                const datHang = getDatHang(documentSnapshot.data().MaDH);
+    
+                promises.push(promise);
+                promisesDatHang.push(datHang);
+            });
+    
+            try {
+                const dataUser = await Promise.all(promises);
+                const dataDatHang = await Promise.all(promisesDatHang);
+                const dataSanPham = [];
+    
+                for (const documentDatHang of dataDatHang) {
+                    const promises = [];
+                    for (const documentSanPham of documentDatHang) {
+                        const promise = getSanPham(documentSanPham.MaSP);
+                        promises.push(promise);
+                    }
+                    const promiseSanPham = await Promise.all(promises);
+                    dataSanPham.push(promiseSanPham);
+                }
+    
+                dataDatHang.forEach((datHang, i) => {
+                    datHang.forEach((sanPham, index) => {
+                        dataDatHang[i][index] = {
+                            ...dataDatHang[i][index],
+                            SanPham: dataSanPham[i][index]
+                        };
+                    });
+                });
+    
+                const data = dataUser.map((user, index) => {
+                    const documentSnapshot = querySnapshot.docs[index];
+                    return {
+                        ...documentSnapshot.data(),
+                        ...user,
+                        DatHang: dataDatHang[index]
+                    };
+                });
+    
+                setDonHangOnWait(data);
+            } catch (error) {
+                console.log("Error getting data: ", error);
             }
-
-            const promiseSanPham = await Promise.all(promises);
-            dataSanPham.push(promiseSanPham)
-        }
-
-
-        dataDatHang.map((datHang, i) => {
-            datHang.map((sanPham, index) => {
-                dataDatHang[i][index] = {
-                    ...dataDatHang[i][index],
-                    SanPham: dataSanPham[i][index]
-                }
-            })
-        })
-
-        dataUser.map((user, index) => {
-            const documentSnapshot = querySnapshot.docs[index];
-            //console.log(user)
-            data.push({
-                ...documentSnapshot.data(),
-                ...user,
-                DatHang: dataDatHang[index]
-            })
         });
-        setDonHangDelivering(data)
-    }
+    
+        return unsubscribe;
+        // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
+        // unsubscribe();
+    };
+      
+    
 
-
-    const getDonHangDelivered = async () => {
-        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivered"));
-        const querySnapshot = await getDocs(q)
-        const promises = [];
-        const promisesDatHang = []
-
-        for (const documentSnapshot of querySnapshot.docs) {
-            const promise = getUsers(documentSnapshot.data().MaND);
-            const datHang = getDatHang(documentSnapshot.data().MaDH)
-
-            promises.push(promise);
-            promisesDatHang.push(datHang)
-        }
-        const data = []
-
-        const dataUser = await Promise.all(promises);
-        const dataDatHang = await Promise.all(promisesDatHang)
-
-        const dataSanPham = []
-
-        for (const documentDatHang of dataDatHang) {
-            const promises = []
-            for (const documentSanPham of documentDatHang) {
-                const promise = getSanPham(documentSanPham.MaSP)
-                promises.push(promise)
+    const getDonHangDelivered = () => {
+        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivered")
+        ,where('MaND', '==', firebase.auth().currentUser.uid));
+    
+        const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+            const promises = [];
+            const promisesDatHang = [];
+    
+            querySnapshot.forEach((documentSnapshot) => {
+                const promise = getUsers(documentSnapshot.data().MaND);
+                const datHang = getDatHang(documentSnapshot.data().MaDH);
+    
+                promises.push(promise);
+                promisesDatHang.push(datHang);
+            });
+            try {
+                const dataUser = await Promise.all(promises);
+                const dataDatHang = await Promise.all(promisesDatHang);
+                const dataSanPham = [];
+    
+                for (const documentDatHang of dataDatHang) {
+                    const promises = [];
+                    for (const documentSanPham of documentDatHang) {
+                        const promise = getSanPham(documentSanPham.MaSP);
+                        promises.push(promise);
+                    }
+                    const promiseSanPham = await Promise.all(promises);
+                    dataSanPham.push(promiseSanPham);
+                }
+    
+                dataDatHang.forEach((datHang, i) => {
+                    datHang.forEach((sanPham, index) => {
+                        dataDatHang[i][index] = {
+                            ...dataDatHang[i][index],
+                            SanPham: dataSanPham[i][index]
+                        };
+                    });
+                });
+    
+                const data = dataUser.map((user, index) => {
+                    const documentSnapshot = querySnapshot.docs[index];
+                    return {
+                        ...documentSnapshot.data(),
+                        ...user,
+                        DatHang: dataDatHang[index]
+                    };
+                });
+    
+                setDonHangDelivered(data);
+            } catch (error) {
+                console.log("Error getting data: ", error);
             }
-
-            const promiseSanPham = await Promise.all(promises);
-            dataSanPham.push(promiseSanPham)
-        }
-
-
-        dataDatHang.map((datHang, i) => {
-            datHang.map((sanPham, index) => {
-                dataDatHang[i][index] = {
-                    ...dataDatHang[i][index],
-                    SanPham: dataSanPham[i][index]
-                }
-            })
-        })
-
-        dataUser.map((user, index) => {
-            const documentSnapshot = querySnapshot.docs[index];
-            //console.log(user)
-            data.push({
-                ...documentSnapshot.data(),
-                ...user,
-                DatHang: dataDatHang[index]
-            })
         });
-        setDonHangDelivered(data)
-    }
+    
+        return unsubscribe;
+        // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
+        // unsubscribe();
+    };
+    
+    const getDonHangDelivering = () => {
+        const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivering")
+        ,where('MaND', '==', firebase.auth().currentUser.uid));
+    
+        const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+            const promises = [];
+            const promisesDatHang = [];
+    
+            querySnapshot.forEach((documentSnapshot) => {
+                const promise = getUsers(documentSnapshot.data().MaND);
+                const datHang = getDatHang(documentSnapshot.data().MaDH);
+    
+                promises.push(promise);
+                promisesDatHang.push(datHang);
+            });
+    
+            try {
+                const dataUser = await Promise.all(promises);
+                const dataDatHang = await Promise.all(promisesDatHang);
+                const dataSanPham = [];
+    
+                for (const documentDatHang of dataDatHang) {
+                    const promises = [];
+                    for (const documentSanPham of documentDatHang) {
+                        const promise = getSanPham(documentSanPham.MaSP);
+                        promises.push(promise);
+                    }
+                    const promiseSanPham = await Promise.all(promises);
+                    dataSanPham.push(promiseSanPham);
+                }
+    
+                dataDatHang.forEach((datHang, i) => {
+                    datHang.forEach((sanPham, index) => {
+                        dataDatHang[i][index] = {
+                            ...dataDatHang[i][index],
+                            SanPham: dataSanPham[i][index]
+                        };
+                    });
+                });
+    
+                const data = dataUser.map((user, index) => {
+                    const documentSnapshot = querySnapshot.docs[index];
+                    return {
+                        ...documentSnapshot.data(),
+                        ...user,
+                        DatHang: dataDatHang[index]
+                    };
+                });
+    
+                setDonHangDelivering(data);
+            } catch (error) {
+                console.log("Error getting data: ", error);
+            }
+        });
+    
+        return unsubscribe;
+        // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
+        // unsubscribe();
+    };
+    
+      
 
 
 
@@ -450,7 +471,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -484,9 +505,7 @@ export default function Order({ navigation }) {
                                     <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                console.log(item)
-
-                                                ConfirmDonHang(item)
+                                                CancelDonHang(item)
                                             }}
                                             style={{
                                                 width: '80%',
@@ -500,7 +519,7 @@ export default function Order({ navigation }) {
 
                                             }}
                                         >
-                                            <Text style={{ color: CUSTOM_COLOR.White }}>Confirm</Text>
+                                            <Text style={{ color: CUSTOM_COLOR.White }}>Cancel</Text>
                                         </TouchableOpacity>
                                     </View>
 
@@ -578,7 +597,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -606,24 +625,6 @@ export default function Order({ navigation }) {
                                         <Text style={{ marginLeft: 35 }}>Item Code</Text>
                                         <Text style={{ marginRight: 35 }}>{item.MaDH}</Text>
                                     </View>
-                                    <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            onPress={() => { OnWaitDonHang(item) }}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                backgroundColor: CUSTOM_COLOR.DarkOrange,
-                                                paddingHorizontal: 20,
-                                                alignSelf: 'center',
-                                                borderRadius: 15
-                                            }}
-                                        >
-                                            <Text style={{ color: CUSTOM_COLOR.White }}>Confirm</Text>
-                                        </TouchableOpacity>
-                                    </View>
-
                                 </View>
                             )
                         }}
@@ -702,7 +703,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -734,23 +735,6 @@ export default function Order({ navigation }) {
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={{ marginLeft: 35 }}>Item Code</Text>
                                         <Text style={{ marginRight: 35 }}>{item.MaDH}</Text>
-                                    </View>
-                                    <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            onPress={() => { DeliveringDonHang(item) }}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                backgroundColor: CUSTOM_COLOR.DarkOrange,
-                                                paddingHorizontal: 20,
-                                                alignSelf: 'center',
-                                                borderRadius: 15
-                                            }}
-                                        >
-                                            <Text style={{ color: CUSTOM_COLOR.White }}>Confirm</Text>
-                                        </TouchableOpacity>
                                     </View>
 
                                 </View>
@@ -829,7 +813,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -858,23 +842,6 @@ export default function Order({ navigation }) {
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={{ marginLeft: 35 }}>Item Code</Text>
                                         <Text style={{ marginRight: 35 }}>{item.MaDH}</Text>
-                                    </View>
-                                    <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            onPress={() => { }}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                backgroundColor: CUSTOM_COLOR.DarkOrange,
-                                                paddingHorizontal: 20,
-                                                alignSelf: 'center',
-                                                borderRadius: 15
-                                            }}
-                                        >
-                                            <Text style={{ color: CUSTOM_COLOR.White }}>Confirm</Text>
-                                        </TouchableOpacity>
                                     </View>
 
                                 </View>
@@ -956,7 +923,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -990,8 +957,6 @@ export default function Order({ navigation }) {
                                     <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                console.log(item)
-
                                                 ConfirmDonHang(item)
                                             }}
                                             style={{
@@ -1006,7 +971,7 @@ export default function Order({ navigation }) {
 
                                             }}
                                         >
-                                            <Text style={{ color: CUSTOM_COLOR.White }}>Confirm</Text>
+                                            <Text style={{ color: CUSTOM_COLOR.White }}>ReOrder</Text>
                                         </TouchableOpacity>
                                     </View>
 
