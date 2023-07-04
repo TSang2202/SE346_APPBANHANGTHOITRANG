@@ -14,7 +14,6 @@ function DetailCategoryScreen({ navigation, route }) {
 
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredItems, setFilteredItems] = useState([]);
     const [sortType, setSortType] = useState("");
 
 
@@ -124,7 +123,7 @@ function DetailCategoryScreen({ navigation, route }) {
                 }}>{items.length} sản phẩm</Text>
             </View>
             <SortDropDown
-                onSelectSort={handleSort}
+                onChangeText={handleSort}
             />
             <View style={{
                 height: '80%'
