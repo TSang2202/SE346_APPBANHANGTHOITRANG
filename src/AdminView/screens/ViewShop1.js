@@ -212,8 +212,10 @@ function ViewShop1({navigation}){
     </SafeAreaView>
     )
   }        
-    else{
-      if(product == false && detail == false){
+    else
+    {
+    if(product == false && detail == false)
+      {
       return(
         <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White,width: '100%', height: '100%'}}>
         <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
@@ -241,7 +243,6 @@ function ViewShop1({navigation}){
             </TouchableOpacity>
       </View>
       <View style={{width: '100%', height: '65%'}}>
-      
                 <FlatList
                     data={ListItem.filter(item => item.namelist.toLowerCase().includes(searchKeyword))}
                     renderItem = {({item}) => {
@@ -261,7 +262,7 @@ function ViewShop1({navigation}){
                         )
                     }}
                 />
-    </View>
+        </View>
         </SafeAreaView>
       )
       }
