@@ -274,7 +274,16 @@ const SignUp = props => {
                 onPress={() => {
                   setShowPicker(true);
                 }}>
-                <Text> {birth}</Text>
+                <Text
+                  style={{
+                    fontFamily: FONT_FAMILY.Semibold,
+                    fontSize: 15,
+                    color: CUSTOM_COLOR.Black,
+                    justifyContent: 'center',
+                  }}>
+                  {' '}
+                  {birth}
+                </Text>
               </TouchableOpacity>
               {showPicker && (
                 <DateTimePicker
@@ -384,14 +393,16 @@ const styles = StyleSheet.create({
   },
   containerBot: {
     width: '100%',
-    height: '10%',
-    bottom: '-1%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: 55,
+    // marginHorizontal: '10%',
+    marginTop: 10,
   },
   button: {
-    width: '80%',
+    width: '200%',
     height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: '-50%',
   },
   policyStyles: {
     fontSize: 15,

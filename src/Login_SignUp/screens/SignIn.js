@@ -46,15 +46,14 @@ const SignIn = props => {
         style={styles.container}>
         <View style={{width: '100%', height: 10}} />
         <HeaderWithBack onPress={() => navigation.goBack()} />
-        <View
-          style={[styles.unitContainer, {height: 50}]}>
+        <View style={[styles.unitContainer, {height: 50}]}>
           <HeaderTitlle title="Sign in" />
         </View>
 
         <View style={{width: '100%', height: '5%'}} />
 
         <View style={[styles.unitContainer, styles.bodyContainer]}>
-          <View style={{flex: 2}}>
+          <View style={{width: '100%', height: 110}}>
             <TextInputCard
               title="Email*"
               txtInput="abc@gmail.com"
@@ -63,7 +62,7 @@ const SignIn = props => {
             />
           </View>
 
-          <View style={{flex: 2}}>
+          <View style={{width: '100%', height: 110}}>
             <PasswordCard
               title="Pasword*"
               txtInput="********"
@@ -79,17 +78,19 @@ const SignIn = props => {
           </View>
         </View>
 
-        <View style={styles.containerBot}>
-          <View style={styles.button}>
-            <CustomButton
-              type="primary"
-              text="Sign in"
-              onPress={() => {
-                loginUser(email, password);
-              }}
-            />
+        <>
+          <View style={{width: '80%', height: 65, marginHorizontal: '10%'}}>
+            <View style={styles.buttonContainer}>
+              <CustomButton
+                type="primary"
+                text="Sign in"
+                onPress={() => {
+                  loginUser(email, password);
+                }}
+              />
+            </View>
           </View>
-        </View>
+        </>
 
         <View style={[styles.unitContainer, styles.botContainer]}>
           <View
@@ -126,13 +127,16 @@ const styles = StyleSheet.create({
   },
   containerBot: {
     width: '100%',
-    height: '10%',
+    height: 55,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  button: {
-    width: '100%',
+  buttonContainer: {
+    width: '200%',
     height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: '-50%',
   },
   botContainer: {
     height: '5%',

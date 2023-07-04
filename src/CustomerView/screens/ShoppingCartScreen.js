@@ -175,8 +175,9 @@ function ShoppingCartScreen({ navigation, route }) {
 
     return (
         <View style={{
-            flex: 1
+            flex: 1, backgroundColor: CUSTOM_COLOR.White,
         }}>
+            <View style={{width: '100%', height: 10}}/>
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center'
@@ -204,7 +205,7 @@ function ShoppingCartScreen({ navigation, route }) {
                 }}>Shopping Cart</Text>
             </View>
 
-
+<View style={{width:'100%', height: 20}}/>
 
             <FlatList
                 style={{
@@ -245,7 +246,7 @@ function ShoppingCartScreen({ navigation, route }) {
                 marginTop: 10,
                 marginBottom: 2,
                 justifyContent: 'space-between',
-                marginHorizontal: 10
+                marginHorizontal: 15
             }}>
                 <View style={{
                     flexDirection: 'row',
@@ -297,15 +298,18 @@ function ShoppingCartScreen({ navigation, route }) {
 
             }}>
                 <Text style={{
-                    fontSize: 17
+                    fontSize: 17, marginHorizontal: 15
                 }}>{totalMoney} đ</Text>
             </View>
 
             <View style={{
+                height: 60,
                 alignItems: 'center',
-                marginVertical: '5%'
+                justifyContent: 'center',
+                marginVertical: '2%',
             }}>
                 <Button
+                style={{width: '90%', height: '85%'}}
                     title='CHECK OUT'
                     color={CUSTOM_COLOR.FlushOrange}
                     onPress={() => {

@@ -18,7 +18,6 @@ import {IMG_Rectangle182} from '../../Login_SignUp/assets/images/index.js';
 
 const ChangePassword = props => {
   const {navigation} = props;
-  const [status, setStatus] = useState('');
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -41,6 +40,7 @@ const ChangePassword = props => {
           .updatePassword(newPassword)
           .then(() => {
             Alert.alert('Sucess', 'Your password has been changed');
+            navigation.goBack();
           })
           .catch(error => {
             Alert.alert('Sucess', error.message);
@@ -91,11 +91,24 @@ const ChangePassword = props => {
           </View>
         </View>
 
-        <View style={[styles.botContainer, styles.unitContainer]}>
-          <View style={{flex: 1, alignItems: 'center'}}>
+        <View
+          style={{
+            width: '80%',
+            height: 60,
+            marginHorizontal: '10%',
+            marginTop: 15,
+          }}>
+          <View
+            style={{
+              width: '200%',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              left: '-50%',
+            }}>
             <CustomButton
               type="primary"
-              text="Continue"
+              text="Save"
               onPress={() => {
                 if (!reauthenticate(oldPassword)) {
                   Alert.alert(
@@ -110,7 +123,6 @@ const ChangePassword = props => {
                     );
                   } else if (newPassword === confirmPassword) {
                     onChangePasswordPress(newPassword);
-                    navigation.goBack();
                   } else {
                     Alert.alert(
                       'Error',

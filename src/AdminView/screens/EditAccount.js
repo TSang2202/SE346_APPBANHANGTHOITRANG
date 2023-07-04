@@ -198,15 +198,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   containerBot: {
-    width: '100%',
-    height: '7%',
-    bottom: '-1%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: '80%',
+    height: 55,
+    marginHorizontal: '10%',
+    // marginTop: 10,
   },
   button: {
-    width: '100%',
+    width: '200%',
     height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: '-50%',
   },
   policyStyles: {
     fontSize: 15,

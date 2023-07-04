@@ -108,8 +108,8 @@ function AccountScreen() {
             <View
               style={{
                 width: '100%',
-                height: '15%',
-                backgroundColor: CUSTOM_COLOR.SeaBuckthorn,
+                height: '18%',
+                backgroundColor: CUSTOM_COLOR.Lynch,
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -124,9 +124,9 @@ function AccountScreen() {
                   <Image
                     source={{uri: imageUrl}}
                     style={{
-                      width: 75,
-                      height: 75,
-                      borderRadius: 40,
+                      width: 100,
+                      height: 100,
+                      borderRadius: 50,
                       borderColor: CUSTOM_COLOR.Black,
                       borderWidth: 1,
                     }}
@@ -135,10 +135,10 @@ function AccountScreen() {
                   <Image
                     source={IC_User}
                     style={{
-                      width: 75,
-                      height: 75,
-                      borderRadius: 40,
-                        borderColor: CUSTOM_COLOR.Black,
+                      width: 100,
+                      height: 100,
+                      borderRadius: 50,
+                      borderColor: CUSTOM_COLOR.Black,
                       borderWidth: 1,
                     }}
                   />
@@ -146,11 +146,11 @@ function AccountScreen() {
 
                 <View
                   style={{
-                    marginHorizontal: '5%',
+                    marginHorizontal: '6%',
                   }}>
                   <Text
                     style={{
-                      fontSize: 17,
+                      fontSize: 20,
                       color: CUSTOM_COLOR.White,
                       fontWeight: '500',
                     }}>
@@ -161,6 +161,7 @@ function AccountScreen() {
                     style={{
                       color: CUSTOM_COLOR.White,
                       fontStyle: 'italic',
+                      fontSize: 15,
                     }}>
                     {userData.LoaiND}
                   </Text>
@@ -178,6 +179,7 @@ function AccountScreen() {
 
             <TouchableOpacity
               style={{
+                height: '8%',
                 flexDirection: 'row',
                 justifyContent: 'space-around',
                 alignItems: 'center',
@@ -186,8 +188,7 @@ function AccountScreen() {
                 paddingBottom: 10,
                 borderBottomColor: CUSTOM_COLOR.Alto,
               }}
-              onPress={()=> navigation.navigate('MyOrder')}
-              >
+              onPress={() => navigation.navigate('MyOrder')}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -204,7 +205,7 @@ function AccountScreen() {
 
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: 16,
                     color: CUSTOM_COLOR.Black,
                   }}>
                   Your order
@@ -282,7 +283,7 @@ function AccountScreen() {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 ...styles.option,
               }}>
@@ -307,7 +308,7 @@ function AccountScreen() {
               </View>
 
               <Image source={IC_Next} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               onPress={() => {
@@ -329,7 +330,7 @@ function AccountScreen() {
                 />
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: 16,
                     color: CUSTOM_COLOR.Black,
                   }}>
                   Profile
@@ -359,7 +360,7 @@ function AccountScreen() {
                 />
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: 16,
                     color: CUSTOM_COLOR.Black,
                   }}>
                   Change Password
@@ -369,7 +370,7 @@ function AccountScreen() {
               <Image source={IC_Next} />
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 ...styles.option,
               }}>
@@ -394,7 +395,7 @@ function AccountScreen() {
               </View>
 
               <Image source={IC_Next} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               onPress={() => {
@@ -418,7 +419,7 @@ function AccountScreen() {
                 />
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: 16,
                     color: CUSTOM_COLOR.Black,
                   }}>
                   Log out
@@ -441,11 +442,12 @@ const styles = StyleSheet.create({
   },
 
   option: {
+    // height: '5%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: '8%',
-    marginVertical: '3%',
+    marginVertical: '4%',
   },
   iconOption: {
     height: 25,
