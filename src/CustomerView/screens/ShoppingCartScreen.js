@@ -110,6 +110,7 @@ function ShoppingCartScreen({ navigation, route }) {
     }
 
     const updateNumber = async (item) => {
+
         const updateRef = doc(Firestore, "GIOHANG", item.MaGH);
         await updateDoc(updateRef, {
             SoLuong: item.SoLuong,
