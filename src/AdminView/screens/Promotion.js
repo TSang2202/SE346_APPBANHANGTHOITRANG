@@ -1,40 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
 import PromotionCard from '../components/PromotionCard';
-import { IC_Momo } from '../../CustomerView/assets/icons';
-import { IM_MauAo } from '../assets/images';
-import { Firestore, Storage } from '../../../Firebase/firebase'
-import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import {IC_Momo} from '../../CustomerView/assets/icons';
+import {IM_MauAo} from '../assets/images';
+import {Firestore, Storage} from '../../../Firebase/firebase';
+import {
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  updateDoc,
+  onSnapshot,
+} from 'firebase/firestore';
 import dayjs from 'dayjs';
 
-
 const Promotion = props => {
-  const { navigation } = props;
-  const [dataPromotion, setDataPromotion] = useState([])
+  const {navigation} = props;
+  const [dataPromotion, setDataPromotion] = useState([]);
 
   const getDataPromotion = async () => {
-    const q = query(collection(Firestore, "KHUYENMAI"));
+    const q = query(collection(Firestore, 'KHUYENMAI'));
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const unsubscribe = onSnapshot(q, querySnapshot => {
       const data = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(doc => {
         data.push(doc.data());
       });
-      setDataPromotion(data)
+      setDataPromotion(data);
     });
-
-  }
+  };
 
   useEffect(() => {
-    getDataPromotion()
-  }, [])
+    getDataPromotion();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ width: '100%', height: 10 }} />
+      <View style={{width: '100%', height: 10}} />
 
       <>
         <View style={styles.headerContainer}>
@@ -42,14 +57,14 @@ const Promotion = props => {
         </View>
       </>
 
-      <View style={{ width: '100%', height: 5 }} />
+      <View style={{width: '100%', height: 5}} />
 
       <>
         <View style={styles.listViewContainer}>
           <FlatList
             data={dataPromotion}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               const timestampBD = item.NgayBatDau.toDate();
               const dateBD = dayjs(timestampBD);
 
@@ -64,7 +79,7 @@ const Promotion = props => {
               const monthKT = dateKT.month();
               const yearKT = dateKT.year();
 
-              console.log(item)
+              console.log(item);
               return (
                 <PromotionCard
                   source={item.HinhAnhKM}
@@ -74,34 +89,25 @@ const Promotion = props => {
                   start={`${dayBD}/${monthBD}/${yearBD}`}
                   end={`${dayKT}/${monthKT}/${yearKT}`}
                   type={item.Loai}
-                  onPress={() => navigation.navigate("EditPromotion", { item })}
+                  onPress={() => navigation.navigate('EditPromotion', {item})}
                 />
-
-              )
+              );
             }}
           />
-
-
         </View>
       </>
 
-      <View style={{ width: '100%', height: 10 }} />
+      <View style={{width: '100%', height: 10}} />
 
       <>
         <View style={styles.buttonContainer}>
-          <View style={styles.unitButton}>
-            <PromotionButton
-              type="secondary"
-              text="Add new"
-              onPress={() => {
-                navigation.navigate('AddPromotion');
-              }}
-            />
-          </View>
-
-          <View style={{ width: '15%', height: '100%' }} />
-
-
+          <PromotionButton
+            type="secondary"
+            text="Add new"
+            onPress={() => {
+              navigation.navigate('AddPromotion');
+            }}
+          />
         </View>
       </>
     </SafeAreaView>
@@ -115,7 +121,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     width: '90%',
-    height: 70,
+    height: 60,
     marginHorizontal: '5%',
   },
   listViewContainer: {
@@ -123,16 +129,12 @@ const styles = StyleSheet.create({
     height: '75%',
   },
   buttonContainer: {
-    width: '100%',
-    height: '10%',
+    width: '90%',
+    height: 60,
     marginHorizontal: '5%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  unitButton: {
-    width: '40%',
-    height: '80%',
   },
 });
 

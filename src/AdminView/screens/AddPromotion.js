@@ -449,51 +449,56 @@ const AddPromotion = props => {
               </View>
             </>
 
+            <View style={styles.spaceContainer} />
+
             <>
               {typeOfPromotion && typeOfPromotion === 'GiamGia' ? (
-                <View style={[styles.comboxContainer, {height: 60}]}>
-                  <View
-                    style={[
-                      styles.unitComboContainer,
-                      {justifyContent: 'flex-start', width: '40%'},
-                    ]}>
-                    <View style={{width: '12%', height: '100%'}} />
-                    <Text style={styles.titleInputStyle}>Discount</Text>
-                    <Text
+                <View style={{width: '100%', height: 70}}>
+                  <View style={[styles.comboxContainer, {height: 60}]}>
+                    <View
                       style={[
-                        styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        styles.unitComboContainer,
+                        {justifyContent: 'flex-start', width: '40%'},
                       ]}>
-                      {' '}
-                      *
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.unitComboContainer,
-                      {
-                        justifyContent: 'flex-end',
-                        width: '50%',
-                      },
-                    ]}>
-                    <TextInput
-                      style={styles.comboType}
-                      onChangeText={text => setDiscount(text)}
-                      value={discount}
-                      keyboardType="numeric"
-                    />
-                    <View style={{width: '8%', height: '100%'}} />
-                  </View>
+                      <View style={{width: '12%', height: '100%'}} />
+                      <Text style={styles.titleInputStyle}>Discount</Text>
+                      <Text
+                        style={[
+                          styles.titleInputStyle,
+                          {color: CUSTOM_COLOR.Red},
+                        ]}>
+                        {' '}
+                        *
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.unitComboContainer,
+                        {
+                          justifyContent: 'flex-end',
+                          width: '50%',
+                        },
+                      ]}>
+                      <TextInput
+                        style={styles.comboType}
+                        onChangeText={text => setDiscount(text)}
+                        value={discount}
+                        keyboardType="numeric"
+                      />
+                      <View style={{width: '8%', height: '100%'}} />
+                    </View>
 
-                  <View
-                    style={[
-                      styles.unitComboContainer,
-                      {justifyContent: 'flex-start', width: '40%'},
-                    ]}>
-                    <Text style={[styles.titleInputStyle, {fontSize: 15}]}>
-                      %
-                    </Text>
+                    <View
+                      style={[
+                        styles.unitComboContainer,
+                        {justifyContent: 'flex-start', width: '40%'},
+                      ]}>
+                      <Text style={[styles.titleInputStyle, {fontSize: 15}]}>
+                        %
+                      </Text>
+                    </View>
                   </View>
+                  <View style={styles.spaceContainer} />
                 </View>
               ) : null}
             </>
