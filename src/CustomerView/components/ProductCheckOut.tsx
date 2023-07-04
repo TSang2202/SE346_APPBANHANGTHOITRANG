@@ -14,7 +14,7 @@ const ProductCheckOut = (props: any) => {
 
 
     return (
-        <View style={{
+        <TouchableOpacity style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -23,7 +23,9 @@ const ProductCheckOut = (props: any) => {
             padding: 5,
             borderRadius: 20,
             ...props.style
-        }}>
+        }}
+            onPress={props.onPressProduct}
+        >
             {props.show ?
                 <TouchableOpacity style={{
                     width: 20,
@@ -151,7 +153,7 @@ const ProductCheckOut = (props: any) => {
             >
                 <Image source={props.show ? IC_Delete : IC_Next} />
             </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
     )
 
 };

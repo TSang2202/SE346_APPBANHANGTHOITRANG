@@ -25,7 +25,7 @@ function CheckoutScreen({ navigation, route }) {
 
   const discount = promotion &&
     promotion.Loai === 'GiamGia' ?
-    promotion.GiamToiDa < totalMoney * promotion.TiLe ? promotion.GiamToiDa : totalMoney * promotion.TiLe
+    totalMoney * promotion.TiLe
     : 5000
 
 
