@@ -44,7 +44,7 @@ function StackHome() {
       <Stack.Screen name="Promotion" component={PromotionScreen} />
       <Stack.Screen name="Delivery" component={DeliveryScreen} />
       <Stack.Screen name="MyOrder" component={Order} />
-      <Stack.Screen name="DetailDelivery" component={DeTailDelivery} />
+      <Stack.Screen name="DetailsDelivery" component={DeTailDelivery} />
     </Stack.Navigator>
   );
 }
