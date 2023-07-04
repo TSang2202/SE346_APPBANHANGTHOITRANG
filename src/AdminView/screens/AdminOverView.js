@@ -26,8 +26,19 @@ import {
 } from '../assets/icons/index.js';
 import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
-import { Storage } from '../../../Firebase/firebase';
+import { Firestore } from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
+import {
+  collection,
+  onSnapshot,
+  query,
+  doc,
+  getDoc,
+  querySnapshot,
+  getDocs,
+  where,
+  updateDoc,
+} from 'firebase/firestore';
 
 const AdminOverView = props => {
   const { navigation } = props;
@@ -36,30 +47,76 @@ const AdminOverView = props => {
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
-  const Order = [
-    {
-      id: '1',
-      number: 10,
-      status: 'Wait',
-    },
-    {
-      id: '2',
-      number: 10,
-      status: 'Cancel',
-    },
-    {
-      id: '3',
-      number: 10,
-      status: 'Request',
-    },
-    {
-      id: '4',
-      number: 10,
-      status: 'Review',
-    },
-  ];
+  const [donHangConfirm, setDonHangConfirm] = useState([]);
+  const [donHangOnWait, setDonHangOnWait] = useState([]);
+  const [donHangDelivering, setDonHangDelivering] = useState([]);
+  const [donHangDelivered, setDonHangDelivered] = useState([]);
+
+  const getDonHangConfirm = () => {
+
+    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Confirm"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setDonHangConfirm(data)
+    });
+
+    return unsubscribe;
+  };
+
+  const getDonHangOnWait = () => {
+    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "OnWait"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setDonHangOnWait(data)
+    });
+
+    return unsubscribe;
+
+  };
+
+  const getDonHangDelivering = () => {
+    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivering"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setDonHangDelivering(data)
+    });
+
+    return unsubscribe;
+
+
+  };
+
+  const getDonHangDelivered = () => {
+    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivered"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setDonHangDelivered(data)
+    });
+
+    return unsubscribe;
+  };
+
+
 
   useEffect(() => {
+
+    getDonHangConfirm()
+    getDonHangOnWait()
+    getDonHangDelivering()
+    getDonHangDelivered()
+
     setTimeout(() => {
       // Assume data is fetched here
       const fetchedData = 'Sample Data';
@@ -231,7 +288,7 @@ const AdminOverView = props => {
                 </TouchableOpacity>
               </View>
               <View style={styles.listOderConatiner}>
-                <FlatList
+                {/* <FlatList
                   horizontal={true}
                   data={Order}
                   keyExtractor={item => item.id}
@@ -240,7 +297,12 @@ const AdminOverView = props => {
                       <ViewNow number={item.number} status={item.status} />
                     );
                   }}
-                />
+                /> */}
+
+                <ViewNow number={donHangConfirm.length} status={"Confirm"} />
+                <ViewNow number={donHangOnWait.length} status={"On wait"} />
+                <ViewNow number={donHangDelivering.length} status={"Delovering"} />
+                <ViewNow number={donHangDelivered.length} status={"Delivered"} />
               </View>
             </View>
           </>
