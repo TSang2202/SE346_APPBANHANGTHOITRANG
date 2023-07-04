@@ -1,4 +1,4 @@
-import { default as React, default as React } from 'react'
+import { default as React } from 'react'
 import { StyleSheet, View } from 'react-native'
 import MyProduct1 from '../components/MyProductOne'
 import Search from '../components/Search'

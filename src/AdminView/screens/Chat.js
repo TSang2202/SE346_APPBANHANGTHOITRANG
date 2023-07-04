@@ -2,7 +2,7 @@ import {
   collection, doc, getDoc, getDocs, onSnapshot,
   orderBy, query, updateDoc, where
 } from 'firebase/firestore';
-import { default as React, default as React, useEffect, useState } from 'react';
+import { default as React, useEffect, useState } from 'react';
 import {
   FlatList,
   Image,

@@ -2,7 +2,7 @@ import {
   Timestamp, addDoc, collection, doc,
   getDoc, onSnapshot, orderBy, query, updateDoc, where
 } from "firebase/firestore";
-import { default as React, default as React, useEffect, useState } from "react";
+import { default as React, useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
 import { IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../assets/icons";
