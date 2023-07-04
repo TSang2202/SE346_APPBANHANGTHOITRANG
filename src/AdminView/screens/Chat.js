@@ -1,30 +1,32 @@
-import {View, Text, Image, FlatList} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import Search from '../components/Search';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import CUSTOM_COLOR from '../constants/colors';
-import UserChat from '../components/UserChat';
-import Size from '../constants/size';
-import {firebase, Firestore} from '../../../Firebase/firebase';
 import {
-  doc,
-  getDoc,
-  getDocs,
-  collection,
-  query,
-  where,
-  onSnapshot,
-  orderBy,
-  querySnapshot,
-  docs,
-  updateDoc,
+  collection, doc, getDoc, getDocs, onSnapshot,
+  orderBy, query, updateDoc, where
 } from 'firebase/firestore';
+import { default as React, useEffect, useState } from 'react';
+import {
+  FlatList,
+  Image,
+  Text,
+  View
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Firestore, firebase } from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
+import Search from '../components/Search';
+import UserChat from '../components/UserChat';
+import CUSTOM_COLOR from '../constants/colors';
+import Size from '../constants/size';
 
-export default function Chat({navigation}) {
+
+export default function Chat({ navigation }) {
   const [users, setUser] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
 
+  const handleSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+  };
   const getUser = async item => {
     //item = item.trim();
 
@@ -54,6 +56,46 @@ export default function Chat({navigation}) {
   };
 
   const getDataChat = async () => {
+    const querySnapshot = await getDocs(collection(Firestore, 'CHAT'));
+    const promises = [];
+    for (const documentSnapshot of querySnapshot.docs) {
+      const promise = getUser(documentSnapshot.data().MaND);
+      promises.push(promise);
+      //console.log(promises)
+    }
+    const dataUser = await Promise.all(promises);
+    const data = [];
+
+    // querySnapshot.forEach( (documentSnapshot) => {
+
+    //   const dataUser = await getUser(documentSnapshot.data().MaND)
+
+    //   console.log(dataUser)
+    //   data.push({
+    //     ...documentSnapshot.data(),
+    //     //...docSnap.data(),
+    //   })
+
+    // })
+
+    dataUser.map((user, index) => {
+      const documentSnapshot = querySnapshot.docs[index];
+      //console.log(user)
+      data.push({
+        ...documentSnapshot.data(),
+        ...user,
+      });
+    });
+    let filteredItems = data;
+        if (searchTerm != null) {
+            filteredItems = data.filter(item =>
+            item.TenND.toLowerCase().includes(searchTerm.toLowerCase())
+            ); 
+        }
+        else {
+            setUser(data);
+        }
+        setUser(filteredItems);
     const q = query(collection(Firestore, 'CHAT'), orderBy('ThoiGian', 'desc'));
 
     const unsubscribe = onSnapshot(q, async querySnapshot => {
@@ -89,7 +131,7 @@ export default function Chat({navigation}) {
     fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
       setImageUrl(url),
     );
-  }, []);
+  }, [searchTerm]);
 
   const setSoLuongChuaDoc = async item => {
     const chatUpdateRef = doc(Firestore, 'CHAT', item.MaChat);

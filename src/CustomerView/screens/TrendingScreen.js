@@ -39,7 +39,7 @@ function TrendingScreen({ navigation }) {
             });
         });
         let sortedItems = items;
-
+        
         if (sortType === "a-z") {
             sortedItems = items.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
         } else if (sortType === "z-a") {
