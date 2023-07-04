@@ -36,3 +36,4 @@ export {default as IC_notification} from '../icons/OverView/notification.png';
 export {default as IC_User} from '../icons/OverView/Account.png';
 export {default as IC_Selected} from '../icons/Selected.png';
 export {default as IC_Review} from '../icons/Review.png';
+export {default as IC_Next} from '../icons/next.png';

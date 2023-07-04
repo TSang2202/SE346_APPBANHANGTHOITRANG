@@ -16,7 +16,7 @@ import CUSTOM_COLOR from '../../AdminView/constants/colors';
 import FONT_FAMILY from '../constants/fonts';
 import CustomHeader from '../../AdminView/components/CustomHeader';
 import {IMG_Rectangle} from '../../Login_SignUp/assets/images';
-import {IC_User} from '../assets/icons';
+import {IC_User, IC_Next} from '../assets/icons';
 import {Dropdown} from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {firebase} from '../../../Firebase/firebase';
@@ -542,10 +542,18 @@ const ChangeProfile = props => {
                       <TouchableOpacity
                         style={styles.buttonChangePasswordContainer}>
                         <Text
-                          style={{color: CUSTOM_COLOR.White}}
+                          style={{
+                            color: CUSTOM_COLOR.Black,
+                            fontWeight: 'bold',
+                          }}
                           onPress={() => navigation.navigate('ChangePassword')}>
                           Change Password
                         </Text>
+                        <Image
+                          source={IC_Next}
+                          style={{width: 25, height: 10}}
+                          resizeMode="center"
+                        />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -616,10 +624,11 @@ const styles = StyleSheet.create({
     width: '60%',
     height: '70%',
     marginRight: '5%',
-    backgroundColor: CUSTOM_COLOR.FlushOrange,
+    // backgroundColor: CUSTOM_COLOR.FlushOrange,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   avataStyle: {
     width: 100,
