@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
-import {border_add} from '../assets/images';
-import {Dropdown} from 'react-native-element-dropdown';
+import { border_add } from '../assets/images';
+import { Dropdown } from 'react-native-element-dropdown';
 import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
 
 const ImportProduct = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isFocus, setIsFocus] = useState(false);
@@ -24,7 +24,7 @@ const ImportProduct = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
       <>
         <View style={styles.headerContainer}>
@@ -35,17 +35,17 @@ const ImportProduct = props => {
         </View>
       </>
 
-      <View style={{width: '100%', height: 50}} />
+      <View style={{ width: '100%', height: 50 }} />
 
       <>
         <View style={styles.bodyContainer}>
           <>
-            <View style={[styles.comboxContainer, {height: 110}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={[styles.unitComboContainer, {height: '20%'}]}>
+            <View style={[styles.comboxContainer, { height: 110 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={[styles.unitComboContainer, { height: '20%' }]}>
                 <Text style={styles.titleInputStyle}>Categorize</Text>
                 <Text
-                  style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                  style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                   {' '}
                   *
                 </Text>
@@ -59,7 +59,7 @@ const ImportProduct = props => {
                   },
                 ]}>
                 <Dropdown
-                  style={[styles.comboType, isFocus && {borderColor: 'blue'}]}
+                  style={[styles.comboType, isFocus && { borderColor: 'blue' }]}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
@@ -84,15 +84,15 @@ const ImportProduct = props => {
             </View>
           </>
 
-          <View style={{width: '100%', height: 20}} />
+          <View style={{ width: '100%', height: 20 }} />
 
           <>
-            <View style={[styles.comboxContainer, {height: 110}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={[styles.unitComboContainer, {height: '20%'}]}>
+            <View style={[styles.comboxContainer, { height: 110 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={[styles.unitComboContainer, { height: '20%' }]}>
                 <Text style={styles.titleInputStyle}>Product</Text>
                 <Text
-                  style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                  style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                   {' '}
                   *
                 </Text>
@@ -106,7 +106,7 @@ const ImportProduct = props => {
                   },
                 ]}>
                 <Dropdown
-                  style={[styles.comboType, isFocus && {borderColor: 'blue'}]}
+                  style={[styles.comboType, isFocus && { borderColor: 'blue' }]}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
@@ -131,15 +131,15 @@ const ImportProduct = props => {
             </View>
           </>
 
-          <View style={{width: '100%', height: 20}} />
+          <View style={{ width: '100%', height: 20 }} />
 
           <>
-            <View style={[styles.comboxContainer, {height: 110}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={[styles.unitComboContainer, {height: '20%'}]}>
+            <View style={[styles.comboxContainer, { height: 110 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={[styles.unitComboContainer, { height: '20%' }]}>
                 <Text style={styles.titleInputStyle}>Quantiy</Text>
                 <Text
-                  style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                  style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                   {' '}
                   *
                 </Text>
@@ -161,16 +161,16 @@ const ImportProduct = props => {
             </View>
           </>
 
-          <View style={{width: '100%', height: 50}} />
+          <View style={{ width: '100%', height: 50 }} />
 
           <>
             <View style={styles.buttonContainer}>
               <PromotionButton
                 type="secondary"
                 text="Save"
-                // onPress={() => {
-                //   navigation.navigate('AddPromotion');
-                // }}
+              // onPress={() => {
+              //   navigation.navigate('AddPromotion');
+              // }}
               />
             </View>
           </>

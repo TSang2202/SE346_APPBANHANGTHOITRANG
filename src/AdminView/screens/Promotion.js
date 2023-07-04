@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,9 +11,9 @@ import CUSTOM_COLOR from '../constants/colors';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
 import PromotionCard from '../components/PromotionCard';
-import {IC_Momo} from '../../CustomerView/assets/icons';
-import {IM_MauAo} from '../assets/images';
-import {Firestore, Storage} from '../../../Firebase/firebase';
+import { IC_Momo } from '../../CustomerView/assets/icons';
+import { IM_MauAo } from '../assets/images';
+import { Firestore, Storage } from '../../../Firebase/firebase';
 import {
   collection,
   doc,
@@ -28,7 +28,7 @@ import {
 import dayjs from 'dayjs';
 
 const Promotion = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [dataPromotion, setDataPromotion] = useState([]);
 
   const getDataPromotion = async () => {
@@ -49,7 +49,7 @@ const Promotion = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
       <>
         <View style={styles.headerContainer}>
@@ -57,14 +57,14 @@ const Promotion = props => {
         </View>
       </>
 
-      <View style={{width: '100%', height: 5}} />
+      <View style={{ width: '100%', height: 5 }} />
 
       <>
         <View style={styles.listViewContainer}>
           <FlatList
             data={dataPromotion}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               const timestampBD = item.NgayBatDau.toDate();
               const dateBD = dayjs(timestampBD);
 
@@ -89,7 +89,7 @@ const Promotion = props => {
                   start={`${dayBD}/${monthBD}/${yearBD}`}
                   end={`${dayKT}/${monthKT}/${yearKT}`}
                   type={item.Loai}
-                  onPress={() => navigation.navigate('EditPromotion', {item})}
+                  onPress={() => navigation.navigate('EditPromotion', { item })}
                 />
               );
             }}
@@ -97,7 +97,7 @@ const Promotion = props => {
         </View>
       </>
 
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
       <>
         <View style={styles.buttonContainer}>
