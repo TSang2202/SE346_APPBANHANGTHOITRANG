@@ -194,7 +194,9 @@ function AccountScreen() {
                 borderBottomWidth: 1,
                 paddingBottom: 10,
                 borderBottomColor: CUSTOM_COLOR.Alto,
-              }}>
+              }}
+              onPress={()=> navigation.navigate('MyOrder')}
+              >
               <View
                 style={{
                   flexDirection: 'row',

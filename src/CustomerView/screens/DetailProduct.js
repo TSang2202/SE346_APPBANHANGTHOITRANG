@@ -127,7 +127,6 @@ function DetailProduct({ navigation, route }) {
             } catch(error){
                 console.log(error);
             }
-        
    }
    const SetLove = async () =>{
         setlove(!love);
