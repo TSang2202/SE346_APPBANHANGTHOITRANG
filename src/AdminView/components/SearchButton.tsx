@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
-import { Animated, Image, Modal, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import React, {useState} from 'react';
+import {
+  Animated,
+  Image,
+  Modal,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 
-
 interface SearchInputProps {
-    onSearch: (searchTerm: string) => void;
-  }
-  
-  const SearchButton: React.FC<SearchInputProps> = ({ onSearch }) => {
+  onSearch: (searchTerm: string) => void;
+}
+
+const SearchButton: React.FC<SearchInputProps> = ({onSearch}) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
   const opacity = new Animated.Value(0);
@@ -49,11 +56,11 @@ interface SearchInputProps {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <TouchableOpacity onPress={handlePress}>
         <Image
           source={require('../assets/icons/SearchIcon.png')}
-          style={{ width: 20, height: 20, marginLeft: '70%', marginTop: 10 }}
+          style={{width: 20, height: 20}}
           resizeMode="contain"
         />
       </TouchableOpacity>
@@ -62,8 +69,7 @@ interface SearchInputProps {
         visible={isModalVisible}
         transparent
         animationType="none"
-        onRequestClose={closeModal}
-      >
+        onRequestClose={closeModal}>
         <View style={styles.modalContainer}>
           <TextInput
             style={styles.input}
@@ -85,12 +91,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   input: {
-    height: 40,
+    width: '100%',
+    height: 55,
     borderColor: CUSTOM_COLOR.DarkBlue,
-    backgroundColor:CUSTOM_COLOR.White,
+    backgroundColor: CUSTOM_COLOR.White,
     borderWidth: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     marginBottom: 10,
+    borderRadius: 5,
   },
 });
 
