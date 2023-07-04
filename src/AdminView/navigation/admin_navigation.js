@@ -28,6 +28,7 @@ import ChangePassword from '../screens/ChangePassword';
 import EditPromotion from '../screens/EditPromotion';
 import Categories from '../screens/Categories';
 import DetailCategory from '../screens/DetailsCategory'
+import AddNewCategory from '../screens/AddNewCategory';
 
 
 const Stack = createNativeStackNavigator();
@@ -63,6 +64,7 @@ function StackNavigator() {
       <Stack.Screen name="EditPromotion" component={EditPromotion} />
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="DetailsCategory" component={DetailCategory} />
+      <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
 
     </Stack.Navigator>
   );

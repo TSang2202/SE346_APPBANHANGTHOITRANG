@@ -21,6 +21,8 @@ import ButtonDetail from '../components/ButtonDetail';
 
 export default function Categories({ navigation }) {
 
+
+
     const [dataCategories, setDataCategories] = useState([])
 
     const getDataCategories = () => {
@@ -99,6 +101,7 @@ export default function Categories({ navigation }) {
                 <ButtonDetail
                     title={"Add new Category"}
                     color={CUSTOM_COLOR.DarkOrange}
+                    onPress={() => navigation.navigate('AddNewCategory')}
                     style={{
                         width: '50%',
                         marginVertical: 10
