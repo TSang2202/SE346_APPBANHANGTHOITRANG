@@ -16,9 +16,9 @@ const OneOrder = (props: any) => {
           <Text>x{props.number}</Text>
           <Text>Màu sắc: {props.color}</Text>
           <Text>Size: {props.size}</Text>
-          <View style={{ marginTop: 5, flexDirection: 'row', marginBottom: 10 }}>
+          <View style={{ marginTop: 5, flexDirection: 'row', marginBottom: 10, justifyContent: 'space-between' }}>
             <Text style={{ fontWeight: 'bold' }}>Total</Text>
-            <Text style={{ marginLeft: 140, fontWeight: 'bold' }}>{props.totalPrice} VND</Text>
+            <Text style={{ fontWeight: 'bold', marginRight: 20 }}>{props.totalPrice} VND</Text>
           </View>
 
         </View>

@@ -101,221 +101,238 @@ export default function Order({ navigation }) {
     }
 
 
-    const getDonHangConfirm = async () => {
+
+
+    const getDonHangConfirm = () => {
         const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Confirm"));
-        const querySnapshot = await getDocs(q)
-        const promises = [];
-        const promisesDatHang = []
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const promises = [];
+            const promisesDatHang = [];
 
-        for (const documentSnapshot of querySnapshot.docs) {
-            const promise = getUsers(documentSnapshot.data().MaND);
-            const datHang = getDatHang(documentSnapshot.data().MaDH)
+            querySnapshot.forEach((documentSnapshot) => {
+                const promise = getUsers(documentSnapshot.data().MaND);
+                const datHang = getDatHang(documentSnapshot.data().MaDH);
 
-            promises.push(promise);
-            promisesDatHang.push(datHang)
-        }
-        const data = []
+                promises.push(promise);
+                promisesDatHang.push(datHang);
+            });
 
-        const dataUser = await Promise.all(promises);
-        const dataDatHang = await Promise.all(promisesDatHang)
+            Promise.all(promises)
+                .then((dataUser) => Promise.all(promisesDatHang)
+                    .then(async (dataDatHang) => {
+                        const dataSanPham = [];
 
-        const dataSanPham = []
+                        for (const documentDatHang of dataDatHang) {
+                            const promises = [];
+                            for (const documentSanPham of documentDatHang) {
+                                const promise = getSanPham(documentSanPham.MaSP);
+                                promises.push(promise);
+                            }
+                            const promiseSanPham = await Promise.all(promises);
+                            dataSanPham.push(promiseSanPham);
+                        }
 
-        for (const documentDatHang of dataDatHang) {
-            const promises = []
-            for (const documentSanPham of documentDatHang) {
-                const promise = getSanPham(documentSanPham.MaSP)
-                promises.push(promise)
-            }
+                        dataDatHang.forEach((datHang, i) => {
+                            datHang.forEach((sanPham, index) => {
+                                dataDatHang[i][index] = {
+                                    ...dataDatHang[i][index],
+                                    SanPham: dataSanPham[i][index]
+                                };
+                            });
+                        });
 
-            const promiseSanPham = await Promise.all(promises);
-            dataSanPham.push(promiseSanPham)
-        }
-
-
-        dataDatHang.map((datHang, i) => {
-            datHang.map((sanPham, index) => {
-                dataDatHang[i][index] = {
-                    ...dataDatHang[i][index],
-                    SanPham: dataSanPham[i][index]
-                }
-            })
-        })
-
-        dataUser.map((user, index) => {
-            const documentSnapshot = querySnapshot.docs[index];
-            //console.log(user)
-            data.push({
-                ...documentSnapshot.data(),
-                ...user,
-                DatHang: dataDatHang[index]
-            })
+                        const data = dataUser.map((user, index) => {
+                            const documentSnapshot = querySnapshot.docs[index];
+                            return {
+                                ...documentSnapshot.data(),
+                                ...user,
+                                DatHang: dataDatHang[index]
+                            };
+                        });
+                        setDonHangConfirm(data);
+                    })
+                )
+                .catch((error) => {
+                    console.log("Error getting data: ", error);
+                });
         });
-        setDonHangConfirm(data)
-    }
 
+        return unsubscribe;
+    };
 
-
-    const getDonHangOnWait = async () => {
+    const getDonHangOnWait = () => {
         const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "OnWait"));
-        const querySnapshot = await getDocs(q)
-        const promises = [];
-        const promisesDatHang = []
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const promises = [];
+            const promisesDatHang = [];
 
-        for (const documentSnapshot of querySnapshot.docs) {
-            const promise = getUsers(documentSnapshot.data().MaND);
-            const datHang = getDatHang(documentSnapshot.data().MaDH)
+            querySnapshot.forEach((documentSnapshot) => {
+                const promise = getUsers(documentSnapshot.data().MaND);
+                const datHang = getDatHang(documentSnapshot.data().MaDH);
 
-            promises.push(promise);
-            promisesDatHang.push(datHang)
-        }
-        const data = []
+                promises.push(promise);
+                promisesDatHang.push(datHang);
+            });
 
-        const dataUser = await Promise.all(promises);
-        const dataDatHang = await Promise.all(promisesDatHang)
+            Promise.all(promises)
+                .then((dataUser) => Promise.all(promisesDatHang)
+                    .then(async (dataDatHang) => {
+                        const dataSanPham = [];
 
-        const dataSanPham = []
+                        for (const documentDatHang of dataDatHang) {
+                            const promises = [];
+                            for (const documentSanPham of documentDatHang) {
+                                const promise = getSanPham(documentSanPham.MaSP);
+                                promises.push(promise);
+                            }
+                            const promiseSanPham = await Promise.all(promises);
+                            dataSanPham.push(promiseSanPham);
+                        }
 
-        for (const documentDatHang of dataDatHang) {
-            const promises = []
-            for (const documentSanPham of documentDatHang) {
-                const promise = getSanPham(documentSanPham.MaSP)
-                promises.push(promise)
-            }
+                        dataDatHang.forEach((datHang, i) => {
+                            datHang.forEach((sanPham, index) => {
+                                dataDatHang[i][index] = {
+                                    ...dataDatHang[i][index],
+                                    SanPham: dataSanPham[i][index]
+                                };
+                            });
+                        });
 
-            const promiseSanPham = await Promise.all(promises);
-            dataSanPham.push(promiseSanPham)
-        }
-
-
-        dataDatHang.map((datHang, i) => {
-            datHang.map((sanPham, index) => {
-                dataDatHang[i][index] = {
-                    ...dataDatHang[i][index],
-                    SanPham: dataSanPham[i][index]
-                }
-            })
-        })
-
-        dataUser.map((user, index) => {
-            const documentSnapshot = querySnapshot.docs[index];
-            //console.log(user)
-            data.push({
-                ...documentSnapshot.data(),
-                ...user,
-                DatHang: dataDatHang[index]
-            })
+                        const data = dataUser.map((user, index) => {
+                            const documentSnapshot = querySnapshot.docs[index];
+                            return {
+                                ...documentSnapshot.data(),
+                                ...user,
+                                DatHang: dataDatHang[index]
+                            };
+                        });
+                        setDonHangOnWait(data);
+                    })
+                )
+                .catch((error) => {
+                    console.log("Error getting data: ", error);
+                });
         });
-        setDonHangOnWait(data)
-    }
 
+        return unsubscribe;
+    };
 
-    const getDonHangDelivering = async () => {
+    const getDonHangDelivering = () => {
         const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivering"));
-        const querySnapshot = await getDocs(q)
-        const promises = [];
-        const promisesDatHang = []
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const promises = [];
+            const promisesDatHang = [];
 
-        for (const documentSnapshot of querySnapshot.docs) {
-            const promise = getUsers(documentSnapshot.data().MaND);
-            const datHang = getDatHang(documentSnapshot.data().MaDH)
+            querySnapshot.forEach((documentSnapshot) => {
+                const promise = getUsers(documentSnapshot.data().MaND);
+                const datHang = getDatHang(documentSnapshot.data().MaDH);
 
-            promises.push(promise);
-            promisesDatHang.push(datHang)
-        }
-        const data = []
+                promises.push(promise);
+                promisesDatHang.push(datHang);
+            });
 
-        const dataUser = await Promise.all(promises);
-        const dataDatHang = await Promise.all(promisesDatHang)
+            Promise.all(promises)
+                .then((dataUser) => Promise.all(promisesDatHang)
+                    .then(async (dataDatHang) => {
+                        const dataSanPham = [];
 
-        const dataSanPham = []
+                        for (const documentDatHang of dataDatHang) {
+                            const promises = [];
+                            for (const documentSanPham of documentDatHang) {
+                                const promise = getSanPham(documentSanPham.MaSP);
+                                promises.push(promise);
+                            }
+                            const promiseSanPham = await Promise.all(promises);
+                            dataSanPham.push(promiseSanPham);
+                        }
 
-        for (const documentDatHang of dataDatHang) {
-            const promises = []
-            for (const documentSanPham of documentDatHang) {
-                const promise = getSanPham(documentSanPham.MaSP)
-                promises.push(promise)
-            }
+                        dataDatHang.forEach((datHang, i) => {
+                            datHang.forEach((sanPham, index) => {
+                                dataDatHang[i][index] = {
+                                    ...dataDatHang[i][index],
+                                    SanPham: dataSanPham[i][index]
+                                };
+                            });
+                        });
 
-            const promiseSanPham = await Promise.all(promises);
-            dataSanPham.push(promiseSanPham)
-        }
-
-
-        dataDatHang.map((datHang, i) => {
-            datHang.map((sanPham, index) => {
-                dataDatHang[i][index] = {
-                    ...dataDatHang[i][index],
-                    SanPham: dataSanPham[i][index]
-                }
-            })
-        })
-
-        dataUser.map((user, index) => {
-            const documentSnapshot = querySnapshot.docs[index];
-            //console.log(user)
-            data.push({
-                ...documentSnapshot.data(),
-                ...user,
-                DatHang: dataDatHang[index]
-            })
+                        const data = dataUser.map((user, index) => {
+                            const documentSnapshot = querySnapshot.docs[index];
+                            return {
+                                ...documentSnapshot.data(),
+                                ...user,
+                                DatHang: dataDatHang[index]
+                            };
+                        });
+                        setDonHangDelivering(data);
+                    })
+                )
+                .catch((error) => {
+                    console.log("Error getting data: ", error);
+                });
         });
-        setDonHangDelivering(data)
-    }
+
+        return unsubscribe;
+    };
 
 
-    const getDonHangDelivered = async () => {
+
+
+    const getDonHangDelivered = () => {
         const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivered"));
-        const querySnapshot = await getDocs(q)
-        const promises = [];
-        const promisesDatHang = []
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const promises = [];
+            const promisesDatHang = [];
 
-        for (const documentSnapshot of querySnapshot.docs) {
-            const promise = getUsers(documentSnapshot.data().MaND);
-            const datHang = getDatHang(documentSnapshot.data().MaDH)
+            querySnapshot.forEach((documentSnapshot) => {
+                const promise = getUsers(documentSnapshot.data().MaND);
+                const datHang = getDatHang(documentSnapshot.data().MaDH);
 
-            promises.push(promise);
-            promisesDatHang.push(datHang)
-        }
-        const data = []
+                promises.push(promise);
+                promisesDatHang.push(datHang);
+            });
 
-        const dataUser = await Promise.all(promises);
-        const dataDatHang = await Promise.all(promisesDatHang)
+            Promise.all(promises)
+                .then((dataUser) => Promise.all(promisesDatHang)
+                    .then(async (dataDatHang) => {
+                        const dataSanPham = [];
 
-        const dataSanPham = []
+                        for (const documentDatHang of dataDatHang) {
+                            const promises = [];
+                            for (const documentSanPham of documentDatHang) {
+                                const promise = getSanPham(documentSanPham.MaSP);
+                                promises.push(promise);
+                            }
+                            const promiseSanPham = await Promise.all(promises);
+                            dataSanPham.push(promiseSanPham);
+                        }
 
-        for (const documentDatHang of dataDatHang) {
-            const promises = []
-            for (const documentSanPham of documentDatHang) {
-                const promise = getSanPham(documentSanPham.MaSP)
-                promises.push(promise)
-            }
+                        dataDatHang.forEach((datHang, i) => {
+                            datHang.forEach((sanPham, index) => {
+                                dataDatHang[i][index] = {
+                                    ...dataDatHang[i][index],
+                                    SanPham: dataSanPham[i][index]
+                                };
+                            });
+                        });
 
-            const promiseSanPham = await Promise.all(promises);
-            dataSanPham.push(promiseSanPham)
-        }
-
-
-        dataDatHang.map((datHang, i) => {
-            datHang.map((sanPham, index) => {
-                dataDatHang[i][index] = {
-                    ...dataDatHang[i][index],
-                    SanPham: dataSanPham[i][index]
-                }
-            })
-        })
-
-        dataUser.map((user, index) => {
-            const documentSnapshot = querySnapshot.docs[index];
-            //console.log(user)
-            data.push({
-                ...documentSnapshot.data(),
-                ...user,
-                DatHang: dataDatHang[index]
-            })
+                        const data = dataUser.map((user, index) => {
+                            const documentSnapshot = querySnapshot.docs[index];
+                            return {
+                                ...documentSnapshot.data(),
+                                ...user,
+                                DatHang: dataDatHang[index]
+                            };
+                        });
+                        setDonHangDelivered(data);
+                    })
+                )
+                .catch((error) => {
+                    console.log("Error getting data: ", error);
+                });
         });
-        setDonHangDelivered(data)
-    }
+
+        return unsubscribe;
+    };
 
 
 
@@ -366,12 +383,14 @@ export default function Order({ navigation }) {
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
                 <View style={{
-                    height: '85%'
+                    height: '100%',
+                    backgroundColor: CUSTOM_COLOR.White
                 }}>
 
                     <FlatList
                         data={donHangConfirm}
                         contentContainerStyle={{ paddingBottom: 50 }}
+                        keyExtractor={(item) => item.MaDH}
                         renderItem={({ item }) => {
                             //console.log(item)
                             return (
@@ -379,10 +398,11 @@ export default function Order({ navigation }) {
                                     <PerSon
                                         avartar={item.Avatar}
                                         name={item.TenND}
+                                        id={item.MaND}
                                     />
                                     <FlatList
                                         data={item.DatHang}
-
+                                        keyExtractor={(item) => item.MaSP}
                                         renderItem={({ item }) => {
 
                                             console.log(item)
@@ -390,7 +410,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -491,10 +511,14 @@ export default function Order({ navigation }) {
                     </Status>
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
+                <View style={{
+                    height: '100%',
+                    backgroundColor: CUSTOM_COLOR.White
+                }}>
 
                     <FlatList
                         data={donHangOnWait}
+                        keyExtractor={(item) => item.MaDH}
                         renderItem={({ item }) => {
                             //console.log(item)
                             return (
@@ -502,9 +526,11 @@ export default function Order({ navigation }) {
                                     <PerSon
                                         avartar={item.Avatar}
                                         name={item.TenND}
+                                        id={item.MaND}
                                     />
                                     <FlatList
                                         data={item.DatHang}
+                                        keyExtractor={(item) => item.MaSP}
                                         renderItem={({ item }) => {
 
                                             console.log(item)
@@ -512,7 +538,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -544,7 +570,7 @@ export default function Order({ navigation }) {
                                         <TouchableOpacity
                                             onPress={() => { OnWaitDonHang(item) }}
                                             style={{
-                                                width: '100%',
+                                                width: '80%',
                                                 height: '100%',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
@@ -609,10 +635,14 @@ export default function Order({ navigation }) {
                     </Status>
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
+                <View style={{
+                    height: '100%',
+                    backgroundColor: CUSTOM_COLOR.White
+                }}>
 
                     <FlatList
                         data={donHangDelivering}
+                        keyExtractor={(item) => item.MaDH}
                         renderItem={({ item }) => {
                             //console.log(item)
                             return (
@@ -620,9 +650,11 @@ export default function Order({ navigation }) {
                                     <PerSon
                                         avartar={item.Avatar}
                                         name={item.TenND}
+                                        id={item.MaND}
                                     />
                                     <FlatList
                                         data={item.DatHang}
+                                        keyExtractor={(item) => item.MaSP}
                                         renderItem={({ item }) => {
 
                                             console.log(item)
@@ -630,7 +662,7 @@ export default function Order({ navigation }) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -667,7 +699,7 @@ export default function Order({ navigation }) {
                                         <TouchableOpacity
                                             onPress={() => { DeliveringDonHang(item) }}
                                             style={{
-                                                width: '100%',
+                                                width: '80%',
                                                 height: '100%',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
@@ -732,10 +764,14 @@ export default function Order({ navigation }) {
                     </Status>
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
+                <View style={{
+                    height: '100%',
+                    backgroundColor: CUSTOM_COLOR.White
+                }}>
 
                     <FlatList
                         data={donHangDelivered}
+                        keyExtractor={(item) => item.MaDH}
                         renderItem={({ item }) => {
                             //console.log(item)
                             return (
@@ -743,16 +779,18 @@ export default function Order({ navigation }) {
                                     <PerSon
                                         avartar={item.Avatar}
                                         name={item.TenND}
+                                        id={item.MaND}
                                     />
                                     <FlatList
                                         data={item.DatHang}
+                                        keyExtractor={(item) => item.MaSP}
                                         renderItem={({ item }) => {
                                             console.log(item)
                                             return (
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP}
+                                                        source={item.SanPham.HinhAnhSP[0]}
                                                         title={item.SanPham.TenSP}
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
@@ -766,7 +804,7 @@ export default function Order({ navigation }) {
                                                 </View>
                                             )
                                         }}
-                                        keyExtractor={() => item.MaSP}
+
                                     ></FlatList>
                                     <TouchableOpacity
                                         onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
@@ -782,23 +820,7 @@ export default function Order({ navigation }) {
                                         <Text style={{ marginLeft: 35 }}>Item Code</Text>
                                         <Text style={{ marginRight: 35 }}>{item.MaDH}</Text>
                                     </View>
-                                    <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            onPress={() => { }}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                backgroundColor: CUSTOM_COLOR.DarkOrange,
-                                                paddingHorizontal: 20,
-                                                alignSelf: 'center',
-                                                borderRadius: 15
-                                            }}
-                                        >
-                                            <Text style={{ color: CUSTOM_COLOR.White }}>Confirm</Text>
-                                        </TouchableOpacity>
-                                    </View>
+
 
                                 </View>
                             )

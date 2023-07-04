@@ -16,7 +16,7 @@ import CUSTOM_COLOR from '../../AdminView/constants/colors';
 import FONT_FAMILY from '../constants/fonts';
 import CustomHeader from '../../AdminView/components/CustomHeader';
 import {IMG_Rectangle} from '../../Login_SignUp/assets/images';
-import {IC_User} from '../assets/icons';
+import {IC_User, IC_Next} from '../assets/icons';
 import {Dropdown} from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {firebase} from '../../../Firebase/firebase';
@@ -25,6 +25,8 @@ import CustomButton from '../../Login_SignUp/components/Buttons/CustomButton';
 // import ImagePicker from 'react-native-image-picker';
 const ImagePicker = require('react-native-image-picker');
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {ref, uploadBytes, put, getDownloadURL} from 'firebase/storage';
+import {Firestore, Storage} from '../../../Firebase/firebase';
 
 const ChangeProfile = props => {
   const {navigation} = props;
@@ -44,6 +46,18 @@ const ChangeProfile = props => {
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [backgroundUrl, setBackgroundUrl] = useState(null);
+  const [image, setImage] = useState();
+
+  const gioiTinh = [
+    {
+      id: 'Nam',
+      title: 'Nam',
+    },
+    {
+      id: 'Nữ',
+      title: 'Nữ',
+    },
+  ];
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -78,6 +92,8 @@ const ChangeProfile = props => {
         setPhoneNumber(userData.Phone);
         setAddress(userData.DiaChi);
         setBirth(userData.NgaySinh);
+        setGender(userData.GioiTinh);
+        setValue(userData.GioiTinh);
       } else {
         console.log('User document does not exist');
       }
@@ -182,6 +198,67 @@ const ChangeProfile = props => {
     }
   };
 
+  const UploadFile = async () => {
+    try {
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          console.log(e);
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', image.uri, true);
+        xhr.send(null);
+      });
+      const storageRef = ref(Storage, `images/users/image-${Date.now()}`);
+      const snapshot = await uploadBytes(storageRef, blob);
+      console.log('Upload successfully!');
+      const url = await getDownloadURL(snapshot.ref);
+      console.log('Get URL successfully');
+      return url;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateAvatar = async (documentId, avatar) => {
+    const urlImage = image ? await UploadFile() : imageUrl;
+    console.log(urlImage);
+
+    try {
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .update({
+          Avatar: urlImage,
+        });
+
+      console.log('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  const updateGender = async (documentId, newData) => {
+    try {
+      await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .update({
+          GioiTinh: newData,
+        });
+
+      console.log('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
       // Assume data is fetched here
@@ -215,6 +292,30 @@ const ChangeProfile = props => {
     getCurrentDate();
   }, []);
 
+  const chooseImage = () => {
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+
+      selectionLimit: 5,
+      quality: 1,
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        setImage(response.assets[0]);
+        console.log(image);
+      }
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {userData ? (
@@ -238,10 +339,10 @@ const ChangeProfile = props => {
                   <View style={styles.avataContainer}>
                     <TouchableOpacity
                       style={styles.avataStyle}
-                      onPress={() => chooseImage}>
+                      onPress={() => chooseImage()}>
                       {imageUrl ? (
                         <Image
-                          source={{uri: imageUrl}}
+                          source={image ? image : {uri: imageUrl}}
                           style={styles.avataStyle}
                         />
                       ) : (
@@ -339,7 +440,7 @@ const ChangeProfile = props => {
                       <TouchableOpacity
                         style={styles.dateStyle}
                         onPress={showDateTimePicker}>
-                        <Text> {birth}</Text>
+                        <Text style={{fontSize: 17, color: CUSTOM_COLOR.Black}}> {birth}</Text>
                       </TouchableOpacity>
                       {showPicker && (
                         <DateTimePicker
@@ -388,20 +489,20 @@ const ChangeProfile = props => {
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
                         iconStyle={styles.iconStyle}
-                        data={danhMuc}
+                        data={gioiTinh}
                         search
                         maxHeight={200}
-                        labelField="TenDM"
-                        valueField="key"
+                        labelField="title"
+                        valueField="id"
                         placeholder={!isFocus ? 'Select item' : '...'}
                         searchPlaceholder="Search..."
                         value={value}
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         onChange={item => {
-                          setValue(item.key);
+                          setValue(item.id);
                           setIsFocus(false);
-                          setCategorize(item);
+                          setGender(item.id);
                         }}
                       />
                     </View>
@@ -496,6 +597,7 @@ const ChangeProfile = props => {
                         style={{flex: 1, fontSize: 17}}
                         onChangeText={setPhoneNumber}
                         value={phoneNumber}
+                        keyboardType="phone-pad"
                       />
                       <View style={{width: '5%', height: '100%'}} />
                     </View>
@@ -541,10 +643,18 @@ const ChangeProfile = props => {
                       <TouchableOpacity
                         style={styles.buttonChangePasswordContainer}>
                         <Text
-                          style={{color: CUSTOM_COLOR.White}}
+                          style={{
+                            color: CUSTOM_COLOR.Black,
+                            fontWeight: 'bold',
+                          }}
                           onPress={() => navigation.navigate('ChangePassword')}>
                           Change Password
                         </Text>
+                        <Image
+                          source={IC_Next}
+                          style={{width: 25, height: 10}}
+                          resizeMode="center"
+                        />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -564,15 +674,29 @@ const ChangeProfile = props => {
                             firebase.auth().currentUser.uid,
                             fullName,
                           );
+                          updateGender(firebase.auth().currentUser.uid, gender);
                           updatePhoneNumber(
                             firebase.auth().currentUser.uid,
                             phoneNumber,
                           );
-                          updateAddress(
-                            firebase.auth().currentUser.uid,
-                            address,
-                          );
+                          {
+                            address
+                              ? updateAddress(
+                                  firebase.auth().currentUser.uid,
+                                  address,
+                                )
+                              : null;
+                          }
                           updateBirth(firebase.auth().currentUser.uid, birth);
+
+                          {
+                            image
+                              ? updateAvatar(
+                                  firebase.auth().currentUser.uid,
+                                  image,
+                                )
+                              : null;
+                          }
                         }}
                       />
                     </View>
@@ -615,10 +739,11 @@ const styles = StyleSheet.create({
     width: '60%',
     height: '70%',
     marginRight: '5%',
-    backgroundColor: CUSTOM_COLOR.FlushOrange,
+    // backgroundColor: CUSTOM_COLOR.FlushOrange,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   avataStyle: {
     width: 100,
@@ -668,10 +793,12 @@ const styles = StyleSheet.create({
     // paddingHorizontal: '5%',
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 17,
+    color: CUSTOM_COLOR.Black,
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 17,
+    color: CUSTOM_COLOR.Black,
   },
   iconStyle: {
     width: 20,

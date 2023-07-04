@@ -1,14 +1,10 @@
+import { collection, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, Keyboard } from "react-native";
-import { IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../assets/icons";
-import { IM_AnhGiay2 } from "../assets/images";
-import Message from "../components/Message";
-import CUSTOM_COLOR from "../constants/colors";
-import { collection, query, where, onSnapshot, Timestamp, addDoc, updateDoc, orderBy, getDocs } from "firebase/firestore";
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
-import { async } from "@firebase/util";
-import { set } from "firebase/database";
+import { IC_Back } from "../assets/icons";
 import Promotion from "../components/Promotion";
+import CUSTOM_COLOR from "../constants/colors";
 
 
 
@@ -107,15 +103,20 @@ function PromotionScreen({ navigation, route }) {
             <FlatList
                 data={dataKhuyenMai}
                 renderItem={({ item }) => {
-                    const day = item.NgayKetThuc.toDate().getDate();
-                    const month = item.NgayKetThuc.toDate().getMonth();
-                    const year = item.NgayKetThuc.toDate().getFullYear();
+
+                    const dayBD = item.NgayBatDau.toDate().getDate();
+                    const monthBD = item.NgayBatDau.toDate().getMonth();
+                    const yearBD = item.NgayBatDau.toDate().getFullYear();
+
+                    const dayKT = item.NgayKetThuc.toDate().getDate();
+                    const monthKT = item.NgayKetThuc.toDate().getMonth();
+                    const yearKT = item.NgayKetThuc.toDate().getFullYear();
                     return (
                         <Promotion
                             source={item.HinhAnhKM}
                             title={item.TenKM}
                             minimum={item.DonToiThieu}
-                            expiry={`${day}.${month}.${year}`}
+                            expiry={`${dayBD}.${monthBD}.${yearBD} - ${dayKT}.${monthKT}.${yearKT}`}
                             onPress={() => updateCheck(item)}
                             checkSelect={item.checkSelect}
                             show={true}

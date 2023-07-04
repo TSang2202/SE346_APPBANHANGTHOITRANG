@@ -28,47 +28,35 @@ import FunctionCard from '../components/FunctionCard.js';
 import {Storage} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 
-export const Acount = {
-  name: 'Nguyen Trung Tinh',
-  avartar:
-    'https://icdn.dantri.com.vn/thumb_w/660/2021/09/24/lucasweibo-1632498824939.jpeg',
-  id: '21520115',
-  address: 'Binh Tan, Ho Chi Minh',
-  phone: '0704408389',
-  sex: 'male',
-  day: '16/12/2003',
-  background:
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9z5m7BtaVEQCqDkL5UI2QrBqr1EiCI6-YXA&usqp=CAU',
-};
-const Order = [
-  {
-    id: '1',
-    number: 10,
-    status: 'Wait',
-  },
-  {
-    id: '2',
-    number: 10,
-    status: 'Cancel',
-  },
-  {
-    id: '3',
-    number: 10,
-    status: 'Request',
-  },
-  {
-    id: '4',
-    number: 10,
-    status: 'Review',
-  },
-];
-
 const AdminOverView = props => {
   const {navigation} = props;
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+
+  const Order = [
+    {
+      id: '1',
+      number: 10,
+      status: 'Wait',
+    },
+    {
+      id: '2',
+      number: 10,
+      status: 'Cancel',
+    },
+    {
+      id: '3',
+      number: 10,
+      status: 'Request',
+    },
+    {
+      id: '4',
+      number: 10,
+      status: 'Review',
+    },
+  ];
 
   useEffect(() => {
     setTimeout(() => {
@@ -136,14 +124,14 @@ const AdminOverView = props => {
                 />
               </View>
               {/* <View style={{width: 5, height: '100%'}} />
-          <View style={{width: 35, height: 35}}>
-            <MenuIcon
-              onPress={() => navigation.navigate('Notification')}
-              source={IC_notification}
-            />
-          </View> */}
+                <View style={{width: 35, height: 35}}>
+                  <MenuIcon
+                    onPress={() => navigation.navigate('Notification')}
+                    source={IC_notification}
+                  />
+                </View> */}
               <View style={{width: 5, height: '100%'}} />
-              <View style={{width: 32, height: 32}}>
+              <View style={{width: 32, height: 32, marginHorizontal: 5}}>
                 <MenuIcon
                   onPress={() => {
                     firebase.auth().signOut();
@@ -169,7 +157,7 @@ const AdminOverView = props => {
                         width: '100%',
                         height: '100%',
                         aspectRatio: 1,
-                        borderRadius: 50,
+                        borderRadius: 60,
                         resizeMode: 'center',
                         borderColor: CUSTOM_COLOR.Black,
                         borderWidth: 1,
@@ -182,7 +170,7 @@ const AdminOverView = props => {
                         width: '100%',
                         height: '100%',
                         aspectRatio: 1,
-                        borderRadius: 50,
+                        borderRadius: 60,
                         resizeMode: 'center',
                         borderColor: CUSTOM_COLOR.Black,
                         borderWidth: 1,
@@ -298,13 +286,7 @@ const AdminOverView = props => {
                     text="Manage User"
                   />
                 </View>
-                <View style={styles.unitContainer}>
-                  {/* <FunctionCard
-                    onPress={() => navigation.navigate('ReviewScreen')}
-                    source={IC_Review}
-                    text="Manage Review"
-                  /> */}
-                </View>
+                <View style={styles.unitContainer} />
               </View>
             </View>
           </>
@@ -346,6 +328,7 @@ const styles = StyleSheet.create({
     height: '80%',
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 10,
   },
   textViewStyles: {
     fontFamily: FONT_FAMILY.Semibold,
@@ -359,13 +342,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   butViewShopContainer: {
-    width: '90%',
-    height: '35%',
+    width: 100,
+    height: 40,
     borderColor: CUSTOM_COLOR.FlushOrange,
     borderRadius: 5,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginEnd: 20,
   },
   oderContainer: {
     flex: 4,

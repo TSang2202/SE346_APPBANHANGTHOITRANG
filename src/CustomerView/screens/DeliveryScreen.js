@@ -113,7 +113,7 @@ function DeliveryScreen({ navigation, route }) {
 
 
             <ScrollView>
-                {dataDelivery ? dataDelivery.map((item) => {
+                {dataDelivery ? dataDelivery.map((item, index) => {
 
                     return (
                         <Delivery
@@ -122,7 +122,7 @@ function DeliveryScreen({ navigation, route }) {
                             ward={item.PhuongXa}
                             district={item.QuanHuyen}
                             city={item.TinhThanhPho}
-                            key={item.MaDC}
+                            key={index}
                             address={item.DiaChi}
                             checkSelect={item.checkSelect}
                             onPressChoose={() => updateCheck(item)}

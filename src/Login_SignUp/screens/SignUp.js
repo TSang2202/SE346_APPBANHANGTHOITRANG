@@ -1,26 +1,35 @@
-import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  Alert,
-  Button,
-} from 'react-native';
-import HeaderWithBack from '../components/Header/HeaderWithBack.js';
-import HeaderTitlle from '../components/Header/HeaderTitlle.js';
-import TextInputCard from '../components/Cards/TextInputCard.js';
-import CustomButton from '../components/Buttons/CustomButton.js';
-import {IMG_Rectangle182} from '../assets/images/index.js';
-import PasswordCard from '../components/Cards/PasswordCard.js';
-import HederContent from '../components/Header/HederContent.js';
+import React, {useEffect, useState} from 'react';
+
 import CheckBox from '@react-native-community/checkbox';
-import FONT_FAMILY from '../constants/fonts.js';
+
+import {
+  Alert,
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {IMG_Rectangle182} from '../assets/images/index.js';
+import CustomButton from '../components/Buttons/CustomButton.js';
+import PasswordCard from '../components/Cards/PasswordCard.js';
+import TextInputCard from '../components/Cards/TextInputCard.js';
+import HeaderTitlle from '../components/Header/HeaderTitlle.js';
+import HeaderWithBack from '../components/Header/HeaderWithBack.js';
+import HederContent from '../components/Header/HederContent.js';
 import CUSTOM_COLOR from '../constants/colors.js';
-import {firebase} from '../../../Firebase/firebase.js';
-import CustomDialog from '../components/Cards/DialogCard.js';
+import FONT_FAMILY from '../constants/fonts.js';
+
+import {
+  addDoc,
+  collection,
+  doc,
+  Timestamp,
+  updateDoc,
+} from 'firebase/firestore';
+import {firebase, Firestore} from '../../../Firebase/firebase.js';
+
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const SignUp = props => {
@@ -57,7 +66,12 @@ const SignUp = props => {
       setBirth(fDate);
     };
 
-    getCurrentDate();
+    getCurrentDate('');
+    setFullName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setToggleCheckBox(false);
   }, []);
 
   const handleDateChange = (event, selected) => {
@@ -114,10 +128,15 @@ const SignUp = props => {
   ) => {
     let isValid = true;
 
-    if (!toggleCheckBox) {
+    if (
+      fullName === '' &&
+      email === '' &&
+      password === '' &&
+      corfirmPassword === ''
+    ) {
       isValid = false;
       setShowDialog(true);
-      setErrorMessage('Please check agree with policy');
+      setErrorMessage('Please enter your information then click sign up');
     } else if (fullName === '') {
       isValid = false;
       setShowDialog(true);
@@ -146,16 +165,10 @@ const SignUp = props => {
       isValid = false;
       setShowDialog(true);
       setErrorMessage('Please enter your corfirm password');
-    } else if (
-      fullName === '' &&
-      email === '' &&
-      password === '' &&
-      corfirmPassword === ''
-    ) {
+    } else if (!toggleCheckBox) {
       isValid = false;
       setShowDialog(true);
-      setErrorMessage('Please enter your information then click sign up');
-    } else {
+      setErrorMessage('Please check agree with policy');
     }
 
     setShowDialog(false);
@@ -197,6 +210,20 @@ const SignUp = props => {
       console.log('Error registering user: ', error);
       Alert.alert('Error', error.message);
     }
+
+    const currentTime = new Date();
+    const docRef = await addDoc(collection(Firestore, 'CHAT'), {
+      MaND: firebase.auth().currentUser.uid,
+      ThoiGian: Timestamp.fromDate(currentTime),
+      SoLuongChuaDoc: 0,
+      SoLuongChuaDocCuaCustomer: 0,
+      MoiKhoiTao: true,
+    });
+
+    const updateRef = doc(Firestore, 'CHAT', docRef.id);
+    await updateDoc(updateRef, {
+      MaChat: docRef.id,
+    });
   };
 
   return (
@@ -214,7 +241,7 @@ const SignUp = props => {
             <TextInputCard
               title="Full name*"
               txtInput="Nguyen Van A"
-              value={fullName}
+              // value={fullName}
               onChangeText={fullName => setFullName(fullName)}
             />
           </View>
@@ -225,7 +252,7 @@ const SignUp = props => {
               txtInput="abc@gmail.com"
               onChangeText={email => setEmail(email)}
               keyboardType="email-address"
-              value={email}
+              // value={email}
             />
           </View>
 
@@ -233,7 +260,7 @@ const SignUp = props => {
             <TextInputCard
               title="Phone number"
               txtInput="03333333333"
-              value={phoneNumber}
+              // value={phoneNumber}
               onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
             />
           </View>
@@ -264,7 +291,7 @@ const SignUp = props => {
             <PasswordCard
               title="Password*"
               txtInput="********"
-              value={password}
+              // value={password}
               onChangeText={password => setPassword(password)}
             />
           </View>
@@ -273,56 +300,56 @@ const SignUp = props => {
             <PasswordCard
               title="Confirm Password*"
               txtInput="********"
-              value={confirmPassword}
+              // value={confirmPassword}
               onChangeText={corfirmPassword =>
                 setConfirmPassword(corfirmPassword)
               }
             />
           </View>
-        </View>
 
-        <View style={[styles.checkContainer, styles.unitContainer]}>
-          <CheckBox
-            disabled={false}
-            value={toggleCheckBox}
-            onValueChange={newValue => setToggleCheckBox(newValue)}
-          />
-          <HederContent content="I agree with this " />
-          <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
-            <Text style={styles.policyStyles}>Policy</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.containerBot}>
-          <View style={styles.button}>
-            <CustomButton
-              type="primary"
-              text="Sign up now"
-              onPress={() => {
-                if (
-                  isValidForm(
-                    fullName,
-                    email,
-                    password,
-                    confirmPassword,
-                    toggleCheckBox,
-                  )
-                ) {
-                  signUp(
-                    fullName,
-                    email,
-                    phoneNumber,
-                    birth,
-                    password,
-                    userType,
-                    avatar,
-                    address,
-                  );
-                } else {
-                  Alert.alert('Error', errorMessage);
-                }
-              }}
+          <View style={[styles.checkContainer, styles.unitContainer]}>
+            <CheckBox
+              disabled={false}
+              value={toggleCheckBox}
+              onValueChange={newValue => setToggleCheckBox(newValue)}
             />
+            <HederContent content="I agree with this " />
+            <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
+              <Text style={styles.policyStyles}>Policy</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.containerBot}>
+            <View style={styles.button}>
+              <CustomButton
+                type="primary"
+                text="Sign up now"
+                onPress={() => {
+                  if (
+                    isValidForm(
+                      fullName,
+                      email,
+                      password,
+                      confirmPassword,
+                      toggleCheckBox,
+                    )
+                  ) {
+                    signUp(
+                      fullName,
+                      email,
+                      phoneNumber,
+                      birth,
+                      password,
+                      userType,
+                      avatar,
+                      address,
+                    );
+                  } else {
+                    Alert.alert('Error', errorMessage);
+                  }
+                }}
+              />
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -344,7 +371,7 @@ const styles = StyleSheet.create({
     left: '3%',
   },
   bodyContainer: {
-    height: 480,
+    height: 570,
     top: '0%',
   },
   checkContainer: {
@@ -357,7 +384,7 @@ const styles = StyleSheet.create({
   },
   containerBot: {
     width: '100%',
-    height: '7%',
+    height: '10%',
     bottom: '-1%',
     alignItems: 'center',
     justifyContent: 'center',

@@ -40,6 +40,7 @@ const ChangePassword = props => {
           .updatePassword(newPassword)
           .then(() => {
             Alert.alert('Sucess', 'Your password has been changed');
+            navigation.goBack();
           })
           .catch(error => {
             Alert.alert('Sucess', error.message);
@@ -109,7 +110,6 @@ const ChangePassword = props => {
                     );
                   } else if (newPassword === confirmPassword) {
                     onChangePasswordPress(newPassword);
-                    navigation.goBack();
                   } else {
                     Alert.alert(
                       'Error',

@@ -1,13 +1,52 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
 import PromotionCard from '../components/PromotionCard';
 import {IC_Momo} from '../../CustomerView/assets/icons';
+import {IM_MauAo} from '../assets/images';
+import {Firestore, Storage} from '../../../Firebase/firebase';
+import {
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  updateDoc,
+  onSnapshot,
+} from 'firebase/firestore';
+import dayjs from 'dayjs';
 
 const Promotion = props => {
   const {navigation} = props;
+  const [dataPromotion, setDataPromotion] = useState([]);
+
+  const getDataPromotion = async () => {
+    const q = query(collection(Firestore, 'KHUYENMAI'));
+
+    const unsubscribe = onSnapshot(q, querySnapshot => {
+      const data = [];
+      querySnapshot.forEach(doc => {
+        data.push(doc.data());
+      });
+      setDataPromotion(data);
+    });
+  };
+
+  useEffect(() => {
+    getDataPromotion();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{width: '100%', height: 10}} />
@@ -22,9 +61,39 @@ const Promotion = props => {
 
       <>
         <View style={styles.listViewContainer}>
-          <PromotionCard />
+          <FlatList
+            data={dataPromotion}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => {
+              const timestampBD = item.NgayBatDau.toDate();
+              const dateBD = dayjs(timestampBD);
 
-          {/* flatlist */}
+              const dayBD = dateBD.date();
+              const monthBD = dateBD.month();
+              const yearBD = dateBD.year();
+
+              const timestampKT = item.NgayKetThuc.toDate();
+              const dateKT = dayjs(timestampKT);
+
+              const dayKT = dateKT.date();
+              const monthKT = dateKT.month();
+              const yearKT = dateKT.year();
+
+              console.log(item);
+              return (
+                <PromotionCard
+                  source={item.HinhAnhKM}
+                  name={item.TenKM}
+                  discount={item.TiLe * 100}
+                  minimum={item.DonToiThieu}
+                  start={`${dayBD}/${monthBD}/${yearBD}`}
+                  end={`${dayKT}/${monthKT}/${yearKT}`}
+                  type={item.Loai}
+                  onPress={() => navigation.navigate('EditPromotion', {item})}
+                />
+              );
+            }}
+          />
         </View>
       </>
 
@@ -32,25 +101,13 @@ const Promotion = props => {
 
       <>
         <View style={styles.buttonContainer}>
-          <View style={styles.unitButton}>
-            <PromotionButton
-              type="secondary"
-              text="Add new"
-              onPress={() => {
-                navigation.navigate('AddPromotion');
-              }}
-            />
-          </View>
-
-          <View style={{width: '15%', height: '100%'}} />
-
-          <View style={styles.unitButton}>
-            <PromotionButton
-              type="secondary"
-              text="Delete"
-              onPress={() => {}}
-            />
-          </View>
+          <PromotionButton
+            type="secondary"
+            text="Add new"
+            onPress={() => {
+              navigation.navigate('AddPromotion');
+            }}
+          />
         </View>
       </>
     </SafeAreaView>
@@ -64,7 +121,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     width: '90%',
-    height: 70,
+    height: 60,
     marginHorizontal: '5%',
   },
   listViewContainer: {
@@ -73,15 +130,11 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '90%',
-    height: '10%',
+    height: 60,
     marginHorizontal: '5%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  unitButton: {
-    width: '40%',
-    height: '80%',
   },
 });
 
