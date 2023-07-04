@@ -8,7 +8,6 @@ interface SearchInputProps {
 
 const Search: React.FC<SearchInputProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
-
   const handleSearch = () => {
     onSearch(searchTerm);
     setSearchTerm("");
@@ -37,6 +36,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     height: 40,
+    width: 300,
     marginTop: 10,
     marginLeft: 20,
     marginRight : 10,

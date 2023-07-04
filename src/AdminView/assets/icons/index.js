@@ -1,4 +1,5 @@
 // export {default as tên icon} from 'đường dẫn';
+
 export { default as settingicon } from '../icons/OverView/setting.png';
 export { default as messenger } from '../icons/OverView/Messenger.png';
 export { default as notification } from '../icons/OverView/notification.png';
@@ -38,3 +39,5 @@ export { default as IC_Selected } from '../icons/Selected.png';
 export { default as IC_Review } from '../icons/Review.png';
 export { default as IC_Next } from '../icons/next.png';
 export { default as IC_Catgory } from '../icons/OverView/categories.png';
+export {default as IC_Search} from '../icons/Search.png';
+

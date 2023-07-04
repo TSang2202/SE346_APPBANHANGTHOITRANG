@@ -814,12 +814,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonContainer: {
-    width: '180%',
+    width: '200%',
     height: '100%',
     bottom: '0%',
     alignItems: 'center',
     justifyContent: 'center',
-    left: '-40%',
+    left: '-50%',
   },
 });
 export default ChangeProfile;

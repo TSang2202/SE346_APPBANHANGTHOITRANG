@@ -13,10 +13,8 @@ import { backto } from '../assets/icons/index.js';
 import { IM_Giay1, IM_Giay2, IM_Giay3, IM_Giay4 } from '../assets/images/index.js';
 import ItemList from '../components/ItemList';
 import Search from '../components/Search';
-
 import SortDropdown from '../components/SortDropDown';
 import scale from '../constants/responsive.js';
-import { Acount } from './AdminOverView';
 const datasdetail = [
   {
     id: '1',
@@ -150,11 +148,21 @@ function ViewShop1({ navigation }) {
   );
   if (product == true && detail == false) {
     return (
-      <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%' }}>
-        <View style={{ width: '100%', height: 180, flexDirection: 'column', alignItems: 'center', backgroundColor: CUSTOM_COLOR.LavenderBlush }}>
-          <View style={{ width: '100%', height: 10 }} />
-          <View style={{ width: '90%', height: 50, marginHorizontal: '5%' }}>
-            <Search onSearch={handleSearch} />
+
+      <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
+        <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
+          <View style={{width: '100%', height: 10}}/>
+            <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
+              <Search onSearch={handleSearch} />
+            </View>
+            <Image
+              style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
+              source = {require('../assets/images/Logo.png')}
+              resizeMode='contain'
+            ></Image>
+            <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
+              >FAUGET</Text>
+
           </View>
           <Image
             style={{ width: scale(72), height: scale(72), aspectRatio: 1, borderRadius: 55, marginTop: 5 }}
@@ -209,31 +217,21 @@ function ViewShop1({ navigation }) {
             numColumns={2}
           />
         </View>
-      </SafeAreaView>
-    )
-  }
-  else {
-    if (product == false && detail == false) {
-      return (
-        <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%' }}>
-          <View style={{ width: '100%', height: 180, flexDirection: 'column', alignItems: 'center', backgroundColor: CUSTOM_COLOR.LavenderBlush }}>
-            <View style={{ width: '100%', height: 10 }} />
-            <View style={{ width: '90%', height: 50, marginHorizontal: '5%' }}>
-              <Search onSearch={handleSearch} />
-            </View>
-            <Image
-              style={{ width: scale(72), height: scale(72), aspectRatio: 1, borderRadius: 55, marginTop: 5 }}
-              source={{ uri: Acount.avartar }}
-              resizeMode='contain'
-            ></Image>
-            <Text style={{ color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2 }}
-            >FAUGET</Text>
-          </View>
-          <View style={{ width: '100%', height: 40, flexDirection: 'row' }}>
-            <TouchableOpacity
-              onPress={() => setproduct(true)}
-              style={{ width: '50%', height: '100%', alignItems: 'center' }}>
-              <Text style={{ marginTop: 5, fontSize: 20, color: CUSTOM_COLOR.Black }}>Product</Text>
+
+        <Image
+          style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
+          source = {require('../assets/images/Logo.png')}
+          resizeMode='contain'
+        ></Image>
+        <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
+        >FAUGET</Text>
+      </View>
+        <View style = {{width: '100%', height:40, flexDirection: 'row'}}>
+            <TouchableOpacity 
+            onPress={()=> setproduct(true)}
+            style = {{width: '50%',height:'100%',alignItems: 'center'}}>
+            <Text style = {{marginTop: 5,  fontSize: 20, color: CUSTOM_COLOR.Black }}>Product</Text>
+
             </TouchableOpacity>
             <TouchableOpacity
               style={{ width: '50%', height: '100%', borderBottomWidth: 2, borderColor: CUSTOM_COLOR.Red, alignItems: 'center' }}>
@@ -271,8 +269,10 @@ function ViewShop1({ navigation }) {
           <View style={{ width: '100%', height: 180, flexDirection: 'column', alignItems: 'center', backgroundColor: CUSTOM_COLOR.LavenderBlush }}>
             <Search onSearch={handleSearch} />
             <Image
-              style={{ width: scale(72), height: scale(72), aspectRatio: 1, borderRadius: 55, marginTop: 5 }}
-              source={{ uri: Acount.avartar }}
+
+              style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
+              source = {require('../assets/images/Logo.png')}
+
               resizeMode='contain'
             ></Image>
             <Text style={{ color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2 }}
