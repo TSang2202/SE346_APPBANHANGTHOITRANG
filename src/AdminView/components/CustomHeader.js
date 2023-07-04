@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import PreviousButton from '../../Login_SignUp/components/Buttons/PreviousButton';
 import CUSTOM_COLOR from '../../Login_SignUp/constants/colors';
 import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'center',
+
     flexDirection: 'row',
   },
   buttonContainer: {

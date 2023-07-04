@@ -26,6 +26,7 @@ import ViewShop2 from '../screens/ViewShop2';
 import ChangeProfile from '../screens/ChangeProfile';
 import ChangePassword from '../screens/ChangePassword';
 import EditPromotion from '../screens/EditPromotion';
+import Categories from '../screens/Categories';
 
 
 const Stack = createNativeStackNavigator();
@@ -59,6 +60,7 @@ function StackNavigator() {
       <Stack.Screen name="ChangeProfile" component={ChangeProfile} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="EditPromotion" component={EditPromotion} />
+      <Stack.Screen name="Categories" component={Categories} />
 
     </Stack.Navigator>
   );

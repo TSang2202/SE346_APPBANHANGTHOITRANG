@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 import FONT_FAMILY from '../constants/fonts';
 
@@ -16,11 +16,11 @@ const FunctionCard = props => {
           alignItems: 'center',
         }}>
         <Image
-          style={{width: '75%', height: '75%', resizeMode: 'stretch'}}
+          style={{ width: '75%', height: '75%', resizeMode: 'stretch', tintColor: CUSTOM_COLOR.White }}
           source={props.source}
         />
       </View>
-      <View style={{width: '100%', height: 7}}/>
+      <View style={{ width: '100%', height: 7 }} />
       <Text style={styles.textViewStyle}>{props.text}</Text>
     </TouchableOpacity>
   );
