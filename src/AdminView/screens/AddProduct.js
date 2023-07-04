@@ -197,7 +197,7 @@ export default function AddProduct({navigation}) {
           <View style={{width: '100%', height: 60}}>
             <CustomHeader
               onPress={() => navigation.goBack()}
-              title="Product / Add product"
+              title="Product/ Add product"
             />
           </View>
         </>
@@ -535,7 +535,7 @@ export default function AddProduct({navigation}) {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <Text style={styles.titleInputStyle}>%</Text>
+                  {/* <Text style={styles.titleInputStyle}>%</Text> */}
                 </View>
               </View>
             </View>
@@ -607,19 +607,19 @@ export default function AddProduct({navigation}) {
             </View>
           </>
 
-          <View style={{width: '100%', height: 10}} />
+          <View style={{width: '100%', height: 15}} />
 
           <>
             <View
               style={{
                 width: '100%',
-                height: 70,
+                height: 55,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
               <ButtonDetail
                 title="Add now"
-                style={{width: 150, height: 50}}
+                style={{width: '100%', height: '90%'}}
                 onPress={() => {
                   setData();
                 }}
@@ -627,7 +627,7 @@ export default function AddProduct({navigation}) {
               />
             </View>
           </>
-          <View style={{width: '100%', height: 10}} />
+          <View style={{width: '100%', height: 15}} />
         </ScrollView>
       </View>
     </SafeAreaView>

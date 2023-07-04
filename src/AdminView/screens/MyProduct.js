@@ -167,57 +167,62 @@ export default function MyProduct({navigation}) {
         </View>
         <View
           style={{
-            flexDirection: 'row',
             width: '100%',
-            height: '85%',
-            marginTop: 10,
-          }}>
-          <View>
-            <FlatList
-              horizontal="true"
-              data={dataInventory}
-              renderItem={({item}) => {
-                return (
-                  <MyProduct1
-                    source={item.HinhAnhSP[0]}
-                    title={item.TenSP}
-                    price={item.GiaSP}
-                    soluongtonkho={item.SoLuongSP}
-                    soluonglove={item.SoLuotYeuThich}
-                    soluongview={item.SoLuotXem}
-                    soluongban={item.SoLuongDaBan}
-                    edit={() => navigation.navigate('EditProduct', {item})}
-                  />
-                );
-              }}
-            />
-            <View style={{height: 90}} />
-          </View>
-        </View>
-
+            height: 10,
+            backgroundColor: CUSTOM_COLOR.LightGray,
+          }}
+        />
         <View
           style={{
-            width: '100%',
-            position: 'absolute',
-            bottom: 0,
+            flex: 1,
             backgroundColor: CUSTOM_COLOR.White,
-            paddingBottom: 20,
           }}>
+          <FlatList
+            horizontal="true"
+            data={dataInventory}
+            renderItem={({item}) => {
+              return (
+                <MyProduct1
+                  source={item.HinhAnhSP[0]}
+                  title={item.TenSP}
+                  price={item.GiaSP}
+                  soluongtonkho={item.SoLuongSP}
+                  soluonglove={item.SoLuotYeuThich}
+                  soluongview={item.SoLuotXem}
+                  soluongban={item.SoLuongDaBan}
+                  edit={() => navigation.navigate('EditProduct', {item})}
+                />
+              );
+            }}
+          />
+        </View>
+
+        <View style={{width: '100%', height: 10}} />
+        <>
           <View
             style={{
               width: '100%',
+              height: 60,
+              backgroundColor: CUSTOM_COLOR.White,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <ButtonDetail
-              style={{width: 250}}
-              color={CUSTOM_COLOR.DarkOrange}
-              title="ADD A NEW PRODUCT"
-              onPress={() => navigation.navigate('AddProduct')}
-            />
+            <View
+              style={{
+                width: '90%',
+                height: 55,
+                flexDirection: 'row',
+                marginHorizontal: '5%',
+              }}>
+              <ButtonDetail
+                style={{width: '100%', height: '90%'}}
+                color={CUSTOM_COLOR.DarkOrange}
+                title="ADD A NEW PRODUCT"
+                onPress={() => navigation.navigate('AddProduct')}
+              />
+            </View>
           </View>
-        </View>
-        <View style={{width: '100%', height: 50}}/>
+        </>
       </SafeAreaView>
     );
   }
@@ -277,63 +282,68 @@ export default function MyProduct({navigation}) {
         </View>
         <View
           style={{
-            flexDirection: 'row',
             width: '100%',
-            height: '85%',
-            marginTop: 10,
-          }}>
-          <View>
-            <FlatList
-              horizontal="true"
-              data={dataOutOfStock}
-              renderItem={({item}) => {
-                return (
-                  <MyProduct1
-                    source={item.HinhAnhSP[0]}
-                    title={item.TenSP}
-                    price={item.GiaSP}
-                    soluongtonkho={item.SoLuongSP}
-                    soluonglove={item.SoLuotYeuThich}
-                    soluongview={item.SoLuotXem}
-                    soluongban={item.SoLuongDaBan}
-                    edit={() => navigation.navigate('EditProduct')}
-                  />
-                );
-              }}
-            />
-            <View style={{height: 90}} />
-          </View>
-        </View>
-
+            height: 10,
+            backgroundColor: CUSTOM_COLOR.LightGray,
+          }}
+        />
         <View
           style={{
-            width: '100%',
-            position: 'absolute',
-            bottom: 0,
+            flex: 1,
             backgroundColor: CUSTOM_COLOR.White,
-            paddingBottom: 20,
           }}>
+          <FlatList
+            horizontal="true"
+            data={dataOutOfStock}
+            renderItem={({item}) => {
+              return (
+                <MyProduct1
+                  source={item.HinhAnhSP[0]}
+                  title={item.TenSP}
+                  price={item.GiaSP}
+                  soluongtonkho={item.SoLuongSP}
+                  soluonglove={item.SoLuotYeuThich}
+                  soluongview={item.SoLuotXem}
+                  soluongban={item.SoLuongDaBan}
+                  edit={() => navigation.navigate('EditProduct')}
+                />
+              );
+            }}
+          />
+        </View>
+
+        <View style={{width: '100%', height: 10}} />
+        <>
           <View
             style={{
               width: '100%',
+              height: 60,
+              backgroundColor: CUSTOM_COLOR.White,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <ButtonDetail
-              style={{width: 250}}
-              color={CUSTOM_COLOR.DarkOrange}
-              title="ADD A NEW PRODUCT"
-              onPress={() => navigation.navigate('AddProduct')}
-            />
+            <View
+              style={{
+                width: '90%',
+                height: 55,
+                flexDirection: 'row',
+                marginHorizontal: '5%',
+              }}>
+              <ButtonDetail
+                style={{width: '100%', height: '90%'}}
+                color={CUSTOM_COLOR.DarkOrange}
+                title="ADD A NEW PRODUCT"
+                onPress={() => navigation.navigate('AddProduct')}
+              />
+            </View>
           </View>
-        </View>
-        <View style={{width: '100%', height: 50}}/>
+        </>
       </SafeAreaView>
     );
   }
   if (Wait == true) {
     return (
-      <SafeAreaView style={{backgroundColor: CUSTOM_COLOR.White}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
         <View
           style={{
             width: '100%',
@@ -387,59 +397,64 @@ export default function MyProduct({navigation}) {
         </View>
         <View
           style={{
-            flexDirection: 'row',
             width: '100%',
-            height: '85%',
-            marginTop: 10,
-          }}>
-          <View>
-            <FlatList
-              horizontal="true"
-              data={dataOnWait}
-              renderItem={({item}) => {
-                return (
-                  <MyProduct1
-                    source={item.HinhAnhSP[0]}
-                    title={item.TenSP}
-                    price={item.GiaSP}
-                    soluongtonkho={item.SoLuongSP}
-                    soluonglove={item.SoLuotYeuThich}
-                    soluongview={item.SoLuotXem}
-                    soluongban={item.SoLuongDaBan}
-                    type="OnWait"
-                    edit={() => navigation.navigate('EditProduct')}
-                    confirm={() => ConfirmProduct(item)}
-                  />
-                );
-              }}
-            />
-            <View style={{height: 90}} />
-          </View>
-        </View>
-
+            height: 10,
+            backgroundColor: CUSTOM_COLOR.LightGray,
+          }}
+        />
         <View
           style={{
-            width: '100%',
-            position: 'absolute',
-            bottom: 0,
+            flex: 1,
             backgroundColor: CUSTOM_COLOR.White,
-            paddingBottom: 20,
           }}>
+          <FlatList
+            horizontal="true"
+            data={dataOnWait}
+            renderItem={({item}) => {
+              return (
+                <MyProduct1
+                  source={item.HinhAnhSP[0]}
+                  title={item.TenSP}
+                  price={item.GiaSP}
+                  soluongtonkho={item.SoLuongSP}
+                  soluonglove={item.SoLuotYeuThich}
+                  soluongview={item.SoLuotXem}
+                  soluongban={item.SoLuongDaBan}
+                  type="OnWait"
+                  edit={() => navigation.navigate('EditProduct')}
+                  confirm={() => ConfirmProduct(item)}
+                />
+              );
+            }}
+          />
+        </View>
+
+        <View style={{width: '100%', height: 10}} />
+        <>
           <View
             style={{
               width: '100%',
+              height: 60,
+              backgroundColor: CUSTOM_COLOR.White,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <ButtonDetail
-              style={{width: 250}}
-              color={CUSTOM_COLOR.DarkOrange}
-              title="ADD A NEW PRODUCT"
-              onPress={() => navigation.navigate('AddProduct')}
-            />
+            <View
+              style={{
+                width: '90%',
+                height: 55,
+                flexDirection: 'row',
+                marginHorizontal: '5%',
+              }}>
+              <ButtonDetail
+                style={{width: '100%', height: '90%'}}
+                color={CUSTOM_COLOR.DarkOrange}
+                title="ADD A NEW PRODUCT"
+                onPress={() => navigation.navigate('AddProduct')}
+              />
+            </View>
           </View>
-        </View>
-        <View style={{width: '100%', height: 50}}/>
+        </>
       </SafeAreaView>
     );
   }

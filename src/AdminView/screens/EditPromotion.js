@@ -291,7 +291,7 @@ function EditPromotion({navigation, route}) {
         <View style={styles.headerContainer}>
           <CustomHeader
             onPress={() => navigation.goBack()}
-            title="Edit promotion"
+            title="Promotion/ Edit promotion"
           />
         </View>
       </>
@@ -692,6 +692,7 @@ function EditPromotion({navigation, route}) {
                     updateData();
                   }}
                 />
+                <View style={{width: 20, height: '100%'}} />
                 <PromotionButton
                   type="secondary"
                   text="Delete"

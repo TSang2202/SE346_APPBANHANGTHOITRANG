@@ -144,15 +144,6 @@ function AccountScreen() {
                   />
                 )}
 
-                {/* <Image
-                  style={{
-                    width: 75,
-                    height: 75,
-                    borderRadius: 40,
-                  }}
-                  source={IM_AnhGiay2}
-                /> */}
-
                 <View
                   style={{
                     marginHorizontal: '5%',
