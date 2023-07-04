@@ -1,79 +1,83 @@
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import {View, Text, Image, FlatList} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Search from '../components/Search';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Acount} from './AdminOverView';
 import CUSTOM_COLOR from '../constants/colors';
 import UserChat from '../components/UserChat';
 import Size from '../constants/size';
 import {firebase, Firestore} from '../../../Firebase/firebase';
-import {doc, getDoc, getDocs, collection} from 'firebase/firestore';
-import {async} from '@firebase/util';
-import {IC_User} from '../assets/icons/index';
-import PropTypes from 'deprecated-react-native-prop-types';
+import {
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+  querySnapshot,
+  docs,
+  updateDoc,
+} from 'firebase/firestore';
+import LoadingComponent from '../components/Loading';
 
 export default function Chat({navigation}) {
   const [users, setUser] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
 
   const getUser = async item => {
-    item = item.trim();
+    //item = item.trim();
 
-    const docRef = doc(Firestore, 'NGUOIDUNG', item);
+    const docRef = doc(Firestore, 'NGUOIDUNG', item.MaND);
     const docSnap = await getDoc(docRef);
 
-    //console.log("item:", item);
-    //console.log(docSnap.data())
+    const q = query(
+      collection(Firestore, 'CHITIETCHAT'),
+      orderBy('ThoiGian', 'asc'),
+      where('MaChat', '==', item.MaChat),
+    );
+    const querySnapshot = await getDocs(q);
+    const dataChiTietChat = querySnapshot.docs.map(doc => doc.data());
+
+    const chiTietChat = {
+      NoiDungMessageMoi: !dataChiTietChat
+        ? 'Không có gì'
+        : dataChiTietChat[dataChiTietChat.length - 1],
+    };
+
     const user = {
       ...docSnap.data(),
+      ...chiTietChat,
     };
 
     return user;
   };
 
   const getDataChat = async () => {
-    const querySnapshot = await getDocs(collection(Firestore, 'CHAT'));
+    const q = query(collection(Firestore, 'CHAT'), orderBy('ThoiGian', 'desc'));
 
-    const promises = [];
+    const unsubscribe = onSnapshot(q, async querySnapshot => {
+      const data = [];
 
-    for (const documentSnapshot of querySnapshot.docs) {
-      const promise = getUser(documentSnapshot.data().MaND);
-      promises.push(promise);
-      //console.log(promises)
-    }
-    const dataUser = await Promise.all(promises);
-
-    const data = [];
-
-    // querySnapshot.forEach( (documentSnapshot) => {
-
-    //   const dataUser = await getUser(documentSnapshot.data().MaND)
-
-    //   console.log(dataUser)
-    //   data.push({
-    //     ...documentSnapshot.data(),
-    //     //...docSnap.data(),
-    //   })
-
-    // })
-
-    dataUser.map((user, index) => {
-      const documentSnapshot = querySnapshot.docs[index];
-      //console.log(user)
-      data.push({
-        ...documentSnapshot.data(),
-        ...user,
+      const promises = querySnapshot.docs.map(doc => {
+        return getUser(doc.data());
       });
-    });
 
-    setUser(data);
+      console.log(promises);
+      const dataUser = await Promise.all(promises);
+
+      dataUser.map((user, index) => {
+        const documentSnapshot = querySnapshot.docs[index];
+
+        data.push({
+          ...documentSnapshot.data(),
+          ...user,
+        });
+      });
+
+      setUser(data);
+      console.log(users);
+    });
   };
 
   useEffect(() => {
@@ -86,6 +90,15 @@ export default function Chat({navigation}) {
       setImageUrl(url),
     );
   }, []);
+
+  const setSoLuongChuaDoc = async item => {
+    const chatUpdateRef = doc(Firestore, 'CHAT', item.MaChat);
+
+    await updateDoc(chatUpdateRef, {
+      SoLuongChuaDoc: 0,
+      MoiKhoiTao: false,
+    });
+  };
 
   const fetchImageUrl = async (documentId, fieldName) => {
     try {
@@ -106,87 +119,100 @@ export default function Chat({navigation}) {
   return (
     <SafeAreaView
       style={{backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight}}>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginTop: 20,
-          width: '100%',
-          height: 70,
-        }}>
-        {imageUrl ? (
-          <Image
-            source={{uri: imageUrl}}
+      {imageUrl ? (
+        <>
+          <View
             style={{
-              aspectRatio: 1,
-              borderRadius: 55,
-              width: '15%',
-              marginLeft: 15,
-            }}
-          />
-        ) : (
-          <Image
-            source={IC_User}
-            style={{
-              aspectRatio: 1,
-              borderRadius: 55,
-              width: '15%',
-              marginLeft: 15,
-              borderColor: CUSTOM_COLOR.Black,
-              borderWidth: 1,
-            }}
-          />
-        )}
-
-        {/* <Image
-          source={{uri: Acount.avartar}}
-          style={{
-            aspectRatio: 1,
-            borderRadius: 55,
-            width: '15%',
-            marginLeft: 15,
-          }}
-        /> */}
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 40,
-            marginLeft: 10,
-            color: CUSTOM_COLOR.Black,
-          }}>
-          Chat
-        </Text>
-      </View>
-
-      <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
-        <Search placeholder="Search" />
-      </View>
-
-      {/* {
-          users ?
-            users.map((item) => (
-              <UserChat
-                key={item.MaChat}
-                source={item.Avatar}
-                name={item.TenND}
-                message='You:What are you doing? - 12:40PM'
-                onPress={() => navigation.navigate('ChatScreen')}
+              flexDirection: 'row',
+              marginTop: 20,
+              width: '100%',
+              height: 70,
+            }}>
+            {imageUrl ? (
+              <Image
+                source={{uri: imageUrl}}
+                style={{
+                  aspectRatio: 1,
+                  borderRadius: 55,
+                  width: '15%',
+                  marginLeft: 15,
+                }}
               />
-            )) : <Text>aaaaaaaaaaaa</Text>
-        } */}
+            ) : (
+              <Image
+                style={{
+                  aspectRatio: 1,
+                  borderRadius: 55,
+                  width: '15%',
+                  marginLeft: 15,
+                  borderColor: CUSTOM_COLOR.Black,
+                  borderWidth: 1,
+                }}
+              />
+            )}
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 40,
+                marginLeft: 10,
+                color: CUSTOM_COLOR.Black,
+              }}>
+              Chat
+            </Text>
+          </View>
+          <View style={{width: '100%', height: 10}} />
+          <View style={{width: '90%', height: 45, marginHorizontal: '5%'}}>
+            <Search placeholder="Search" />
+          </View>
+          <View style={{width: '100%', height: 10}} />
+          <View style={{width: '100%', height: '73%'}}>
+            <FlatList
+              data={users}
+              renderItem={({item}) => {
+                console.log(item.NoiDungMessageMoi);
 
-      <FlatList
-        data={users}
-        renderItem={({item}) => (
-          <UserChat
-            //key={item.MaChat}
-            source={item.Avatar}
-            name={item.TenND}
-            message="You:What are you doing? - 12:40PM"
-            onPress={() => navigation.navigate('ChatScreenStaff', {item})}
-          />
-        )}
-        keyExtractor={item => item.MaChat}
-      />
+                const hour = item.NoiDungMessageMoi
+                  ? item.ThoiGian.toDate().getHours()
+                  : null;
+                const minute = item.NoiDungMessageMoi
+                  ? item.ThoiGian.toDate().getMinutes()
+                  : null;
+
+                return (
+                  <UserChat
+                    //key={item.MaChat}
+                    source={item.Avatar}
+                    name={item.TenND}
+                    message={
+                      !item.NoiDungMessageMoi
+                        ? 'Customer just created an account'
+                        : item.NoiDungMessageMoi.NoiDung
+                    }
+                    onPress={() => {
+                      setSoLuongChuaDoc(item);
+
+                      navigation.navigate('ChatScreenStaff', {item});
+                    }}
+                    time={!item.NoiDungMessageMoi ? null : `${hour}:${minute}`}
+                    notification={
+                      !item.NoiDungMessageMoi ? 0 : item.SoLuongChuaDoc
+                    }
+                    //notification={item.SoLuongChuaDoc}
+                    justCreate={
+                      !item.NoiDungMessageMoi
+                        ? item.MoiKhoiTao
+                        : item.MoiKhoiTao
+                    }
+                  />
+                );
+              }}
+              keyExtractor={item => item.MaChat}
+            />
+          </View>
+        </>
+      ) : (
+        <LoadingComponent text="Loading data..." />
+      )}
     </SafeAreaView>
   );
 }
