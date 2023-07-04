@@ -16,7 +16,6 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ onSelectSort }) => {
     setIsOpen(false);
     onSelectSort(sortOption);
   };
-
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
