@@ -7,12 +7,12 @@ import {
   orderBy,
   query,
   updateDoc,
-  where
+  where,
 } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { FlatList, Image, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Firestore, firebase } from '../../../Firebase/firebase';
+import React, {useEffect, useState} from 'react';
+import {FlatList, Image, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Firestore, firebase} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 import Search from '../components/Search';
 import UserChat from '../components/UserChat';
@@ -21,9 +21,9 @@ import Size from '../constants/size';
 export default function Chat({navigation}) {
   const [users, setUser] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = (searchTerm) => {
+  const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
   };
   const getUser = async item => {
@@ -76,15 +76,14 @@ export default function Chat({navigation}) {
         });
       });
       let filteredItems = data;
-        if (searchTerm != null) {
-            filteredItems = data.filter(item =>
-            item.TenND.toLowerCase().includes(searchTerm.toLowerCase())
-            ); 
-        }
-        else {
-            setUser(data);
-        }
-        setUser(filteredItems);
+      if (searchTerm != null) {
+        filteredItems = data.filter(item =>
+          item.TenND.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+      } else {
+        setUser(data);
+      }
+      setUser(filteredItems);
       console.log(users);
     });
   };
@@ -171,9 +170,7 @@ export default function Chat({navigation}) {
           </View>
           <View style={{width: '100%', height: 10}} />
           <View style={{width: '90%', height: 45, marginHorizontal: '5%'}}>
-            <Search placeholder="Search" 
-              onSearch={handleSearch}
-            />
+            <Search placeholder="Search" onSearch={handleSearch} />
           </View>
           <View style={{width: '100%', height: 10}} />
           <View style={{width: '100%', height: '73%'}}>

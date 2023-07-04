@@ -1,17 +1,17 @@
 import {
-    collection,
-    doc,
-    getDocs,
-    query,
-    updateDoc,
-    where,
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
 } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Firestore } from '../../../Firebase/firebase';
-import { SearchIcon } from '../../CustomerView/assets/icons';
+import React, {useEffect, useState} from 'react';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Firestore} from '../../../Firebase/firebase';
+import {SearchIcon} from '../../CustomerView/assets/icons';
 import BackTo from '../components/BackTo';
 import ButtonDetail from '../components/ButtonDetail';
 import MyProduct1 from '../components/MyProductOne';
@@ -22,12 +22,12 @@ export default function MyProduct({navigation}) {
   const [inventory, setinventory] = useState(true);
   const [Out, setOut] = useState(false);
   const [Wait, setWait] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [dataOnWait, setDataOnWait] = useState([]);
   const [dataOutOfStock, setDataOutOfStock] = useState([]);
   const [dataInventory, setDataInventory] = useState([]);
 
-  const handleSearch = (searchTerm) => {
+  const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
   };
   const ConfirmProduct = item => {
@@ -82,27 +82,25 @@ export default function MyProduct({navigation}) {
       where('TrangThai', '==', 'Inventory'),
     );
     const querySnapshot = await getDocs(q);
-  
+
     const data = [];
-  
+
     querySnapshot.forEach(doc => {
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, ' => ', doc.data());
-      data.push({ ...doc.data() });
+      data.push({...doc.data()});
     });
-  
+
     let filteredItems = data;
     if (searchTerm != null) {
-        filteredItems = data.filter(item =>
-        item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
-        ); 
-    }
-    else {
-        setDataInventory(data);
+      filteredItems = data.filter(item =>
+        item.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    } else {
+      setDataInventory(data);
     }
     setDataInventory(filteredItems);
   };
-  
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -110,14 +108,14 @@ export default function MyProduct({navigation}) {
       getDadaOnWait();
       getDadaOutOfStock();
       getDadaInventory();
-    },);
+    });
     getDadaOnWait();
     getDadaOutOfStock();
     getDadaInventory();
     //const interval = setInterval(() => getDadaOnWait(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
     // return () => clearInterval(interval); // Xóa interval khi component bị unmount
-  },[dataOnWait.length, dataInventory.length, dataOutOfStock.length]);
-  useEffect(()=>{
+  }, [dataOnWait.length, dataInventory.length, dataOutOfStock.length]);
+  useEffect(() => {
     getDadaInventory();
   }, [searchTerm]);
   if (inventory == true) {
@@ -134,9 +132,10 @@ export default function MyProduct({navigation}) {
             onPress={() => navigation.navigate('AdminOverView')}
             Info="My Product"
           />
-          <SearchButton
-            onSearch = {handleSearch}
-          />
+          <View
+            style={{width: 20, height: 20, marginLeft: '55%', marginTop: 10}}>
+            <SearchButton onSearch={handleSearch} />
+          </View>
         </View>
         <View
           style={{
@@ -245,13 +244,18 @@ export default function MyProduct({navigation}) {
             onPress={() => navigation.navigate('AdminOverView')}
             Info="My Product"
           />
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+          <View
+            style={{width: 20, height: 20, marginLeft: '55%', marginTop: 10}}>
+            <SearchButton onSearch={handleSearch} />
+          </View>
+
+          {/* <TouchableOpacity onPress={() => navigation.navigate('Search')}>
             <Image
               source={SearchIcon}
               style={{width: 20, height: 20, marginLeft: '70%', marginTop: 10}}
               resizeMode="contain"
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View
           style={{
@@ -360,13 +364,18 @@ export default function MyProduct({navigation}) {
             onPress={() => navigation.navigate('AdminOverView')}
             Info="My Product"
           />
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+          <View
+            style={{width: 20, height: 20, marginLeft: '55%', marginTop: 10}}>
+            <SearchButton onSearch={handleSearch} />
+          </View>
+
+          {/* <TouchableOpacity onPress={() => navigation.navigate('Search')}>
             <Image
               source={SearchIcon}
               style={{width: 20, height: 20, marginLeft: '70%', marginTop: 10}}
               resizeMode="contain"
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View
           style={{

@@ -1,5 +1,6 @@
 const CUSTOM_COLOR = {
   //Tên màu: 'Mã màu',
+  Lynch: '#637B94',
   ChathamsBlue: '#143F6B',
   White: '#FFFFFF',
   Black: '#000000',

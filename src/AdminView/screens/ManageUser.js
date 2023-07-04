@@ -15,8 +15,13 @@ import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
 import { IC_User } from '../assets/icons';
 import AccountCard from '../components/AccountCard';
 import LoadingComponent from '../components/Loading';
+import {Storage} from '../../../Firebase/firebase';
+import {IC_User} from '../assets/icons';
+import {Avatar, ListItem} from 'react-native-elements';
+import {getAuth, deleteUser} from 'firebase/auth';
 import SearchButton from '../components/SearchButton';
 import CUSTOM_COLOR from '../constants/colors';
+
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -161,6 +166,11 @@ const ManageUser = props => {
       </View>
     </TouchableOpacity>
   );
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = searchTerm => {
+    setSearchTerm(searchTerm);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -226,7 +236,18 @@ const ManageUser = props => {
               />
               <View style={{width: '5%', height: '100%'}} />
               <View style={styles.searchViewContainer}>
-                
+                <Search
+                  placeholder="Search"
+                  style={{
+                    width: 200,
+                    height: 35,
+                    backgroundColor: CUSTOM_COLOR.White,
+                  }}
+                />
+                {/* <SearchButton
+                  style={styles.SearchButtonView}
+                  onSearch={handleSearch}
+                /> */}
               </View>
               <View style={{width: '5%', height: '100%'}} />
               <TouchableOpacity style={styles.butAddContainer}>
@@ -250,7 +271,7 @@ const ManageUser = props => {
               />
             </View>
           </>
-          <View style={{width: '100%', height: 20}}/>
+          <View style={{width: '100%', height: 20}} />
         </>
       ) : (
         <LoadingComponent text="Loading data..." />
@@ -265,7 +286,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   accountContainer: {
-    flex: 2.5,
+    width: '100%',
+    height: 120,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -282,7 +304,8 @@ const styles = StyleSheet.create({
     color: CUSTOM_COLOR.Black,
   },
   searchContainer: {
-    flex: 1.5,
+    width: '100%',
+    height: 65,
     flexDirection: 'row',
     alignItems: 'center',
   },
