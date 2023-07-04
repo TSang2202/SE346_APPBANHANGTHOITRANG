@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import ViewNow from '../../StaffView/components/ViewNow';
-import { firebase } from '../../../Firebase/firebase.js';
+import {firebase} from '../../../Firebase/firebase.js';
 import {
   IC_product,
   IC_order,
@@ -25,12 +25,11 @@ import {
 } from '../assets/icons/index.js';
 import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
-import { Storage } from '../../../Firebase/firebase';
+import {Storage} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 
-
 const AdminOverView = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -111,14 +110,14 @@ const AdminOverView = props => {
         <>
           <>
             <View style={styles.menuContainer}>
-              <View style={{ width: 32, height: 37, marginHorizontal: 5 }}>
+              <View style={{width: 32, height: 37}}>
                 <MenuIcon
                   onPress={() => navigation.navigate('ChangeProfile')}
                   source={IC_User}
                 />
               </View>
-              <View style={{ width: 10, height: '100%' }} />
-              <View style={{ width: 30, height: 30, marginHorizontal: 5 }}>
+              <View style={{width: 10, height: '100%'}} />
+              <View style={{width: 30, height: 30}}>
                 <MenuIcon
                   onPress={() => navigation.navigate('Chat')}
                   source={IC_messenger}
@@ -131,8 +130,8 @@ const AdminOverView = props => {
                     source={IC_notification}
                   />
                 </View> */}
-              <View style={{ width: 5, height: '100%' }} />
-              <View style={{ width: 32, height: 32, marginHorizontal: 5 }}>
+              <View style={{width: 5, height: '100%'}} />
+              <View style={{width: 32, height: 32, marginHorizontal: 5}}>
                 <MenuIcon
                   onPress={() => {
                     firebase.auth().signOut();
@@ -140,7 +139,7 @@ const AdminOverView = props => {
                   source={IC_logout}
                 />
               </View>
-              <View style={{ width: 10, height: '100%' }} />
+              <View style={{width: 10, height: '100%'}} />
             </View>
           </>
 
@@ -149,11 +148,11 @@ const AdminOverView = props => {
           <>
             <View style={styles.accountContainer}>
               <View style={styles.infoContainer}>
-                <View style={{ width: 10, height: '100%' }} />
+                <View style={{width: 10, height: '100%'}} />
                 <View style={styles.avataContainer}>
                   {imageUrl ? (
                     <Image
-                      source={{ uri: imageUrl }}
+                      source={{uri: imageUrl}}
                       style={{
                         width: '100%',
                         height: '100%',
@@ -179,14 +178,14 @@ const AdminOverView = props => {
                     />
                   )}
                 </View>
-                <View style={{ width: 15, height: '100%' }} />
+                <View style={{width: 15, height: '100%'}} />
                 <View
-                  style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                  <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
+                  style={{flexDirection: 'column', justifyContent: 'center'}}>
+                  <Text style={[styles.textViewStyles, {fontSize: 20}]}>
                     {userData.TenND}
                   </Text>
-                  <View style={{ width: '100%', height: 5 }} />
-                  <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
+                  <View style={{width: '100%', height: 5}} />
+                  <Text style={[styles.textViewStyles, {fontSize: 15}]}>
                     {userData.LoaiND}
                   </Text>
                 </View>
@@ -194,7 +193,7 @@ const AdminOverView = props => {
               <View style={styles.viewShopContainer}>
                 <TouchableOpacity style={styles.butViewShopContainer}>
                   <Text
-                    style={{ color: CUSTOM_COLOR.Red }}
+                    style={{color: CUSTOM_COLOR.Red}}
                     onPress={() => navigation.navigate('ViewShop1')}>
                     View Shop
                   </Text>
@@ -207,7 +206,7 @@ const AdminOverView = props => {
 
           <>
             <View style={styles.oderContainer}>
-              <View style={{ width: '100%', height: '5%' }} />
+              <View style={{width: '100%', height: '5%'}} />
               <View style={styles.textContainer}>
                 <View
                   style={{
@@ -235,7 +234,7 @@ const AdminOverView = props => {
                   horizontal={true}
                   data={Order}
                   keyExtractor={item => item.id}
-                  renderItem={({ item }) => {
+                  renderItem={({item}) => {
                     return (
                       <ViewNow number={item.number} status={item.status} />
                     );
@@ -287,9 +286,7 @@ const AdminOverView = props => {
                     text="Manage User"
                   />
                 </View>
-                <View style={styles.unitContainer}>
-
-                </View>
+                <View style={styles.unitContainer} />
               </View>
             </View>
           </>
@@ -331,7 +328,7 @@ const styles = StyleSheet.create({
     height: '80%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   textViewStyles: {
     fontFamily: FONT_FAMILY.Semibold,
@@ -352,7 +349,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginEnd: 20
+    marginEnd: 20,
   },
   oderContainer: {
     flex: 4,
