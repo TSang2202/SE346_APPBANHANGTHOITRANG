@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,12 +9,12 @@ import {
 } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors.js';
 import FONT_FAMILY from '../constants/fonts.js';
-import {IMG_image1, IMG_Rectangle} from '../assets/images/index.js';
-import {IC_Line} from '../assets/icons/index.js';
+import { IMG_image1, IMG_Rectangle } from '../assets/images/index.js';
+import { IC_Line } from '../assets/icons/index.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
 
 const Intro = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const Intro = props => {
                   <View style={styles.viewTop}>
                     <Image
                       source={IC_Line}
-                      style={{width: '100%', height: '10%', top: '10%'}}
+                      style={{ width: '100%', height: '10%', top: '10%' }}
                     />
                     <Text style={styles.baseText}>FAUGET</Text>
                   </View>
@@ -51,7 +51,7 @@ const Intro = props => {
                     <View style={styles.flexbot}>
                       <Image
                         source={IC_Line}
-                        style={{width: '100%', height: '10%'}}
+                        style={{ width: '100%', height: '10%' }}
                       />
                     </View>
 
@@ -62,7 +62,7 @@ const Intro = props => {
                     <View style={styles.flexbot}>
                       <Image
                         source={IC_Line}
-                        style={{width: '100%', height: '10%'}}
+                        style={{ width: '100%', height: '10%' }}
                       />
                     </View>
                   </View>

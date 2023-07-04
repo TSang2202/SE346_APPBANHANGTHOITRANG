@@ -1,16 +1,16 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import BackTo from '../components/BackTo'
-import CUSTOM_COLOR from '../constants/colors'
-import { Address, Delivery, Payment } from '../assets/icons'
+import BackTo from '../../StaffView/components/BackTo'
+import CUSTOM_COLOR from '../../StaffView/constants/colors'
+import { Address, Delivery, Payment } from '../../StaffView/assets/icons'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Acount } from './OverView'
-import PerSon from '../components/PerSon'
-import { IM_MauAo } from '../assets/images'
-import ButtonDetail from '../components/ButtonDetail'
+//import { Acount } from './OverView'
+import PerSon from '../../StaffView/components/PerSon'
+//import { IM_MauAo } from '../assets/images'
+import ButtonDetail from '../../StaffView/components/ButtonDetail'
 import { Firestore } from '../../../Firebase/firebase'
 import { collection, onSnapshot, query, doc, getDoc, querySnapshot, getDocs, where, updateDoc } from "firebase/firestore";
-import OneOrder from '../components/OneOrder'
+import OneOrder from '../../StaffView/components/OneOrder'
 
 
 const DataDelivery = {
@@ -51,20 +51,7 @@ export default function DeTailDelivery({ navigation, route }) {
     }
   }, [isLoading]);
 
-  const Confirm = async () => {
-
-    navigation.goBack();
-    const confirmRef = doc(Firestore, "DONHANG", item.MaDH)
-
-    await updateDoc(confirmRef, {
-      TrangThai: item.TrangThai === "Confirm" ? "OnWait" : item.TrangThai === "OnWait" ? "Delivering" : item.TrangThai === "Delivering" ? "Delivered" : "Delivered"
-    })
-
-
-  }
-
   return (
-
     <ScrollView style={{ backgroundColor: CUSTOM_COLOR.White }}>
 
 
@@ -85,7 +72,9 @@ export default function DeTailDelivery({ navigation, route }) {
             </Image>
             <Text style={{ color: CUSTOM_COLOR.Black, marginLeft: 5, fontSize: 20 }}>Address</Text>
           </View>
-
+          <TouchableOpacity>
+            <Text style={{ color: CUSTOM_COLOR.DarkBlue, marginRight: 20, fontSize: 20, fontWeight: 'bold' }}>COPY</Text>
+          </TouchableOpacity>
         </View>
         <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
           <Text>{item.TenND}</Text>
@@ -94,7 +83,27 @@ export default function DeTailDelivery({ navigation, route }) {
 
         </View>
       </View>
-
+      <View style={{ width: '100%', height: 10, marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
+      <View style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
+        <View style={{ width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Image
+              source={Delivery}
+              style={{ width: 30, height: 30, marginLeft: 18 }}
+              resizeMode='contain'
+            >
+            </Image>
+            <Text style={{ color: CUSTOM_COLOR.Black, marginLeft: 5, fontSize: 20 }}>Delivery</Text>
+          </View>
+          <TouchableOpacity>
+            <Text style={{ color: CUSTOM_COLOR.DarkBlue, marginRight: 20, fontSize: 20, fontWeight: 'bold' }}>SEE</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
+          <Text>{DataDelivery.CTY}</Text>
+          <Text>Delivery Code: {DataDelivery.Code}</Text>
+        </View>
+      </View>
       <View style={{ width: '100%', height: 10, marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
       <View style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
         <View style={{ width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between' }}>
@@ -109,53 +118,10 @@ export default function DeTailDelivery({ navigation, route }) {
           </View>
         </View>
         <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
-          <View style={{
-            flexDirection: 'row'
-          }}>
-            <Text style={{
-              fontWeight: 'bold'
-            }}>Provisional: </Text>
-            <Text>{item.TamTinh} </Text>
-            <Text style={{
-              fontStyle: 'italic'
-            }}>VND</Text>
-          </View>
-
-          <View style={{
-            flexDirection: 'row'
-          }}>
-            <Text style={{
-              fontWeight: 'bold'
-            }}>Delivery fee: </Text>
-            <Text>{item.PhiVanChuyen} </Text>
-            <Text style={{
-              fontStyle: 'italic'
-            }}>VND</Text>
-          </View>
-
-          <View style={{
-            flexDirection: 'row'
-          }}>
-            <Text style={{
-              fontWeight: 'bold'
-            }}>Discount: </Text>
-            <Text>- {item.GiamGia} </Text>
-            <Text style={{
-              fontStyle: 'italic'
-            }}>VND</Text>
-          </View>
-
-          <View style={{
-            flexDirection: 'row'
-          }}>
-            <Text style={{
-              fontWeight: 'bold'
-            }}>Total: </Text>
-            <Text>{item.TongTien} </Text>
-            <Text style={{
-              fontStyle: 'italic'
-            }}>VND</Text>
-          </View>
+          <Text>Provisional: {item.TamTinh}</Text>
+          <Text>Delivery fee: {item.PhiVanChuyen}</Text>
+          <Text>Discount</Text>
+          <Text>Total: {item.TongTien}</Text>
         </View>
       </View>
       <View style={{ width: '100%', height: 10, marginTop: 20, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
@@ -167,30 +133,7 @@ export default function DeTailDelivery({ navigation, route }) {
         ></PerSon>
 
         <View>
-
-          {item.DatHang.map((order, index) => {
-            return (
-              <View
-
-                key={index}>
-
-                <OneOrder
-
-                  source={order.SanPham.HinhAnhSP[0]}
-                  title={order.SanPham.TenSP}
-                  price={order.SanPham.GiaSP}
-                  number={order.SoLuong}
-                  color={order.MauSac}
-                  size={order.Size}
-                  totalPrice={order.ThanhTien}
-
-                ></OneOrder>
-
-              </View>
-            )
-          })}
-
-          {/* <FlatList
+          <FlatList
             data={item.DatHang}
             renderItem={({ item }) => {
 
@@ -199,7 +142,7 @@ export default function DeTailDelivery({ navigation, route }) {
                 <View>
 
                   <OneOrder
-                    source={item.SanPham.HinhAnhSP[0]}
+                    source={item.SanPham.HinhAnhSP}
                     title={item.SanPham.TenSP}
                     price={item.SanPham.GiaSP}
                     number={item.SoLuong}
@@ -212,9 +155,9 @@ export default function DeTailDelivery({ navigation, route }) {
                 </View>
               )
             }}
-          /> */}
+          />
         </View>
-        {/* <View style={{ width: '100%', height: 50, marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ width: '100%', height: 50, marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
           <ButtonDetail
             title='Buyer Contact'
             color={CUSTOM_COLOR.DarkBlue}
@@ -227,10 +170,10 @@ export default function DeTailDelivery({ navigation, route }) {
             onPress={() => { }}
             style={styles.button}
           ></ButtonDetail>
-        </View> */}
+        </View>
         <View style={{ width: '100%', height: 50, flexDirection: 'row' }}>
           <TouchableOpacity
-            onPress={() => { Confirm(item) }}
+            onPress={() => { }}
             style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
           >
             <Text style={{ color: CUSTOM_COLOR.White, fontWeight: 'bold', fontSize: 20 }}>Confirm</Text>

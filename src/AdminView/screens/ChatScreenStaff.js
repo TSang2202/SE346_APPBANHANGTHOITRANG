@@ -1,19 +1,40 @@
-import { Timestamp, addDoc, collection, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import {
+  Timestamp, addDoc, collection, doc,
+  getDoc, onSnapshot, orderBy, query, updateDoc, where
+} from "firebase/firestore";
+import { default as React, default as React, useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
 import { IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../assets/icons";
 import Message from "../components/Message";
 import CUSTOM_COLOR from "../constants/colors";
 
+function ChatScreenStaff({navigation, route}) {
+  const {item} = route.params;
 
-function ChatScreenStaff({ navigation, route }) {
+  const [message, setMessage] = useState([]);
+  const [chat, setChat] = useState('');
 
-    const { item } = route.params;
+  const getDataMessage = async () => {
+    const q = query(
+      collection(Firestore, 'CHITIETCHAT'),
+      orderBy('ThoiGian', 'asc'),
+      where('MaChat', '==', item.MaChat),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
+      const data = [];
+      querySnapshot.forEach(doc => {
+        data.push(doc.data());
+      });
+      console.log(data);
+      setMessage(data);
+    });
+  };
 
-    const [message, setMessage] = useState([])
-    const [chat, setChat] = useState('')
+  const getSoLuongChuaDocCuaCustomer = async () => {
+    const chatDocRef = doc(Firestore, 'CHAT', item.MaChat);
 
+    const docSnapshot = await getDoc(chatDocRef);
 
     const getDataMessage = async () => {
         const q = query(collection(Firestore, "CHITIETCHAT"), orderBy("ThoiGian", "asc"), where("MaChat", "==", item.MaChat));
@@ -25,185 +46,190 @@ function ChatScreenStaff({ navigation, route }) {
             console.log(data);
             setMessage(data);
         });
+    if (docSnapshot.exists()) {
+      console.log(
+        'Current data: ',
+        docSnapshot.data().SoLuongChuaDocCuaCustomer,
+      );
+      return docSnapshot.data().SoLuongChuaDocCuaCustomer;
     }
 
-    const SendMessage = async () => {
-        console.log(1)
-        const currentTime = new Date();
-        const docRef = await addDoc(collection(Firestore, "CHITIETCHAT"), {
-            NoiDung: chat,
-            LaNguoiMua: false,
-            ThoiGian: Timestamp.fromDate(currentTime),
-            MaChat: item.MaChat
-        });
-        console.log("Document written with ID: ", docRef.id);
+    // Trả về giá trị mặc định của hàm, nếu không có dữ liệu trả về từ getDoc()
+    return 0;
+  };
 
-        const updateId = await updateDoc(docRef, {
-            MaCTChat: docRef.id
-        })
+  const SendMessage = async () => {
+    console.log(1);
+    const currentTime = new Date();
+    const docRef = await addDoc(collection(Firestore, 'CHITIETCHAT'), {
+      NoiDung: chat,
+      LaNguoiMua: false,
+      ThoiGian: Timestamp.fromDate(currentTime),
+      MaChat: item.MaChat,
+    });
+    console.log('Document written with ID: ', docRef.id);
 
-        setChat('')
-    }
+    const updateId = await updateDoc(docRef, {
+      MaCTChat: docRef.id,
+    });
 
-    useEffect(() => {
-        getDataMessage();
-    }, [])
+    const chatDocRef = doc(Firestore, 'CHAT', item.MaChat);
 
-    return (
-        <View style={styles.container}>
-            <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: CUSTOM_COLOR.White,
-                paddingVertical: '1%'
-            }}>
-                <TouchableOpacity onPress={() => {
-                    navigation.goBack();
-                }}>
-                    <Image
-                        source={IC_Back}
-                        style={{
-                            width: 10,
-                            height: 20,
-                            marginHorizontal: 20,
-                            marginVertical: 15
-                        }}
-                        resizeMode='stretch'
-                    />
-                </TouchableOpacity>
+    const soLuongChuaDocCuaCustomer = await getSoLuongChuaDocCuaCustomer();
 
-                <Image
-                    style={{
-                        width: 45,
-                        height: 45,
-                        borderRadius: 30,
+    const updateChat = await updateDoc(chatDocRef, {
+      SoLuongChuaDocCuaCustomer: soLuongChuaDocCuaCustomer + 1,
+      ThoiGian: Timestamp.fromDate(currentTime),
+    });
 
-                    }}
+    setChat('');
+  };
 
-                    source={{ uri: item.Avatar }}
-                />
+  useEffect(() => {
+    getDataMessage();
+  }, []);
 
-                <Text style={{
-                    marginHorizontal: '5%',
-                    fontSize: 17,
-                    fontWeight: 'bold'
-                }}>{item.TenND}</Text>
+  return (
+    <View style={styles.container}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: CUSTOM_COLOR.White,
+          paddingVertical: '1%',
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <Image
+            source={IC_Back}
+            style={{
+              width: 10,
+              height: 20,
+              marginHorizontal: 20,
+              marginVertical: 15,
+            }}
+            resizeMode="stretch"
+          />
+        </TouchableOpacity>
 
-            </View>
+        <Image
+          style={{
+            width: 45,
+            height: 45,
+            borderRadius: 30,
+          }}
+          source={{uri: item.Avatar}}
+        />
 
-            <ScrollView style={{
-                backgroundColor: CUSTOM_COLOR.Gallery
-            }}>
-                {message.map((message, index) => {
-                    const hour = message.ThoiGian.toDate().getHours();
-                    const minute = message.ThoiGian.toDate().getMinutes();
+        <Text
+          style={{
+            marginHorizontal: '5%',
+            fontSize: 17,
+            fontWeight: 'bold',
+          }}>
+          {item.TenND}
+        </Text>
+      </View>
 
-                    return (
-                        <Message
-                            key={message.MaCTChat}
-                            content={message.NoiDung}
-                            time={`${hour}:${minute}`}
-                            isRight={message.LaNguoiMua}
-                        />
-                    )
-                })}
+      <ScrollView
+        style={{
+          backgroundColor: CUSTOM_COLOR.Gallery,
+        }}>
+        {message.map((message, index) => {
+          const hour = message.ThoiGian.toDate().getHours();
+          const minute = message.ThoiGian.toDate().getMinutes();
 
-            </ScrollView>
+          return (
+            <Message
+              key={index}
+              content={message.NoiDung}
+              time={`${hour}:${minute}`}
+              isRight={!message.LaNguoiMua}
+            />
+          );
+        })}
+      </ScrollView>
 
-            <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
 
-                backgroundColor: CUSTOM_COLOR.Gallery
+          backgroundColor: CUSTOM_COLOR.Gallery,
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: CUSTOM_COLOR.White,
+            paddingHorizontal: '2%',
+            borderRadius: 25,
+            marginHorizontal: '3%',
+            marginVertical: '2%',
+            width: '80%',
+          }}>
+          <Image
+            style={{
+              width: 20,
+              height: 20,
+              marginHorizontal: '2%',
+            }}
+            source={IC_Emo}
+          />
 
-            }}>
+          <TextInput
+            placeholder="Hello, I have a problem"
+            style={{
+              width: '70%',
+            }}
+            onChangeText={text => setChat(text)}
+            value={chat}
+          />
 
-                <View style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    backgroundColor: CUSTOM_COLOR.White,
-                    paddingHorizontal: '2%',
-                    borderRadius: 25,
-                    marginHorizontal: '3%',
-                    marginVertical: '2%',
-                    width: '80%'
-                }}>
-
-                    <Image
-                        style={{
-                            width: 20,
-                            height: 20,
-                            marginHorizontal: '2%'
-                        }}
-                        source={IC_Emo}
-                    />
-
-                    <TextInput
-                        placeholder='Hello, I have a problem'
-                        style={{
-                            width: '70%'
-                        }}
-
-                        onChangeText={(text) => setChat(text)}
-                        value={chat}
-                    />
-
-                    <Image
-                        style={{
-                            width: 10,
-                            height: 20,
-                            marginHorizontal: '2%'
-                        }}
-                        resizeMode='stretch'
-                        source={IC_Attachment}
-                    />
-                    <Image
-                        style={{
-                            width: 22,
-                            height: 20,
-                            marginLeft: '2%'
-                        }}
-                        source={IC_Camera}
-                    />
-                </View>
-
-                <TouchableOpacity style={{
-                    height: 45,
-                    width: 45,
-                    borderRadius: 30,
-                    backgroundColor: CUSTOM_COLOR.ChathamsBlue,
-                    alignItems: "center",
-                    justifyContent: 'center'
-                }}
-                    onPress={() => {
-                        SendMessage()
-                    }}
-                >
-                    <Image
-                        source={IC_Send}
-
-                    />
-
-                </TouchableOpacity>
-            </View>
-
-
-
+          <Image
+            style={{
+              width: 10,
+              height: 20,
+              marginHorizontal: '2%',
+            }}
+            resizeMode="stretch"
+            source={IC_Attachment}
+          />
+          <Image
+            style={{
+              width: 22,
+              height: 20,
+              marginLeft: '2%',
+            }}
+            source={IC_Camera}
+          />
         </View>
 
-    )
+        <TouchableOpacity
+          style={{
+            height: 45,
+            width: 45,
+            borderRadius: 30,
+            backgroundColor: CUSTOM_COLOR.ChathamsBlue,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          onPress={() => {
+            SendMessage();
+          }}>
+          <Image source={IC_Send} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 }
-
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: CUSTOM_COLOR.White
-
-    },
-
-
-
-})
-
-export default ChatScreenStaff
+  container: {
+    flex: 1,
+    // backgroundColor: CUSTOM_COLOR.White
+  },
+});
+}
+export default ChatScreenStaff;

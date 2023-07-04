@@ -12,7 +12,7 @@ function PromotionScreen({ navigation, route }) {
 
     const { itemsCheckout, totalMoney, delivery, choosePayment } = route.params
 
-    const [promotion, setPromotion] = useState()                                                      
+    const [promotion, setPromotion] = useState()
 
     const [dataKhuyenMai, setDataKhuyenMai] = useState([])
 
@@ -103,15 +103,20 @@ function PromotionScreen({ navigation, route }) {
             <FlatList
                 data={dataKhuyenMai}
                 renderItem={({ item }) => {
-                    const day = item.NgayKetThuc.toDate().getDate();
-                    const month = item.NgayKetThuc.toDate().getMonth();
-                    const year = item.NgayKetThuc.toDate().getFullYear();
+
+                    const dayBD = item.NgayBatDau.toDate().getDate();
+                    const monthBD = item.NgayBatDau.toDate().getMonth();
+                    const yearBD = item.NgayBatDau.toDate().getFullYear();
+
+                    const dayKT = item.NgayKetThuc.toDate().getDate();
+                    const monthKT = item.NgayKetThuc.toDate().getMonth();
+                    const yearKT = item.NgayKetThuc.toDate().getFullYear();
                     return (
                         <Promotion
                             source={item.HinhAnhKM}
                             title={item.TenKM}
                             minimum={item.DonToiThieu}
-                            expiry={`${day}.${month}.${year}`}
+                            expiry={`${dayBD}.${monthBD}.${yearBD} - ${dayKT}.${monthKT}.${yearKT}`}
                             onPress={() => updateCheck(item)}
                             checkSelect={item.checkSelect}
                             show={true}

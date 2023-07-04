@@ -1,8 +1,15 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, ImageProps } from 'react-native'
 import React from 'react'
 import FONT_FAMILY from '../constants/fonts'
 import CUSTOM_COLOR from '../constants/colors'
-const PerSon = (props: any) => {
+
+interface PersonProps {
+  avartar: string;
+  name: string;
+  id: String;
+}
+
+const Person = (props: PersonProps) => {
   return (
     <View style={{ marginTop: 10, width: '100%', height: 60, borderBottomWidth: 0.5, flexDirection: 'row' }}>
       <Image
@@ -19,6 +26,6 @@ const PerSon = (props: any) => {
   )
 }
 
-export default PerSon
+export default Person;
 
 const styles = StyleSheet.create({})

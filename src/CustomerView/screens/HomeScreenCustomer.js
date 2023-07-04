@@ -11,6 +11,9 @@ import CUSTOM_COLOR from "../constants/colors";
 import { collection, doc, setDoc, getDocs, query, where, addDoc, updateDoc, onSnapshot, Timestamp } from "firebase/firestore";
 import { async } from "@firebase/util";
 import ProductView from "../components/ProductView";
+import Swiper from "react-native-swiper";
+import PromotionCard from "../../AdminView/components/PromotionCard";
+import dayjs from 'dayjs';
 
 //import { get } from "firebase/database";
 
@@ -25,6 +28,7 @@ function HomeScreenCustomer({ navigation }) {
   const [loadingChatUser, setLoadingChatUser] = useState(false)
   const [idUser, setIdUser] = useState()
   const [badgeCart, setBadgeCart] = useState(0);
+  const [dataPromotion, setDataPromotion] = useState([])
 
   const getDataTrending = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
@@ -88,6 +92,19 @@ function HomeScreenCustomer({ navigation }) {
     });
   }
 
+  const getDataPromotion = async () => {
+    const q = query(collection(Firestore, "KHUYENMAI"));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setDataPromotion(data)
+    });
+
+  }
+
   useEffect(() => {
 
 
@@ -96,11 +113,10 @@ function HomeScreenCustomer({ navigation }) {
     getDataChatUser();
     setIdUser(firebase.auth().currentUser.uid)
     getBadgeCart();
+    getDataPromotion()
 
     console.log(chatUser)
 
-    // const interval = setInterval(() => getData(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
-    // return () => clearInterval(interval); // Xóa interval khi component bị unmount
   }, [loadingChatUser]);
 
 
@@ -191,11 +207,69 @@ function HomeScreenCustomer({ navigation }) {
 
         <Text style={styles.textView}>On sale</Text>
 
-        <Image style={{ marginHorizontal: 30, height: 120, width: 380 }}
+        {/* <Image style={{ marginHorizontal: 30, height: 120, width: 380 }}
           source={IM_SaleImage}
-        />
+        /> */}
 
-        <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+        <View style={{
+
+          height: 175
+        }}>
+
+          <Swiper
+            autoplay
+            loop
+            style={{
+              flexDirection: 'row',
+
+              height: '90%'
+            }}
+          >
+
+            {dataPromotion ? dataPromotion.map((promotion, index) => {
+              const timestampBD = promotion.NgayBatDau.toDate();
+              const dateBD = dayjs(timestampBD);
+
+              const dayBD = dateBD.date();
+              const monthBD = dateBD.month();
+              const yearBD = dateBD.year();
+
+              const timestampKT = promotion.NgayKetThuc.toDate();
+              const dateKT = dayjs(timestampKT);
+
+              const dayKT = dateKT.date();
+              const monthKT = dateKT.month();
+              const yearKT = dateKT.year();
+
+              return (
+
+                <PromotionCard
+                  source={promotion.HinhAnhKM}
+                  name={promotion.TenKM}
+                  discount={promotion.TiLe * 100}
+                  minimum={promotion.DonToiThieu}
+                  start={`${dayBD}/${monthBD}/${yearBD}`}
+                  end={`${dayKT}/${monthKT}/${yearKT}`}
+                  type={promotion.Loai}
+                  key={index}
+                // onPress={() => navigation.navigate("EditPromotion", { item })}
+                />
+
+              )
+            })
+              : null}
+
+
+
+
+
+
+
+          </Swiper>
+        </View>
+
+
+        <View style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: -40 }}>
           <Text style={styles.textView}>Trending now</Text>
           <TouchableOpacity
             onPress={() => {

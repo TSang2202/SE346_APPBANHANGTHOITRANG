@@ -62,7 +62,7 @@ function DetailProduct({ navigation, route }) {
         );
 
     }
-    
+
     const setBuyNow = async () => {
         const docRef = await addDoc(collection(Firestore, "GIOHANG"), {
             MaND: firebase.auth().currentUser.uid,
@@ -99,48 +99,47 @@ function DetailProduct({ navigation, route }) {
 
     //
     const addYeuThich = async () => {
-        try{
+        try {
             const docRef = await addDoc(collection(Firestore, "YEUTHICH"), {
                 MaND: firebase.auth().currentUser.uid,
                 MaSP: item.MaSP
             });
-        } catch(error){
+        } catch (error) {
 
         }
-        
+
     }
-   const deleteYeuThich = async () => {
-        try{
+    const deleteYeuThich = async () => {
+        try {
             const collectionRef = collection(Firestore, 'YEUTHICH');
             const q = query(collectionRef
-                                ,where('MaND', '==', firebase.auth().currentUser.uid)
-                                ,where('MaSP', '==', item.MaSP));
+                , where('MaND', '==', firebase.auth().currentUser.uid)
+                , where('MaSP', '==', item.MaSP));
             const querySnapshot = await getDocs(q);
-            console.log(querySnapshot);
+           // console.log(querySnapshot);
             querySnapshot.forEach((doc) => {
                 deleteDoc(doc.ref).then(() => {
-                console.log('Xóa tài liệu thành công');
+                    console.log('Xóa tài liệu thành công');
                 }).catch((error) => {
-                console.error('Lỗi khi xóa tài liệu:', error);
+                    console.error('Lỗi khi xóa tài liệu:', error);
                 });
             });
             } catch(error){
                 console.log(error);
             }
-        
    }
    const SetLove = async () =>{
+
         setlove(!love);
-   }
+    }
     const setDataYeuThich = async () => {
         await SetLove();
         let check = love;
-        console.log('jsssssss'+ check);
         if(check == false){
             addYeuThich()
         }
-        else{
-           deleteYeuThich()
+        else {
+            deleteYeuThich()
         }
     }
     const getstatusYeuThich = async () => {
@@ -149,24 +148,23 @@ function DetailProduct({ navigation, route }) {
         const items = [];
 
         querySnapshot.forEach(documentSnapshot => {
-          items.push({
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id,
-          });
+            items.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
         });
-        for(let i = 0; i < items.length; i++){
-            if(items[i].MaSP == item.MaSP)
-            {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].MaSP == item.MaSP) {
                 setlove(true);
             }
-                
+
         }
     }
     useEffect(() => {
         console.log(item.Size)
         getstatusYeuThich();
     }, [])
-    
+
     return (
         <View style={{
             ...styles.container,
@@ -202,26 +200,26 @@ function DetailProduct({ navigation, route }) {
                         setDataYeuThich();
                     }}
                     >
-                    { love ? (<Image
-                        source={IC_Heart_Red}
-                        style={{
-                            margin: 10,
-                            width: 33,
-                            height: 33,
+                        {love ? (<Image
+                            source={IC_Heart_Red}
+                            style={{
+                                margin: 10,
+                                width: 33,
+                                height: 33,
 
-                        }}
-                        resizeMode='contain'
-                    />):
-                    (<Image
-                        source={IC_Heart}
-                        style={{
-                            margin: 10,
-                            width: 28,
-                            height: 28,
-                        }}
-                        resizeMode='contain'
-                    />)
-                    }
+                            }}
+                            resizeMode='contain'
+                        />) :
+                            (<Image
+                                source={IC_Heart}
+                                style={{
+                                    margin: 10,
+                                    width: 28,
+                                    height: 28,
+                                }}
+                                resizeMode='contain'
+                            />)
+                        }
                     </TouchableOpacity>
 
                     <Image
@@ -441,7 +439,8 @@ function DetailProduct({ navigation, route }) {
                         <TouchableWithoutFeedback style={{
                             ...styles.sizeCircle,
                             width: 45,
-                            marginHorizontal: 5
+                            marginHorizontal: 5,
+                            borderWidth: chooseSize === size.title ? 1 : 0
                         }}>
                             <Text>{size.title}</Text>
                         </TouchableWithoutFeedback>
@@ -569,6 +568,7 @@ function DetailProduct({ navigation, route }) {
 
                             <FlatList
                                 data={item.MauSac}
+                                keyExtractor={(item, index) => index}
                                 renderItem={({ item }) => {
                                     return item.checked == true ? (
                                         <View style={{
@@ -631,6 +631,7 @@ function DetailProduct({ navigation, route }) {
 
                                 data={item.Size}
                                 numColumns={3}
+                                keyExtractor={(item, index) => index}
                                 renderItem={({ item }) => {
                                     return item.checked == true ?
                                         <TouchableOpacity style={{
