@@ -1,12 +1,12 @@
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
 import CUSTOM_COLOR from '../constants/colors';
 const ViewNow = (props: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.button}>
-        <Text>+{props.number}</Text>
-        <Text>{props.status}</Text>
+        <Text style={styles.text}>{props.number}</Text>
+        <Text style={{ color: CUSTOM_COLOR.Black }}>{props.status}</Text>
       </View>
     </View>
   );
@@ -27,5 +27,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  text: {
+    color: CUSTOM_COLOR.Black,
+    fontWeight: 'bold'
+  }
 });
 export default ViewNow;
