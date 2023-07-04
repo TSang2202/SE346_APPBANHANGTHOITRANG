@@ -134,7 +134,7 @@ function OverView({ navigation }) {
       <View style={styles.menuContainer}>
         <View style={{ width: 32, height: 37, marginHorizontal: 5 }}>
           <MenuIcon
-            onPress={() => navigation.navigate('Setting')}
+            onPress={() => navigation.navigate('ChangeProfile')}
             source={IC_User}
           />
         </View>
@@ -355,11 +355,7 @@ function OverView({ navigation }) {
             />
           </View>
           <View style={styles.unitContainer}>
-            <FunctionCard
-              onPress={() => navigation.navigate('ManageUser')}
-              source={IC_user}
-              text="Manage User"
-            />
+
           </View>
           <View style={styles.unitContainer}>
             {/* <FunctionCard

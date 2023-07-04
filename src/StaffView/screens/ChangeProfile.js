@@ -20,7 +20,7 @@ import { IC_User } from '../assets/icons';
 import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { firebase } from '../../../Firebase/firebase';
-import LoadingComponent from '../components/Loading';
+import LoadingComponent from '../../AdminView/components/Loading';
 import CustomButton from '../../Login_SignUp/components/Buttons/CustomButton';
 // import ImagePicker from 'react-native-image-picker';
 const ImagePicker = require('react-native-image-picker');
@@ -610,53 +610,7 @@ const ChangeProfile = props => {
 
                 <View style={{ width: '100%', height: 15 }} />
 
-                <>
-                  <View
-                    style={{
-                      height: 70,
-                      width: '100%',
-                      elevation: 1.5,
-                      borderRadius: 0.5,
-                      shadowColor: CUSTOM_COLOR.Black,
-                      flexDirection: 'row',
-                    }}>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          { justifyContent: 'flex-start' },
-                        ]}>
-                        <View style={{ width: '10%', height: '100%' }} />
-                        <Text style={styles.titleInputStyle}>Password</Text>
-                        <Text
-                          style={[
-                            styles.titleInputStyle,
-                            { color: CUSTOM_COLOR.Red },
-                          ]}>
-                          {' '}
-                          *
-                        </Text>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        flex: 2,
-                        justifyContent: 'center',
-                        alignItems: 'flex-end',
-                      }}>
-                      <TouchableOpacity
-                        style={styles.buttonChangePasswordContainer}>
-                        <Text
-                          style={{ color: CUSTOM_COLOR.White }}
-                          onPress={() => navigation.navigate('ChangePassword')}>
-                          Change Password
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </>
 
-                <View style={{ width: '100%', height: 15 }} />
 
                 <>
                   <View style={{ width: '100%', height: 65 }}>

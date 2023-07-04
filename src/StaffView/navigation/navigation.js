@@ -1,6 +1,6 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OverView from '../screens/OverView.js';
 import ViewShop1 from '../screens/ViewShop1.js';
 import ViewShop2 from '../screens/ViewShop2.js';
@@ -19,13 +19,14 @@ import AddProduct from '../screens/AddProduct.js';
 import DeTailDelivery from '../screens/DeTailDelivery.js';
 import ReView from '../screens/ReView.js';
 import ChatScreenStaff from '../screens/ChatScreenStaff.js';
+import ChangeProfile from '../screens/ChangeProfile.js';
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Test"
-        screenOptions={{headerShown: false}}>
+        screenOptions={{ headerShown: false }}>
         <Stack.Screen name="OverView" component={OverView} />
         <Stack.Screen name="ViewShop1" component={ViewShop1} />
         <Stack.Screen name="ViewShop2" component={ViewShop2} />
@@ -44,6 +45,8 @@ function StackNavigator() {
         <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
         <Stack.Screen name="Review" component={ReView} />
         <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
+        <Stack.Screen name="ChangeProfile" component={ChangeProfile} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
