@@ -212,14 +212,17 @@ function HomeScreenCustomer({ navigation }) {
         /> */}
 
         <View style={{
-          height: 150
+
+          height: 175
         }}>
 
           <Swiper
             autoplay
             loop
             style={{
-              flexDirection: 'row'
+              flexDirection: 'row',
+
+              height: '90%'
             }}
           >
 
@@ -266,7 +269,7 @@ function HomeScreenCustomer({ navigation }) {
         </View>
 
 
-        <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: -40 }}>
           <Text style={styles.textView}>Trending now</Text>
           <TouchableOpacity
             onPress={() => {

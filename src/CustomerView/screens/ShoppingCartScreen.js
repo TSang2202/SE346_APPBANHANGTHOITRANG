@@ -11,6 +11,7 @@ import { collection, doc, setDoc, getDocs, query, where, onSnapshot, updateDoc, 
 import { Firestore } from "../../../Firebase/firebase";
 import { product } from "../../StaffView/assets/icons";
 import { async } from "@firebase/util";
+import LoadingComponent from "../components/Loading";
 
 
 function ShoppingCartScreen({ navigation, route }) {
@@ -97,6 +98,15 @@ function ShoppingCartScreen({ navigation, route }) {
         }, 0)
 
         setTotalMoney(sum)
+    }
+
+
+    const GoToProduct = (sanPham) => {
+        const unsub = onSnapshot(doc(Firestore, "SANPHAM", sanPham.MaSP), (doc) => {
+            const item = doc.data();
+            console.log("Current data: ", doc.data());
+            navigation.navigate('DetailProduct', { item })
+        });
     }
 
     const updateNumber = async (item) => {
@@ -222,6 +232,7 @@ function ShoppingCartScreen({ navigation, route }) {
                             onPressUp={() => UpNumber(item)}
                             onPressDown={() => DownNumber(item)}
                             onPressDelete={() => DeleteProduct(item)}
+                            onPressProduct={() => { GoToProduct(item) }}
                         />
 
 

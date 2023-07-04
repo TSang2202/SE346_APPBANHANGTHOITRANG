@@ -45,7 +45,7 @@ const Promotion = (props: any) => {
                     <Text style={{
                         color: CUSTOM_COLOR.Black
                     }}>Đơn tối thiểu {props.minimum} đ</Text>
-                    <Text>HSD: {props.expiry}</Text>
+                    <Text>{props.expiry}</Text>
                 </View>
 
             </View>
