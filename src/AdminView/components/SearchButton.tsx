@@ -67,7 +67,7 @@ interface SearchInputProps {
         <View style={styles.modalContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Search Product"
+            placeholder="Search"
             value={searchText}
             onChangeText={setSearchText}
             onSubmitEditing={handleSearchTextSubmit}
