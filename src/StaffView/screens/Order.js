@@ -383,7 +383,8 @@ export default function Order({ navigation }) {
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
                 <View style={{
-                    height: '85%'
+                    height: '100%',
+                    backgroundColor: CUSTOM_COLOR.White
                 }}>
 
                     <FlatList
@@ -510,7 +511,10 @@ export default function Order({ navigation }) {
                     </Status>
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
+                <View style={{
+                    height: '100%',
+                    backgroundColor: CUSTOM_COLOR.White
+                }}>
 
                     <FlatList
                         data={donHangOnWait}
@@ -631,7 +635,10 @@ export default function Order({ navigation }) {
                     </Status>
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
+                <View style={{
+                    height: '100%',
+                    backgroundColor: CUSTOM_COLOR.White
+                }}>
 
                     <FlatList
                         data={donHangDelivering}
@@ -757,7 +764,10 @@ export default function Order({ navigation }) {
                     </Status>
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
+                <View style={{
+                    height: '100%',
+                    backgroundColor: CUSTOM_COLOR.White
+                }}>
 
                     <FlatList
                         data={donHangDelivered}
