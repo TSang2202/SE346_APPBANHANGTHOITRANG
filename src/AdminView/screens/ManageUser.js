@@ -1,26 +1,29 @@
-import { getAuth } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Alert,
-  FlatList,
-  Image,
-  SafeAreaView,
   StyleSheet,
+  SafeAreaView,
+  View,
   Text,
   TouchableOpacity,
-  View,
+  Image,
+  FlatList,
+  Alert,
 } from 'react-native';
-import { firebase } from '../../../Firebase/firebase';
+import Search from '../components/Search';
+import ButtonDetail from '../components/ButtonDetail';
+import OneStaff from '../components/OneStaff';
+import { IM_AnhGiay1 } from '../../CustomerView/assets/images';
+import HeaderWithBack from '../components/HeaderWithBack';
+import CUSTOM_COLOR from '../constants/colors';
 import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
-import { IC_User } from '../assets/icons';
 import AccountCard from '../components/AccountCard';
+import { firebase, Firestore } from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
+
 import { Storage } from '../../../Firebase/firebase';
 import { IC_User } from '../assets/icons';
 import { Avatar, ListItem } from 'react-native-elements';
 import { getAuth, deleteUser } from 'firebase/auth';
-import SearchButton from '../components/SearchButton';
-import CUSTOM_COLOR from '../constants/colors';
 
 
 export const Acount = {
@@ -43,11 +46,8 @@ const ManageUser = props => {
   const [imageUrl, setImageUrl] = useState(null);
   const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
-  const [searchTerm, setSearchTerm] = useState([]);
 
-  const handleSearch = (searchTerm) => {
-    setSearchTerm(searchTerm);
-  };
+
   useEffect(() => {
     setTimeout(() => {
       // Assume data is fetched here
@@ -55,10 +55,12 @@ const ManageUser = props => {
       // setData(fetchedData);
       setIsLoading(false);
     }, 2000);
+
     fetchUserData(firebase.auth().currentUser.uid);
     fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
       setImageUrl(url),
     );
+
     const fetchUsers = async () => {
       try {
         const querySnapshot = await firebase
@@ -66,12 +68,12 @@ const ManageUser = props => {
           .collection('NGUOIDUNG')
           .get();
         const allUserData = querySnapshot.docs.map(doc => doc.data());
-
         setUsers(allUserData);
       } catch (error) {
         console.error('Error retrieving users: ', error);
       }
     };
+
     // const fetchUserAvata = async() => {
     //   try {
     //     const documentSnapshot = await firebase
@@ -85,7 +87,9 @@ const ManageUser = props => {
     //     console.error('Error fetching image URL:', error);
     //     return null;
     //   }
+
     // }
+
     fetchUsers();
   }, []);
 
@@ -97,8 +101,9 @@ const ManageUser = props => {
       if (userDoc.exists) {
         const userData = userDoc.data();
 
-      }
-      else {
+        setUserData(userData);
+      } else {
+
         console.log('User document does not exist');
       }
     } catch (error) {
@@ -166,11 +171,6 @@ const ManageUser = props => {
       </View>
     </TouchableOpacity>
   );
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const handleSearch = searchTerm => {
-    setSearchTerm(searchTerm);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -230,11 +230,9 @@ const ManageUser = props => {
 
           <>
             <View style={styles.searchContainer}>
-              <SearchButton
-                style={styles.SearchButtonView}
-                onSearch={handleSearch}
-              />
+
               <View style={{ width: '5%', height: '100%' }} />
+
               <View style={styles.searchViewContainer}>
                 <Search
                   placeholder="Search"
@@ -244,10 +242,6 @@ const ManageUser = props => {
                     backgroundColor: CUSTOM_COLOR.White,
                   }}
                 />
-                {/* <SearchButton
-                  style={styles.SearchButtonView}
-                  onSearch={handleSearch}
-                /> */}
               </View>
               <View style={{ width: '5%', height: '100%' }} />
               <TouchableOpacity style={styles.butAddContainer}>
@@ -309,13 +303,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  SearchButtonView: {
-    justifyContent: 'center',
-    alignItems: 'center',
 
-  },
+
   searchViewContainer: {
-    width: '50%',
+    width: '60%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
@@ -329,7 +320,6 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOM_COLOR.FlushOrange,
     borderRadius: 5,
     borderWidth: 1,
-    marginRight: 20,
   },
   listViewContainer: {
     flex: 10,
