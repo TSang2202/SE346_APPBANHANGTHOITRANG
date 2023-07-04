@@ -9,7 +9,8 @@ import {
   Image,
   Text,
   TextInput,
-  Alert,
+  Platform,
+  Button,
 } from 'react-native';
 import CUSTOM_COLOR from '../../AdminView/constants/colors';
 import FONT_FAMILY from '../constants/fonts';
@@ -19,13 +20,14 @@ import { IC_User } from '../assets/icons';
 import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { firebase } from '../../../Firebase/firebase';
-import LoadingComponent from '../components/Loading';
+import LoadingComponent from '../../AdminView/components/Loading';
 import CustomButton from '../../Login_SignUp/components/Buttons/CustomButton';
 // import ImagePicker from 'react-native-image-picker';
 const ImagePicker = require('react-native-image-picker');
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { ref, uploadBytes, put, getDownloadURL } from "firebase/storage";
 import { Firestore, Storage } from '../../../Firebase/firebase'
+
 
 const ChangeProfile = props => {
   const { navigation } = props;
@@ -197,7 +199,6 @@ const ChangeProfile = props => {
     }
   };
 
-
   const UploadFile = async () => {
     try {
       const blob = await new Promise((resolve, reject) => {
@@ -294,6 +295,7 @@ const ChangeProfile = props => {
     getCurrentDate();
   }, []);
 
+
   const chooseImage = () => {
     const options = {
       title: 'Select Image',
@@ -317,6 +319,7 @@ const ChangeProfile = props => {
       }
     });
   }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -504,7 +507,7 @@ const ChangeProfile = props => {
                         onChange={item => {
                           setValue(item.id);
                           setIsFocus(false);
-                          setGender(item.id);
+                          setGender(item.id)
                         }}
                       />
                     </View>
@@ -607,6 +610,8 @@ const ChangeProfile = props => {
 
                 <View style={{ width: '100%', height: 15 }} />
 
+
+
                 <>
                   <View style={{ width: '100%', height: 65 }}>
                     <View style={styles.buttonContainer}>
@@ -614,6 +619,7 @@ const ChangeProfile = props => {
                         type="primary"
                         text="Save"
                         onPress={() => {
+                          navigation.goBack();
                           updateFullname(
                             firebase.auth().currentUser.uid,
                             fullName,
@@ -636,13 +642,6 @@ const ChangeProfile = props => {
                           updateBirth(firebase.auth().currentUser.uid, birth);
 
                           { image ? updateAvatar(firebase.auth().currentUser.uid, image) : null }
-
-
-                          Alert.alert(
-                            'Sucess',
-                            'Your profile updated successfully!',
-                          );
-                          navigation.goBack();
                         }}
                       />
                     </View>
@@ -678,6 +677,15 @@ const styles = StyleSheet.create({
   avataContainer: {
     width: '100%',
     height: '67%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonChangePasswordContainer: {
+    width: '60%',
+    height: '70%',
+    marginRight: '5%',
+    backgroundColor: CUSTOM_COLOR.FlushOrange,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
