@@ -116,7 +116,7 @@ function DetailProduct({ navigation, route }) {
                 , where('MaND', '==', firebase.auth().currentUser.uid)
                 , where('MaSP', '==', item.MaSP));
             const querySnapshot = await getDocs(q);
-            console.log(querySnapshot);
+           // console.log(querySnapshot);
             querySnapshot.forEach((doc) => {
                 deleteDoc(doc.ref).then(() => {
                     console.log('Xóa tài liệu thành công');
@@ -124,19 +124,18 @@ function DetailProduct({ navigation, route }) {
                     console.error('Lỗi khi xóa tài liệu:', error);
                 });
             });
-        } catch (error) {
-            console.log(error);
-        }
+            } catch(error){
+                console.log(error);
+            }
+   }
+   const SetLove = async () =>{
 
-    }
-    const SetLove = async () => {
         setlove(!love);
     }
     const setDataYeuThich = async () => {
         await SetLove();
         let check = love;
-        console.log('jsssssss' + check);
-        if (check == false) {
+        if(check == false){
             addYeuThich()
         }
         else {
