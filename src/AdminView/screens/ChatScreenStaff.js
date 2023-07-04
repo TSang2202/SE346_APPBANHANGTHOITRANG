@@ -1,13 +1,35 @@
 import {
-  Timestamp, addDoc, collection, doc,
-  getDoc, onSnapshot, orderBy, query, updateDoc, where
-} from "firebase/firestore";
-import { default as React, useEffect, useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Firestore } from "../../../Firebase/firebase";
-import { IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../assets/icons";
-import Message from "../components/Message";
-import CUSTOM_COLOR from "../constants/colors";
+  Timestamp,
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { Firestore } from '../../../Firebase/firebase';
+import {
+  IC_Attachment,
+  IC_Back,
+  IC_Camera,
+  IC_Emo,
+  IC_Send,
+} from '../../CustomerView/assets/icons';
+import Message from '../components/Message';
+import CUSTOM_COLOR from '../constants/colors';
 
 function ChatScreenStaff({navigation, route}) {
   const {item} = route.params;
@@ -36,16 +58,6 @@ function ChatScreenStaff({navigation, route}) {
 
     const docSnapshot = await getDoc(chatDocRef);
 
-    const getDataMessage = async () => {
-        const q = query(collection(Firestore, "CHITIETCHAT"), orderBy("ThoiGian", "asc"), where("MaChat", "==", item.MaChat));
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const data = [];
-            querySnapshot.forEach((doc) => {
-                data.push(doc.data());
-            });
-            console.log(data);
-            setMessage(data);
-        });
     if (docSnapshot.exists()) {
       console.log(
         'Current data: ',
@@ -225,11 +237,12 @@ function ChatScreenStaff({navigation, route}) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: CUSTOM_COLOR.White
   },
 });
-}
+
 export default ChatScreenStaff;
