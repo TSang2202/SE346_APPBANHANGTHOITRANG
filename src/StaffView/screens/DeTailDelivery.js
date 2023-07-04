@@ -85,9 +85,7 @@ export default function DeTailDelivery({ navigation, route }) {
             </Image>
             <Text style={{ color: CUSTOM_COLOR.Black, marginLeft: 5, fontSize: 20 }}>Address</Text>
           </View>
-          <TouchableOpacity>
-            <Text style={{ color: CUSTOM_COLOR.DarkBlue, marginRight: 20, fontSize: 20, fontWeight: 'bold' }}>COPY</Text>
-          </TouchableOpacity>
+
         </View>
         <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
           <Text>{item.TenND}</Text>
@@ -96,27 +94,7 @@ export default function DeTailDelivery({ navigation, route }) {
 
         </View>
       </View>
-      <View style={{ width: '100%', height: 10, marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-      <View style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
-        <View style={{ width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between' }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Image
-              source={Delivery}
-              style={{ width: 30, height: 30, marginLeft: 18 }}
-              resizeMode='contain'
-            >
-            </Image>
-            <Text style={{ color: CUSTOM_COLOR.Black, marginLeft: 5, fontSize: 20 }}>Delivery</Text>
-          </View>
-          <TouchableOpacity>
-            <Text style={{ color: CUSTOM_COLOR.DarkBlue, marginRight: 20, fontSize: 20, fontWeight: 'bold' }}>SEE</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
-          <Text>{DataDelivery.CTY}</Text>
-          <Text>Delivery Code: {DataDelivery.Code}</Text>
-        </View>
-      </View>
+
       <View style={{ width: '100%', height: 10, marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
       <View style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
         <View style={{ width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between' }}>
@@ -131,10 +109,53 @@ export default function DeTailDelivery({ navigation, route }) {
           </View>
         </View>
         <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
-          <Text>Provisional: {item.TamTinh}</Text>
-          <Text>Delivery fee: {item.PhiVanChuyen}</Text>
-          <Text>Discount: -{item.GiamGia}</Text>
-          <Text>Total: {item.TongTien}</Text>
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            <Text style={{
+              fontWeight: 'bold'
+            }}>Provisional: </Text>
+            <Text>{item.TamTinh} </Text>
+            <Text style={{
+              fontStyle: 'italic'
+            }}>VND</Text>
+          </View>
+
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            <Text style={{
+              fontWeight: 'bold'
+            }}>Delivery fee: </Text>
+            <Text>{item.PhiVanChuyen} </Text>
+            <Text style={{
+              fontStyle: 'italic'
+            }}>VND</Text>
+          </View>
+
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            <Text style={{
+              fontWeight: 'bold'
+            }}>Discount: </Text>
+            <Text>- {item.GiamGia} </Text>
+            <Text style={{
+              fontStyle: 'italic'
+            }}>VND</Text>
+          </View>
+
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            <Text style={{
+              fontWeight: 'bold'
+            }}>Total: </Text>
+            <Text>{item.TongTien} </Text>
+            <Text style={{
+              fontStyle: 'italic'
+            }}>VND</Text>
+          </View>
         </View>
       </View>
       <View style={{ width: '100%', height: 10, marginTop: 20, backgroundColor: CUSTOM_COLOR.LightGray }}></View>

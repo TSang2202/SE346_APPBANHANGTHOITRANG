@@ -1,6 +1,6 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddAccount from '../screens/AddAccount';
 import AddProduct from '../screens/AddProduct';
 import AddPromotion from '../screens/AddPromotion';
@@ -27,19 +27,20 @@ import ChangeProfile from '../screens/ChangeProfile';
 import ChangePassword from '../screens/ChangePassword';
 import EditPromotion from '../screens/EditPromotion';
 
+
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator
       initialRouteName="AdminOverView"
-      screenOptions={{headerShown: false}}>
+      screenOptions={{ headerShown: false }}>
       <Stack.Screen name="AddAccount" component={AddAccount} />
       <Stack.Screen name="AddProduct" component={AddProduct} />
       <Stack.Screen name="AddPromotion" component={AddPromotion} />
       <Stack.Screen name="AdminOverView" component={AdminOverView} />
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
-      <Stack.Screen name="DeTailDelivery" component={DeTailDelivery} />
+      <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
       <Stack.Screen name="DeTailsChat" component={DeTailsChat} />
       <Stack.Screen name="EditAccount" component={EditAccount} />
       <Stack.Screen name="EditProduct" component={EditProduct} />
@@ -58,6 +59,7 @@ function StackNavigator() {
       <Stack.Screen name="ChangeProfile" component={ChangeProfile} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="EditPromotion" component={EditPromotion} />
+
     </Stack.Navigator>
   );
 }
