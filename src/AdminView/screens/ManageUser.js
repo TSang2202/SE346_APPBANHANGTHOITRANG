@@ -15,10 +15,10 @@ import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
 import { IC_User } from '../assets/icons';
 import AccountCard from '../components/AccountCard';
 import LoadingComponent from '../components/Loading';
-import {Storage} from '../../../Firebase/firebase';
-import {IC_User} from '../assets/icons';
-import {Avatar, ListItem} from 'react-native-elements';
-import {getAuth, deleteUser} from 'firebase/auth';
+import { Storage } from '../../../Firebase/firebase';
+import { IC_User } from '../assets/icons';
+import { Avatar, ListItem } from 'react-native-elements';
+import { getAuth, deleteUser } from 'firebase/auth';
 import SearchButton from '../components/SearchButton';
 import CUSTOM_COLOR from '../constants/colors';
 
@@ -37,15 +37,15 @@ export const Acount = {
 };
 
 const ManageUser = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
   const [searchTerm, setSearchTerm] = useState([]);
-  
-  const handleSearch = (searchTerm) =>{
+
+  const handleSearch = (searchTerm) => {
     setSearchTerm(searchTerm);
   };
   useEffect(() => {
@@ -96,8 +96,8 @@ const ManageUser = props => {
 
       if (userDoc.exists) {
         const userData = userDoc.data();
-        
-      } 
+
+      }
       else {
         console.log('User document does not exist');
       }
@@ -124,7 +124,7 @@ const ManageUser = props => {
 
   const handleUserPress = user => {
     // Navigate to the edit screen with the selected user data
-    navigation.navigate('EditAccount', {user});
+    navigation.navigate('EditAccount', { user });
   };
 
   const handleDeleteUser = async uid => {
@@ -154,11 +154,11 @@ const ManageUser = props => {
       });
   };
 
-  const renderUser = ({item}) => (
+  const renderUser = ({ item }) => (
     <TouchableOpacity onPress={() => handleUserPress(item)}>
       <View style={{}}>
         <AccountCard
-          source={{uri: item.Avatar}}
+          source={{ uri: item.Avatar }}
           name={item.TenND}
           userType={item.LoaiND}
           onPress={() => handleResetPassword(item.Email)}
@@ -174,7 +174,7 @@ const ManageUser = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 15}} />
+      <View style={{ width: '100%', height: 15 }} />
 
       {userData ? (
         <>
@@ -182,7 +182,7 @@ const ManageUser = props => {
             <View style={styles.avataContainer}>
               {imageUrl ? (
                 <Image
-                  source={{uri: imageUrl}}
+                  source={{ uri: imageUrl }}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -208,13 +208,13 @@ const ManageUser = props => {
                 />
               )}
             </View>
-            <View style={{width: 15, height: '100%'}} />
-            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-              <Text style={[styles.textViewStyles, {fontSize: 20}]}>
+            <View style={{ width: 15, height: '100%' }} />
+            <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+              <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
                 {userData.TenND}
               </Text>
-              <View style={{width: '100%', height: 5}} />
-              <Text style={[styles.textViewStyles, {fontSize: 15}]}>
+              <View style={{ width: '100%', height: 5 }} />
+              <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
                 {userData.LoaiND}
               </Text>
             </View>
@@ -230,11 +230,11 @@ const ManageUser = props => {
 
           <>
             <View style={styles.searchContainer}>
-            <SearchButton 
-                  style = {styles.SearchButtonView}
-                  onSearch={handleSearch}
+              <SearchButton
+                style={styles.SearchButtonView}
+                onSearch={handleSearch}
               />
-              <View style={{width: '5%', height: '100%'}} />
+              <View style={{ width: '5%', height: '100%' }} />
               <View style={styles.searchViewContainer}>
                 <Search
                   placeholder="Search"
@@ -249,10 +249,10 @@ const ManageUser = props => {
                   onSearch={handleSearch}
                 /> */}
               </View>
-              <View style={{width: '5%', height: '100%'}} />
+              <View style={{ width: '5%', height: '100%' }} />
               <TouchableOpacity style={styles.butAddContainer}>
                 <Text
-                  style={{color: CUSTOM_COLOR.White}}
+                  style={{ color: CUSTOM_COLOR.White }}
                   onPress={() => navigation.navigate('AddAccount')}>
                   Add Account
                 </Text>
@@ -271,7 +271,7 @@ const ManageUser = props => {
               />
             </View>
           </>
-          <View style={{width: '100%', height: 20}} />
+          <View style={{ width: '100%', height: 20 }} />
         </>
       ) : (
         <LoadingComponent text="Loading data..." />
@@ -309,10 +309,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  SearchButtonView:{
+  SearchButtonView: {
     justifyContent: 'center',
     alignItems: 'center',
-    
+
   },
   searchViewContainer: {
     width: '50%',
