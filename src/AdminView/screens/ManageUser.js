@@ -12,16 +12,10 @@ import {
 } from 'react-native';
 import { firebase } from '../../../Firebase/firebase';
 import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
-import { IC_User } from '../assets/icons';
 import AccountCard from '../components/AccountCard';
 import LoadingComponent from '../components/Loading';
-import {Storage} from '../../../Firebase/firebase';
-import {IC_User} from '../assets/icons';
-import {Avatar, ListItem} from 'react-native-elements';
-import {getAuth, deleteUser} from 'firebase/auth';
 import SearchButton from '../components/SearchButton';
 import CUSTOM_COLOR from '../constants/colors';
-
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -44,10 +38,10 @@ const ManageUser = props => {
   const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
   const [searchTerm, setSearchTerm] = useState([]);
-  
+  const [searchResults, setSearchResults] = useState([]);
   const handleSearch = (searchTerm) =>{
     setSearchTerm(searchTerm);
-  };
+    };
   useEffect(() => {
     setTimeout(() => {
       // Assume data is fetched here
@@ -67,7 +61,7 @@ const ManageUser = props => {
           .get();
         const allUserData = querySnapshot.docs.map(doc => doc.data());
 
-        setUsers(allUserData);
+           setUsers(allUserData);
       } catch (error) {
         console.error('Error retrieving users: ', error);
       }
@@ -166,11 +160,6 @@ const ManageUser = props => {
       </View>
     </TouchableOpacity>
   );
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const handleSearch = searchTerm => {
-    setSearchTerm(searchTerm);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -236,18 +225,7 @@ const ManageUser = props => {
               />
               <View style={{width: '5%', height: '100%'}} />
               <View style={styles.searchViewContainer}>
-                <Search
-                  placeholder="Search"
-                  style={{
-                    width: 200,
-                    height: 35,
-                    backgroundColor: CUSTOM_COLOR.White,
-                  }}
-                />
-                {/* <SearchButton
-                  style={styles.SearchButtonView}
-                  onSearch={handleSearch}
-                /> */}
+                
               </View>
               <View style={{width: '5%', height: '100%'}} />
               <TouchableOpacity style={styles.butAddContainer}>
@@ -265,13 +243,13 @@ const ManageUser = props => {
               {/* Lay list nguoi dung ve hien thi */}
               {/* <AccountCard onPress={() => navigation.navigate('EditAccount')} /> */}
               <FlatList
-                data={users}
+                data ={searchResults.length > 0 ? searchResults:users}
                 renderItem={renderUser}
                 keyExtractor={item => item.id}
               />
             </View>
           </>
-          <View style={{width: '100%', height: 20}} />
+          <View style={{width: '100%', height: 20}}/>
         </>
       ) : (
         <LoadingComponent text="Loading data..." />
@@ -286,8 +264,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   accountContainer: {
-    width: '100%',
-    height: 120,
+    flex: 2.5,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -304,8 +281,7 @@ const styles = StyleSheet.create({
     color: CUSTOM_COLOR.Black,
   },
   searchContainer: {
-    width: '100%',
-    height: 65,
+    flex: 1.5,
     flexDirection: 'row',
     alignItems: 'center',
   },
