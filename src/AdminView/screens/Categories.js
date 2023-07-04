@@ -77,12 +77,14 @@ export default function Categories({ navigation }) {
                 backgroundColor: CUSTOM_COLOR.Alto,
                 height: '85%'
             }}>
-                {dataCategories.map((category) => {
+                {dataCategories.map((category, index) => {
                     return (
                         <ItemList
+                            key={index}
                             source={category.AnhDM}
                             namelist={category.TenDM}
                             numberitem={category.SoLuongSP}
+                            onPress={() => navigation.navigate('DetailsCategory', { category })}
                         />
                     );
                 })
