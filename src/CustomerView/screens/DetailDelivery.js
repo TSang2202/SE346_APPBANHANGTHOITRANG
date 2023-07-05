@@ -20,7 +20,7 @@ const DataDelivery = {
   CTY: 'Fast Delivery VietNam',
   Code: '#JHGUJHCFJG'
 }
-export default function DeTailDelivery({ navigation, route }) {
+export default function DeTailDelivery({navigation,route }) {
 
   const { item } = route.params
 

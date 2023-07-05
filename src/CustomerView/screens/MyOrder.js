@@ -489,7 +489,7 @@ export default function Order({navigation}) {
                                     ></FlatList>
 
                                     <TouchableOpacity
-                                        //onPress={() => { navigation.navigate('DetailsDelivery', { item }) }}
+                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -611,7 +611,7 @@ export default function Order({navigation}) {
                                         }}
                                     ></FlatList>
                                     <TouchableOpacity
-                                        //onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
+                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -721,7 +721,7 @@ export default function Order({navigation}) {
                                     ></FlatList>
 
                                     <TouchableOpacity
-                                        //onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
+                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -828,7 +828,7 @@ export default function Order({navigation}) {
                                         keyExtractor={() => item.MaSP}
                                     ></FlatList>
                                     <TouchableOpacity
-                                        //onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
+                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -901,7 +901,7 @@ export default function Order({navigation}) {
                 }}>
 
                     <FlatList
-                        data={donHangConfirm}
+                        data={donHangCancel}
                         contentContainerStyle={{ paddingBottom: 50 }}
                         renderItem={({ item }) => {
                             //console.log(item)
@@ -937,7 +937,7 @@ export default function Order({navigation}) {
                                     ></FlatList>
 
                                     <TouchableOpacity
-                                        //onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
+                                        onPress={() => { navigation.navigate('DeTailsDelivery', {item}) }}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10

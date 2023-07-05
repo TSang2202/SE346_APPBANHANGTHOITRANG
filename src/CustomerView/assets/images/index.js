@@ -11,4 +11,5 @@ export {default as IM_AnhGiay1} from '../images/AnhGiay1.png'
 export {default as IM_AnhGiay2} from '../images/AnhGiay2.png'
 export {default as IM_AnhGiay3} from '../images/AnhGiay3.png'
 export {default as IM_AnhGiay4} from '../images/AnhGiay4.png'
+export {default as IM_Logo} from '../images/logo.jpg'
 
