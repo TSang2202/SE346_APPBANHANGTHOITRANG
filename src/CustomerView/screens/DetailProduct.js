@@ -21,6 +21,8 @@ function DetailProduct({ navigation, route }) {
     //
     const [love, setlove] = useState(false)
     //
+    const [tong, settong] = useState()
+    const [tb, settb] = useState()
     const { item } = route.params
     const [chooseStyle, setChooseStyle] = useState(false)
     const [numProduct, setNumProduct] = useState(1)
@@ -128,6 +130,33 @@ function DetailProduct({ navigation, route }) {
                 console.log(error);
             }
    }
+   const getdataReview = () =>{
+    try{
+        const q = query(collection(Firestore, "DANHGIA"), where("MaSP", "==", item.MaSP));
+        const querySnapshot = onSnapshot(q, async (snapshot) => {
+        const items = [];
+        snapshot.forEach(documentSnapshot => {
+        items.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+        });
+        });
+        console.log(items.length);
+        let sum = 0;
+        if(items.length != 0){
+            for(let i = 0; i < items.length; i++){
+                sum += items[i].Rating;
+            }
+            settong(items.length);
+            console.log(tong);
+            settb(sum/items.length);
+            console.log(tb);
+        }
+        })
+    }catch(error){
+        console.log(error);
+    }
+}
    const SetLove = async () =>{
 
         setlove(!love);
@@ -163,6 +192,7 @@ function DetailProduct({ navigation, route }) {
     useEffect(() => {
         console.log(item.Size)
         getstatusYeuThich();
+        getdataReview()
     }, [])
 
     return (
@@ -302,12 +332,13 @@ function DetailProduct({ navigation, route }) {
                 marginHorizontal: 40,
                 alignItems: 'center'
             }}>
+                <Text style = {{marginRight: 10}}>{tb}</Text>
                 <StarRating
                     nums={5}
-                    fill={item.DanhGiaTB}
+                    fill={tb}
                 />
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Review')}
+                    onPress={() => navigation.navigate('Review', {item})}
                 >
                     <Text style={{
                         marginHorizontal: 40,
