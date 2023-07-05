@@ -499,8 +499,8 @@ export default function Order({navigation}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{ marginLeft: 35 }}>Item Code</Text>
-                                        <Text style={{ marginRight: 35 }}>{item.MaDH}</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
                                     <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
                                         <TouchableOpacity
@@ -508,14 +508,13 @@ export default function Order({navigation}) {
                                                 CancelDonHang(item)
                                             }}
                                             style={{
-                                                width: '80%',
+                                                width: '100%',
                                                 height: '100%',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
                                                 backgroundColor: CUSTOM_COLOR.DarkOrange,
                                                 paddingHorizontal: 20,
                                                 alignSelf: 'center',
-                                                borderRadius: 15,
 
                                             }}
                                         >
@@ -621,8 +620,8 @@ export default function Order({navigation}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{ marginLeft: 35 }}>Item Code</Text>
-                                        <Text style={{ marginRight: 35 }}>{item.MaDH}</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
                                 </View>
                             )
@@ -731,8 +730,8 @@ export default function Order({navigation}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{ marginLeft: 35 }}>Item Code</Text>
-                                        <Text style={{ marginRight: 35 }}>{item.MaDH}</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
 
                                 </View>
@@ -838,8 +837,8 @@ export default function Order({navigation}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{ marginLeft: 35 }}>Item Code</Text>
-                                        <Text style={{ marginRight: 35 }}>{item.MaDH}</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
 
                                 </View>
@@ -947,8 +946,8 @@ export default function Order({navigation}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{ marginLeft: 35 }}>Item Code</Text>
-                                        <Text style={{ marginRight: 35 }}>{item.MaDH}</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
                                     <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
                                         <TouchableOpacity
@@ -956,14 +955,13 @@ export default function Order({navigation}) {
                                                 ConfirmDonHang(item)
                                             }}
                                             style={{
-                                                width: '80%',
+                                                width: '100%',
                                                 height: '100%',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
                                                 backgroundColor: CUSTOM_COLOR.DarkOrange,
                                                 paddingHorizontal: 20,
                                                 alignSelf: 'center',
-                                                borderRadius: 15,
 
                                             }}
                                         >
