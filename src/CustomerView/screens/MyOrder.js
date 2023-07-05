@@ -499,7 +499,7 @@ export default function Order({navigation, route}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 ,fontWeight: 'bold'}}>Item Code</Text>
                                         <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
                                     <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
@@ -596,13 +596,16 @@ export default function Order({navigation, route}) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP[0]}
-                                                        title={item.SanPham.TenSP}
-                                                        price={item.SanPham.GiaSP}
-                                                        number={item.SoLuong}
-                                                        totalPrice={item.ThanhTien}
-                                                        Code={item.MaDH}
-                                                       
+                                                         source={item.SanPham.HinhAnhSP[0]}
+                                                         title={item.SanPham.TenSP}
+                                                         price={item.SanPham.GiaSP}
+                                                         number={item.SoLuong}
+                                                         totalPrice={item.ThanhTien}
+                                                         color={item.MauSac}
+                                                         size={item.Size}
+                                                         Code={item.MaDH}
+                                                         onPress={() => {  }}
+                                                         PressConfirm={() => { }}
                                                     ></OneOrder>
                                                 </View>
 
@@ -610,7 +613,7 @@ export default function Order({navigation, route}) {
                                         }}
                                     ></FlatList>
                                     <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item })}}
+                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
                                         
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
@@ -621,7 +624,7 @@ export default function Order({navigation, route}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35,fontWeight: 'bold' }}>Item Code</Text>
                                         <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
                                 </View>
@@ -645,7 +648,7 @@ export default function Order({navigation, route}) {
                     ></BackTo>
                 </View>
                 <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <Status
+                <Status
                         title='Confirm'
                         Color={CUSTOM_COLOR.Black}
                         onPress={() => { setConfirm(true), setDelivering(false) }}
@@ -681,10 +684,13 @@ export default function Order({navigation, route}) {
                     </Status>
                 </View>
                 <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
+                <View style={{
+                    height: '85%'
+                }}>
 
                     <FlatList
                         data={donHangDelivering}
+                        contentContainerStyle={{ paddingBottom: 50 }}
                         renderItem={({ item }) => {
                             //console.log(item)
                             return (
@@ -695,6 +701,7 @@ export default function Order({navigation, route}) {
                                     />
                                     <FlatList
                                         data={item.DatHang}
+
                                         renderItem={({ item }) => {
 
                                             console.log(item)
@@ -707,21 +714,20 @@ export default function Order({navigation, route}) {
                                                         price={item.SanPham.GiaSP}
                                                         number={item.SoLuong}
                                                         totalPrice={item.ThanhTien}
+                                                        color={item.MauSac}
+                                                        size={item.Size}
                                                         Code={item.MaDH}
-                                        
+                                                        onPress={() => {  }}
+                                                        PressConfirm={() => { }}
                                                     ></OneOrder>
-
-
                                                 </View>
-
-
 
                                             )
                                         }}
                                     ></FlatList>
 
                                     <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item })}}
+                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -731,7 +737,7 @@ export default function Order({navigation, route}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 ,fontWeight: 'bold'}}>Item Code</Text>
                                         <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
 
@@ -811,15 +817,16 @@ export default function Order({navigation, route}) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP[0]}
-                                                        title={item.SanPham.TenSP}
-                                                        price={item.SanPham.GiaSP}
-                                                        number={item.SoLuong}
-                                                        totalPrice={item.ThanhTien}
-                                                        color={item.MauSac}
-                                                        size={item.Size}
-
-
+                                                         source={item.SanPham.HinhAnhSP[0]}
+                                                         title={item.SanPham.TenSP}
+                                                         price={item.SanPham.GiaSP}
+                                                         number={item.SoLuong}
+                                                         totalPrice={item.ThanhTien}
+                                                         color={item.MauSac}
+                                                         size={item.Size}
+                                                         Code={item.MaDH}
+                                                         onPress={() => {  }}
+                                                         PressConfirm={() => { }}
                                                     ></OneOrder>
 
                                                 </View>
@@ -828,7 +835,7 @@ export default function Order({navigation, route}) {
                                         keyExtractor={() => item.MaSP}
                                     ></FlatList>
                                     <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item })}}
+                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -838,7 +845,7 @@ export default function Order({navigation, route}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black,fontWeight: 'bold', marginLeft: 35 }}>Item Code</Text>
                                         <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
 
@@ -921,14 +928,16 @@ export default function Order({navigation, route}) {
                                                 <View>
 
                                                     <OneOrder
-                                                        source={item.SanPham.HinhAnhSP[0]}
-                                                        title={item.SanPham.TenSP}
-                                                        price={item.SanPham.GiaSP}
-                                                        number={item.SoLuong}
-                                                        totalPrice={item.ThanhTien}
-                                                        color={item.MauSac}
-                                                        size={item.Size}
-                                                        Code={item.MaDH}
+                                                         source={item.SanPham.HinhAnhSP[0]}
+                                                         title={item.SanPham.TenSP}
+                                                         price={item.SanPham.GiaSP}
+                                                         number={item.SoLuong}
+                                                         totalPrice={item.ThanhTien}
+                                                         color={item.MauSac}
+                                                         size={item.Size}
+                                                         Code={item.MaDH}
+                                                         onPress={() => {  }}
+                                                         PressConfirm={() => { }}
                                                     ></OneOrder>
                                                 </View>
 
@@ -937,7 +946,7 @@ export default function Order({navigation, route}) {
                                     ></FlatList>
 
                                     <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DeTailsDelivery', {item})}}
+                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -947,7 +956,7 @@ export default function Order({navigation, route}) {
                                     </TouchableOpacity>
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 }}>Item Code</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black,fontWeight: 'bold', marginLeft: 35 }}>Item Code</Text>
                                         <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
                                     <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
