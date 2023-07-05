@@ -135,9 +135,7 @@ function CustomerBottomTab() {
                             />
                                
                             </View>
-                    )
-                       
-                        
+                    )           
                     }
                 }}
             />

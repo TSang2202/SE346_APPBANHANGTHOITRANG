@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import CUSTOM_COLOR from '../constants/colors'
-
+import { IC_Chat } from '../../CustomerView/assets/icons'
 const OneOrder = (props: any) => {
   return (
     <View style={{ width: '100%', flexDirection: 'column', marginTop: 10, marginVertical: 10 }}>
       <View style={{ width: '100%', borderBottomWidth: 0.5, flexDirection: 'row' }}>
-        <Image source={{ uri: props.source }}
+        <Image source= {props.source ? { uri: props.source } : IC_Chat}
           style={{ width: 100, height: 100, marginLeft: 35 }}
           resizeMode='cover'
         ></Image>

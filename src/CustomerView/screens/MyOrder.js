@@ -15,7 +15,7 @@ import { Firestore, firebase } from '../../../Firebase/firebase'
 import { async } from '@firebase/util'
 
 
-export default function Order({navigation}) {
+export default function Order({navigation, route}) {
     const [confirm, setConfirm] = useState(true)
     const [onWait, setOnWait] = useState(false)
     const [delivering, setDelivering] = useState(false)
@@ -610,7 +610,8 @@ export default function Order({navigation}) {
                                         }}
                                     ></FlatList>
                                     <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
+                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item })}}
+                                        
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -720,7 +721,7 @@ export default function Order({navigation}) {
                                     ></FlatList>
 
                                     <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
+                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item })}}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -827,7 +828,7 @@ export default function Order({navigation}) {
                                         keyExtractor={() => item.MaSP}
                                     ></FlatList>
                                     <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item }) }}
+                                        onPress={() => { navigation.navigate('DeTailsDelivery', { item })}}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
@@ -936,7 +937,7 @@ export default function Order({navigation}) {
                                     ></FlatList>
 
                                     <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DeTailsDelivery', {item}) }}
+                                        onPress={() => { navigation.navigate('DeTailsDelivery', {item})}}
                                         style={{
                                             backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
                                             marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10

@@ -64,7 +64,7 @@ function ReviewScreen({navigation, route}) {
                 console.log(items);
                 settong(items.length);
                 console.log(tong);
-                settb(sum/items.length);
+                settb((Math.round(sum/data.length * 100) / 100).toFixed(2));
                 console.log(tb);
             }
             })
