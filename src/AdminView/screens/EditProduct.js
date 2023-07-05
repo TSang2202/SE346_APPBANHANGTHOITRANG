@@ -224,7 +224,7 @@ export default function EditProduct({navigation, route}) {
           <View style={{width: '100%', height: 60}}>
             <CustomHeader
               onPress={() => navigation.goBack()}
-              title="Product / Edit product"
+              title="Product/ Edit product"
             />
           </View>
         </>
@@ -556,7 +556,7 @@ export default function EditProduct({navigation, route}) {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <Text style={styles.titleInputStyle}>%</Text>
+                  {/* <Text style={styles.titleInputStyle}>%</Text> */}
                 </View>
               </View>
             </View>
@@ -626,18 +626,18 @@ export default function EditProduct({navigation, route}) {
               </View>
             </View>
           </>
-          <View style={{width: '100%', height: 10}} />
+          <View style={{width: '100%', height: 15}} />
           <>
             <View
               style={{
                 width: '100%',
-                height: 70,
+                height: 55,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
               <ButtonDetail
                 title="Save"
-                style={{width: 50, height: 50}}
+                style={{width: '100%', height: '90%'}}
                 onPress={() => {
                   UpdateData();
                 }}
@@ -645,6 +645,7 @@ export default function EditProduct({navigation, route}) {
               />
             </View>
           </>
+          <View style={{width: '100%', height: 15}} />
         </ScrollView>
       </View>
     </SafeAreaView>

@@ -1,17 +1,16 @@
+import React from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
   Image,
   ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import React from 'react';
-import {Acount} from './AdminOverView';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import CUSTOM_COLOR from '../constants/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import BackTo from '../components/BackTo';
+import CUSTOM_COLOR from '../constants/colors';
+import { Acount } from './AdminOverView';
 function Setting({navigation}) {
   const changeBackground = () => {};
   const changeAvatar = () => {};

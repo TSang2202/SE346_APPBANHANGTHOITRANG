@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -6,140 +6,109 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image, Alert
 } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
-import {border_add} from '../assets/images';
-import {Dropdown} from 'react-native-element-dropdown';
+import { border_add } from '../assets/images';
+import { Dropdown } from 'react-native-element-dropdown';
 import FONT_FAMILY from '../constants/fonts.js';
 import CUSTOM_COLOR from '../constants/colors.js';
+import { Firestore } from '../../../Firebase/firebase';
+import {
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
 
-const ImportProduct = props => {
-  const {navigation} = props;
+function ImportProduct({ navigation, route }) {
+  const { item } = route.params
   const [name, setName] = useState('');
+  const [quanity, setQuanity] = useState(0);
   const [description, setDescription] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const [danhMuc, setDanhMuc] = useState([]);
   const [value, setValue] = useState(null);
 
+  const isNumeric = input => {
+    return /^-?\d+$/.test(input);
+  };
+
+
+  const KiemTraNhapLieu = () => {
+    if (isNumeric(quanity)) return true
+    return false
+  }
+
+  const CapNhatSoLuong = () => {
+
+    if (!KiemTraNhapLieu()) {
+      Alert.alert(
+        'Notification',
+        'Please fill in the information accurately!',
+        [{ text: 'OK', style: 'cancel' }],
+      );
+      return;
+    }
+    const confirmRef = doc(Firestore, 'SANPHAM', item.MaSP);
+    updateDoc(confirmRef, {
+      SoLuongSP: item.SoLuongSP + parseInt(quanity, 10)
+    });
+
+    Alert.alert('Notification', 'Successfully added product quanity!', [
+      { text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' },
+    ]);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
       <>
         <View style={styles.headerContainer}>
           <CustomHeader
             onPress={() => navigation.goBack()}
-            title="Product/ Add new product"
+            title="Add product quantity"
           />
         </View>
       </>
 
-      <View style={{width: '100%', height: 50}} />
+      <View style={{ width: '100%', height: 50 }} />
 
       <>
         <View style={styles.bodyContainer}>
           <>
-            <View style={[styles.comboxContainer, {height: 110}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={[styles.unitComboContainer, {height: '20%'}]}>
-                <Text style={styles.titleInputStyle}>Categorize</Text>
-                <Text
-                  style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
-                  {' '}
-                  *
-                </Text>
-              </View>
-              <View
-                style={[
-                  styles.unitComboContainer,
-                  {
-                    justifyContent: 'center',
-                    height: '70%',
-                  },
-                ]}>
-                <Dropdown
-                  style={[styles.comboType, isFocus && {borderColor: 'blue'}]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={danhMuc}
-                  search
-                  maxHeight={200}
-                  labelField="TenDM"
-                  valueField="key"
-                  placeholder={!isFocus ? 'Select item' : '...'}
-                  searchPlaceholder="Search..."
-                  value={value}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
-                  onChange={item => {
-                    setValue(item.key);
-                    setIsFocus(false);
-                    setCategorize(item);
-                  }}
-                />
-              </View>
+            <View style={[styles.comboxContainer, { height: 150 }]}>
+
+              <Image
+                style={{
+                  height: 140,
+                  width: 140
+                }}
+                source={{ uri: item.HinhAnhSP[0] }}
+              />
+
+              <Text style={{
+                marginHorizontal: 20,
+                fontSize: 20,
+                fontWeight: 'bold'
+              }}>{item.TenSP}</Text>
+
             </View>
           </>
 
-          <View style={{width: '100%', height: 20}} />
+          <View style={{ width: '100%', height: 20 }} />
+
+
+
+          <View style={{ width: '100%', height: 20 }} />
 
           <>
-            <View style={[styles.comboxContainer, {height: 110}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={[styles.unitComboContainer, {height: '20%'}]}>
-                <Text style={styles.titleInputStyle}>Product</Text>
-                <Text
-                  style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
-                  {' '}
-                  *
-                </Text>
-              </View>
-              <View
-                style={[
-                  styles.unitComboContainer,
-                  {
-                    justifyContent: 'center',
-                    height: '70%',
-                  },
-                ]}>
-                <Dropdown
-                  style={[styles.comboType, isFocus && {borderColor: 'blue'}]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={danhMuc}
-                  search
-                  maxHeight={200}
-                  labelField="TenDM"
-                  valueField="key"
-                  placeholder={!isFocus ? 'Select item' : '...'}
-                  searchPlaceholder="Search..."
-                  value={value}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
-                  onChange={item => {
-                    setValue(item.key);
-                    setIsFocus(false);
-                    setCategorize(item);
-                  }}
-                />
-              </View>
-            </View>
-          </>
-
-          <View style={{width: '100%', height: 20}} />
-
-          <>
-            <View style={[styles.comboxContainer, {height: 110}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={[styles.unitComboContainer, {height: '20%'}]}>
+            <View style={[styles.comboxContainer1, { height: 110 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={[styles.unitComboContainer, { height: '20%' }]}>
                 <Text style={styles.titleInputStyle}>Quantiy</Text>
                 <Text
-                  style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                  style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                   {' '}
                   *
                 </Text>
@@ -154,23 +123,24 @@ const ImportProduct = props => {
                 ]}>
                 <TextInput
                   style={styles.comboType}
-                  onChangeText={text => setName(text)}
-                  value={name}
+                  onChangeText={text => setQuanity(text)}
+                  value={quanity.toString()}
+                  keyboardType='numeric'
                 />
               </View>
             </View>
           </>
 
-          <View style={{width: '100%', height: 50}} />
+          <View style={{ width: '100%', height: 50 }} />
 
           <>
             <View style={styles.buttonContainer}>
               <PromotionButton
                 type="secondary"
                 text="Save"
-                // onPress={() => {
-                //   navigation.navigate('AddPromotion');
-                // }}
+                onPress={() => {
+                  CapNhatSoLuong()
+                }}
               />
             </View>
           </>
@@ -203,7 +173,17 @@ const styles = StyleSheet.create({
     elevation: 1.5,
     borderRadius: 0.5,
     shadowColor: CUSTOM_COLOR.Black,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  comboxContainer1: {
+    width: '100%',
+    elevation: 1.5,
+    borderRadius: 0.5,
+    shadowColor: CUSTOM_COLOR.Black,
     flexDirection: 'column',
+
   },
   unitComboContainer: {
     width: '90%',
