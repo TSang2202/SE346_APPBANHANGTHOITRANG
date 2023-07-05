@@ -9,18 +9,18 @@ import {
   SafeAreaView,
   ImageBackground,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import BackTo from '../components/BackTo';
 import CUSTOM_COLOR from '../constants/colors';
 import ButtonDetail from '../components/ButtonDetail';
-import {AddImage} from '../assets/images';
+import { AddImage } from '../assets/images';
 import FONT_FAMILY from '../constants/fonts';
-import {border_add} from '../assets/images';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { border_add } from '../assets/images';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Search from '../components/Search';
 import Categorybutton from '../components/categorybutton';
 import CheckBox from 'react-native-check-box';
-import {Firestore, Storage} from '../../../Firebase/firebase';
+import { Firestore, Storage } from '../../../Firebase/firebase';
 import CustomHeader from '../components/CustomHeader';
 import {
   collection,
@@ -32,11 +32,11 @@ import {
   addDoc,
   updateDoc,
 } from 'firebase/firestore';
-import {ref, uploadBytes, put} from 'firebase/storage';
-import {Dropdown} from 'react-native-element-dropdown';
-import {firebase, storage} from 'firebase';
+import { ref, uploadBytes, put } from 'firebase/storage';
+import { Dropdown } from 'react-native-element-dropdown';
+import { firebase, storage } from 'firebase';
 
-export default function AddProduct({navigation}) {
+export default function AddProduct({ navigation }) {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -86,14 +86,14 @@ export default function AddProduct({navigation}) {
 
   const handleCheckColor = key => {
     const newList = color.map(item =>
-      item.key === key ? {...item, checked: !item.checked} : item,
+      item.key === key ? { ...item, checked: !item.checked } : item,
     );
     setColor(newList);
   };
 
   const handleCheckSize = id => {
     const newList = size.map(item =>
-      item.id === id ? {...item, checked: !item.checked} : item,
+      item.id === id ? { ...item, checked: !item.checked } : item,
     );
     setSize(newList);
   };
@@ -134,7 +134,7 @@ export default function AddProduct({navigation}) {
       MauSac: colors,
       Size: sizes,
       MaDM: value,
-      TrangThai: 'OnWait',
+      TrangThai: 'Inventory',
       SoLuongDaBan: 0,
       SoLuotYeuThich: 0,
       SoLuotXem: 0,
@@ -185,7 +185,7 @@ export default function AddProduct({navigation}) {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: CUSTOM_COLOR.White }}>
       <View
         style={{
           width: '90%',
@@ -194,21 +194,21 @@ export default function AddProduct({navigation}) {
           backgroundColor: CUSTOM_COLOR.White,
         }}>
         <>
-          <View style={{width: '100%', height: 60}}>
+          <View style={{ width: '100%', height: 60 }}>
             <CustomHeader
               onPress={() => navigation.goBack()}
-              title="Product / Add product"
+              title="Product/ Add product"
             />
           </View>
         </>
 
-        <ScrollView style={{backgroundColor: CUSTOM_COLOR.White}}>
-          <View style={{width: '100%', height: 10}} />
+        <ScrollView style={{ backgroundColor: CUSTOM_COLOR.White }}>
+          <View style={{ width: '100%', height: 10 }} />
           <>
             <View style={styles.addImageContainer}>
-              <View style={{width: 20, height: '100%'}} />
+              <View style={{ width: 20, height: '100%' }} />
               <TouchableOpacity
-                style={{width: 75, height: 75}}
+                style={{ width: 75, height: 75 }}
                 onPress={selectImage}>
                 <ImageBackground
                   style={{
@@ -222,38 +222,38 @@ export default function AddProduct({navigation}) {
                   <Text style={styles.icAddStyle}>+</Text>
                 </ImageBackground>
               </TouchableOpacity>
-              <View style={{width: 20, height: '100%'}} />
+              <View style={{ width: 20, height: '100%' }} />
               {image ? (
                 <ScrollView horizontal={true}>
                   {image.map(img => (
                     <Image
                       key={img.uri}
-                      source={{uri: img.uri}}
-                      style={{height: 90, width: 90, margin: 5}}
+                      source={{ uri: img.uri }}
+                      style={{ height: 90, width: 90, margin: 5 }}
                     />
                   ))}
                 </ScrollView>
               ) : (
-                <Text style={{marginLeft: 30}}>(Add picture or video)</Text>
+                <Text style={{ marginLeft: 30 }}>(Add picture or video)</Text>
               )}
             </View>
           </>
 
-          <View style={{width: '100%', height: 10}} />
+          <View style={{ width: '100%', height: 10 }} />
 
           <>
-            <View style={[styles.inputContainer, {height: 90}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-start'},
+                    { justifyContent: 'flex-start' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                   <Text style={styles.titleInputStyle}>Name Of Product</Text>
                   <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                     {' '}
                     *
                   </Text>
@@ -261,17 +261,17 @@ export default function AddProduct({navigation}) {
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-end'},
+                    { justifyContent: 'flex-end' },
                   ]}>
                   <Text style={styles.titleInputStyle}>{lengthName}/200</Text>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                 </View>
               </View>
-              <View style={{width: '100%', height: 5}} />
-              <View style={{flex: 2, flexDirection: 'row'}}>
-                <View style={{width: '5%', height: '100%'}} />
+              <View style={{ width: '100%', height: 5 }} />
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '5%', height: '100%' }} />
                 <TextInput
-                  style={{flex: 1, fontSize: 17}}
+                  style={{ flex: 1, fontSize: 17 }}
                   onChangeText={text => {
                     if (text.length < 200) {
                       setName(text);
@@ -280,26 +280,26 @@ export default function AddProduct({navigation}) {
                   }}
                   value={name}
                 />
-                <View style={{width: '5%', height: '100%'}} />
+                <View style={{ width: '5%', height: '100%' }} />
               </View>
             </View>
           </>
 
-          <View style={{width: '100%', height: 10}} />
+          <View style={{ width: '100%', height: 10 }} />
 
           <>
-            <View style={[styles.inputContainer, {height: 100}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={[styles.inputContainer, { height: 100 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-start'},
+                    { justifyContent: 'flex-start' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                   <Text style={styles.titleInputStyle}>Description</Text>
                   <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                     {' '}
                     *
                   </Text>
@@ -307,19 +307,19 @@ export default function AddProduct({navigation}) {
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-end'},
+                    { justifyContent: 'flex-end' },
                   ]}>
                   <Text style={styles.titleInputStyle}>
                     {lengthDescription}/500
                   </Text>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                 </View>
               </View>
-              <View style={{width: '100%', height: 5}} />
-              <View style={{flex: 2, flexDirection: 'row'}}>
-                <View style={{width: '5%', height: '100%'}} />
+              <View style={{ width: '100%', height: 5 }} />
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '5%', height: '100%' }} />
                 <TextInput
-                  style={{flex: 1, fontSize: 17}}
+                  style={{ flex: 1, fontSize: 17 }}
                   onChangeText={text => {
                     if (text.length <= 500) {
                       setDescription(text);
@@ -329,26 +329,26 @@ export default function AddProduct({navigation}) {
                   value={description}
                   multiline={true}
                 />
-                <View style={{width: '5%', height: '100%'}} />
+                <View style={{ width: '5%', height: '100%' }} />
               </View>
             </View>
           </>
 
-          <View style={{width: '100%', height: 10}} />
+          <View style={{ width: '100%', height: 10 }} />
 
           <>
-            <View style={[styles.inputContainer, {height: 90}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-start'},
+                    { justifyContent: 'flex-start' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                   <Text style={styles.titleInputStyle}>Price</Text>
                   <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                     {' '}
                     *
                   </Text>
@@ -356,15 +356,15 @@ export default function AddProduct({navigation}) {
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-end'},
+                    { justifyContent: 'flex-end' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                 </View>
               </View>
-              <View style={{flex: 2, flexDirection: 'row'}}>
-                <View style={{width: '5%', height: '100%'}} />
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '5%', height: '100%' }} />
                 <TextInput
-                  style={{flex: 1, fontSize: 17}}
+                  style={{ flex: 1, fontSize: 17 }}
                   onChangeText={text => setPrice(text)}
                   value={price}
                   keyboardType="numeric"
@@ -382,21 +382,21 @@ export default function AddProduct({navigation}) {
             </View>
           </>
 
-          <View style={{width: '100%', height: 10}} />
+          <View style={{ width: '100%', height: 10 }} />
 
           <>
-            <View style={[styles.inputContainer, {height: 90}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-start'},
+                    { justifyContent: 'flex-start' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                   <Text style={styles.titleInputStyle}>Color</Text>
                   <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                     {' '}
                     *
                   </Text>
@@ -404,28 +404,28 @@ export default function AddProduct({navigation}) {
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-end'},
+                    { justifyContent: 'flex-end' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                 </View>
               </View>
-              <View style={{flex: 2, flexDirection: 'row'}}>
-                <View style={{width: '3%', height: '100%'}} />
-                <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '3%', height: '100%' }} />
+                <ScrollView horizontal={true} style={{ flexDirection: 'row' }}>
                   {color
                     ? color.map(item => (
-                        <CheckBox
-                          key={item.key}
-                          style={{flex: 1, padding: 10}}
-                          onClick={() => {
-                            //setChecked(!checked)
-                            handleCheckColor(item.key);
-                          }}
-                          isChecked={item.checked}
-                          leftText={item.TenMau}
-                          leftTextStyle={{fontSize: 15, marginHorizontal: 5}}
-                        />
-                      ))
+                      <CheckBox
+                        key={item.key}
+                        style={{ flex: 1, padding: 10 }}
+                        onClick={() => {
+                          //setChecked(!checked)
+                          handleCheckColor(item.key);
+                        }}
+                        isChecked={item.checked}
+                        leftText={item.TenMau}
+                        leftTextStyle={{ fontSize: 15, marginHorizontal: 5 }}
+                      />
+                    ))
                     : null}
                 </ScrollView>
                 <View
@@ -438,21 +438,21 @@ export default function AddProduct({navigation}) {
             </View>
           </>
 
-          <View style={{width: '100%', height: 10}} />
+          <View style={{ width: '100%', height: 10 }} />
 
           <>
-            <View style={[styles.inputContainer, {height: 90}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-start'},
+                    { justifyContent: 'flex-start' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                   <Text style={styles.titleInputStyle}>Size</Text>
                   <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                     {' '}
                     *
                   </Text>
@@ -460,27 +460,27 @@ export default function AddProduct({navigation}) {
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-end'},
+                    { justifyContent: 'flex-end' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                 </View>
               </View>
-              <View style={{flex: 2, flexDirection: 'row'}}>
-                <View style={{width: '3%', height: '100%'}} />
-                <ScrollView style={{flexDirection: 'row'}} horizontal={true}>
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '3%', height: '100%' }} />
+                <ScrollView style={{ flexDirection: 'row' }} horizontal={true}>
                   {size
                     ? size.map(item => (
-                        <CheckBox
-                          key={item.id}
-                          style={{flex: 1, padding: 10}}
-                          isChecked={item.checked}
-                          leftText={item.title}
-                          leftTextStyle={{fontSize: 15, marginHorizontal: 5}}
-                          onClick={() => {
-                            handleCheckSize(item.id);
-                          }}
-                        />
-                      ))
+                      <CheckBox
+                        key={item.id}
+                        style={{ flex: 1, padding: 10 }}
+                        isChecked={item.checked}
+                        leftText={item.title}
+                        leftTextStyle={{ fontSize: 15, marginHorizontal: 5 }}
+                        onClick={() => {
+                          handleCheckSize(item.id);
+                        }}
+                      />
+                    ))
                     : null}
                 </ScrollView>
                 <View
@@ -493,21 +493,21 @@ export default function AddProduct({navigation}) {
             </View>
           </>
 
-          <View style={{width: '100%', height: 10}} />
+          <View style={{ width: '100%', height: 10 }} />
 
           <>
-            <View style={[styles.inputContainer, {height: 90}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-start'},
+                    { justifyContent: 'flex-start' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                   <Text style={styles.titleInputStyle}>Amount</Text>
                   <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                     {' '}
                     *
                   </Text>
@@ -515,15 +515,15 @@ export default function AddProduct({navigation}) {
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-end'},
+                    { justifyContent: 'flex-end' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                 </View>
               </View>
-              <View style={{flex: 2, flexDirection: 'row'}}>
-                <View style={{width: '5%', height: '100%'}} />
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '5%', height: '100%' }} />
                 <TextInput
-                  style={{flex: 1, fontSize: 17}}
+                  style={{ flex: 1, fontSize: 17 }}
                   onChangeText={text => setAmount(text)}
                   value={amount}
                   keyboardType="numeric"
@@ -535,27 +535,27 @@ export default function AddProduct({navigation}) {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <Text style={styles.titleInputStyle}>%</Text>
+                  {/* <Text style={styles.titleInputStyle}>%</Text> */}
                 </View>
               </View>
             </View>
           </>
 
-          <View style={{width: '100%', height: 10}} />
+          <View style={{ width: '100%', height: 10 }} />
 
           <>
-            <View style={[styles.inputContainer, {height: 90}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-start'},
+                    { justifyContent: 'flex-start' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                   <Text style={styles.titleInputStyle}>Categorize</Text>
                   <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                     {' '}
                     *
                   </Text>
@@ -563,9 +563,9 @@ export default function AddProduct({navigation}) {
                 <View
                   style={[
                     styles.unitTitleContainer,
-                    {justifyContent: 'flex-end'},
+                    { justifyContent: 'flex-end' },
                   ]}>
-                  <View style={{width: '10%', height: '100%'}} />
+                  <View style={{ width: '10%', height: '100%' }} />
                 </View>
               </View>
               <View
@@ -574,9 +574,9 @@ export default function AddProduct({navigation}) {
                   flexDirection: 'row',
                   justifyContent: 'center',
                 }}>
-                <View style={{width: '5%', height: '100%'}} />
+                <View style={{ width: '5%', height: '100%' }} />
                 <Dropdown
-                  style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+                  style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
@@ -607,19 +607,19 @@ export default function AddProduct({navigation}) {
             </View>
           </>
 
-          <View style={{width: '100%', height: 10}} />
+          <View style={{ width: '100%', height: 15 }} />
 
           <>
             <View
               style={{
                 width: '100%',
-                height: 70,
+                height: 55,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
               <ButtonDetail
                 title="Add now"
-                style={{width: 150, height: 50}}
+                style={{ width: '100%', height: '90%' }}
                 onPress={() => {
                   setData();
                 }}
@@ -627,7 +627,7 @@ export default function AddProduct({navigation}) {
               />
             </View>
           </>
-          <View style={{width: '100%', height: 10}} />
+          <View style={{ width: '100%', height: 15 }} />
         </ScrollView>
       </View>
     </SafeAreaView>

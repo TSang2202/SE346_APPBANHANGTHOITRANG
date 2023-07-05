@@ -1,30 +1,31 @@
-import {View, Text, Image, FlatList} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import Search from '../components/Search';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import CUSTOM_COLOR from '../constants/colors';
-import UserChat from '../components/UserChat';
-import Size from '../constants/size';
-import {firebase, Firestore} from '../../../Firebase/firebase';
 import {
+  collection,
   doc,
   getDoc,
   getDocs,
-  collection,
-  query,
-  where,
   onSnapshot,
   orderBy,
-  querySnapshot,
-  docs,
+  query,
   updateDoc,
+  where,
 } from 'firebase/firestore';
+import React, {useEffect, useState} from 'react';
+import {FlatList, Image, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Firestore, firebase} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
-
+import Search from '../components/Search';
+import UserChat from '../components/UserChat';
+import CUSTOM_COLOR from '../constants/colors';
+import Size from '../constants/size';
 export default function Chat({navigation}) {
   const [users, setUser] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
+  const handleSearch = searchTerm => {
+    setSearchTerm(searchTerm);
+  };
   const getUser = async item => {
     //item = item.trim();
 
@@ -74,8 +75,15 @@ export default function Chat({navigation}) {
           ...user,
         });
       });
-
-      setUser(data);
+      let filteredItems = data;
+      if (searchTerm != null) {
+        filteredItems = data.filter(item =>
+          item.TenND.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+      } else {
+        setUser(data);
+      }
+      setUser(filteredItems);
       console.log(users);
     });
   };
@@ -89,7 +97,7 @@ export default function Chat({navigation}) {
     fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
       setImageUrl(url),
     );
-  }, []);
+  }, [searchTerm]);
 
   const setSoLuongChuaDoc = async item => {
     const chatUpdateRef = doc(Firestore, 'CHAT', item.MaChat);
@@ -162,7 +170,7 @@ export default function Chat({navigation}) {
           </View>
           <View style={{width: '100%', height: 10}} />
           <View style={{width: '90%', height: 45, marginHorizontal: '5%'}}>
-            <Search placeholder="Search" />
+            <Search placeholder="Search" onSearch={handleSearch} />
           </View>
           <View style={{width: '100%', height: 10}} />
           <View style={{width: '100%', height: '73%'}}>
