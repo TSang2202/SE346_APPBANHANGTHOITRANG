@@ -19,8 +19,8 @@ const Person = (props: PersonProps) => {
       >
       </Image>
       <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 13 }}>
-        <Text style={{ fontWeight: 'bold' }}>{props.name}</Text>
-        <Text style={{ marginTop: 1, fontWeight: 'bold' }}>ID: {props.id}</Text>
+        <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold' }}>{props.name}</Text>
+        <Text style={{ marginTop: 1, fontWeight: 'bold', fontStyle: 'italic' }}>Customer</Text>
       </View>
     </View>
   )

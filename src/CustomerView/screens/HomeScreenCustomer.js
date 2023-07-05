@@ -65,7 +65,7 @@ function HomeScreenCustomer({ navigation }) {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const items = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data()();
+        const data = doc.data();
         if (data && data.TrangThai) {
           items.push({
             ...data,
