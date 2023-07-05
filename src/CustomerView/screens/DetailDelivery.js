@@ -12,6 +12,8 @@ import { Firestore, firebase } from '../../../Firebase/firebase'
 import { collection, onSnapshot, query, doc, getDoc, querySnapshot, getDocs, where, updateDoc } from "firebase/firestore";
 import OneOrder from '../../StaffView/components/OneOrder'
 import ItemList from '../../StaffView/components/ItemList'
+import Size from '../constants/size'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 const DataDelivery = {
@@ -80,7 +82,7 @@ export default function DeTailDelivery({navigation, route}) {
   }, [isLoading]);
 
   return (
-    <View style={{ backgroundColor: CUSTOM_COLOR.White }}>
+    <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, width: '100%', height: Size.DeviceHeight }}>
 
 
       <BackTo
@@ -197,23 +199,23 @@ export default function DeTailDelivery({navigation, route}) {
             }}
           />
         </View>
-        <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ width: '100%', marginTop: 20, height: 50, flexDirection: 'row', justifyContent: 'center' }}>
           
           <TouchableOpacity
             onPress={() => {navigation.navigate('Chat', {chatUser}) }}
-            style={{ width: '30%', height: '100%', justifyContent: 'center', marginLeft: 20, alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
+            style={{ width: '40%', height: '80%', borderRadius: 25,justifyContent: 'center', marginLeft: 20, alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
           >
-            <Text style={{ color: CUSTOM_COLOR.White, fontWeight: 'bold', fontSize: 20 }}>Chat</Text>
+            <Text style={{ color: CUSTOM_COLOR.White, fontSize: 20 }}>Contact Seller</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             //onPress={() => {navigation.navigate('Chat', {chatUser}) }}
             style={{ width: '30%', height: '100%', justifyContent: 'center', marginRight: 20,alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
           >
             <Text style={{ color: CUSTOM_COLOR.White, fontWeight: 'bold', fontSize: 20 }}>Cancel</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
