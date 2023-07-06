@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Size from '../constants/size'
 const Product = (props: any) => {
     return(

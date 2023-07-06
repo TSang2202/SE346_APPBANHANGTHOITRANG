@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import Size from "../constants/size";
 
 
@@ -12,14 +12,16 @@ const ProductView = (props: any) => {
          marginHorizontal: 30,
          marginVertical: 5
       }} >
-
+         <TouchableOpacity onPress={props.onPress}>
          <Image
             source={{ uri: props.source }}
             style={{
                width: 150,
                height: 165,
                borderRadius: 20
+
             }} />
+            </TouchableOpacity>
          <Text style={{
             fontWeight: 'bold',
             marginVertical: 4

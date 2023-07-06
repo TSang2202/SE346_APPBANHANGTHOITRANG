@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
-  View,
-  Text,
+  FlatList,
+  Image,
   SafeAreaView,
   StyleSheet,
-  Image,
+  Text,
   TouchableOpacity,
-  FlatList,
+  View,
 } from 'react-native';
+import {firebase} from '../../../Firebase/firebase.js';
+import ViewNow from '../../StaffView/components/ViewNow';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
-import ViewNow from '../../StaffView/components/ViewNow';
-import { firebase } from '../../../Firebase/firebase.js';
 import {
-  IC_product,
-  IC_order,
-  IC_logout,
-  IC_promotions,
+  IC_User,
   IC_financial,
+  IC_logout,
+  IC_order,
+  IC_product,
+  IC_promotions,
   IC_user,
   IC_messenger,
-  IC_User,
   IC_Review,
   IC_Catgory,
 } from '../assets/icons/index.js';
-import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
-import { Firestore } from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
+import MenuIcon from '../components/MenuIcon.js';
+import {Firestore} from '../../../Firebase/firebase';
 import {
   collection,
   onSnapshot,
@@ -41,7 +41,7 @@ import {
 } from 'firebase/firestore';
 
 const AdminOverView = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -53,69 +53,74 @@ const AdminOverView = props => {
   const [donHangDelivered, setDonHangDelivered] = useState([]);
 
   const getDonHangConfirm = () => {
-
-    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Confirm"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const q = query(
+      collection(Firestore, 'DONHANG'),
+      where('TrangThai', '==', 'Confirm'),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
       const data = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(doc => {
         data.push(doc.data());
       });
-      setDonHangConfirm(data)
+      setDonHangConfirm(data);
     });
 
     return unsubscribe;
   };
 
   const getDonHangOnWait = () => {
-    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "OnWait"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const q = query(
+      collection(Firestore, 'DONHANG'),
+      where('TrangThai', '==', 'OnWait'),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
       const data = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(doc => {
         data.push(doc.data());
       });
-      setDonHangOnWait(data)
+      setDonHangOnWait(data);
     });
 
     return unsubscribe;
-
   };
 
   const getDonHangDelivering = () => {
-    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivering"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const q = query(
+      collection(Firestore, 'DONHANG'),
+      where('TrangThai', '==', 'Delivering'),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
       const data = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(doc => {
         data.push(doc.data());
       });
-      setDonHangDelivering(data)
+      setDonHangDelivering(data);
     });
 
     return unsubscribe;
-
-
   };
 
   const getDonHangDelivered = () => {
-    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivered"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const q = query(
+      collection(Firestore, 'DONHANG'),
+      where('TrangThai', '==', 'Delivered'),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
       const data = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(doc => {
         data.push(doc.data());
       });
-      setDonHangDelivered(data)
+      setDonHangDelivered(data);
     });
 
     return unsubscribe;
   };
 
-
-
   useEffect(() => {
-
-    getDonHangConfirm()
-    getDonHangOnWait()
-    getDonHangDelivering()
-    getDonHangDelivered()
+    getDonHangConfirm();
+    getDonHangOnWait();
+    getDonHangDelivering();
+    getDonHangDelivered();
 
     setTimeout(() => {
       // Assume data is fetched here
@@ -168,14 +173,14 @@ const AdminOverView = props => {
         <>
           <>
             <View style={styles.menuContainer}>
-              <View style={{ width: 32, height: 37 }}>
+              <View style={{width: 32, height: 37}}>
                 <MenuIcon
                   onPress={() => navigation.navigate('ChangeProfile')}
                   source={IC_User}
                 />
               </View>
-              <View style={{ width: 10, height: '100%' }} />
-              <View style={{ width: 30, height: 30 }}>
+              <View style={{width: 10, height: '100%'}} />
+              <View style={{width: 30, height: 30}}>
                 <MenuIcon
                   onPress={() => navigation.navigate('Chat')}
                   source={IC_messenger}
@@ -188,8 +193,8 @@ const AdminOverView = props => {
                     source={IC_notification}
                   />
                 </View> */}
-              <View style={{ width: 5, height: '100%' }} />
-              <View style={{ width: 32, height: 32, marginHorizontal: 5 }}>
+              <View style={{width: 5, height: '100%'}} />
+              <View style={{width: 32, height: 32, marginHorizontal: 5}}>
                 <MenuIcon
                   onPress={() => {
                     firebase.auth().signOut();
@@ -197,7 +202,7 @@ const AdminOverView = props => {
                   source={IC_logout}
                 />
               </View>
-              <View style={{ width: 10, height: '100%' }} />
+              <View style={{width: 10, height: '100%'}} />
             </View>
           </>
 
@@ -206,11 +211,11 @@ const AdminOverView = props => {
           <>
             <View style={styles.accountContainer}>
               <View style={styles.infoContainer}>
-                <View style={{ width: 10, height: '100%' }} />
+                <View style={{width: 10, height: '100%'}} />
                 <View style={styles.avataContainer}>
                   {imageUrl ? (
                     <Image
-                      source={{ uri: imageUrl }}
+                      source={{uri: imageUrl}}
                       style={{
                         width: '100%',
                         height: '100%',
@@ -236,14 +241,14 @@ const AdminOverView = props => {
                     />
                   )}
                 </View>
-                <View style={{ width: 15, height: '100%' }} />
+                <View style={{width: 15, height: '100%'}} />
                 <View
-                  style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                  <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
+                  style={{flexDirection: 'column', justifyContent: 'center'}}>
+                  <Text style={[styles.textViewStyles, {fontSize: 20}]}>
                     {userData.TenND}
                   </Text>
-                  <View style={{ width: '100%', height: 5 }} />
-                  <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
+                  <View style={{width: '100%', height: 5}} />
+                  <Text style={[styles.textViewStyles, {fontSize: 15}]}>
                     {userData.LoaiND}
                   </Text>
                 </View>
@@ -251,7 +256,7 @@ const AdminOverView = props => {
               <View style={styles.viewShopContainer}>
                 <TouchableOpacity style={styles.butViewShopContainer}>
                   <Text
-                    style={{ color: CUSTOM_COLOR.Red }}
+                    style={{color: CUSTOM_COLOR.Red}}
                     onPress={() => navigation.navigate('ViewShop1')}>
                     View Shop
                   </Text>
@@ -264,7 +269,7 @@ const AdminOverView = props => {
 
           <>
             <View style={styles.oderContainer}>
-              <View style={{ width: '100%', height: '5%' }} />
+              <View style={{width: '100%', height: '5%'}} />
               <View style={styles.textContainer}>
                 <View
                   style={{
@@ -299,10 +304,16 @@ const AdminOverView = props => {
                   }}
                 /> */}
 
-                <ViewNow number={donHangConfirm.length} status={"Confirm"} />
-                <ViewNow number={donHangOnWait.length} status={"On wait"} />
-                <ViewNow number={donHangDelivering.length} status={"Delovering"} />
-                <ViewNow number={donHangDelivered.length} status={"Delivered"} />
+                <ViewNow number={donHangConfirm.length} status={'Confirm'} />
+                <ViewNow number={donHangOnWait.length} status={'On wait'} />
+                <ViewNow
+                  number={donHangDelivering.length}
+                  status={'Delovering'}
+                />
+                <ViewNow
+                  number={donHangDelivered.length}
+                  status={'Delivered'}
+                />
               </View>
             </View>
           </>
@@ -333,7 +344,6 @@ const AdminOverView = props => {
                     text="My Order"
                   />
                 </View>
-
               </View>
               <View style={styles.unitContainer}>
                 <View style={styles.unitContainer}>
@@ -357,7 +367,6 @@ const AdminOverView = props => {
                     text="Manage User"
                   />
                 </View>
-
               </View>
             </View>
           </>
