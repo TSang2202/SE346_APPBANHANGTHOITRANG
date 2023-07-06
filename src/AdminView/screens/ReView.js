@@ -60,11 +60,8 @@ function ReviewScreen({navigation, route}) {
                 sum += items[i].Rating;
             }
             setdata(items);
-            console.log(items);
             settong(items.length);
-            console.log(tong);
             settb((Math.round(sum/items.length * 100) / 100).toFixed(1));
-            console.log(tb);
         }
         })
     }catch(error){
@@ -80,10 +77,10 @@ function ReviewScreen({navigation, route}) {
           const q = query(collectionRef
               , where('MaDG', '==', sanpham.MaDG));
           const querySnapshot = await getDocs(q);
-         // console.log(querySnapshot);
           querySnapshot.forEach((doc) => {
               deleteDoc(doc.ref).then(() => {
                   console.log('Xóa tài liệu thành công');
+                  getdataReview()
               }).catch((error) => {
                   console.error('Lỗi khi xóa tài liệu:', error);
               });
@@ -95,6 +92,9 @@ function ReviewScreen({navigation, route}) {
     })
     setRemoveReview(false)
   }
+  const updateLaiData = () =>{
+
+  }
   const updateCheck = (item) =>{
     const updateItem = data.map((product) => {
       if (product.MaDG === item.MaDG) {
@@ -103,7 +103,6 @@ function ReviewScreen({navigation, route}) {
       return product
     })
     setdata(updateItem)
-    console.log(data)
   }
   useEffect(() =>{
     getdataReview()
@@ -185,7 +184,7 @@ function ReviewScreen({navigation, route}) {
                         marginLeft: 10,
                         fontWeight: 'bold',
                         color: CUSTOM_COLOR.White
-                    }}>Add Review</Text>
+                    }}>Remove Review</Text>
                 </TouchableOpacity>
   
             </View>
