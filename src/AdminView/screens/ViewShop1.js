@@ -16,6 +16,8 @@ import ProductView from '../components/ProductView';
 import Search from '../components/Search';
 import SortDropdown from '../components/SortDropDown';
 import scale from '../constants/responsive.js';
+
+
 function ViewShop1({navigation}) {
   const [detail, setdetail] = useState(false);
   const [product, setproduct] = useState(true);
@@ -64,12 +66,14 @@ function ViewShop1({navigation}) {
         filteredItems = data.filter(itemData =>
           itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
         );
-      } else {
+      } 
+      else 
+      {
         setItems(data);
       }
       setItems(filteredItems);
     });
-  };
+  }
   const getDataCategory = async () => {
     const q = query(collection(Firestore, 'DANHMUC'));
 
@@ -224,7 +228,7 @@ function ViewShop1({navigation}) {
           <FlatList
             nestedScrollEnabled={true}
             data={items}
-            renderItem={({item}) => {
+            renderItem={(item) => {
               return (
                 //<TouchableOpacity
                 //  onPress={() => navigation.navigate('ViewShop2')}
@@ -236,7 +240,7 @@ function ViewShop1({navigation}) {
                   onPress={() => {
                     navigation.navigate('ViewShop2', {item});
                   }}
-                  source={item.HinhAnhSP[0]}
+                  source = {item.HinhAnhSP[0]}
                   title={item.TenSP}
                   price={item.GiaSP}
                 />
