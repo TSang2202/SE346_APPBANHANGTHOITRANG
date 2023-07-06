@@ -2,16 +2,15 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
-import { IC_Back, IC_ShoppingCart } from "../../CustomerView/assets/icons";
+import { IC_Back } from "../../CustomerView/assets/icons";
 
 import ProductView from "../../CustomerView/components/ProductView";
 import SearchInput from "../../CustomerView/components/SearchInput";
 import SortDropDown from "../components/SortDropDown";
-import CUSTOM_COLOR from "../constants/colors";
 
 function ViewDetailsinList({ navigation, route }) {
 
-
+    const {item} = route.params;
 
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -19,16 +18,16 @@ function ViewDetailsinList({ navigation, route }) {
     const [sortType, setSortType] = useState("");
 
 
-    const handleSearch = (searchTerm) => {
+    const handleSearch = searchTerm => {
         setSearchTerm(searchTerm);
-    };
+      };
     const handleSort = (type) => {
         setSortType(type);
     };
 
     const getDataCategory = async () => {
 
-        const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", category.MaDM));
+        const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", item.MaDM));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const data = [];
             querySnapshot.forEach((doc) => {
@@ -45,19 +44,17 @@ function ViewDetailsinList({ navigation, route }) {
             } else if (sortType === "high-to-low") {
                 sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
             }
-
-
             let filteredItems = data;
             if (searchTerm != null) {
-                filteredItems = data.filter(item =>
-                    item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+                filteredItems = data.filter(itemData =>
+                    itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
                 );
             }
             else {
                 setItems(data);
             }
             setItems(filteredItems);
-
+            
         });
     };
     useEffect(() => {
@@ -69,10 +66,15 @@ function ViewDetailsinList({ navigation, route }) {
     }, [searchTerm, sortType]); // Gọi lại hàm getDataCategory mỗi khi searchTerm thay đổi
     return (
         <View style={{
-            flex: 1
+            flex: 1,
+            maginBottom:20,
         }}>
             <View style={{
-                flexDirection: 'row'
+                flexDirection: 'row',
+                width:'80%',
+                height:40,
+                marginTop:15,
+                
             }}>
                 <TouchableOpacity onPress={() => {
                     navigation.goBack();
@@ -82,40 +84,27 @@ function ViewDetailsinList({ navigation, route }) {
                         style={{
                             width: 10,
                             height: 20,
-                            margin: 20,
-
+                            marginTop: 10,
+                            marginLeft: 20,
+                            marginRight: 20,
                         }}
                         resizeMode='stretch'
                     />
                 </TouchableOpacity>
-
                 <SearchInput
                     onSearch={handleSearch}
                 />
-
-                <TouchableOpacity style={{
-                    backgroundColor: CUSTOM_COLOR.Mercury,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: 10,
-                    padding: 8,
-                    borderRadius: 10
-                }}>
-                    <Image
-                        source={IC_ShoppingCart}
-                    />
-                </TouchableOpacity>
             </View>
-
             <View style={{
-                flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
+                flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom:10, marginTop:10,
             }}>
             </View>
             <SortDropDown
                 onSelectSort={handleSort}
+                style = {{marginBottom:20}}
             />
             <View style={{
-                height: '80%'
+                height: '80%',
             }}>
                 <FlatList
                     data={items}
@@ -131,7 +120,7 @@ function ViewDetailsinList({ navigation, route }) {
                                     price={item.GiaSP}
                                 />
                             </TouchableOpacity>
-                        )
+                        );
                     }}
                     numColumns={2}
                 //keyExtractor={(item) => item.MASP}

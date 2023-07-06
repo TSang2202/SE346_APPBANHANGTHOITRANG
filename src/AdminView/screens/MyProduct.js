@@ -1,18 +1,16 @@
 import {
   collection,
   doc,
-  getDocs,
+  onSnapshot,
   query,
   updateDoc,
-  where,
-  onSnapshot
+  where
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Firestore } from '../../../Firebase/firebase';
-import { SearchIcon } from '../../CustomerView/assets/icons';
 import BackTo from '../components/BackTo';
 import ButtonDetail from '../components/ButtonDetail';
 import MyProduct1 from '../components/MyProductOne';

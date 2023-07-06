@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { Firestore } from '../../../Firebase/firebase';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import { backto } from '../assets/icons/index.js';
 import ItemList from '../components/ItemList';
 import ProductView from '../components/ProductView';
 import Search from '../components/Search';
@@ -228,7 +227,7 @@ function ViewShop1({navigation}) {
           <FlatList
             nestedScrollEnabled={true}
             data={items}
-            renderItem={(item) => {
+            renderItem={({item}) => {
               return (
                 //<TouchableOpacity
                 //  onPress={() => navigation.navigate('ViewShop2')}
@@ -240,13 +239,15 @@ function ViewShop1({navigation}) {
                   onPress={() => {
                     navigation.navigate('ViewShop2', {item});
                   }}
-                  source = {item.HinhAnhSP[0]}
+                  source={item.HinhAnhSP[0]}
                   title={item.TenSP}
                   price={item.GiaSP}
                 />
               )
+              
             }
             }
+            numColumns={2}
             />
             </View>
             </SafeAreaView>
@@ -344,89 +345,6 @@ function ViewShop1({navigation}) {
                     }}
                 />
     </View>
-        </SafeAreaView>
-      );
-    } else {
-      return (
-        <SafeAreaView
-          style={{
-            backgroundColor: CUSTOM_COLOR.White,
-            width: '100%',
-            height: '100%',
-          }}>
-          <View
-            style={{
-              width: '100%',
-              height: 180,
-              flexDirection: 'column',
-              alignItems: 'center',
-              backgroundColor: CUSTOM_COLOR.LavenderBlush,
-            }}>
-            <Search onSearch={handleSearch} />
-            <Image
-              style={{
-                width: scale(72),
-                height: scale(72),
-                aspectRatio: 1,
-                borderRadius: 55,
-                marginTop: 5,
-              }}
-              source={{uri: imageUrl}}
-              resizeMode="contain"
-            />
-            <Text
-              style={{
-                color: CUSTOM_COLOR.Black,
-                fontSize: 20,
-                fontWeight: 'bold',
-                marginTop: 2,
-              }}>
-              FAUGET
-            </Text>
-          </View>
-          <View
-            style={{
-              width: '100%',
-              height: 30,
-              flexDirection: 'row',
-              marginTop: 20,
-            }}>
-            <TouchableOpacity
-              onPress={() => setdetail(false)}
-              style={{width: 17, height: 17, marginLeft: 18, marginTop: 5}}>
-              <Image
-                resizeMode="contain"
-                source={backto}
-                style={{width: '100%', height: '100%'}}
-              />
-            </TouchableOpacity>
-            <Text
-              style={{color: CUSTOM_COLOR.Black, fontSize: 18, marginLeft: 10}}>
-              List Item
-            </Text>
-          </View>
-          <SortDropdown onSelectSort={handleSort} />
-          <View>
-            <FlatList
-              horizontal={false}
-              data={dataCategories}
-              key={2}
-              numColumns={2}
-              renderItem={({item}) => {
-                return (
-                  <ProductView
-                    onPress={() => {
-                      navigation.navigate('ViewShop2', {item});
-                    }}
-                    source={item.HinhAnhSP[0]}
-                    title={item.TenSP}
-                    price={item.GiaSP}
-                  />
-                  //</View> </TouchableOpacity>
-                );
-              }}
-            />
-          </View>
         </SafeAreaView>
       );
     }

@@ -1,31 +1,40 @@
 import {
   collection,
-  endOfDay,
-  endOfMonth,
-  endOfYear,
   getDocs,
   query,
-  startOfDay,
-  startOfMonth,
-  startOfYear,
-  where,
+  where
 } from '@firebase/firestore';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Image } from 'react-native-elements';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Firestore } from '../../../Firebase/firebase';
+import { SearchIcon } from '../../CustomerView/assets/icons';
 import BackTo from '../components/BackTo';
 import CUSTOM_COLOR from '../constants/colors';
 
 const Report = ({navigation}) => {
+  const [total, setTotal] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedYear, setSelectedYear] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const isValidDay = (day) => {
+    return day > 0 && day <= 31;
+  };
 
+  // Hàm kiểm tra tính hợp lệ của tháng
+  const isValidMonth = (month) => {
+    return month > 0 && month <= 12;
+  };
+
+  // Hàm kiểm tra tính hợp lệ của năm
+  const isValidYear = (year) => {
+    return year > 2020;
+  };
   useEffect(() => {
     const fetchFinancialData = async () => {
       try {
@@ -34,60 +43,43 @@ const Report = ({navigation}) => {
           where('TrangThai', '==', 'Delivered'),
         );
 
-        if (selectedDate) {
-          const startDate = startOfDay(selectedDate);
-          const endDate = endOfDay(selectedDate);
-
-          q = query(
-            q,
-            where('NgayDatHang', '>=', startDate),
-            where('NgayDatHang', '<=', endDate),
-          );
-        } else if (selectedMonth) {
-          const startDate = startOfMonth(selectedMonth);
-          const endDate = endOfMonth(selectedMonth);
-
-          q = query(
-            q,
-            where('NgayDatHang', '>=', startDate),
-            where('NgayDatHang', '<=', endDate),
-          );
-        } else if (selectedYear) {
-          const startDate = startOfYear(selectedYear);
-          const endDate = endOfYear(selectedYear);
-
-          q = query(
-            q,
-            where('NgayDatHang', '>=', startDate),
-            where('NgayDatHang', '<=', endDate),
-          );
-        }
-
         const querySnapshot = await getDocs(q);
 
         let total = 0;
+        let count = 0;
 
         querySnapshot.forEach(doc => {
           const {TongTien} = doc.data();
           total += TongTien;
+          count +=1;
         });
 
         setTotalRevenue(total);
+        setTotal(count);
       } catch (error) {
         console.log('Error fetching data:', error);
       }
     };
 
     fetchFinancialData();
-  }, [selectedDate, selectedMonth, selectedYear]);
-
-  const handleDateChange = (event, selected) => {
-    const currentDate = selected || selectedDate;
-    setShowDatePicker(false);
-    setSelectedDate(currentDate);
-    setSelectedMonth(null);
-    setSelectedYear(null);
+  }, []);
+  const handleDateChange = () => {
+    
+  }
+  const handleSearchDateTime = () => {
+    if (
+      !isValidDay(selectedDate) ||
+      !isValidMonth(selectedMonth) ||
+      !isValidYear(selectedYear)
+    ) {
+      // Hiển thị thông báo lỗi nếu ngày, tháng hoặc năm không hợp lệ
+      console.log('Ngày, tháng hoặc năm không hợp lệ');
+      return;
+    }
+  
+    // Tiếp tục thực hiện truy vấn dữ liệu hoặc các tác vụ khác
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -98,31 +90,55 @@ const Report = ({navigation}) => {
           />
       </View>
       <View style={styles.content}>
-        <View style={styles.header1}>
+        <View style={styles.backgroundHeader}>
           <Text style={styles.Heading}>Quá trình hoạt động</Text>
-          <Button
-            title="Chọn ngày"
-            onPress={() => setShowDatePicker(true)}
-            buttonStyle={styles.button}
-          />
-          {showDatePicker && (
-            <DateTimePicker
-              value={selectedDate || new Date()}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
+          <View style = {styles.buttonGroup}>
+            <TextInput
+              placeholder="Chọn ngày"
+              style = {styles.textinput}
+              onChangeText = {(text) => selectedDate(text)}
             />
-          )}
+            <TextInput
+              placeholder='Chọn tháng'
+              style = {styles.textinput}
+              onChangeText={(text) => setSelectedMonth(text)}
+            />
+            <TextInput
+              placeholder='Chọn năm'
+              style = {styles.textinput}
+              onChangeText={(text) => setSelectedYear(text)}
+            />
+            <TouchableOpacity
+              onPress={handleSearchDateTime}
+              style = {styles.button}
+            >
+              <Image
+                source={SearchIcon}
+                style = {styles.icon}
+              />
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={selectedDate || new Date()}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
+          </View>
+          
         </View>
-        <Text style={styles.title}>BÁO CÁO DOANH THU</Text>
-        <View style={styles.revenueContainer}>
-          <Text style={styles.revenueLabel}>Tổng doanh thu (VND)</Text>
-          <Text style={styles.revenueValue}>{totalRevenue}</Text>
+        <View style={styles.title}>
+        <Text style ={styles.tieude}>BÁO CÁO DOANH THU</Text>
+          <Text style = {styles.minibutton}>Tổng</Text>
+          <Text style = {styles.report}>{totalRevenue.toLocaleString()} VNĐ</Text>
         </View>
-        <View style={styles.revenueContainer }>
-          <Text style={styles.revenueLabel}> Số đơn hàng đã bán ra</Text>
-          <Text style={styles.revenueValue}>{totalRevenue}</Text>
+        <View style={styles.title}>
+        <Text style= {styles.tieude}>SỐ ĐƠN HÀNG ĐÃ BÁN</Text>
+          <Text style = {styles.minibutton}>Tổng</Text>
+          <Text style = {styles.report}>{total}</Text>
         </View>
+        
       </View>
     </SafeAreaView>
   );
@@ -133,10 +149,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  header1: {
+  backgroundHeader: {
     backgroundColor: CUSTOM_COLOR.FlushOrange,
     marginTop: 15,
     paddingHorizontal: 15,
+    borderRadius: 10,
+    height: 130,
     alignContent: 'center',
   },
   header: {
@@ -149,6 +167,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   Heading: {
+    color:CUSTOM_COLOR.White,
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
@@ -173,26 +192,53 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  revenueContainer: {
-    backgroundColor: CUSTOM_COLOR.DarkBlue,
-    paddingVertical: 20,
-    paddingHorizontal: 40,
-    borderRadius: 10,
+  tieude:{
+    fontSize: 30,
+    fontStyle: 'normal',
+    color: CUSTOM_COLOR.Black,
+  },  
+  textinput: {
+    textAlign:'center',
+    color: CUSTOM_COLOR.Black,
+    backgroundColor:CUSTOM_COLOR.White,
+    borderRadius:10,
+    width: 80,
+    height: 40,
+    marginRight:10,
+  },
+  button: {
+    padding: 10,
+    borderRadius: 15,
+    backgroundColor: CUSTOM_COLOR.White,
+  },
+  icon: {
+    width: 20,
+    height: 20,
+  },
+  buttonGroup: {
+    flexDirection: 'row',
     marginTop: 10,
-    alignItems: 'center',
+    marginLeft:18,
   },
-  revenueLabel: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  minibutton:{
+    marginBottom: 10,
+    marginTop:10,
     color: CUSTOM_COLOR.White,
+    backgroundColor:CUSTOM_COLOR.Purple,
+    padding: 8,
+    width: 60,
+    height:40,
+    borderRadius:10,
+    fontSize:18,
+    textAlign:'left',
   },
-  revenueValue: {
-    backgroundColor: CUSTOM_COLOR.DarkBlue,
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 10,
-    color: CUSTOM_COLOR.White,
+  report: {
+    color: CUSTOM_COLOR.Black,
+    fontSize: 32,
+    fontStyle: 'italic',
+
   },
+
 });
 
 export default Report;

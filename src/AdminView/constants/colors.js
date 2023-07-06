@@ -19,6 +19,7 @@ const CUSTOM_COLOR = {
   DarkBlue: '#143F6B',
   LightBlue: '#36648B',
   RoseBud: '#FAA9A9',
+  Purple: '#523CF8',
 };
 
 export default CUSTOM_COLOR;
