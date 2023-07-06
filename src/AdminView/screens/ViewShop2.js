@@ -106,7 +106,6 @@ function ViewShop2({navigation, route}) {
                 <Text style ={{height: 40, padding: 7, fontSize: 18, fontWeight: 'bold', color: CUSTOM_COLOR.Black}}>Product</Text>
             </View>
 
-
                
           </View>
 

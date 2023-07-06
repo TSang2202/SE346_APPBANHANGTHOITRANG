@@ -150,7 +150,7 @@ function DetailProduct({ navigation, route }) {
             }
             settong(items.length);
             console.log(tong);
-            settb((Math.round(sum/items.length * 100) / 100).toFixed(2));
+            settb((Math.round(sum/items.length * 100) / 100).toFixed(1));
             console.log(tb);
         }
         })
