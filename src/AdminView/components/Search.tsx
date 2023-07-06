@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
+  Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
-  Image,
 } from 'react-native';
+import { IC_Search } from '../assets/icons';
 import CUSTOM_COLOR from '../constants/colors';
-import {IC_Search} from '../assets/icons';
 
 interface SearchInputProps {
   onSearch: (searchTerm: string) => void;

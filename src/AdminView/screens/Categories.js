@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { collection, onSnapshot, query } from "firebase/firestore";
 import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    View,
     Image,
-    FlatList,
+    SafeAreaView,
+    ScrollView,
+    Text,
     TouchableOpacity,
-    ScrollView
+    View
 } from 'react-native';
-import CUSTOM_COLOR from '../constants/colors';
-import CustomHeader from '../components/CustomHeader';
+import { Firestore } from '../../../Firebase/firebase';
 import { IC_Back } from '../../CustomerView/assets/icons';
-import ItemList from '../components/ItemList';
-import { collection, query, where, onSnapshot, getDocs } from "firebase/firestore";
-import { Firestore } from '../../../Firebase/firebase'
-import { async } from '@firebase/util';
 import ButtonDetail from '../components/ButtonDetail';
+import ItemList from '../components/ItemList';
+import CUSTOM_COLOR from '../constants/colors';
 
 export default function Categories({ navigation }) {
-
-
 
     const [dataCategories, setDataCategories] = useState([])
 
