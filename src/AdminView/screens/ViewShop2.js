@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { AirbnbRating, Rating } from "react-native-ratings";
@@ -9,20 +9,81 @@ import { IM_MauAo} from "../assets/images";
 import ButtonDetail from "../../StaffView/components/ButtonDetail";
 import StarRating from "../../StaffView/components/StartRating";
 import CUSTOM_COLOR from "../constants/colors";
-
-
+import { collection, addDoc, doc, updateDoc, onSnapshot, query, deleteDoc, where, getDocs } from "firebase/firestore";
+import { async } from "@firebase/util";
+import { Firestore, firebase } from "../../../Firebase/firebase";
+import Swiper from 'react-native-swiper'
+import { da } from "date-fns/locale";
+import Button from "../../CustomerView/components/Button";
+import { IC_Back } from "../../CustomerView/assets/icons";
 function ViewShop2({navigation, route}) {
-
+    const item = {"GiaSP": 139000, 
+    "HinhAnhSP": ["https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fproducts%2Fimage-1687527148817?alt=media&token=0467f3f5-a25e-470a-a5cb-d5bb8b4e2df2", "https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fproducts%2Fimage-1687527149745?alt=media&token=ae9f0bac-3b0b-4aba-ab0a-4582e6135f2d"], "MaDM": "lV95kTTz3PIxItriF4rU", "MaSP": "NtRoJWsfk1tH7niUcYu9",
+     "MauSac": [{"MaMS": "J9e6EkiNPM6zJmDc2DV8", "MaMau": "#D73C2D", "TenMau": "Đỏ", "checked": true, "key": "J9e6EkiNPM6zJmDc2DV8"}, {"MaMS": "KeDTyP7uAAfU04hzqruV", "MaMau": "#EC65CF", "TenMau": "Hồng", "checked": true, "key": "KeDTyP7uAAfU04hzqruV"}, {"MaMS": "k8SlzWonYLXHBriMadH5", "MaMau": "#2D38D7", "TenMau": "Xanh", "checked": true, "key": "k8SlzWonYLXHBriMadH5"}], "MoTaSP": "Váy nữ cực đẹp mùa hè", 
+     "Size": [{"checked": true, "id": "sizeS", "title": "S"}, {"checked": true, "id": "sizeM", "title": "M"}, {"checked": true, "id": "sizeL", "title": "L"}, {"checked": false, "id": "sizeXL", "title": "XL"}, {"checked": false, "id": "sizeXXL", "title": "XXL"}, {"checked": false, "id": "sizeXXXL", "title": "XXXL"}], "SoLuongDaBan": 0, "SoLuongSP": 40, "SoLuotXem": 0, "SoLuotYeuThich": 0, "TenSP": "Váy nữ", "TrangThai": "Inventory",
+      "Trending": true, "key": "NtRoJWsfk1tH7niUcYu9"}
     //const {item} = route.params
     const [chooseStyle, setChooseStyle] = useState(false)
+    const [tong, settong] = useState()
+    const [tb, settb] = useState()
+    const [numProduct, setNumProduct] = useState(1)
+    const [chooseColor, setChooseColor] = useState()
+    const [chooseSize, setChooseSize] = useState()
+    const [itemsCheckout, setItemsCheckout] = useState([])
+    const [totalMoney, setTotalMoney] = useState()
+    const [seeDetails, setSeeDetails] = useState(false)
+    const getdataReview = () =>{
+        try{
+            console.log('dahsddrejjjjg');
+            console.log(item.MaSP);
+            const q = query(collection(Firestore, "DANHGIA"), where("MaSP", "==", item.MaSP));
+            const querySnapshot = onSnapshot(q, async (snapshot) => {
+            const items = [];
+            snapshot.forEach(documentSnapshot => {
+            items.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+            });
+            console.log(items);
+            let sum = 0;
+            if(items.length != 0){
+                for(let i = 0; i < items.length; i++){
+                    sum += items[i].Rating;
+                }
+                settong(items.length);
+                console.log(tong);
+                settb((Math.round(sum/items.length * 100) / 100).toFixed(2));
+                console.log(tb);
+            }
+            })
+        }catch(error){
+            console.log(error);
+        }
+    }
+    // const getItemTest = async () =>{
+    //     const q = query(collection(Firestore, "SANPHAM"), where("MaSP", "==", 'NtRoJWsfk1tH7niUcYu9'));
 
+    //     const querySnapshot = await getDocs(q);
+
+    //     const data = []
+    //     querySnapshot.forEach((doc) => {
+
+    //         data.push(doc.data())
+    //         //console.log(doc.id, " => ", doc.data());
+    //     });
+    //     console.log(data)
+    //     setItem(data);
+        
+    // }
+    useEffect(() => {
+        getdataReview()
+    }, [])
     return (
       <View style = {{
         ...styles.container,
         
       }}>
-            
-
         
           <View style = {{flexDirection: 'row',   justifyContent: 'space-between', }}>
 
@@ -31,7 +92,7 @@ function ViewShop2({navigation, route}) {
                     navigation.goBack();
                 }}>
                     <Image
-                        source={backto}
+                        source={IC_Back}
                         style = {{
                             width: 10, 
                             height: 20,
@@ -50,16 +111,35 @@ function ViewShop2({navigation, route}) {
           </View>
 
 
-        <View style = {{width: '100%', height: '40%', alignItems: 'center', justifyContent: 'center'}}>
-            <Image
-                resizeMode="contain"
-                source={IM_MauAo}
-                style = {{
-                    width: 240,
-                    height: 240, borderRadius: 20
-                }}
-            />
-        </View>
+          <View style={{ width: '100%', height: '40%', alignItems: 'center', justifyContent: 'center' }}>
+
+            <Swiper
+                loop
+                autoplay
+            >
+                {item.HinhAnhSP.map((image) => (
+
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                    }}
+                        key={image}
+                    >
+                        <Image
+                            source={{ uri: image }}
+                            style={{
+                                width: 300,
+                                height: 300, borderRadius: 20
+                            }}
+                        />
+
+                    </View>
+                ))}
+
+            </Swiper>
+
+
+            </View>
 
         <View style = {{
             flexDirection: 'row',
@@ -74,7 +154,7 @@ function ViewShop2({navigation, route}) {
                 fontSize: 20,
                 marginLeft: 40
 
-            }}>TÊN SẢN PHẨM</Text>
+            }}>{item.TenSP}</Text>
 
             <Text
                 style ={{
@@ -83,216 +163,205 @@ function ViewShop2({navigation, route}) {
                     color: CUSTOM_COLOR.Sunglow,
                     fontWeight: 'bold'
                 }}
-            >200.000 đ</Text>
+            >{item.GiaSP}</Text>
         </View>
-        <View>
-            <Text style = {{marginLeft: 60, marginTop: 5}}>4.37+</Text>
-        </View>
-          <View style = {{
-            flexDirection: 'row', 
-            marginVertical: 5,
-            marginHorizontal: 35,
-            alignItems: 'center'
-          }}>
+        <View style={{
+                flexDirection: 'row',
+                marginVertical: 20,
+                marginHorizontal: 40,
+                alignItems: 'center'
+            }}>
+                <Text style = {{marginRight: 10}}>{tb}</Text>
                 <StarRating
-                    nums = {5}
-                    fill = {2}
+                    nums={5}
+                    fill={tb}
                 />
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Review')}
+                    onPress={() => navigation.navigate('ReviewScreen', {item})}
                 >
-                    <Text style = {{
+                    <Text style={{
                         marginHorizontal: 40,
-                        fontStyle: 'italic',
-                        textDecorationLine: 'underline'
+                        fontStyle: 'italic'
                     }}>
                         See reviews
                     </Text>
                 </TouchableOpacity>
-          </View>
+            </View>
 
-        <View style ={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-            marginVertical: '1%'
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                }}
+            >
 
-        }}>
-            <Text style = {{
-                marginLeft: 25,
-                ...styles.textLarge
-                
-            }}>Color</Text>
-            <View style ={{
+
+            </View>
+
+            <View style={{
                 flexDirection: 'row',
-               
-            }}>
-            <View style = {{
-                ...styles.colorCicle,
-                backgroundColor: CUSTOM_COLOR.ChathamsBlue,
-                
-
-            }}>
-
-            </View>
-
-            <View style = {{
-                ...styles.colorCicle,
-                backgroundColor: CUSTOM_COLOR.Carnation,
-                
-
-            }}>
-
-            </View>
-
-            <View style = {{
-                ...styles.colorCicle,
-                backgroundColor: CUSTOM_COLOR.Mercury,
-               
-
-            }}>
-
-            </View>
-            </View>
-            
-
-            <Text>+2 colors</Text>
-
-            <TouchableOpacity style = {{
-                width: 30,
-                height: 30,
-                borderWidth: 1,
-                borderRadius: 20,
                 alignItems: 'center',
-                justifyContent: 'center', 
-                backgroundColor: CUSTOM_COLOR.Alto,
-                marginLeft: 20
+                justifyContent: 'space-between',
+                marginVertical: '1%'
+
             }}>
-                <Text style = {{
-                    fontSize: 20,
-                    fontWeight: 'bold'
-                }}>-</Text>
-        
-            </TouchableOpacity>
 
-            <Text>1</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                }}>
 
-            <TouchableOpacity style = {{
-                width: 30,
-                height: 30,
-                borderWidth: 1,
-                borderRadius: 20,
-                alignItems: 'center',
-                justifyContent: 'center', 
-                backgroundColor: CUSTOM_COLOR.Alto,
-                marginRight: 20
-            }}>
-                <Text style = {{
-                    fontSize: 20,
-                    fontWeight: 'bold'
-                }}>+</Text>
-        
-            </TouchableOpacity>
-        </View>
-    
+                    <Text style={{
+                        marginLeft: 35,
+                        marginRight: 20,
+                        ...styles.textLarge
 
-        <View style ={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-            marginTop: 10,
-            marginVertical: '1%'
-        }}>
-            <Text style ={{
-                ...styles.textLarge,
-                marginLeft: 25
-            }}>Size</Text>
+                    }}>Color</Text>
 
-            <View style = {{
+
+
+                    {item.MauSac.filter(color => color.checked == true).map(color => (
+                        <View style={{
+                            ...styles.colorCicle,
+                            backgroundColor: color.MaMau,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                            key={color.MaMS}
+                        >
+                            {chooseColor === color.TenMau ?
+                                <View style={{
+                                    ...styles.colorCicle,
+                                    width: 10,
+                                    height: 10,
+                                    backgroundColor: CUSTOM_COLOR.White,
+                                    borderWidth: 0
+                                }}>
+
+                                </View> : null}
+
+                        </View>
+                    ))}
+
+
+
+
+
+
+                </View>
+
+
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}
+                >
+
+                    <TouchableOpacity style={{
+                        ...styles.btnCount
+                    }}
+                        onPress={() => numProduct > 1 ? setNumProduct(numProduct - 1) : null}
+                    >
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold'
+                        }}>-</Text>
+
+                    </TouchableOpacity>
+
+                    <Text>{numProduct}</Text>
+
+                    <TouchableOpacity style={{
+                        ...styles.btnCount
+                    }}
+                        onPress={() => setNumProduct(numProduct + 1)}
+                    >
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold'
+                        }}>+</Text>
+
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+
+
+            <View style={{
                 flexDirection: 'row',
-                
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                marginTop: 10,
+                marginVertical: '1%'
             }}>
+                <Text style={{
+                    ...styles.textLarge,
+                    marginLeft: 35
 
-                <TouchableWithoutFeedback style = {{
-                    width: 25,
-                    height: 25,
-                    backgroundColor: CUSTOM_COLOR.Alto,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 10,
-                    marginHorizontal: 5
-                }}>
-                    <Text>S</Text>
-                </TouchableWithoutFeedback>
+                }}>Size</Text>
 
-                <TouchableWithoutFeedback style = {{
-                    width: 25,
-                    height: 25,
-                    backgroundColor: CUSTOM_COLOR.Alto,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 10,
-                    marginHorizontal: 5
-                }}>
-                    <Text>M</Text>
-                </TouchableWithoutFeedback>
+                <View style={{
+                    flexDirection: 'row',
 
-                <TouchableWithoutFeedback style = {{
-                    width: 25,
-                    height: 25,
-                    backgroundColor: CUSTOM_COLOR.Alto,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 10,
-                    marginHorizontal: 5
                 }}>
-                    <Text>L</Text>
-                </TouchableWithoutFeedback>
+                    {item.Size.filter(size => size.checked == true).map(size => (
+                        <TouchableWithoutFeedback style={{
+                            ...styles.sizeCircle,
+                            width: 45,
+                            marginHorizontal: 5,
+                            borderWidth: chooseSize === size.title ? 1 : 0
+                        }}>
+                            <Text>{size.title}</Text>
+                        </TouchableWithoutFeedback>
+                    ))}
 
-                <TouchableWithoutFeedback style = {{
-                    width: 25,
-                    height: 25,
-                    backgroundColor: CUSTOM_COLOR.Alto,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 10,
-                    marginHorizontal: 5
-                }}>
-                    <Text>+1</Text>
-                </TouchableWithoutFeedback>
+
+
+
+                </View>
+
 
             </View>
 
             <TouchableOpacity
                 onPress={() => setChooseStyle(true)}
+                style={{ alignSelf: 'flex-end', marginHorizontal: 20 }}
             >
-                <Text style = {{
-                    fontStyle: 'italic',
-                    textDecorationLine: 'underline'
+                <Text style={{
+                    fontStyle: 'italic'
                 }}>How can I choose my size?</Text>
             </TouchableOpacity>
-        </View>
 
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between', marginVertical: 10,
+                    marginHorizontal: 35
+                }}
+            >
+                <Text style={{
+                    color: CUSTOM_COLOR.Black
+                }}>
+                    See product details
+                </Text>
 
-        <View
-            style = {{
-                flexDirection: 'row',
-                justifyContent: 'space-between', marginVertical: 10,
-                marginHorizontal: 35
-            }}
-        >
-            <Text style = {{
-                color: CUSTOM_COLOR.Black
-            }}>
-                See product details
-            </Text>
+                <TouchableOpacity styles={{
 
-            <TouchableWithoutFeedback styles ={{
-                
-            }}>
-                <Image source={IC_Down}/>
-            </TouchableWithoutFeedback>
-        </View>
+                }}
+                    onPress={() => setSeeDetails(!seeDetails)}
+                >
+                    <Image source={IC_Down} />
+                </TouchableOpacity>
+            </View>
+            {seeDetails ?
+                <View>
+                    <Text style={{
+                        marginHorizontal: 35
+                    }}>{item.MoTaSP}</Text>
+                </View>
+                :
+                null}
 
         <View style = {{
             flexDirection: 'row', justifyContent: 'center',
@@ -304,11 +373,165 @@ function ViewShop2({navigation, route}) {
                 style = {{
                     paddingVertical: '3%'
                 }}
+                onPress = {() =>{navigation.navigate('EditProduct', {item})}}
+            />
+
+        </View>
+        {chooseStyle ?
+
+<View style={{
+    position: 'absolute',
+    width: '80%',
+    height: '40%',
+    backgroundColor: CUSTOM_COLOR.White,
+    alignSelf: 'center',
+    top: '30%',
+    borderRadius: 30,
+    borderWidth: 1
+}}>
+
+    <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginHorizontal: '5%',
+        marginVertical: '2%'
+    }}>
+        <Text style={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: CUSTOM_COLOR.Black
+        }}>Choose your style</Text>
+
+        <TouchableOpacity
+            onPress={() => setChooseStyle(false)}
+        >
+            <Image style={{
+                width: 15,
+                height: 15
+            }}
+                source={IC_Cancle}
+            />
+
+        </TouchableOpacity>
+    </View>
+
+    <View style={{
+        ...styles.flexRow,
+        marginHorizontal: '10%',
+        marginVertical: '3%'
+    }}>
+        <Text style={{ ...styles.textLarge, fontWeight: 'normal' }}>Color</Text>
+
+        <View>
+
+            <FlatList
+                data={item.MauSac}
+                keyExtractor={(item, index) => index}
+                renderItem={({ item }) => {
+                    return item.checked == true ? (
+                        <View style={{
+                            ...styles.flexRow,
+                            marginHorizontal: '5%',
+                            marginVertical: 3
+
+                        }}>
+                            <TouchableOpacity style={{
+                                ...styles.colorCicle,
+                                backgroundColor: item.MaMau,
+                                borderWidth: 1,
+
+                                justifyContent: 'center',
+                                alignItems: 'center'
+
+                            }}
+                                onPress={() => setChooseColor(item.TenMau)}
+                            >
+                                {chooseColor === item.TenMau ?
+                                    <View style={{
+                                        ...styles.colorCicle,
+                                        width: 10,
+                                        height: 10,
+                                        backgroundColor: CUSTOM_COLOR.White,
+                                        borderWidth: 0
+                                    }}>
+
+                                    </View> : null}
+
+                            </TouchableOpacity>
+                            <Text style={{ ...styles.textSmall }}>{item.TenMau}</Text>
+
+                        </View>
+                    ) :
+                        <View></View>
+                }
+                }
+                numColumns={2}
+            />
+
+
+
+
+        </View>
+
+
+    </View>
+
+    <View style={{ ...styles.flexRow }}>
+        <Text style={{
+            ...styles.textLarge,
+            fontWeight: 'normal',
+            marginHorizontal: '10%',
+            marginVertical: '3%'
+        }}>Size</Text>
+
+        <View>
+            <FlatList
+
+                data={item.Size}
+                numColumns={3}
+                keyExtractor={(item, index) => index}
+                renderItem={({ item }) => {
+                    return item.checked == true ?
+                        <TouchableOpacity style={{
+                            ...styles.sizeCircle,
+                            width: 45,
+                            marginVertical: 5,
+
+                            borderWidth: chooseSize === item.title ? 1 : 0
+
+                        }}
+                            onPress={() => setChooseSize(item.title)}
+                        >
+                            <Text>{item.title}</Text>
+                        </TouchableOpacity>
+                        : <View></View>
+                }}
+
             />
 
         </View>
 
-      </View>
+
+    </View>
+
+    <View style={{
+        ...styles.flexRow,
+        justifyContent: 'center',
+        marginVertical: '6%'
+    }}>
+        <Button
+            title='DONE'
+            color={CUSTOM_COLOR.Carnation}
+            onPress={() => setChooseStyle(false)}
+        />
+
+    </View>
+
+</View> : null}
+
+</View>
+
       
     )
   }
@@ -346,7 +569,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     marginHorizontal: 5
-  }
+  },
+  btnCount: {
+    width: 30,
+    height: 30,
+    borderWidth: 1,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: CUSTOM_COLOR.Alto,
+    marginHorizontal: 15
+},
 
 
 })

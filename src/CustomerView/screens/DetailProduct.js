@@ -24,6 +24,7 @@ function DetailProduct({ navigation, route }) {
     const [tong, settong] = useState()
     const [tb, settb] = useState()
     const { item } = route.params
+    console.log(item);
     const [chooseStyle, setChooseStyle] = useState(false)
     const [numProduct, setNumProduct] = useState(1)
     const [chooseColor, setChooseColor] = useState()
@@ -149,7 +150,7 @@ function DetailProduct({ navigation, route }) {
             }
             settong(items.length);
             console.log(tong);
-            settb((Math.round(sum/data.length * 100) / 100).toFixed(2));
+            settb((Math.round(sum/items.length * 100) / 100).toFixed(2));
             console.log(tb);
         }
         })
@@ -293,7 +294,6 @@ function DetailProduct({ navigation, route }) {
                     ))}
 
                 </Swiper>
-
 
             </View>
 
