@@ -1,32 +1,30 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
+  FlatList,
+  Image,
   SafeAreaView,
   StyleSheet,
-  Image,
+  Text,
   TouchableOpacity,
-  FlatList,
+  View,
 } from 'react-native';
+import { firebase } from '../../../Firebase/firebase.js';
+import ViewNow from '../../StaffView/components/ViewNow';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
-import ViewNow from '../../StaffView/components/ViewNow';
-import {firebase} from '../../../Firebase/firebase.js';
 import {
-  IC_product,
-  IC_order,
-  IC_logout,
-  IC_promotions,
-  IC_financial,
-  IC_user,
-  IC_messenger,
   IC_User,
-  IC_Review,
+  IC_financial,
+  IC_logout,
+  IC_messenger,
+  IC_order,
+  IC_product,
+  IC_promotions,
+  IC_user
 } from '../assets/icons/index.js';
-import MenuIcon from '../components/MenuIcon.js';
 import FunctionCard from '../components/FunctionCard.js';
-import {Storage} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
+import MenuIcon from '../components/MenuIcon.js';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -286,9 +284,8 @@ const AdminOverView = props => {
               <View style={styles.unitContainer}>
                 <View style={styles.unitContainer}>
                   <FunctionCard
-                    onPress={() => navigation.navigate('Report')}
+                    onPress={() => navigation.navigate('Report.js')}
                     source={IC_financial}
-                    text="Financial Report"
                   />
                 </View>
                 <View style={styles.unitContainer}>

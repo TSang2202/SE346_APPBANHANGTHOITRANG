@@ -20,7 +20,7 @@ import scale from '../constants/responsive.js';
 import { Acount } from './AdminOverView';
 
 
-function ViewShop1({navigation, route}){
+function ViewShop1({navigation}){
   
   const [detail ,setdetail] = useState(false)
   const [product, setproduct] = useState(true)
