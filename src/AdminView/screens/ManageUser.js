@@ -1,28 +1,22 @@
-import React, {useState, useEffect} from 'react';
+import { getAuth } from 'firebase/auth';
+import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
+  Alert,
+  FlatList,
+  Image,
   SafeAreaView,
-  View,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  Image,
-  FlatList,
-  Alert,
+  View,
 } from 'react-native';
-import Search from '../components/Search';
-import ButtonDetail from '../components/ButtonDetail';
-import OneStaff from '../components/OneStaff';
-import {IM_AnhGiay1} from '../../CustomerView/assets/images';
-import HeaderWithBack from '../components/HeaderWithBack';
-import CUSTOM_COLOR from '../constants/colors';
+import { firebase } from '../../../Firebase/firebase';
 import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
+import { IC_User } from '../assets/icons';
 import AccountCard from '../components/AccountCard';
-import {firebase, Firestore} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
-import {Storage} from '../../../Firebase/firebase';
-import {IC_User} from '../assets/icons';
-import {Avatar, ListItem} from 'react-native-elements';
-import {getAuth, deleteUser} from 'firebase/auth';
+import Search from '../components/Search';
+import CUSTOM_COLOR from '../constants/colors';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -44,7 +38,7 @@ const ManageUser = props => {
   const [imageUrl, setImageUrl] = useState(null);
   const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
-
+  const [searchTerm, setSearchTerm] = useState([]);
   useEffect(() => {
     setTimeout(() => {
       // Assume data is fetched here
@@ -153,7 +147,11 @@ const ManageUser = props => {
         Alert.alert('Error', error.message);
       });
   };
-
+  //SEARCH_IF
+  const handleSearch = (searchTerm)=>{
+    setSearchTerm(searchTerm);
+  }
+  //SEARCH_END_IF
   const renderUser = ({item}) => (
     <TouchableOpacity onPress={() => handleUserPress(item)}>
       <View style={{}}>
@@ -234,6 +232,7 @@ const ManageUser = props => {
                     height: 35,
                     backgroundColor: CUSTOM_COLOR.White,
                   }}
+                  onSearch={handleSearch}
                 />
               </View>
               <View style={{width: '5%', height: '100%'}} />

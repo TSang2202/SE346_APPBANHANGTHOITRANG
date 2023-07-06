@@ -1,31 +1,25 @@
+import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
   FlatList,
-  ScrollView,
-  TouchableWithoutFeedback,
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import React from 'react';
-import {useState} from 'react';
-import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import FONT_FAMILY from '../../StaffView/constants/fonts.js';
-import Search from '../components/Search';
-import scale from '../constants/responsive.js';
-import {Acount} from './AdminOverView';
 import Product from '../../StaffView/components/Product';
-import ItemList from '../components/ItemList';
+import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
+import { backto } from '../assets/icons/index.js';
 import {
   IM_Giay1,
   IM_Giay2,
   IM_Giay3,
   IM_Giay4,
 } from '../assets/images/index.js';
-import Size from '../constants/size.js';
-import {backto} from '../assets/icons/index.js';
+import ItemList from '../components/ItemList';
+import Search from '../components/Search';
+import scale from '../constants/responsive.js';
+import { Acount } from './AdminOverView';
 const datasdetail = [
   {
     id: '1',
@@ -125,6 +119,38 @@ export const ListItem = [
 function ViewShop1({navigation}) {
   const [detail, setdetail] = useState(false);
   const [product, setproduct] = useState(true);
+  //SEARCH
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const handleSearch = (keyword) => {
+    setSearchKeyword(keyword);
+  };
+  //SORT
+  const [dataSets, setDataSets] = useState([
+    { name: 'datas', data: datas },
+    { name: 'datasdetail', data: datasdetail },
+    { name: 'ListItem', data: ListItem },
+  ]);
+  const [selectedDataSet, setSelectedDataSet] = useState(dataSets[0]);
+  const [sortedData, setSortedData] = useState(selectedDataSet.data);
+
+  const handleSort = (sortType) => {
+    let sortedArray = [...selectedDataSet.data];
+
+    if (sortType === "a-z") {
+      sortedArray.sort((a, b) => a.title.localeCompare(b.title));
+  } else if (sortType === "z-a") {
+      sortedArray.sort((a, b) => b.title.localeCompare(a.title));
+  } else if (sortType === "low-to-high") {
+      sortedArray.sort((a, b) => a.price - b.price);
+  } else if (sortType === "high-to-low") {
+      sortedArray.sort((a, b) => b.price - a.price);
+  }
+
+    setSortedData([...sortedArray]);
+  };
+  const filteredData = sortedData.filter((item) =>
+    item.title.toLowerCase().includes(searchKeyword.toLowerCase())
+  );
   if (product == true && detail == false) {
     return (
       <SafeAreaView
@@ -150,6 +176,7 @@ function ViewShop1({navigation}) {
                 height: 35,
                 backgroundColor: CUSTOM_COLOR.White,
               }}
+              onSearch={handleSearch}
             />
           </View>
           <Image
@@ -160,7 +187,7 @@ function ViewShop1({navigation}) {
               borderRadius: 55,
               marginTop: 5,
             }}
-            source={{uri: Acount.avartar}}
+            //source={{uri: Acount.avartar}}
             resizeMode="contain"
           />
           <Text
@@ -390,6 +417,7 @@ function ViewShop1({navigation}) {
                   height: 35,
                   backgroundColor: CUSTOM_COLOR.White,
                 }}
+                onSearch={handleSearch}
               />
             </View>
             <Image
@@ -400,7 +428,7 @@ function ViewShop1({navigation}) {
                 borderRadius: 55,
                 marginTop: 5,
               }}
-              source={{uri: Acount.avartar}}
+              //source={{uri: Acount.avartar}}
               resizeMode="contain"
             />
             <Text

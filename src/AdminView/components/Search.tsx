@@ -1,14 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
+  Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
-  Image,
 } from 'react-native';
+import { SearchIcon } from '../../CustomerView/assets/icons';
 import CUSTOM_COLOR from '../constants/colors';
-import {IC_Search} from '../assets/icons';
-
 interface SearchInputProps {
   onSearch: (searchTerm: string) => void;
 }
@@ -31,7 +30,7 @@ const Search: React.FC<SearchInputProps> = ({onSearch}) => {
         />
         <TouchableOpacity onPress={handleSearch} style={styles.button}>
           <Image
-            source={IC_Search}
+            source={SearchIcon}
             style={{width: '50%', height: '100%'}}
             resizeMode="center"
           />
