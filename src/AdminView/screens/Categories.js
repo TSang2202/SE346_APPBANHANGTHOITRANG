@@ -104,7 +104,9 @@ export default function Categories({ navigation }) {
                     onPress={() => navigation.navigate('AddNewCategory')}
                     style={{
                         width: '50%',
-                        marginVertical: 10
+                        marginVertical: 10,
+                        padding: 10
+
                     }}
                 />
 

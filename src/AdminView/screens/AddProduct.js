@@ -49,6 +49,7 @@ export default function AddProduct({ navigation }) {
   const [lengthDescription, setLengthDescription] = useState(0);
 
   const [color, setColor] = useState([]);
+  const [soLuongSPDanhMuc, setSoLuongSPDanhMuc] = useState()
   const [size, setSize] = useState([
     {
       id: 'sizeS',
@@ -144,6 +145,12 @@ export default function AddProduct({ navigation }) {
     const updateId = await updateDoc(docRef, {
       MaSP: docRef.id,
     });
+
+    const updateDanhMucRef = doc(Firestore, "DanhMuc", value);
+    const updayeDanhMuc = await updateDoc(updateDanhMucRef, {
+      SoLuongSP: soLuongSPDanhMuc + 1,
+    });
+
   };
 
   useEffect(() => {
@@ -594,7 +601,8 @@ export default function AddProduct({ navigation }) {
                   onChange={item => {
                     setValue(item.key);
                     setIsFocus(false);
-                    setCategorize(item);
+
+                    setSoLuongSPDanhMuc(item.SoLuongSP)
                   }}
                 />
                 <View
