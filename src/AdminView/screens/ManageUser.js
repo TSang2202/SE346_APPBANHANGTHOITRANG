@@ -1,29 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
+  Alert,
+  FlatList,
+  Image,
   SafeAreaView,
-  View,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  Image,
-  FlatList,
-  Alert,
+  View,
 } from 'react-native';
-import Search from '../components/Search';
-import ButtonDetail from '../components/ButtonDetail';
-import OneStaff from '../components/OneStaff';
-import { IM_AnhGiay1 } from '../../CustomerView/assets/images';
-import HeaderWithBack from '../components/HeaderWithBack';
-import CUSTOM_COLOR from '../constants/colors';
+import { firebase } from '../../../Firebase/firebase';
 import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
 import AccountCard from '../components/AccountCard';
-import { firebase, Firestore } from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
+import Search from '../components/Search';
+import CUSTOM_COLOR from '../constants/colors';
 
-import { Storage } from '../../../Firebase/firebase';
+import { getAuth } from 'firebase/auth';
 import { IC_User } from '../assets/icons';
-import { Avatar, ListItem } from 'react-native-elements';
-import { getAuth, deleteUser } from 'firebase/auth';
 
 
 export const Acount = {
@@ -46,7 +40,10 @@ const ManageUser = props => {
   const [imageUrl, setImageUrl] = useState(null);
   const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
-
+  const [searchTerm, setSearchTerm] = useState();
+  const handleSearch = (searchTerm) =>{
+    setSearchTerm(searchTerm);
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -73,22 +70,6 @@ const ManageUser = props => {
         console.error('Error retrieving users: ', error);
       }
     };
-
-    // const fetchUserAvata = async() => {
-    //   try {
-    //     const documentSnapshot = await firebase
-    //       .firestore()
-    //       .collection('NGUOIDUNG')
-    //       .get();
-    //     const data = documentSnapshot.data();
-    //     const imageUrl = data[Avatar];
-    //     return imageUrl;
-    //   } catch (error) {
-    //     console.error('Error fetching image URL:', error);
-    //     return null;
-    //   }
-
-    // }
 
     fetchUsers();
   }, []);
@@ -241,6 +222,7 @@ const ManageUser = props => {
                     height: 35,
                     backgroundColor: CUSTOM_COLOR.White,
                   }}
+                  onSearch={handleSearch}
                 />
               </View>
               <View style={{ width: '5%', height: '100%' }} />
