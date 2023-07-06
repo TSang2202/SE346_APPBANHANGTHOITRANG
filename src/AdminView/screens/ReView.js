@@ -17,18 +17,21 @@ import Review from '../components/Review';
 import StarRating from '../components/StarRating';
 import { IC_Back } from '../../CustomerView/assets/icons';
 import CUSTOM_COLOR from '../constants/colors';
-import { collection, addDoc, doc, updateDoc, getDoc, onSnapshot, getDocs, where, query } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, getDoc, onSnapshot, getDocs, where, query , deleteDoc} from "firebase/firestore";
 import { async } from "@firebase/util";
 import { Firestore, firebase, Storage } from "../../../Firebase/firebase";
+import ReviewDe from '../components/ReViewDe';
+import { update } from 'firebase/database';
+import { da } from 'date-fns/locale';
 
 function ReviewScreen({navigation, route}) {
-  const [addReview, setAddReview] = useState(false);
+  const [RemoveReview, setRemoveReview] = useState(false);
   const {item} = route.params
   const [image, setImage] = useState('')
   const [data, setdata] = useState([])
   const [tong, settong] = useState()
   const [tb, settb] = useState()
-
+  const [Check, setCheck] = useState()
   const getdataReview = () =>{
     try{
         const q = query(collection(Firestore, "DANHGIA"), where("MaSP", "==", item.MaSP));
@@ -49,6 +52,7 @@ function ReviewScreen({navigation, route}) {
                 const NguoiDung = {
                     ...docSnap.data()
                 }
+                items[i].check = false
                 items[i].TenND = NguoiDung.TenND
                 items[i].Avatar = NguoiDung.Avatar
                 console.log(NguoiDung.Avatar)
@@ -59,7 +63,7 @@ function ReviewScreen({navigation, route}) {
             console.log(items);
             settong(items.length);
             console.log(tong);
-            settb((Math.round(sum/items.length * 100) / 100).toFixed(2));
+            settb((Math.round(sum/items.length * 100) / 100).toFixed(1));
             console.log(tb);
         }
         })
@@ -68,244 +72,261 @@ function ReviewScreen({navigation, route}) {
     }
     
 }
+  const DeleteReView = () =>{
+    data.map(async (sanpham) =>{
+      if(sanpham.check == true){
+        try {
+          const collectionRef = collection(Firestore, 'DANHGIA');
+          const q = query(collectionRef
+              , where('MaDG', '==', sanpham.MaDG));
+          const querySnapshot = await getDocs(q);
+         // console.log(querySnapshot);
+          querySnapshot.forEach((doc) => {
+              deleteDoc(doc.ref).then(() => {
+                  console.log('Xóa tài liệu thành công');
+              }).catch((error) => {
+                  console.error('Lỗi khi xóa tài liệu:', error);
+              });
+          });
+          } catch(error){
+              console.log(error);
+          }
+      }
+    })
+    setRemoveReview(false)
+  }
+  const updateCheck = (item) =>{
+    const updateItem = data.map((product) => {
+      if (product.MaDG === item.MaDG) {
+          product.check = !item.check;
+      }
+      return product
+    })
+    setdata(updateItem)
+    console.log(data)
+  }
   useEffect(() =>{
     getdataReview()
   }, [])
-  return (
-    <View style = {{
-      flex: 1,
-      backgroundColor: CUSTOM_COLOR.White
-  }}>
-      <View style ={{
-          flexDirection: 'row', 
-          alignItems: 'center',
-      
-      }}>
-          <TouchableOpacity onPress={() => {
-              navigation.goBack();
-          }}>
-              <Image
-                  source={IC_Back}
-                  style = {{
-                      width: 10, 
-                      height: 20,
-                      marginHorizontal: 20,
-                      marginVertical: 15
-                  }}
-                  resizeMode = 'cover'
-              />  
-          </TouchableOpacity>
-              
-        
-          <Text style ={{
-              fontSize: 20,
-              color: CUSTOM_COLOR.Black, 
-              fontWeight: 'bold'
-          }}>Review</Text>
-      </View>
-
+  if( RemoveReview == false){
+    return (
       <View style = {{
-          flexDirection: 'row',
-          marginHorizontal: '5%',
-          justifyContent: 'space-between'
-      }}>
-          <View>
-              <Text style ={{
-                  fontSize: 17,
-                  color: CUSTOM_COLOR.Black
-              }}>{tong} Reviews</Text>
-              <View style = {{
-                  flexDirection: 'row'
-              }}>
-                  <Text style = {{
-                      fontSize: 17,
-                      color: CUSTOM_COLOR.Black,
-                      marginRight: '5%'
-                  }}>{tb}</Text>
-                  <StarRating
-                      nums = {5}
-                      fill = {tb}
-                  />
-              </View>
-          </View>
-
+        flex: 1,
+        backgroundColor: CUSTOM_COLOR.White
+    }}>
+        <View style ={{
+            flexDirection: 'row', 
+            alignItems: 'center',
+        
+        }}>
+            <TouchableOpacity onPress={() => {
+                navigation.goBack();
+            }}>
+                <Image
+                    source={IC_Back}
+                    style = {{
+                        width: 10, 
+                        height: 20,
+                        marginHorizontal: 20,
+                        marginVertical: 15
+                    }}
+                    resizeMode = 'cover'
+                />  
+            </TouchableOpacity>
+                
           
-          <View>
-              <TouchableOpacity style ={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  backgroundColor: CUSTOM_COLOR.FlushOrange,
-                  borderRadius: 20,
-                  paddingHorizontal: 15,
-                  paddingVertical: 8
-              }}
-                  onPress = {() => setAddReview(true)}
-              >
-                  <Image source={IC_Review}/>
-                  <Text style ={{
-                      fontSize: 15,
-                      marginLeft: 10,
-                      fontWeight: 'bold',
-                      color: CUSTOM_COLOR.White
-                  }}>Add Review</Text>
-              </TouchableOpacity>
-
-          </View>
-
-      </View>
-
-      <ScrollView>
-          {data.map((review, index) =>(
-              
-              <View style = {{
-                  marginVertical: '3%',
-                  borderBottomWidth: 1,
-                  borderBottomColor: CUSTOM_COLOR.Alto,
-                  paddingBottom: '2%'
-              }}>
-                  <Review
-                      key = {review.id}
-                      avatar = {review.Avatar}
-                      name = {review.TenND}
-                      time = {review.NgayDG}
-                      rating = {review.Rating}
-                      content = {review.NDDG}
-                      image = {review.AnhDG}
-                  />
-
-              </View>
-          ))}
-      </ScrollView>
-
-      {addReview ? (
-        <View
-          style={{
-            position: 'absolute',
-            width: '80%',
-            height: 350,
-            backgroundColor: CUSTOM_COLOR.White,
-            borderWidth: 1,
-            borderRadius: 20,
-            alignSelf: 'center',
-            top: '25%',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              marginHorizontal: '3%',
-              marginTop: '2%',
-            }}>
-            <TouchableOpacity onPress={() => setAddReview(false)}>
-              <Image
-                source={IC_Cancle}
-                style={{
-                  width: 20,
-                  height: 20,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginHorizontal: '5%',
-            }}>
-            <Image
-              source={IM_AnhGiay1}
-              style={{
-                width: 45,
-                height: 45,
-                borderRadius: 30,
-              }}
-            />
-            <Text
-              style={{
-                fontSize: 17,
-                marginHorizontal: '3%',
-                fontWeight: 'bold',
-                color: CUSTOM_COLOR.Black,
-              }}>
-              Sang Thach
-            </Text>
-          </View>
-
-          <View
-            style={{
-              ...styles.flexRow,
-              marginHorizontal: '5%',
-              marginVertical: '3%',
-            }}>
-            <Text
-              style={{
-                fontSize: 17,
-                marginRight: '5%',
-              }}>
-              Rating
-            </Text>
-            <StarRating nums={5} fill={4} />
-          </View>
-
-          <View
-            style={{
-              width: '90%',
-              height: '30%',
-              backgroundColor: CUSTOM_COLOR.Gallery,
-              alignSelf: 'center',
-              borderRadius: 20,
-            }}>
-            <TextInput
-              placeholder="Write something..."
-              multiline
-              numberOfLines={1}
-              style={{
-                paddingHorizontal: 10,
-              }}
-            />
-          </View>
-
-          <View
-            style={{
-              ...styles.flexRow,
-              marginVertical: 10,
-              marginHorizontal: 10,
-            }}>
-            <TouchableOpacity>
-              <Image
-                source={IC_Add}
-                style={{
-                  width: 45,
-                  height: 45,
-                  marginRight: 10,
-                }}
-              />
-            </TouchableOpacity>
-
-            <Text>Upload your image or video</Text>
-          </View>
-
-          <View
-            style={{
-              ...styles.flexRow,
-              justifyContent: 'center',
-            }}>
-            <Button
-              title="Add Review"
-              color={CUSTOM_COLOR.FlushOrange}
-              style={{
-                width: '40%',
-              }}
-            />
-          </View>
+            <Text style ={{
+                fontSize: 20,
+                color: CUSTOM_COLOR.Black, 
+                fontWeight: 'bold'
+            }}>Review</Text>
         </View>
-      ) : null}
-    </View>
-  );
-}
-
+  
+        <View style = {{
+            flexDirection: 'row',
+            marginHorizontal: '5%',
+            justifyContent: 'space-between'
+        }}>
+            <View>
+                <Text style ={{
+                    fontSize: 17,
+                    color: CUSTOM_COLOR.Black
+                }}>{tong} Reviews</Text>
+                <View style = {{
+                    flexDirection: 'row'
+                }}>
+                    <Text style = {{
+                        fontSize: 17,
+                        color: CUSTOM_COLOR.Black,
+                        marginRight: '5%'
+                    }}>{tb}</Text>
+                    <StarRating
+                        nums = {5}
+                        fill = {tb}
+                    />
+                </View>
+            </View>
+  
+            
+            <View>
+                <TouchableOpacity style ={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: CUSTOM_COLOR.FlushOrange,
+                    borderRadius: 20,
+                    paddingHorizontal: 15,
+                    paddingVertical: 8
+                }}
+                    onPress = {() => setRemoveReview(true)}
+                >
+                    <Image source={IC_Review}/>
+                    <Text style ={{
+                        fontSize: 15,
+                        marginLeft: 10,
+                        fontWeight: 'bold',
+                        color: CUSTOM_COLOR.White
+                    }}>Add Review</Text>
+                </TouchableOpacity>
+  
+            </View>
+  
+        </View>
+  
+        <ScrollView>
+            {data.map((review, index) =>(
+                
+                <View style = {{
+                    marginVertical: '3%',
+                    borderBottomWidth: 1,
+                    borderBottomColor: CUSTOM_COLOR.Alto,
+                    paddingBottom: '2%'
+                }}>
+                    <Review
+                        key = {review.id}
+                        avatar = {review.Avatar}
+                        name = {review.TenND}
+                        time = {review.NgayDG}
+                        rating = {review.Rating}
+                        content = {review.NDDG}
+                        image = {review.AnhDG}
+                    />
+  
+                </View>
+            ))}
+        </ScrollView>
+        </View>
+      )
+      }else{
+        return (
+          <View style = {{
+            flex: 1,
+            backgroundColor: CUSTOM_COLOR.White
+        }}>
+            <View style ={{
+                flexDirection: 'row', 
+                alignItems: 'center',
+            
+            }}>
+                <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                }}>
+                    <Image
+                        source={IC_Back}
+                        style = {{
+                            width: 10, 
+                            height: 20,
+                            marginHorizontal: 20,
+                            marginVertical: 15
+                        }}
+                        resizeMode = 'cover'
+                    />  
+                </TouchableOpacity>
+                    
+              
+                <Text style ={{
+                    fontSize: 20,
+                    color: CUSTOM_COLOR.Black, 
+                    fontWeight: 'bold'
+                }}>Review</Text>
+            </View>
+      
+            <View style = {{
+                flexDirection: 'row',
+                marginHorizontal: '5%',
+                justifyContent: 'space-between'
+            }}>
+                <View>
+                    <Text style ={{
+                        fontSize: 17,
+                        color: CUSTOM_COLOR.Black
+                    }}>{tong} Reviews</Text>
+                    <View style = {{
+                        flexDirection: 'row'
+                    }}>
+                        <Text style = {{
+                            fontSize: 17,
+                            color: CUSTOM_COLOR.Black,
+                            marginRight: '5%'
+                        }}>{tb}</Text>
+                        <StarRating
+                            nums = {5}
+                            fill = {tb}
+                        />
+                    </View>
+                </View>
+      
+                
+                <View>
+                    <TouchableOpacity style ={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: CUSTOM_COLOR.FlushOrange,
+                        borderRadius: 20,
+                        paddingHorizontal: 15,
+                        paddingVertical: 8
+                    }}
+                        onPress = {DeleteReView}
+                    >
+                        <Image source={IC_Review}/>
+                        <Text style ={{
+                            fontSize: 15,
+                            marginLeft: 10,
+                            fontWeight: 'bold',
+                            color: CUSTOM_COLOR.White
+                        }}>OK</Text>
+                    </TouchableOpacity>
+      
+                </View>
+      
+            </View>
+      
+            <ScrollView>
+                {data.map((review, index) =>(
+                    <View style = {{
+                        marginVertical: '3%',
+                        borderBottomWidth: 1,
+                        borderBottomColor: CUSTOM_COLOR.Alto,
+                        paddingBottom: '2%'
+                    }}>
+                        <ReviewDe
+                            key = {review.id}
+                            avatar = {review.Avatar}
+                            name = {review.TenND}
+                            time = {review.NgayDG}
+                            rating = {review.Rating}
+                            content = {review.NDDG}
+                            image = {review.AnhDG}
+                            value = {review.check}
+                            change = { () => updateCheck(review)}
+                        />
+      
+                    </View>
+                ))}
+            </ScrollView>
+            </View>
+        )
+      }
+    }
 const styles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',

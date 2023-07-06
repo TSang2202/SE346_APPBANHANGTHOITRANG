@@ -8,11 +8,6 @@ import CUSTOM_COLOR from "../constants/colors";
 const ProductCheckOut = (props: any) => {
 
 
-
-
-
-
-
     return (
         <TouchableOpacity style={{
             flexDirection: 'row',

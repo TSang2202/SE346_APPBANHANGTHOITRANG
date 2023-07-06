@@ -59,11 +59,8 @@ function ReviewScreen({navigation, route}) {
                     sum += items[i].Rating;
                 }
                 setdata(items);
-                console.log(items);
                 settong(items.length);
-                console.log(tong);
-                settb((Math.round(sum/data.length * 100) / 100).toFixed(2));
-                console.log(tb);
+                settb((Math.round(sum/items.length * 100) / 100).toFixed(2));
             }
             })
         }catch(error){
@@ -78,11 +75,9 @@ function ReviewScreen({navigation, route}) {
             ...docSnap.data()
         }
         setdataUser(NguoiDung);
-        console.log(NguoiDung);
     }
     const currentDay = () => {
         const currentDate = new Date();
-        console.log(currentDate);
         const day = currentDate.getDate();
         const month = currentDate.getMonth() + 1;
         const year = currentDate.getFullYear();
@@ -130,7 +125,7 @@ function ReviewScreen({navigation, route}) {
             path: 'images',
           },
           multiple: true,
-          selectionLimit: 5,
+          selectionLimit: 1,
           quality: 1,
         };
     
