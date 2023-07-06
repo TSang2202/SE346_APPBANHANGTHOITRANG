@@ -1,46 +1,37 @@
-import React, { useState, useEffect } from 'react';
 import {
-  FlatList,
+  collection,
+  onSnapshot,
+  query,
+  where
+} from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import {
   Image,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import {firebase} from '../../../Firebase/firebase.js';
+import { Firestore } from '../../../Firebase/firebase';
+import { firebase } from '../../../Firebase/firebase.js';
 import ViewNow from '../../StaffView/components/ViewNow';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import {
+  IC_Catgory,
   IC_User,
   IC_financial,
   IC_logout,
+  IC_messenger,
   IC_order,
   IC_product,
   IC_promotions,
-  IC_user,
-  IC_messenger,
-  IC_User,
-  IC_Review,
-  IC_Catgory,
+  IC_user
 } from '../assets/icons/index.js';
 import FunctionCard from '../components/FunctionCard.js';
 import LoadingComponent from '../components/Loading';
 import MenuIcon from '../components/MenuIcon.js';
-import { Firestore } from '../../../Firebase/firebase';
-import LoadingComponent from '../components/Loading';
-import {
-  collection,
-  onSnapshot,
-  query,
-  doc,
-  getDoc,
-  querySnapshot,
-  getDocs,
-  where,
-  updateDoc,
-} from 'firebase/firestore';
 
 const AdminOverView = props => {
   const { navigation } = props;

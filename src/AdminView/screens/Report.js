@@ -11,15 +11,15 @@ import {
   where,
 } from '@firebase/firestore';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Button} from 'react-native-elements';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Firestore} from '../../../Firebase/firebase';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Button } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Firestore } from '../../../Firebase/firebase';
 import BackTo from '../components/BackTo';
 import CUSTOM_COLOR from '../constants/colors';
 
-const Report = navigation => {
+const Report = ({navigation}) => {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -92,7 +92,10 @@ const Report = navigation => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <BackTo onPress={() => navigation.goBack()} Info="Financial Report" />
+      <BackTo
+            onPress={() => navigation.navigate('AdminOverView')}
+            Info = 'Financial Report'
+          />
       </View>
       <View style={styles.content}>
         <View style={styles.header1}>

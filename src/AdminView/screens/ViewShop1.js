@@ -1,15 +1,12 @@
 import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
   FlatList,
-  ScrollView,
-  TouchableWithoutFeedback,
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { Firestore } from "../../../Firebase/firebase";
 import ProductView from "../components/ProductView";
