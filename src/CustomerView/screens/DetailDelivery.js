@@ -8,9 +8,12 @@ import { ScrollView } from 'react-native-gesture-handler'
 import PerSon from '../../StaffView/components/PerSon'
 //import { IM_MauAo } from '../assets/images'
 import ButtonDetail from '../../StaffView/components/ButtonDetail'
-import { Firestore } from '../../../Firebase/firebase'
+import { Firestore, firebase } from '../../../Firebase/firebase'
 import { collection, onSnapshot, query, doc, getDoc, querySnapshot, getDocs, where, updateDoc } from "firebase/firestore";
 import OneOrder from '../../StaffView/components/OneOrder'
+import ItemList from '../../StaffView/components/ItemList'
+import Size from '../constants/size'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 const DataDelivery = {
@@ -20,13 +23,22 @@ const DataDelivery = {
   CTY: 'Fast Delivery VietNam',
   Code: '#JHGUJHCFJG'
 }
-export default function DeTailDelivery({ navigation, route }) {
+export default function DeTailDelivery({navigation, route}) {
 
   const { item } = route.params
-
+  const [chatUser, setChatUser] = useState();
   const [address, setAddress] = useState()
   const [isLoading, setIsLoading] = useState(true);
-
+  const [status, setStatus] = useState('');
+  const getStatus = () =>{
+    if(item.TrangThai == 'Cancel')
+    {
+      setStatus = 'ReOrder'
+    }
+    if(item.TrangThai == 'Confirm'){
+      setStatus = 'Cancel'
+    }
+  }
   const getAddress = async (item) => {
 
     const docRef = doc(Firestore, "DIACHI", item);
@@ -39,10 +51,28 @@ export default function DeTailDelivery({ navigation, route }) {
     setAddress(address)
     setIsLoading(false)
   }
-
+  const getDataChatUser = async () => {
+    try{
+      const q = query(
+        collection(Firestore, 'CHAT'),
+        where('MaND', '==', firebase.auth().currentUser.uid),
+      );
+  
+      const unsubscribe = onSnapshot(q, async querySnapshot => {
+        querySnapshot.forEach(doc => {
+          setChatUser(doc.data());
+          console.log(doc.data());
+        });
+      });
+    }catch(error){
+      console.log(error)
+    }
+    
+  };
 
   useEffect(() => {
     getAddress(item.MaDC);
+    getDataChatUser()
   }, []);
 
   useEffect(() => {
@@ -52,7 +82,7 @@ export default function DeTailDelivery({ navigation, route }) {
   }, [isLoading]);
 
   return (
-    <ScrollView style={{ backgroundColor: CUSTOM_COLOR.White }}>
+    <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, width: '100%', height: Size.DeviceHeight }}>
 
 
       <BackTo
@@ -66,7 +96,7 @@ export default function DeTailDelivery({ navigation, route }) {
           <View style={{ flexDirection: 'row' }}>
             <Image
               source={Address}
-              style={{ width: 30, height: 30, marginLeft: 18 }}
+              style={{ width: 26, height: 26, marginLeft: 18 }}
               resizeMode='contain'
             >
             </Image>
@@ -89,7 +119,7 @@ export default function DeTailDelivery({ navigation, route }) {
           <View style={{ flexDirection: 'row' }}>
             <Image
               source={Delivery}
-              style={{ width: 30, height: 30, marginLeft: 18 }}
+              style={{ width: 26, height: 26, marginLeft: 18 }}
               resizeMode='contain'
             >
             </Image>
@@ -110,18 +140,30 @@ export default function DeTailDelivery({ navigation, route }) {
           <View style={{ flexDirection: 'row' }}>
             <Image
               source={Payment}
-              style={{ width: 30, height: 30, marginLeft: 18 }}
+              style={{ width: 26, height: 26, marginLeft: 18 }}
               resizeMode='contain'
             >
             </Image>
             <Text style={{ color: CUSTOM_COLOR.Black, marginLeft: 5, fontSize: 20 }}>Payment</Text>
           </View>
         </View>
-        <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
-          <Text>Provisional: {item.TamTinh}</Text>
-          <Text>Delivery fee: {item.PhiVanChuyen}</Text>
-          <Text>Discount</Text>
-          <Text>Total: {item.TongTien}</Text>
+        <View style={{ marginLeft: 30, marginTop: 5, marginRight: 20 }}>
+          <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                          <Text style={{color: CUSTOM_COLOR.Black,fontWeight: 'bold', marginLeft: 20 }}>Provisional:</Text>
+                                          <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginRight: 10 }}>{item.TamTinh} VND</Text>
+          </View>
+          <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginLeft: 20 }}>Delivery fee:</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginRight: 10 }}>{item.PhiVanChuyen} VND</Text>
+          </View>
+          <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginLeft: 20 }}>Discount:</Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginRight: 10 }}>{item.GiamGia} VND</Text>
+          </View>
+          <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <Text style={{color: CUSTOM_COLOR.Black,fontWeight: 'bold', marginLeft: 20 }}>Total: </Text>
+                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginRight: 10 }}>{item.TongTien} VND</Text>
+          </View>
         </View>
       </View>
       <View style={{ width: '100%', height: 10, marginTop: 20, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
@@ -142,7 +184,7 @@ export default function DeTailDelivery({ navigation, route }) {
                 <View>
 
                   <OneOrder
-                    source={item.SanPham.HinhAnhSP}
+                    source={item.SanPham.HinhAnhSP[0]}
                     title={item.SanPham.TenSP}
                     price={item.SanPham.GiaSP}
                     number={item.SoLuong}
@@ -157,30 +199,23 @@ export default function DeTailDelivery({ navigation, route }) {
             }}
           />
         </View>
-        <View style={{ width: '100%', height: 50, marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <ButtonDetail
-            title='Buyer Contact'
-            color={CUSTOM_COLOR.DarkBlue}
-            onPress={() => { navigation.navigate('ChatScreen') }}
-            style={styles.button}
-          ></ButtonDetail>
-          <ButtonDetail
-            title='Add Note'
-            color={CUSTOM_COLOR.DarkBlue}
-            onPress={() => { }}
-            style={styles.button}
-          ></ButtonDetail>
-        </View>
-        <View style={{ width: '100%', height: 50, flexDirection: 'row' }}>
+        <View style={{ width: '100%', marginTop: 20, height: 50, flexDirection: 'row', justifyContent: 'center' }}>
+          
           <TouchableOpacity
-            onPress={() => { }}
-            style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
+            onPress={() => {navigation.navigate('Chat', {chatUser}) }}
+            style={{ width: '40%', height: '80%', borderRadius: 25,justifyContent: 'center', marginLeft: 20, alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
           >
-            <Text style={{ color: CUSTOM_COLOR.White, fontWeight: 'bold', fontSize: 20 }}>Confirm</Text>
+            <Text style={{ color: CUSTOM_COLOR.White, fontSize: 20 }}>Contact Seller</Text>
           </TouchableOpacity>
+          {/* <TouchableOpacity
+            //onPress={() => {navigation.navigate('Chat', {chatUser}) }}
+            style={{ width: '30%', height: '100%', justifyContent: 'center', marginRight: 20,alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
+          >
+            <Text style={{ color: CUSTOM_COLOR.White, fontWeight: 'bold', fontSize: 20 }}>Cancel</Text>
+          </TouchableOpacity> */}
         </View>
       </View>
-    </ScrollView>
+    </SafeAreaView>
   )
 }
 

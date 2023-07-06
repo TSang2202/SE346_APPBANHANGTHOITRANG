@@ -1,19 +1,21 @@
-import { collection, getDocs, query, where, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
-import { IC_Back, IC_ShoppingCart } from "../assets/icons";
-import ProductView from "../components/ProductView";
-import SearchInput from "../components/SearchInput";
+import { IC_Back, IC_ShoppingCart } from "../../CustomerView/assets/icons";
+
+import ProductView from "../../CustomerView/components/ProductView";
+import SearchInput from "../../CustomerView/components/SearchInput";
 import SortDropDown from "../components/SortDropDown";
 import CUSTOM_COLOR from "../constants/colors";
 
-function DetailCategoryScreen({ navigation, route }) {
+function ViewDetailsinList({ navigation, route }) {
 
-    const { item } = route.params
+    const { category } = route.params
 
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [filteredItems, setFilteredItems] = useState([]);
     const [sortType, setSortType] = useState("");
 
 
@@ -25,15 +27,24 @@ function DetailCategoryScreen({ navigation, route }) {
     };
 
     const getDataCategory = async () => {
-        const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", item.MaDM), where("TrangThai", "==", "Inventory"));
 
+        const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", category.MaDM));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const data = [];
             querySnapshot.forEach((doc) => {
-                data.push({
-                    ...doc.data(),
-                });
+                data.push(doc.data());
             });
+            // console.log("Current cities in CA: ", cities.join(", "));
+
+            // const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", category.MaDM));
+            // const querySnapshot = await getDocs(q);
+            // const data = [];
+
+            // querySnapshot.forEach(documentSnapshot => {
+            //     data.push({
+            //         ...documentSnapshot.data(),
+            //     });
+            // });
             let sortedItems = data;
 
             if (sortType === "a-z") {
@@ -45,7 +56,7 @@ function DetailCategoryScreen({ navigation, route }) {
             } else if (sortType === "high-to-low") {
                 sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
             }
-            console.log(item.MaDM);
+
 
             let filteredItems = data;
             if (searchTerm != null) {
@@ -57,8 +68,8 @@ function DetailCategoryScreen({ navigation, route }) {
                 setItems(data);
             }
             setItems(filteredItems);
-        });
 
+        });
     };
     useEffect(() => {
         getDataCategory();
@@ -115,7 +126,7 @@ function DetailCategoryScreen({ navigation, route }) {
                     marginHorizontal: 30,
                     fontWeight: 'bold',
                     marginBottom: 10
-                }}>{item.TenDM}</Text>
+                }}>{category.TenDM}</Text>
 
                 <Text style={{
                     fontSize: 17,
@@ -125,7 +136,7 @@ function DetailCategoryScreen({ navigation, route }) {
                 }}>{items.length} sản phẩm</Text>
             </View>
             <SortDropDown
-                onChangeText={handleSort}
+                onSelectSort={handleSort}
             />
             <View style={{
                 height: '80%'
@@ -138,7 +149,7 @@ function DetailCategoryScreen({ navigation, route }) {
                                 flexDirection: 'row',
                                 //justifyContent: 'space-around'
                             }}
-                                onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+                            // onPress={() => { navigation.navigate('DetailProduct', { item }) }}
                             >
                                 <ProductView
                                     source={item.HinhAnhSP[0]}
@@ -157,5 +168,4 @@ function DetailCategoryScreen({ navigation, route }) {
 
     )
 }
-
-export default DetailCategoryScreen
+export default ViewDetailsinList

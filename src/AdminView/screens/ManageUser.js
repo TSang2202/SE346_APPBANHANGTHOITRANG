@@ -1,4 +1,3 @@
-import { getAuth } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
@@ -18,6 +17,9 @@ import LoadingComponent from '../components/Loading';
 import Search from '../components/Search';
 import CUSTOM_COLOR from '../constants/colors';
 
+import { getAuth } from 'firebase/auth';
+
+
 export const Acount = {
   name: 'Nguyen Trung Tinh',
   avartar:
@@ -32,13 +34,23 @@ export const Acount = {
 };
 
 const ManageUser = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
-  const [searchTerm, setSearchTerm] = useState([]);
+  const [searchTerm, setSearchTerm] = useState();
+  const [filteredItems, setFilteredItems] = useState([]);
+  const handleSearch = searchTerm => {
+    setSearchTerm(searchTerm);
+    const filteredItems = users.filter(item =>
+      item.TenND.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredItems(filteredItems);
+  };
+  
+
   useEffect(() => {
     setTimeout(() => {
       // Assume data is fetched here
@@ -65,22 +77,6 @@ const ManageUser = props => {
       }
     };
 
-    // const fetchUserAvata = async() => {
-    //   try {
-    //     const documentSnapshot = await firebase
-    //       .firestore()
-    //       .collection('NGUOIDUNG')
-    //       .get();
-    //     const data = documentSnapshot.data();
-    //     const imageUrl = data[Avatar];
-    //     return imageUrl;
-    //   } catch (error) {
-    //     console.error('Error fetching image URL:', error);
-    //     return null;
-    //   }
-
-    // }
-
     fetchUsers();
   }, []);
 
@@ -91,8 +87,10 @@ const ManageUser = props => {
 
       if (userDoc.exists) {
         const userData = userDoc.data();
+
         setUserData(userData);
       } else {
+
         console.log('User document does not exist');
       }
     } catch (error) {
@@ -118,7 +116,7 @@ const ManageUser = props => {
 
   const handleUserPress = user => {
     // Navigate to the edit screen with the selected user data
-    navigation.navigate('EditAccount', {user});
+    navigation.navigate('EditAccount', { user });
   };
 
   const handleDeleteUser = async uid => {
@@ -147,16 +145,12 @@ const ManageUser = props => {
         Alert.alert('Error', error.message);
       });
   };
-  //SEARCH_IF
-  const handleSearch = (searchTerm)=>{
-    setSearchTerm(searchTerm);
-  }
-  //SEARCH_END_IF
-  const renderUser = ({item}) => (
+
+  const renderUser = ({ item }) => (
     <TouchableOpacity onPress={() => handleUserPress(item)}>
       <View style={{}}>
         <AccountCard
-          source={{uri: item.Avatar}}
+          source={{ uri: item.Avatar }}
           name={item.TenND}
           userType={item.LoaiND}
           onPress={() => handleResetPassword(item.Email)}
@@ -167,7 +161,7 @@ const ManageUser = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 15}} />
+      <View style={{ width: '100%', height: 15 }} />
 
       {userData ? (
         <>
@@ -175,7 +169,7 @@ const ManageUser = props => {
             <View style={styles.avataContainer}>
               {imageUrl ? (
                 <Image
-                  source={{uri: imageUrl}}
+                  source={{ uri: imageUrl }}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -201,13 +195,13 @@ const ManageUser = props => {
                 />
               )}
             </View>
-            <View style={{width: 15, height: '100%'}} />
-            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-              <Text style={[styles.textViewStyles, {fontSize: 20}]}>
+            <View style={{ width: 15, height: '100%' }} />
+            <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+              <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
                 {userData.TenND}
               </Text>
-              <View style={{width: '100%', height: 5}} />
-              <Text style={[styles.textViewStyles, {fontSize: 15}]}>
+              <View style={{ width: '100%', height: 5 }} />
+              <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
                 {userData.LoaiND}
               </Text>
             </View>
@@ -223,7 +217,9 @@ const ManageUser = props => {
 
           <>
             <View style={styles.searchContainer}>
-              <View style={{width: '5%', height: '100%'}} />
+
+              <View style={{ width: '5%', height: '100%' }} />
+
               <View style={styles.searchViewContainer}>
                 <Search
                   placeholder="Search"
@@ -235,10 +231,10 @@ const ManageUser = props => {
                   onSearch={handleSearch}
                 />
               </View>
-              <View style={{width: '5%', height: '100%'}} />
+              <View style={{ width: '5%', height: '100%' }} />
               <TouchableOpacity style={styles.butAddContainer}>
                 <Text
-                  style={{color: CUSTOM_COLOR.White}}
+                  style={{ color: CUSTOM_COLOR.White }}
                   onPress={() => navigation.navigate('AddAccount')}>
                   Add Account
                 </Text>
@@ -251,13 +247,13 @@ const ManageUser = props => {
               {/* Lay list nguoi dung ve hien thi */}
               {/* <AccountCard onPress={() => navigation.navigate('EditAccount')} /> */}
               <FlatList
-                data={users}
+                data={searchTerm ? filteredItems : users}
                 renderItem={renderUser}
                 keyExtractor={item => item.id}
               />
             </View>
           </>
-          <View style={{width: '100%', height: 20}} />
+          <View style={{ width: '100%', height: 20 }} />
         </>
       ) : (
         <LoadingComponent text="Loading data..." />
@@ -295,6 +291,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+
+
   searchViewContainer: {
     width: '60%',
     height: 40,

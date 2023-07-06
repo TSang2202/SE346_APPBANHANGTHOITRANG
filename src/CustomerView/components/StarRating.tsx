@@ -18,8 +18,8 @@ const StarRating = (props: any) =>{
             >
                 <Image source={x <= props.fill ? IC_StartCorner : IC_StartFull}
                     style ={{
-                        width: 20,
-                        height: 20,
+                        width: 17,
+                        height: 17,
                         marginHorizontal: 1
                     }}
                 />

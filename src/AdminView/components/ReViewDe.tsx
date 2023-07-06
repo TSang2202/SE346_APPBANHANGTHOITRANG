@@ -3,13 +3,22 @@ import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpa
 import { IC_Clock } from "../assets/icons";
 import CUSTOM_COLOR from "../constants/colors";
 import StarRating from "./StarRating";
+import CheckBox from "@react-native-community/checkbox";
 
 
-const Review = (props: any) => {
+const ReviewDe = (props: any) => {
 
     return (
-
-        <View style={{ flex: 1 }}>
+        <View style = {{flexDirection: 'row'}}>
+            <View style = {{justifyContent: 'center', marginLeft: 10}}>
+                <CheckBox
+                    tintColor={CUSTOM_COLOR.Black}
+                    value = {props.value}
+                    onValueChange = {props.change}
+                >
+                </CheckBox>
+            </View>
+            <View style={{ flex: 1 }}>
             <View style={{
                 ...styles.flexRow,
                 justifyContent: 'space-between',
@@ -90,9 +99,9 @@ const Review = (props: any) => {
                     />
                 </View> : null}
         </View>
+        </View>
 
-    )
-
+     )
 };
 
 const styles = StyleSheet.create({
@@ -101,4 +110,4 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 })
-export default Review
+export default ReviewDe
