@@ -75,7 +75,7 @@ const Review = (props: any) =>{
             }}>{props.content}</Text>
         </View>
 
-        {props.image !== null ?
+        {props.image != null ?
         <View style = {{
             marginHorizontal: '4%',
             
