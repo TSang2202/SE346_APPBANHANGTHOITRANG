@@ -63,13 +63,11 @@ function HomeScreenCustomer({ navigation }) {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const items = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data && data.TrangThai) {
-          items.push({
-            ...data,
-            key: doc.id,
-          });
-        }
+        items.push({
+          ...doc.data(),
+          key: doc.id,
+
+        });
       });
       setTrending(items);
     });
