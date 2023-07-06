@@ -29,7 +29,7 @@ import EditPromotion from '../screens/EditPromotion';
 import Categories from '../screens/Categories';
 import DetailCategory from '../screens/DetailsCategory'
 import AddNewCategory from '../screens/AddNewCategory';
-
+import ViewDetailsinList from '../screens/ViewDetailsinList';
 
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
@@ -65,7 +65,7 @@ function StackNavigator() {
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="DetailsCategory" component={DetailCategory} />
       <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
-
+      <Stack.Screen name="ViewDetailsinList" component={ViewDetailsinList} />
     </Stack.Navigator>
   );
 }

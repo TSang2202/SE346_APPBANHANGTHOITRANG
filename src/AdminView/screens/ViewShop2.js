@@ -17,12 +17,12 @@ import { da } from "date-fns/locale";
 import Button from "../../CustomerView/components/Button";
 import { IC_Back } from "../../CustomerView/assets/icons";
 function ViewShop2({navigation, route}) {
-    const item = {"GiaSP": 139000, 
-    "HinhAnhSP": ["https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fproducts%2Fimage-1687527148817?alt=media&token=0467f3f5-a25e-470a-a5cb-d5bb8b4e2df2", "https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fproducts%2Fimage-1687527149745?alt=media&token=ae9f0bac-3b0b-4aba-ab0a-4582e6135f2d"], "MaDM": "lV95kTTz3PIxItriF4rU", "MaSP": "NtRoJWsfk1tH7niUcYu9",
-     "MauSac": [{"MaMS": "J9e6EkiNPM6zJmDc2DV8", "MaMau": "#D73C2D", "TenMau": "Đỏ", "checked": true, "key": "J9e6EkiNPM6zJmDc2DV8"}, {"MaMS": "KeDTyP7uAAfU04hzqruV", "MaMau": "#EC65CF", "TenMau": "Hồng", "checked": true, "key": "KeDTyP7uAAfU04hzqruV"}, {"MaMS": "k8SlzWonYLXHBriMadH5", "MaMau": "#2D38D7", "TenMau": "Xanh", "checked": true, "key": "k8SlzWonYLXHBriMadH5"}], "MoTaSP": "Váy nữ cực đẹp mùa hè", 
-     "Size": [{"checked": true, "id": "sizeS", "title": "S"}, {"checked": true, "id": "sizeM", "title": "M"}, {"checked": true, "id": "sizeL", "title": "L"}, {"checked": false, "id": "sizeXL", "title": "XL"}, {"checked": false, "id": "sizeXXL", "title": "XXL"}, {"checked": false, "id": "sizeXXXL", "title": "XXXL"}], "SoLuongDaBan": 0, "SoLuongSP": 40, "SoLuotXem": 0, "SoLuotYeuThich": 0, "TenSP": "Váy nữ", "TrangThai": "Inventory",
-      "Trending": true, "key": "NtRoJWsfk1tH7niUcYu9"}
-    //const {item} = route.params
+    // const item = {"GiaSP": 139000, 
+    // "HinhAnhSP": ["https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fproducts%2Fimage-1687527148817?alt=media&token=0467f3f5-a25e-470a-a5cb-d5bb8b4e2df2", "https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fproducts%2Fimage-1687527149745?alt=media&token=ae9f0bac-3b0b-4aba-ab0a-4582e6135f2d"], "MaDM": "lV95kTTz3PIxItriF4rU", "MaSP": "NtRoJWsfk1tH7niUcYu9",
+    //  "MauSac": [{"MaMS": "J9e6EkiNPM6zJmDc2DV8", "MaMau": "#D73C2D", "TenMau": "Đỏ", "checked": true, "key": "J9e6EkiNPM6zJmDc2DV8"}, {"MaMS": "KeDTyP7uAAfU04hzqruV", "MaMau": "#EC65CF", "TenMau": "Hồng", "checked": true, "key": "KeDTyP7uAAfU04hzqruV"}, {"MaMS": "k8SlzWonYLXHBriMadH5", "MaMau": "#2D38D7", "TenMau": "Xanh", "checked": true, "key": "k8SlzWonYLXHBriMadH5"}], "MoTaSP": "Váy nữ cực đẹp mùa hè", 
+    //  "Size": [{"checked": true, "id": "sizeS", "title": "S"}, {"checked": true, "id": "sizeM", "title": "M"}, {"checked": true, "id": "sizeL", "title": "L"}, {"checked": false, "id": "sizeXL", "title": "XL"}, {"checked": false, "id": "sizeXXL", "title": "XXL"}, {"checked": false, "id": "sizeXXXL", "title": "XXXL"}], "SoLuongDaBan": 0, "SoLuongSP": 40, "SoLuotXem": 0, "SoLuotYeuThich": 0, "TenSP": "Váy nữ", "TrangThai": "Inventory",
+    //   "Trending": true, "key": "NtRoJWsfk1tH7niUcYu9"}
+    const {item} = route.params
     const [chooseStyle, setChooseStyle] = useState(false)
     const [tong, settong] = useState()
     const [tb, settb] = useState()
