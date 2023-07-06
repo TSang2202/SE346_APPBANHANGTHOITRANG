@@ -8,6 +8,7 @@ import {
   View,
   SafeAreaView,
   ImageBackground,
+  Alert
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import BackTo from '../components/BackTo';
@@ -32,9 +33,11 @@ import {
   addDoc,
   updateDoc,
 } from 'firebase/firestore';
-import { ref, uploadBytes, put } from 'firebase/storage';
+import { ref, uploadBytes, put, getDownloadURL } from 'firebase/storage';
 import { Dropdown } from 'react-native-element-dropdown';
+
 import { firebase, storage } from 'firebase';
+import { async } from '@firebase/util'
 
 export default function AddProduct({ navigation }) {
   const [value, setValue] = useState(null);
@@ -47,6 +50,7 @@ export default function AddProduct({ navigation }) {
   const [amount, setAmount] = useState();
   const [lengthName, setLengthName] = useState(0);
   const [lengthDescription, setLengthDescription] = useState(0);
+  const [categorize, setCategorize] = useState()
 
   const [color, setColor] = useState([]);
   const [soLuongSPDanhMuc, setSoLuongSPDanhMuc] = useState()
@@ -126,6 +130,7 @@ export default function AddProduct({ navigation }) {
   const setData = async () => {
     const colors = color.filter(item => item.checked == true);
     const sizes = size.filter(item => item.checked == true);
+    const imageUri = await UploadFile()
 
     const docRef = await addDoc(collection(Firestore, 'SANPHAM'), {
       TenSP: name,
@@ -138,7 +143,7 @@ export default function AddProduct({ navigation }) {
       TrangThai: 'Inventory',
       SoLuongDaBan: 0,
       SoLuotYeuThich: 0,
-      SoLuotXem: 0,
+      HinhAnhSP: imageUri
     });
     console.log('Document written with ID: ', docRef.id);
 
@@ -146,12 +151,51 @@ export default function AddProduct({ navigation }) {
       MaSP: docRef.id,
     });
 
-    const updateDanhMucRef = doc(Firestore, "DanhMuc", value);
+    const updateDanhMucRef = doc(Firestore, "DANHMUC", value);
     const updayeDanhMuc = await updateDoc(updateDanhMucRef, {
       SoLuongSP: soLuongSPDanhMuc + 1,
     });
 
+    Alert.alert("Notification", "Successfully added new products!", [{ text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' }])
+
   };
+
+  const UploadFile = async () => {
+    const data = [];
+    for (let index = 0; index < image.length; index++) {
+      try {
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = function () {
+            resolve(xhr.response);
+          };
+          xhr.onerror = function (e) {
+            console.log(e);
+            reject(new TypeError("Network request failed"));
+          };
+          xhr.responseType = "blob";
+          xhr.open("GET", image[index].uri, true);
+          xhr.send(null);
+        });
+        const storageRef = ref(Storage, `images/products/image-${Date.now()}`);
+        const snapshot = await uploadBytes(storageRef, blob);
+        console.log("Upload successfully!");
+        const url = await getDownloadURL(snapshot.ref);
+        console.log("Get URL successfully");
+        data.push(url);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+
+
+    console.log(data);
+
+    return data;
+  };
+
+
 
   useEffect(() => {
     //setColor([{ id: 1, title: 'red', checked: true }, { id: 2, title: 'blue', checked: false }])

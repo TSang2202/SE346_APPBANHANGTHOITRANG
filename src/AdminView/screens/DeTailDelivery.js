@@ -6,16 +6,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import BackTo from '../components/BackTo';
 import CUSTOM_COLOR from '../constants/colors';
-import {Address, Delivery, Payment} from '../assets/icons';
-import {ScrollView} from 'react-native-gesture-handler';
-import {Acount} from './OverView';
+import { Address, Delivery, Payment } from '../assets/icons';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Acount } from './OverView';
 import PerSon from '../components/PerSon';
-import {IM_MauAo} from '../assets/images';
+import { IM_MauAo } from '../assets/images';
 import ButtonDetail from '../components/ButtonDetail';
-import {Firestore} from '../../../Firebase/firebase';
+import { Firestore } from '../../../Firebase/firebase';
 import {
   collection,
   onSnapshot,
@@ -29,19 +29,15 @@ import {
 } from 'firebase/firestore';
 import OneOrder from '../components/OneOrder';
 import CustomHeader from '../components/CustomHeader';
+import dayjs from 'dayjs';
 
-const DataDelivery = {
-  Name: 'Trung Tinh',
-  Phone: '0704408389',
-  Address: '140/10 Dinh Bo Linh, Phuong 26, Binh Thanh, Ho Chi Minh',
-  CTY: 'Fast Delivery VietNam',
-  Code: '#JHGUJHCFJG',
-};
-export default function DeTailDelivery({navigation, route}) {
-  const {item} = route.params;
+
+export default function DeTailDelivery({ navigation, route }) {
+  const { item } = route.params;
 
   const [address, setAddress] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [time, setTime] = useState()
 
   const getAddress = async item => {
     const docRef = doc(Firestore, 'DIACHI', item);
@@ -55,8 +51,25 @@ export default function DeTailDelivery({navigation, route}) {
     setIsLoading(false);
   };
 
+  const getTime = () => {
+    const timestamp = item.NgayDatHang.toDate();
+    const date = dayjs(timestamp);
+
+    const day = date.date();
+    const month = date.month();
+    const year = date.year();
+
+    const hour = date.hour();
+    const minute = date.minute();
+    const second = date.second();
+
+    setTime(`${day}/${month}/${year} ${hour}:${minute}:${second}`);
+
+  }
+
   useEffect(() => {
     getAddress(item.MaDC);
+    getTime()
   }, []);
 
   useEffect(() => {
@@ -74,17 +87,17 @@ export default function DeTailDelivery({navigation, route}) {
         item.TrangThai === 'Confirm'
           ? 'OnWait'
           : item.TrangThai === 'OnWait'
-          ? 'Delivering'
-          : item.TrangThai === 'Delivering'
-          ? 'Delivered'
-          : 'Delivered',
+            ? 'Delivering'
+            : item.TrangThai === 'Delivering'
+              ? 'Delivered'
+              : 'Delivered',
     });
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: CUSTOM_COLOR.White, flex: 1}}>
+    <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, flex: 1 }}>
       <>
-        <View style={{width: '100%', height: 55, justifyContent: 'center'}}>
+        <View style={{ width: '100%', height: 55, justifyContent: 'center' }}>
           <CustomHeader
             onPress={() => navigation.goBack()}
             title="Order/ Detail Delivery"
@@ -92,8 +105,8 @@ export default function DeTailDelivery({navigation, route}) {
         </View>
       </>
       <>
-        <View style={{width: '100%', height: '80%', backgroundColor: 'red'}}>
-          <ScrollView style={{backgroundColor: CUSTOM_COLOR.White}}>
+        <View style={{ width: '100%', height: '80%', backgroundColor: 'red' }}>
+          <ScrollView style={{ backgroundColor: CUSTOM_COLOR.White }}>
             <View
               style={{
                 width: '100%',
@@ -102,7 +115,7 @@ export default function DeTailDelivery({navigation, route}) {
               }}
             />
             <View
-              style={{width: '100%', flexDirection: 'column', marginTop: 10}}>
+              style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
               <View
                 style={{
                   width: '100%',
@@ -110,10 +123,10 @@ export default function DeTailDelivery({navigation, route}) {
                   height: 30,
                   justifyContent: 'space-between',
                 }}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <Image
                     source={Address}
-                    style={{width: 30, height: 30, marginLeft: 18}}
+                    style={{ width: 30, height: 30, marginLeft: 18 }}
                     resizeMode="contain"
                   />
                   <Text
@@ -127,7 +140,7 @@ export default function DeTailDelivery({navigation, route}) {
                   </Text>
                 </View>
               </View>
-              <View style={{marginLeft: 50, marginTop: 5, marginRight: 20}}>
+              <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
                 <Text>{item.TenND}</Text>
                 <Text>{item.SDT}</Text>
                 {!isLoading && (
@@ -146,7 +159,7 @@ export default function DeTailDelivery({navigation, route}) {
             />
 
             <View
-              style={{width: '100%', flexDirection: 'column', marginTop: 10}}>
+              style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
               <View
                 style={{
                   width: '100%',
@@ -154,10 +167,10 @@ export default function DeTailDelivery({navigation, route}) {
                   height: 30,
                   justifyContent: 'space-between',
                 }}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <Image
                     source={Payment}
-                    style={{width: 30, height: 30, marginLeft: 18}}
+                    style={{ width: 30, height: 30, marginLeft: 18 }}
                     resizeMode="contain"
                   />
                   <Text
@@ -171,81 +184,22 @@ export default function DeTailDelivery({navigation, route}) {
                   </Text>
                 </View>
               </View>
-              <View style={{marginLeft: 50, marginTop: 5, marginRight: 20}}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                    }}>
-                    Provisional:{' '}
-                  </Text>
-                  <Text>{item.TamTinh} </Text>
-                  <Text
-                    style={{
-                      fontStyle: 'italic',
-                    }}>
-                    VND
-                  </Text>
+              <View style={{ marginLeft: 30, marginTop: 5, marginRight: 20 }}>
+                <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginLeft: 20 }}>Provisional:</Text>
+                  <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginRight: 10 }}>{item.TamTinh} VND</Text>
                 </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                    }}>
-                    Delivery fee:{' '}
-                  </Text>
-                  <Text>{item.PhiVanChuyen} </Text>
-                  <Text
-                    style={{
-                      fontStyle: 'italic',
-                    }}>
-                    VND
-                  </Text>
+                <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginLeft: 20 }}>Delivery fee:</Text>
+                  <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginRight: 10 }}>{item.PhiVanChuyen} VND</Text>
                 </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                    }}>
-                    Discount:{' '}
-                  </Text>
-                  <Text>- {item.GiamGia} </Text>
-                  <Text
-                    style={{
-                      fontStyle: 'italic',
-                    }}>
-                    VND
-                  </Text>
+                <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginLeft: 20 }}>Discount:</Text>
+                  <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginRight: 10 }}>- {item.GiamGia} VND</Text>
                 </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                    }}>
-                    Total:{' '}
-                  </Text>
-                  <Text>{item.TongTien} </Text>
-                  <Text
-                    style={{
-                      fontStyle: 'italic',
-                    }}>
-                    VND
-                  </Text>
+                <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginLeft: 20 }}>Total: </Text>
+                  <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginRight: 10 }}>{item.TongTien} VND</Text>
                 </View>
               </View>
             </View>
@@ -266,7 +220,7 @@ export default function DeTailDelivery({navigation, route}) {
                 flexDirection: 'row',
                 marginTop: 10,
               }}>
-              <View style={{width: 50, height: '100%'}} />
+              <View style={{ width: 50, height: '100%' }} />
               <View
                 style={{
                   flex: 1,
@@ -278,12 +232,12 @@ export default function DeTailDelivery({navigation, route}) {
                     fontWeight: 'bold',
                     fontSize: 18,
                   }}>
-                  Code:{' '}
+                  Code: {item.MaDH}
                 </Text>
-                <View style={{width: '100%', height: 3}} />
-                <Text>Date: </Text>
-                <View style={{width: '100%', height: 2}} />
-                <Text>Status</Text>
+                <View style={{ width: '100%', height: 3 }} />
+                <Text>Date: {time}</Text>
+                <View style={{ width: '100%', height: 2 }} />
+                <Text>Status: {item.TrangThai === 'OnWait' ? 'On wait' : item.TrangThai}</Text>
               </View>
               {/* <View
                 style={{
@@ -341,7 +295,7 @@ export default function DeTailDelivery({navigation, route}) {
                 })}
               </View>
             </View>
-            <View style={{width: '100%', height: 20}} />
+            <View style={{ width: '100%', height: 20 }} />
           </ScrollView>
         </View>
       </>
