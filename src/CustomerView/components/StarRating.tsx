@@ -30,6 +30,7 @@ const StarRating = (props: any) =>{
 
     return(
         <View style ={{
+            marginTop: 2,
             flexDirection: 'row'
         }}>
             {star}

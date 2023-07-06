@@ -22,7 +22,6 @@ export default function Chat({navigation}) {
   const [users, setUser] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-
   const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
   };
@@ -45,31 +44,23 @@ export default function Chat({navigation}) {
         ? 'Không có gì'
         : dataChiTietChat[dataChiTietChat.length - 1],
     };
-
     const user = {
       ...docSnap.data(),
       ...chiTietChat,
     };
-
     return user;
   };
-
   const getDataChat = async () => {
     const q = query(collection(Firestore, 'CHAT'), orderBy('ThoiGian', 'desc'));
-
     const unsubscribe = onSnapshot(q, async querySnapshot => {
       const data = [];
-
       const promises = querySnapshot.docs.map(doc => {
         return getUser(doc.data());
       });
-
       console.log(promises);
       const dataUser = await Promise.all(promises);
-
       dataUser.map((user, index) => {
         const documentSnapshot = querySnapshot.docs[index];
-
         data.push({
           ...documentSnapshot.data(),
           ...user,
@@ -87,7 +78,6 @@ export default function Chat({navigation}) {
       console.log(users);
     });
   };
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getDataChat();
