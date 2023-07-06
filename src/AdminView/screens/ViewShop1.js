@@ -178,7 +178,7 @@ function ViewShop1({navigation}){
               borderRadius: 55,
               marginTop: 5,
             }}
-            source={{uri: Acount.avartar}}
+            //source={{uri: Acount.avartar}}
             resizeMode="contain"
           />
           <Text
@@ -253,11 +253,6 @@ function ViewShop1({navigation}){
                     }}
                     numColumns = {2}
                 />
-                //</View> </TouchableOpacity>
-              );
-            }}
-            numColumns={2}
-          />
         </View>
       </SafeAreaView>
     );
@@ -297,7 +292,7 @@ function ViewShop1({navigation}){
                 borderRadius: 55,
                 marginTop: 5,
               }}
-              source={{uri: Acount.avartar}}
+              //source={{uri: Acount.avartar}}
               resizeMode="contain"
             />
             <Text
@@ -332,11 +327,11 @@ function ViewShop1({navigation}){
                     renderItem = {({item}) => {
                         return(
                             <TouchableOpacity
-                            onPress={handleDanhMucClick(item.MaDM)}
+                            onPress={() => { navigation.navigate('ViewDetailsinList') }}
                             >
                             <TouchableOpacity
                             
-                                onPress={() => setdetail(true) }
+                                
                                 style = {{
                                 flexDirection: 'row',
                                 //justifyContent: 'space-around'
@@ -442,5 +437,4 @@ function ViewShop1({navigation}){
       }
     }
   }
-}
 export default ViewShop1;
