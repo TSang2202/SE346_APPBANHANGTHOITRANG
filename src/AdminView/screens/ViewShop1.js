@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   Image,
@@ -7,147 +8,140 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import Product from '../../StaffView/components/Product';
+import { Firestore } from "../../../Firebase/firebase";
+import ProductView from "../components/ProductView";
+
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import { backto } from '../assets/icons/index.js';
-import { IM_Giay1, IM_Giay2, IM_Giay3, IM_Giay4 } from '../assets/images/index.js';
 import ItemList from '../components/ItemList';
 import Search from '../components/Search';
-
 import SortDropdown from '../components/SortDropDown';
 import scale from '../constants/responsive.js';
 import { Acount } from './AdminOverView';
-const datasdetail = [
-  {
-    id: '1',
-    source: IM_Giay1,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999
-  },
-  {
-    id: '2',
-    source: IM_Giay2,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999
-  },
-  {
-    id: '3',
-    source: IM_Giay3,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999
-  },
-  {
-    id: '4',
-    source: IM_Giay4,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999
-  },
-]
-const datas = [
-  {
-      id: '1',
-      source: IM_Giay1,
-      title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-      price: 699999
-  },
-  {
-      id: '2',
-      source: IM_Giay2,
-      title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-      price: 599999
-  },
-  {
-      id: '3',
-      source: IM_Giay3,
-      title: 'T-Shirt Blue2 Blank - VSD343545D - New Elevent',
-      price: 499999
-  },
-  {
-      id: '4',
-      source: IM_Giay4,
-      title: 'T-Shirt Blue1 Blank - VSD343545D - New Elevent',
-      price: 399999
-  },
-  {
-      id: '5',
-      source: IM_Giay3,
-      title: 'T-Shirt White Blank-VSD343545D - New Elevent',
-      price: 199999
-  },
-  {
-      id: '6',
-      source: IM_Giay1,
-      title: 'T-Shirt White Blank-VSD343545D - New Elevent',
-      price: 299999
-  }
-]
-export const ListItem = [
-  {
-    id: '1',
-    namelist: 'Limited Edition 2023',
-    numberitem: '4',
-    avartar: IM_Giay2
-  },
-  {
-    id: '2',
-    namelist: 'Limited Edition 2022',
-    numberitem: '4',
-    avartar: IM_Giay2
-  },
-  {
-    id: '3',
-    namelist: 'Limited Edition 2021',
-    numberitem: '4',
-    avartar: IM_Giay2
-  },
-  {
-    id: '4',
-    namelist: 'Limited Edition 2020',
-    numberitem: '4',
-    avartar: IM_Giay2
-  },
-  {
-    id: '5',
-    namelist: 'Limited Edition 2019',
-    numberitem: '4',
-    avartar: IM_Giay2
-  }
-]
-function ViewShop1({navigation}){
+
+
+function ViewShop1({navigation, route}){
+  
   const [detail ,setdetail] = useState(false)
   const [product, setproduct] = useState(true)
-  //SEARCH
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const handleSearch = (keyword) => {
-    setSearchKeyword(keyword);
+  const [items, setItems] = useState([]);
+  const [dataCategory,setDataCategory] = useState([]);
+  const [dataCategories, setDataCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("")
+  const [sortType, setSortType] = useState("")
+  const [selectedDanhMuc, setSelectedDanhMuc] = useState("");
+
+  const handleSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
   };
-  //SORT
-  const [dataSets, setDataSets] = useState([
-    { name: 'datas', data: datas },
-    { name: 'datasdetail', data: datasdetail },
-    { name: 'ListItem', data: ListItem },
-  ]);
-  const [selectedDataSet, setSelectedDataSet] = useState(dataSets[0]);
-  const [sortedData, setSortedData] = useState(selectedDataSet.data);
+  const handleSort = (type) => {
+      setSortType(type);
+  };
+  // Lấy MaDM khi người dùng click vào danh mục
+  const handleDanhMucClick = (MaDM) => {
+    setSelectedDanhMuc(MaDM);
+  };
+  const getItems = async () => {
+    const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "Inventory"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      let sortedItems = data;
 
-  const handleSort = (sortType) => {
-    let sortedArray = [...selectedDataSet.data];
-
-    if (sortType === "a-z") {
-      sortedArray.sort((a, b) => a.title.localeCompare(b.title));
-  } else if (sortType === "z-a") {
-      sortedArray.sort((a, b) => b.title.localeCompare(a.title));
-  } else if (sortType === "low-to-high") {
-      sortedArray.sort((a, b) => a.price - b.price);
-  } else if (sortType === "high-to-low") {
-      sortedArray.sort((a, b) => b.price - a.price);
+      if (sortType === "a-z") {
+          sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+      } else if (sortType === "z-a") {
+          sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+      } else if (sortType === "low-to-high") {
+          sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
+      } else if (sortType === "high-to-low") {
+          sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
+      }
+      let filteredItems = data;
+      if (searchTerm != null) {
+          filteredItems = data.filter((itemData)=>
+          itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase())); 
+      }
+      else {
+        setItems(data)
+      }
+      setItems(filteredItems)
+      
+    });
+  
   }
+  const getDataCategory = async() => {
+    const q = query(collection(Firestore, "DANHMUC"))
 
-    setSortedData([...sortedArray]);
-  };
-  const filteredData = sortedData.filter((item) =>
-    item.title.toLowerCase().includes(searchKeyword.toLowerCase())
-  );
+    const querySnapshot = await getDocs(q);
+
+    const items = [];
+
+    querySnapshot.forEach(documentSnapshot => {
+      items.push({
+        ...documentSnapshot.data(),
+        key: documentSnapshot.id,
+      });
+    });
+    setDataCategory(items);
+  }
+  const getDataCategories = async () => {
+    const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==",selectedDanhMuc ));
+        const querySnapshot = await getDocs(q);
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+            ...documentSnapshot.data(),
+            });
+        });
+        let sortedItems = data;
+
+        if (sortType === "a-z") {
+            sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+        } else if (sortType === "z-a") {
+            sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+        } else if (sortType === "low-to-high") {
+            sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
+        } else if (sortType === "high-to-low") {
+            sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
+        }
+        
+        let filteredItems = data;
+        if (searchTerm != null) {
+            filteredItems = data.filter((itemData) =>
+            itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+            ); 
+        }
+        else {
+            setDataCategories(data);
+        }
+        setDataCategories(filteredItems);
+    };
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        const categoryItems = await getDataCategory();
+        if (categoryItems.length > 0) {
+          const firstCategory = categoryItems[0]; // Assuming you want to select the first category by default
+          handleDanhMucClick(firstCategory.MaDM);
+        }
+      };
+    
+      fetchData();
+    }, []);
+  useEffect(() => {
+    getItems();
+    getDataCategories();
+    getDataCategory();
+  }, []); // Gọi lại hàm getDataCategory khi component được tạo lần đầu
+
+  useEffect(() => {
+    getItems();
+    getDataCategories();
+    getDataCategory();
+  }, [searchTerm, sortType, selectedDanhMuc]); // Gọi lại hàm getDataCategory mỗi khi searchTerm thay đổi
   if(product == true && detail == false)
   {
     return (
@@ -189,7 +183,7 @@ function ViewShop1({navigation}){
     <View style = {{width: '100%', height: 300}}>
                 <FlatList
                     nestedScrollEnabled={true}
-                    data={filteredData}
+                    data={items}
                     renderItem = {({item}) => {
                         return(
                             //<TouchableOpacity
@@ -198,12 +192,13 @@ function ViewShop1({navigation}){
                                 //flexDirection: 'row',
                                 //justifyContent: 'space-around'
                            // }}>
-                                <Product
-                                    onPress={() => navigation.navigate('ViewShop2')}
-                                    source = {item.source}
-                                    title = {item.title}
-                                    price = {item.price}
+                                <ProductView
+                                    onPress={() => { navigation.navigate('ViewShop2', { item }) }}
+                                    source={item.HinhAnhSP[0]}
+                                    title={item.TenSP}
+                                    price={item.GiaSP}
                                 />
+                              
                            //</View> </TouchableOpacity>
                         )
                     }}
@@ -239,25 +234,31 @@ function ViewShop1({navigation}){
             <TouchableOpacity 
             style = {{width: '50%', height: '100%',borderBottomWidth: 2, borderColor: CUSTOM_COLOR.Red, alignItems: 'center'}}>
             <Text style = {{marginTop: 5,color: CUSTOM_COLOR.DarkOrange, fontSize: 20}}>List Item</Text>
+            
             </TouchableOpacity>
       </View>
       <View style={{width: '100%', height: '65%'}}>
       
                 <FlatList
-                    data={ListItem.filter(item => item.namelist.toLowerCase().includes(searchKeyword))}
+                    data={dataCategory}
                     renderItem = {({item}) => {
                         return(
                             <TouchableOpacity
+                            onPress={handleDanhMucClick(item.MaDM)}
+                            >
+                            <TouchableOpacity
+                            
                                 onPress={() => setdetail(true) }
                                 style = {{
                                 flexDirection: 'row',
                                 //justifyContent: 'space-around'
                             }}>
                                 <ItemList
-                                source = {item.avartar}
-                                namelist = {item.namelist}
-                                numberitem = {item.numberitem}
+                                
+                                source = {item.AnhDM}
+                                title = {item.TenDM}
                                 ></ItemList>
+                            </TouchableOpacity>
                             </TouchableOpacity>
                         )
                     }}
@@ -289,22 +290,22 @@ function ViewShop1({navigation}){
                   style={{width:'100%',height:'100%'}}
               ></Image>
             </TouchableOpacity>
-            <Text style = {{color: CUSTOM_COLOR.Black, fontSize: 18, marginLeft: 10}}>List Item/ {ListItem[0].namelist}</Text>
+            <Text style = {{color: CUSTOM_COLOR.Black, fontSize: 18, marginLeft: 10}}>List Item</Text>
             </View>
             <SortDropdown onSelectSort={handleSort}/>
             <View>
               <FlatList
                     horizontal={false} 
-                    data={filteredData}
+                    data={dataCategories}
                     key = {2}
                     numColumns={2}
                     renderItem = {({item}) => {
                         return(
-                                <Product
-                                    onPress={() => navigation.navigate('ViewShop2')}
-                                    source = {item.source}
-                                    title = {item.title}
-                                    price = {item.price}
+                                <ProductView
+                                    onPress={() => { navigation.navigate('ViewShop2', { item }) }}
+                                    source = {item.HinhAnhSP[0]}
+                                    title = {item.TenSP}
+                                    price = {item.GiaSP}
                                 />
                            //</View> </TouchableOpacity>
                         )
