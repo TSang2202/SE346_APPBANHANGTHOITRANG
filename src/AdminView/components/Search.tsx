@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SearchIcon } from '../../CustomerView/assets/icons';
 import CUSTOM_COLOR from '../constants/colors';
 
 interface SearchInputProps {
