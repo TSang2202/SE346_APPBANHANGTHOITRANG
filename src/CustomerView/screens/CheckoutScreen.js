@@ -1,5 +1,5 @@
-import {async} from '@firebase/util';
-import React, {useState, useEffect} from 'react';
+import { async } from '@firebase/util';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {Firestore, firebase} from '../../../Firebase/firebase';
+import { Firestore, firebase } from '../../../Firebase/firebase';
 import {
   IC_Back,
   IC_CheckGreen,
@@ -20,7 +20,7 @@ import {
   IC_Next,
   IC_Visa,
 } from '../assets/icons';
-import {IM_AnhGiay1} from '../assets/images';
+import { IM_AnhGiay1 } from '../assets/images';
 import Button from '../components/Button';
 import Delivery from '../components/Delivery';
 import ProductCard from '../components/ProductCard';
@@ -34,12 +34,14 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  onSnapshot,
+  getDoc
 } from 'firebase/firestore';
 
-function CheckoutScreen({navigation, route}) {
-  const {itemsCheckout, totalMoney} = route.params;
+function CheckoutScreen({ navigation, route }) {
+  const { itemsCheckout, totalMoney } = route.params;
 
-  const {delivery, choosePayment, promotion} = route.params;
+  const { delivery, choosePayment, promotion } = route.params;
 
   const [index, setIndex] = useState(0);
 
@@ -100,6 +102,11 @@ function CheckoutScreen({navigation, route}) {
     // ])
   };
 
+  const getSoLuongSP = async (maSP) => {
+    const docRef = doc(Firestore, "SANPHAM", maSP);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  };
   const AddDatHang = async (item, id) => {
     const docRef = await addDoc(collection(Firestore, 'DATHANG'), {
       MaDH: id,
@@ -111,6 +118,15 @@ function CheckoutScreen({navigation, route}) {
     });
 
     await deleteDoc(doc(Firestore, 'GIOHANG', item.MaGH));
+
+    const dataSP = await getSoLuongSP(item.MaSP)
+
+    const updateRef = doc(Firestore, "SANPHAM", item.MaSP);
+    await updateDoc(updateRef, {
+      SoLuongSP: dataSP.SoLuongSP - 1,
+      SoLuongDaBan: dataSP.SoLuongDaBan + 1
+    });
+
   };
 
   const MoveNext = () => {
@@ -346,11 +362,11 @@ function CheckoutScreen({navigation, route}) {
             />
             {choosePayment ? (
               choosePayment === 'MomoWallet' ? (
-                <Text style={{...styles.textPayment}}>Momo Wallet</Text>
+                <Text style={{ ...styles.textPayment }}>Momo Wallet</Text>
               ) : choosePayment === 'CashPayment' ? (
-                <Text style={{...styles.textPayment}}>Cash Payment</Text>
+                <Text style={{ ...styles.textPayment }}>Cash Payment</Text>
               ) : choosePayment === 'OnlineBanking' ? (
-                <Text style={{...styles.textPayment}}>Online Banking</Text>
+                <Text style={{ ...styles.textPayment }}>Online Banking</Text>
               ) : null
             ) : (
               <Text
@@ -472,16 +488,16 @@ function CheckoutScreen({navigation, route}) {
               promotion && delivery && choosePayment
                 ? () => AddDonHang()
                 : () => {
-                    Alert.alert(
-                      'Warning',
-                      'Please provide enough information!',
-                      [
-                        {
-                          text: 'Cancle',
-                        },
-                      ],
-                    );
-                  }
+                  Alert.alert(
+                    'Warning',
+                    'Please provide enough information!',
+                    [
+                      {
+                        text: 'Cancle',
+                      },
+                    ],
+                  );
+                }
             }
           />
         </View>
