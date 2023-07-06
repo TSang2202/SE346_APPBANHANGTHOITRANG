@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { firebase } from '../../../Firebase/firebase.js';
+import {firebase} from '../../../Firebase/firebase.js';
 import ViewNow from '../../StaffView/components/ViewNow';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
@@ -20,7 +20,7 @@ import {
   IC_order,
   IC_product,
   IC_promotions,
-  IC_user
+  IC_user,
 } from '../assets/icons/index.js';
 import FunctionCard from '../components/FunctionCard.js';
 import LoadingComponent from '../components/Loading';
@@ -286,7 +286,7 @@ const AdminOverView = props => {
                   <FunctionCard
                     onPress={() => navigation.navigate('Report')}
                     source={IC_financial}
-                    text = "Financial Report"
+                    text="Financial Report"
                   />
                 </View>
                 <View style={styles.unitContainer}>

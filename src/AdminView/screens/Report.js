@@ -1,14 +1,25 @@
-import { collection, endOfDay, endOfMonth, endOfYear, getDocs, query, startOfDay, startOfMonth, startOfYear, where } from '@firebase/firestore';
+import {
+  collection,
+  endOfDay,
+  endOfMonth,
+  endOfYear,
+  getDocs,
+  query,
+  startOfDay,
+  startOfMonth,
+  startOfYear,
+  where,
+} from '@firebase/firestore';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native-elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Firestore } from '../../../Firebase/firebase';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {Button} from 'react-native-elements';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Firestore} from '../../../Firebase/firebase';
 import BackTo from '../components/BackTo';
 import CUSTOM_COLOR from '../constants/colors';
 
-const Report = (navigation) => {
+const Report = navigation => {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -18,31 +29,46 @@ const Report = (navigation) => {
   useEffect(() => {
     const fetchFinancialData = async () => {
       try {
-        let q = query(collection(Firestore, 'DONHANG'), where('TrangThai', '==', 'Delivered'));
+        let q = query(
+          collection(Firestore, 'DONHANG'),
+          where('TrangThai', '==', 'Delivered'),
+        );
 
         if (selectedDate) {
           const startDate = startOfDay(selectedDate);
           const endDate = endOfDay(selectedDate);
 
-          q = query(q, where('NgayDatHang', '>=', startDate), where('NgayDatHang', '<=', endDate));
+          q = query(
+            q,
+            where('NgayDatHang', '>=', startDate),
+            where('NgayDatHang', '<=', endDate),
+          );
         } else if (selectedMonth) {
           const startDate = startOfMonth(selectedMonth);
           const endDate = endOfMonth(selectedMonth);
 
-          q = query(q, where('NgayDatHang', '>=', startDate), where('NgayDatHang', '<=', endDate));
+          q = query(
+            q,
+            where('NgayDatHang', '>=', startDate),
+            where('NgayDatHang', '<=', endDate),
+          );
         } else if (selectedYear) {
           const startDate = startOfYear(selectedYear);
           const endDate = endOfYear(selectedYear);
 
-          q = query(q, where('NgayDatHang', '>=', startDate), where('NgayDatHang', '<=', endDate));
+          q = query(
+            q,
+            where('NgayDatHang', '>=', startDate),
+            where('NgayDatHang', '<=', endDate),
+          );
         }
 
         const querySnapshot = await getDocs(q);
 
         let total = 0;
 
-        querySnapshot.forEach((doc) => {
-          const { TongTien } = doc.data();
+        querySnapshot.forEach(doc => {
+          const {TongTien} = doc.data();
           total += TongTien;
         });
 
@@ -153,7 +179,7 @@ const styles = StyleSheet.create({
     color: CUSTOM_COLOR.White,
   },
   revenueValue: {
-    backgroundColor:CUSTOM_COLOR.DarkBlue,
+    backgroundColor: CUSTOM_COLOR.DarkBlue,
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 10,
