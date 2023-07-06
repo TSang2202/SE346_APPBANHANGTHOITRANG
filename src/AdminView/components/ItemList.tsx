@@ -15,7 +15,6 @@ const ItemList = (props: any) => {
         alignItems: "center" // Đảm bảo căn giữa theo chiều dọc
       }}
     >
-
         <Image
           source={{ uri: props.source }}
           style={{

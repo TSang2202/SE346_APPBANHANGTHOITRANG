@@ -1,6 +1,6 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddAccount from '../screens/AddAccount';
 import AddProduct from '../screens/AddProduct';
 import AddPromotion from '../screens/AddPromotion';
@@ -25,20 +25,25 @@ import ViewShop1 from '../screens/ViewShop1';
 import ViewShop2 from '../screens/ViewShop2';
 import ChangeProfile from '../screens/ChangeProfile';
 import ChangePassword from '../screens/ChangePassword';
+import EditPromotion from '../screens/EditPromotion';
+import Categories from '../screens/Categories';
+import DetailCategory from '../screens/DetailsCategory'
+import AddNewCategory from '../screens/AddNewCategory';
+
 
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator
       initialRouteName="AdminOverView"
-      screenOptions={{headerShown: false}}>
+      screenOptions={{ headerShown: false }}>
       <Stack.Screen name="AddAccount" component={AddAccount} />
       <Stack.Screen name="AddProduct" component={AddProduct} />
       <Stack.Screen name="AddPromotion" component={AddPromotion} />
       <Stack.Screen name="AdminOverView" component={AdminOverView} />
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
-      <Stack.Screen name="DeTailDelivery" component={DeTailDelivery} />
+      <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
       <Stack.Screen name="DeTailsChat" component={DeTailsChat} />
       <Stack.Screen name="EditAccount" component={EditAccount} />
       <Stack.Screen name="EditProduct" component={EditProduct} />
@@ -50,12 +55,17 @@ function StackNavigator() {
       <Stack.Screen name="Promotion" component={Promotion} />
       <Stack.Screen name="Report" component={Report} />
       <Stack.Screen name="ReviewScreen" component={ReviewScreen} />
-      <Stack.Screen name="SearchSrc" component={SearchSrc} />
+      <Stack.Screen name="Search" component={SearchSrc} />
       <Stack.Screen name="Setting" component={Setting} />
       <Stack.Screen name="ViewShop1" component={ViewShop1} />
       <Stack.Screen name="ViewShop2" component={ViewShop2} />
       <Stack.Screen name="ChangeProfile" component={ChangeProfile} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="EditPromotion" component={EditPromotion} />
+      <Stack.Screen name="Categories" component={Categories} />
+      <Stack.Screen name="DetailsCategory" component={DetailCategory} />
+      <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
+
     </Stack.Navigator>
   );
 }

@@ -1,85 +1,91 @@
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
 import {
-  FlatList,
-  Image,
-  Text,
-  View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Firestore, firebase } from '../../../Firebase/firebase';
-import { IC_User } from '../assets/icons/index';
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
+import React, {useEffect, useState} from 'react';
+import {FlatList, Image, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Firestore, firebase} from '../../../Firebase/firebase';
+import LoadingComponent from '../components/Loading';
 import Search from '../components/Search';
 import UserChat from '../components/UserChat';
 import CUSTOM_COLOR from '../constants/colors';
 import Size from '../constants/size';
-
-
-export default function Chat({ navigation }) {
+export default function Chat({navigation}) {
   const [users, setUser] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = (searchTerm) => {
+  const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
   };
   const getUser = async item => {
-    item = item.trim();
+    //item = item.trim();
 
-    const docRef = doc(Firestore, 'NGUOIDUNG', item);
+    const docRef = doc(Firestore, 'NGUOIDUNG', item.MaND);
     const docSnap = await getDoc(docRef);
 
-    //console.log("item:", item);
-    //console.log(docSnap.data())
+    const q = query(
+      collection(Firestore, 'CHITIETCHAT'),
+      orderBy('ThoiGian', 'asc'),
+      where('MaChat', '==', item.MaChat),
+    );
+    const querySnapshot = await getDocs(q);
+    const dataChiTietChat = querySnapshot.docs.map(doc => doc.data());
+
+    const chiTietChat = {
+      NoiDungMessageMoi: !dataChiTietChat
+        ? 'Không có gì'
+        : dataChiTietChat[dataChiTietChat.length - 1],
+    };
+
     const user = {
       ...docSnap.data(),
+      ...chiTietChat,
     };
 
     return user;
   };
 
   const getDataChat = async () => {
-    const querySnapshot = await getDocs(collection(Firestore, 'CHAT'));
-    const promises = [];
-    for (const documentSnapshot of querySnapshot.docs) {
-      const promise = getUser(documentSnapshot.data().MaND);
-      promises.push(promise);
-      //console.log(promises)
-    }
-    const dataUser = await Promise.all(promises);
-    const data = [];
+    const q = query(collection(Firestore, 'CHAT'), orderBy('ThoiGian', 'desc'));
 
-    // querySnapshot.forEach( (documentSnapshot) => {
+    const unsubscribe = onSnapshot(q, async querySnapshot => {
+      const data = [];
 
-    //   const dataUser = await getUser(documentSnapshot.data().MaND)
-
-    //   console.log(dataUser)
-    //   data.push({
-    //     ...documentSnapshot.data(),
-    //     //...docSnap.data(),
-    //   })
-
-    // })
-
-    dataUser.map((user, index) => {
-      const documentSnapshot = querySnapshot.docs[index];
-      //console.log(user)
-      data.push({
-        ...documentSnapshot.data(),
-        ...user,
+      const promises = querySnapshot.docs.map(doc => {
+        return getUser(doc.data());
       });
+
+      console.log(promises);
+      const dataUser = await Promise.all(promises);
+
+      dataUser.map((user, index) => {
+        const documentSnapshot = querySnapshot.docs[index];
+
+        data.push({
+          ...documentSnapshot.data(),
+          ...user,
+        });
+      });
+      let filteredItems = data;
+      if (searchTerm != null) {
+        filteredItems = data.filter(item =>
+          item.TenND.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+      } else {
+        setUser(data);
+      }
+      setUser(filteredItems);
+      console.log(users);
     });
-    let filteredItems = data;
-        if (searchTerm != null) {
-            filteredItems = data.filter(item =>
-            item.TenND.toLowerCase().includes(searchTerm.toLowerCase())
-            ); 
-        }
-        else {
-            setUser(data);
-        }
-        setUser(filteredItems);
   };
 
   useEffect(() => {
@@ -92,6 +98,15 @@ export default function Chat({ navigation }) {
       setImageUrl(url),
     );
   }, [searchTerm]);
+
+  const setSoLuongChuaDoc = async item => {
+    const chatUpdateRef = doc(Firestore, 'CHAT', item.MaChat);
+
+    await updateDoc(chatUpdateRef, {
+      SoLuongChuaDoc: 0,
+      MoiKhoiTao: false,
+    });
+  };
 
   const fetchImageUrl = async (documentId, fieldName) => {
     try {
@@ -111,90 +126,101 @@ export default function Chat({ navigation }) {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginTop: 20,
-          width: '100%',
-          height: 70,
-        }}>
-        {imageUrl ? (
-          <Image
-            source={{ uri: imageUrl }}
+      style={{backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight}}>
+      {imageUrl ? (
+        <>
+          <View
             style={{
-              aspectRatio: 1,
-              borderRadius: 55,
-              width: '15%',
-              marginLeft: 15,
-            }}
-          />
-        ) : (
-          <Image
-            source={IC_User}
-            style={{
-              aspectRatio: 1,
-              borderRadius: 55,
-              width: '15%',
-              marginLeft: 15,
-              borderColor: CUSTOM_COLOR.Black,
-              borderWidth: 1,
-            }}
-          />
-        )}
-
-        {/* <Image
-          source={{uri: Acount.avartar}}
-          style={{
-            aspectRatio: 1,
-            borderRadius: 55,
-            width: '15%',
-            marginLeft: 15,
-          }}
-        /> */}
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 40,
-            marginLeft: 10,
-            color: CUSTOM_COLOR.Black,
-          }}>
-          Chat
-        </Text>
-      </View>
-
-      <View style={{ width: '90%', height: 50, marginHorizontal: '5%' }}>
-        <Search
-          onSearch={handleSearch}
-        />
-      </View>
-
-      {/* {
-          users ?
-            users.map((item) => (
-              <UserChat
-                key={item.MaChat}
-                source={item.Avatar}
-                name={item.TenND}
-                message='You:What are you doing? - 12:40PM'
-                onPress={() => navigation.navigate('ChatScreen')}
+              flexDirection: 'row',
+              marginTop: 20,
+              width: '100%',
+              height: 70,
+            }}>
+            {imageUrl ? (
+              <Image
+                source={{uri: imageUrl}}
+                style={{
+                  aspectRatio: 1,
+                  borderRadius: 55,
+                  width: '15%',
+                  marginLeft: 15,
+                }}
               />
-            )) : <Text>aaaaaaaaaaaa</Text>
-        } */}
+            ) : (
+              <Image
+                style={{
+                  aspectRatio: 1,
+                  borderRadius: 55,
+                  width: '15%',
+                  marginLeft: 15,
+                  borderColor: CUSTOM_COLOR.Black,
+                  borderWidth: 1,
+                }}
+              />
+            )}
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 40,
+                marginLeft: 10,
+                color: CUSTOM_COLOR.Black,
+              }}>
+              Chat
+            </Text>
+          </View>
+          <View style={{width: '100%', height: 10}} />
+          <View style={{width: '90%', height: 45, marginHorizontal: '5%'}}>
+            <Search placeholder="Search" onSearch={handleSearch} />
+          </View>
+          <View style={{width: '100%', height: 10}} />
+          <View style={{width: '100%', height: '73%'}}>
+            <FlatList
+              data={users}
+              renderItem={({item}) => {
+                console.log(item.NoiDungMessageMoi);
 
-      <FlatList
-        data={users}
-        renderItem={({ item }) => (
-          <UserChat
-            //key={item.MaChat}
-            source={item.Avatar}
-            name={item.TenND}
-            message="You:What are you doing? - 12:40PM"
-            onPress={() => navigation.navigate('ChatScreenStaff', { item })}
-          />
-        )}
-        keyExtractor={item => item.MaChat}
-      />
+                const hour = item.NoiDungMessageMoi
+                  ? item.ThoiGian.toDate().getHours()
+                  : null;
+                const minute = item.NoiDungMessageMoi
+                  ? item.ThoiGian.toDate().getMinutes()
+                  : null;
+
+                return (
+                  <UserChat
+                    //key={item.MaChat}
+                    source={item.Avatar}
+                    name={item.TenND}
+                    message={
+                      !item.NoiDungMessageMoi
+                        ? 'Customer just created an account'
+                        : item.NoiDungMessageMoi.NoiDung
+                    }
+                    onPress={() => {
+                      setSoLuongChuaDoc(item);
+
+                      navigation.navigate('ChatScreenStaff', {item});
+                    }}
+                    time={!item.NoiDungMessageMoi ? null : `${hour}:${minute}`}
+                    notification={
+                      !item.NoiDungMessageMoi ? 0 : item.SoLuongChuaDoc
+                    }
+                    //notification={item.SoLuongChuaDoc}
+                    justCreate={
+                      !item.NoiDungMessageMoi
+                        ? item.MoiKhoiTao
+                        : item.MoiKhoiTao
+                    }
+                  />
+                );
+              }}
+              keyExtractor={item => item.MaChat}
+            />
+          </View>
+        </>
+      ) : (
+        <LoadingComponent text="Loading data..." />
+      )}
     </SafeAreaView>
   );
 }

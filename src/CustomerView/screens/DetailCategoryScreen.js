@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
@@ -14,7 +14,6 @@ function DetailCategoryScreen({ navigation, route }) {
 
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredItems, setFilteredItems] = useState([]);
     const [sortType, setSortType] = useState("");
 
 
@@ -26,43 +25,45 @@ function DetailCategoryScreen({ navigation, route }) {
     };
 
     const getDataCategory = async () => {
-    const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", item.MaDM));
-        const querySnapshot = await getDocs(q);
-        const data = [];
-        
-        querySnapshot.forEach(documentSnapshot => {
-            data.push({
-            ...documentSnapshot.data(),
-            });
-        });
-        let sortedItems = data;
+        const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", item.MaDM), where("TrangThai", "==", "Inventory"));
 
-        if (sortType === "a-z") {
-            sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
-        } else if (sortType === "z-a") {
-            sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
-        } else if (sortType === "low-to-high") {
-            sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
-        } else if (sortType === "high-to-low") {
-            sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
-        }
-        console.log(item.MaDM);
-        
-        let filteredItems = data;
-        if (searchTerm != null) {
-            filteredItems = data.filter(item =>
-            item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
-            ); 
-        }
-        else {
-            setItems(data);
-        }
-        setItems(filteredItems);
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const data = [];
+            querySnapshot.forEach((doc) => {
+                data.push({
+                    ...doc.data(),
+                });
+            });
+            let sortedItems = data;
+
+            if (sortType === "a-z") {
+                sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+            } else if (sortType === "z-a") {
+                sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+            } else if (sortType === "low-to-high") {
+                sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
+            } else if (sortType === "high-to-low") {
+                sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
+            }
+            console.log(item.MaDM);
+
+            let filteredItems = data;
+            if (searchTerm != null) {
+                filteredItems = data.filter(item =>
+                    item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+            else {
+                setItems(data);
+            }
+            setItems(filteredItems);
+        });
+
     };
     useEffect(() => {
         getDataCategory();
-      }, []); // Gọi lại hàm getDataCategory khi component được tạo lần đầu
-    
+    }, []); // Gọi lại hàm getDataCategory khi component được tạo lần đầu
+
     useEffect(() => {
         getDataCategory();
     }, [searchTerm, sortType]); // Gọi lại hàm getDataCategory mỗi khi searchTerm thay đổi
@@ -89,7 +90,7 @@ function DetailCategoryScreen({ navigation, route }) {
                 </TouchableOpacity>
 
                 <SearchInput
-                onSearch = {handleSearch}
+                    onSearch={handleSearch}
                 />
 
                 <TouchableOpacity style={{
@@ -124,7 +125,7 @@ function DetailCategoryScreen({ navigation, route }) {
                 }}>{items.length} sản phẩm</Text>
             </View>
             <SortDropDown
-                onSelectSort={handleSort}
+                onChangeText={handleSort}
             />
             <View style={{
                 height: '80%'

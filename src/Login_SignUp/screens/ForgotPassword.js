@@ -60,10 +60,17 @@ const ForgotPassword = props => {
           />
         </View>
 
-        <View style={{width: '100%', height: '2%'}} />
+        <View style={{width: '100%', height: '5%'}} />
 
         <View style={[styles.botContainer, styles.unitContainer]}>
-          <View style={{flex: 1, alignItems: 'center'}}>
+          <View
+            style={{
+              width: '200%',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              left: '-50%',
+            }}>
             <CustomButton
               type="primary"
               text="Continue"
@@ -95,7 +102,7 @@ const styles = StyleSheet.create({
     height: 110,
   },
   botContainer: {
-    height: 70,
+    height: 65,
   },
   italicText: {
     fontFamily: FONT_FAMILY.MediumItalic,

@@ -1,13 +1,20 @@
-import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import CUSTOM_COLOR from '../constants/colors';
 import FONT_FAMILY from '../constants/fonts';
-import { IMG_backgroundCard } from '../assets/images';
+import {IMG_backgroundCard} from '../assets/images';
 
 const PromotionCard = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={props.onPress}>
       <View style={styles.accountContainer}>
         <ImageBackground
           source={IMG_backgroundCard}
@@ -15,7 +22,7 @@ const PromotionCard = props => {
           style={styles.image}>
           <View style={styles.avataContainer}>
             <Image
-              source={props.source}
+              source={{uri: props.source}}
               style={{
                 width: '80%',
                 height: '80%',
@@ -26,18 +33,26 @@ const PromotionCard = props => {
             />
           </View>
 
-          <View style={{ width: '5%', height: '100%' }} />
+          <View style={{width: '5%', height: '100%'}} />
 
           <View style={styles.textViewContainer}>
             <Text style={styles.titleStyles}>{props.name}</Text>
-            <View style={{ width: '100%' }} />
-            <Text style={styles.contentStyles}>Giảm giá {props.discount}</Text>
-            <Text style={styles.minimumStyles}>Đơn tối thiểu {props.minimum}</Text>
-            <Text style={styles.timeStyle}>{props.start} - {props.end}</Text>
+
+            <Text style={styles.contentStyles}>
+              {props.type === 'GiamGia'
+                ? `Giảm giá ${props.discount}%`
+                : 'Miễn phí vẫn chuyển'}
+            </Text>
+            <Text style={styles.minimumStyles}>
+              Đơn tối thiểu {props.minimum}
+            </Text>
+            <Text style={styles.timeStyle}>
+              {props.start} - {props.end}
+            </Text>
           </View>
         </ImageBackground>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -53,7 +68,9 @@ const styles = StyleSheet.create({
     //width: '90%',
     height: '80%',
     alignItems: 'center',
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   image: {
     flex: 1,
@@ -77,7 +94,7 @@ const styles = StyleSheet.create({
   },
   titleStyles: {
     fontFamily: FONT_FAMILY.Semibold,
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
     color: CUSTOM_COLOR.Black,
   },

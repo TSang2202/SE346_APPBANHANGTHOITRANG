@@ -1,339 +1,477 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import BackTo from '../components/BackTo'
-import { SearchIcon } from '../../CustomerView/assets/icons'
-import { FlatList, ScrollView } from 'react-native-gesture-handler'
-import CUSTOM_COLOR from '../constants/colors'
-import ButtonDetail from '../components/ButtonDetail'
-import Status from '../components/Status'
-import { IM_MauAo } from '../assets/images'
-import MyProduct1 from '../components/MyProductOne'
-
-import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
-import { Firestore, Storage } from '../../../Firebase/firebase'
-import { async } from '@firebase/util'
-
-
-
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+  onSnapshot
+} from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Firestore } from '../../../Firebase/firebase';
+import { SearchIcon } from '../../CustomerView/assets/icons';
+import BackTo from '../components/BackTo';
+import ButtonDetail from '../components/ButtonDetail';
+import MyProduct1 from '../components/MyProductOne';
+import SearchButton from '../components/SearchButton';
+import Status from '../components/Status';
+import CUSTOM_COLOR from '../constants/colors';
 
 
 export default function MyProduct({ navigation }) {
-    const [inventory, setinventory] = useState(true)
-    const [Out, setOut] = useState(false)
-    const [Wait, setWait] = useState(false)
+  const [inventory, setinventory] = useState(true);
+  const [Out, setOut] = useState(false);
+  const [Wait, setWait] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dataOnWait, setDataOnWait] = useState([]);
+  const [dataOutOfStock, setDataOutOfStock] = useState([]);
+  const [dataInventory, setDataInventory] = useState([]);
+
+  const handleSearch = searchTerm => {
+    setSearchTerm(searchTerm);
+  };
+  const ConfirmProduct = item => {
+    const confirmRef = doc(Firestore, 'SANPHAM', item.MaSP);
+
+    updateDoc(confirmRef, {
+      TrangThai: 'Inventory',
+    });
+
+    getDadaOnWait();
+  };
+
+  const HideSanPham = item => {
+    const confirmRef = doc(Firestore, 'SANPHAM', item.MaSP);
+    updateDoc(confirmRef, {
+      TrangThai: 'Hidden',
+    });
+
+  }
+  const ShowSanPham = item => {
+    const confirmRef = doc(Firestore, 'SANPHAM', item.MaSP);
+    updateDoc(confirmRef, {
+      TrangThai: 'Inventory',
+    });
+
+  }
+
+  const getDadaOnWait = async () => {
+    const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "Hidden"));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+
+      setDataOnWait(data)
+    });
 
 
-    const [dataOnWait, setDataOnWait] = useState([])
-    const [dataOutOfStock, setDataOutOfStock] = useState([])
-    const [dataInventory, setDataInventory] = useState([])
+  }
 
-    const ConfirmProduct = (item) => {
-        const confirmRef = doc(Firestore, "SANPHAM", item.MaSP)
+  const getDadaOutOfStock = async () => {
+    const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "OutOfStock"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
 
-        updateDoc(confirmRef, {
-            TrangThai: "Inventory"
-        })
+      setDataOutOfStock(data)
+    });
 
-        getDadaOnWait();
-    }
+  }
 
-    const getDadaOnWait = async () => {
-        const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "OnWait"));
-        const querySnapshot = await getDocs(q);
+  const getDadaInventory = async () => {
+    const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "Inventory"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
 
-        const data = []
+      setDataInventory(data)
+    });
 
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            data.push({ ...doc.data() })
-
-        });
-
-        setDataOnWait(data)
-    }
-
-    const getDadaOutOfStock = async () => {
-        const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "OutOfStock"));
-        const querySnapshot = await getDocs(q);
-
-        const data = []
-
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            data.push({ ...doc.data() })
-
-        });
-
-        setDataOutOfStock(data)
-    }
-
-    const getDadaInventory = async () => {
-        const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "Inventory"));
-        const querySnapshot = await getDocs(q);
-
-        const data = []
-
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            data.push({ ...doc.data() })
-
-        });
-
-        setDataInventory(data)
-    }
+  }
 
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Screen A is focused');
+      getDadaOnWait();
+      getDadaOutOfStock();
+      getDadaInventory();
+    });
+    getDadaOnWait();
+    getDadaOutOfStock();
+    getDadaInventory();
+    //const interval = setInterval(() => getDadaOnWait(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
+    // return () => clearInterval(interval); // Xóa interval khi component bị unmount
+  }, [dataOnWait.length, dataInventory.length, dataOutOfStock.length]);
+  useEffect(() => {
+    getDadaInventory();
+  }, [searchTerm]);
+  if (inventory == true) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: CUSTOM_COLOR.White }}>
+        <View
+          style={{
+            width: '100%',
+            height: 30,
+            flexDirection: 'row',
+            marginTop: 15,
+          }}>
+          <BackTo
+            onPress={() => navigation.navigate('AdminOverView')}
+            Info="My Product"
+          />
+          <View
+            style={{ width: 20, height: 20, marginLeft: '55%', marginTop: 10 }}>
+            <SearchButton onSearch={handleSearch} />
+          </View>
+        </View>
+        <View
+          style={{
+            width: '100%',
+            height: 50,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginTop: 15,
+          }}>
+          <Status
+            title="My inventory"
+            Color={CUSTOM_COLOR.DarkOrange}
+            botwidth={2}
+            borderColor={CUSTOM_COLOR.Red}
+            countProduct={dataInventory.length}
+          />
+          <Status
+            Color={CUSTOM_COLOR.Black}
+            onPress={() => {
+              setOut(true), setinventory(false);
+            }}
+            title="Out of Stock"
+            countProduct={dataOutOfStock.length}
+          />
+          <Status
+            Color={CUSTOM_COLOR.Black}
+            onPress={() => {
+              setWait(true), setinventory(false);
+            }}
+            title="Hidden"
+            countProduct={dataOnWait.length}
+          />
+        </View>
+        <View
+          style={{
+            width: '100%',
+            height: 10,
+            backgroundColor: CUSTOM_COLOR.LightGray,
+          }}
+        />
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: CUSTOM_COLOR.White,
+          }}>
+          <FlatList
+            horizontal="true"
+            data={dataInventory}
+            renderItem={({ item }) => {
+              return (
+                <MyProduct1
+                  source={item.HinhAnhSP[0]}
+                  title={item.TenSP}
+                  price={item.GiaSP}
+                  soluongtonkho={item.SoLuongSP}
+                  soluonglove={item.SoLuotYeuThich}
+                  soluongview={item.SoLuotXem}
+                  soluongban={item.SoLuongDaBan}
+                  edit={() => navigation.navigate('EditProduct', { item })}
+                  hide={() => HideSanPham(item)}
+                  AddAmount={() => navigation.navigate('ImportProduct', { item })}
+                />
+              );
+            }}
+          />
+        </View>
 
+        <View style={{ width: '100%', height: 10 }} />
+        <>
+          <View
+            style={{
+              width: '100%',
+              height: 60,
+              backgroundColor: CUSTOM_COLOR.White,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                width: '90%',
+                height: 55,
+                flexDirection: 'row',
+                marginHorizontal: '5%',
+              }}>
+              <ButtonDetail
+                style={{ width: '100%', height: '90%' }}
+                color={CUSTOM_COLOR.DarkOrange}
+                title="ADD A NEW PRODUCT"
+                onPress={() => navigation.navigate('AddProduct')}
+              />
+            </View>
+          </View>
+        </>
+      </SafeAreaView>
+    );
+  }
+  if (Out == true) {
+    return (
+      <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, flex: 1 }}>
+        <View
+          style={{
+            width: '100%',
+            height: 30,
+            flexDirection: 'row',
+            marginTop: 15,
+          }}>
+          <BackTo
+            onPress={() => navigation.navigate('AdminOverView')}
+            Info="My Product"
+          />
+          <View
+            style={{ width: 20, height: 20, marginLeft: '55%', marginTop: 10 }}>
+            <SearchButton onSearch={handleSearch} />
+          </View>
 
-    useEffect(() => {
+          {/* <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+            <Image
+              source={SearchIcon}
+              style={{width: 20, height: 20, marginLeft: '70%', marginTop: 10}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity> */}
+        </View>
+        <View
+          style={{
+            width: '100%',
+            height: 50,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginTop: 15,
+          }}>
+          <Status
+            title="My invantory"
+            Color={CUSTOM_COLOR.Black}
+            onPress={() => {
+              setOut(false), setinventory(true);
+            }}
+            countProduct={dataInventory.length}
+          />
+          <Status
+            botwidth={2}
+            borderColor={CUSTOM_COLOR.Red}
+            Color={CUSTOM_COLOR.DarkOrange}
+            title="Out of Stock"
+            countProduct={dataOutOfStock.length}
+          />
+          <Status
+            Color={CUSTOM_COLOR.Black}
+            onPress={() => {
+              setWait(true), setOut(false);
+            }}
+            title="Hidden"
+            countProduct={dataOnWait.length}
+          />
+        </View>
+        <View
+          style={{
+            width: '100%',
+            height: 10,
+            backgroundColor: CUSTOM_COLOR.LightGray,
+          }}
+        />
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: CUSTOM_COLOR.White,
+          }}>
+          <FlatList
+            horizontal="true"
+            data={dataOutOfStock}
+            renderItem={({ item }) => {
+              return (
+                <MyProduct1
+                  source={item.HinhAnhSP[0]}
+                  title={item.TenSP}
+                  price={item.GiaSP}
+                  soluongtonkho={item.SoLuongSP}
+                  soluonglove={item.SoLuotYeuThich}
+                  soluongview={item.SoLuotXem}
+                  soluongban={item.SoLuongDaBan}
+                  edit={() => navigation.navigate('EditProduct')}
+                />
+              );
+            }}
+          />
+        </View>
 
-        const unsubscribe = navigation.addListener('focus', () => {
-            console.log('Screen A is focused');
+        <View style={{ width: '100%', height: 10 }} />
+        <>
+          <View
+            style={{
+              width: '100%',
+              height: 60,
+              backgroundColor: CUSTOM_COLOR.White,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                width: '90%',
+                height: 55,
+                flexDirection: 'row',
+                marginHorizontal: '5%',
+              }}>
+              <ButtonDetail
+                style={{ width: '100%', height: '90%' }}
+                color={CUSTOM_COLOR.DarkOrange}
+                title="ADD A NEW PRODUCT"
+                onPress={() => navigation.navigate('AddProduct')}
+              />
+            </View>
+          </View>
+        </>
+      </SafeAreaView>
+    );
+  }
+  if (Wait == true) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: CUSTOM_COLOR.White }}>
+        <View
+          style={{
+            width: '100%',
+            height: 30,
+            flexDirection: 'row',
+            marginTop: 15,
+          }}>
+          <BackTo
+            onPress={() => navigation.navigate('AdminOverView')}
+            Info="My Product"
+          />
+          <View
+            style={{ width: 20, height: 20, marginLeft: '55%', marginTop: 10 }}>
+            <SearchButton onSearch={handleSearch} />
+          </View>
 
-            getDadaOnWait()
-            getDadaOutOfStock()
-            getDadaInventory()
+          {/* <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+            <Image
+              source={SearchIcon}
+              style={{width: 20, height: 20, marginLeft: '70%', marginTop: 10}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity> */}
+        </View>
+        <View
+          style={{
+            width: '100%',
+            height: 50,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginTop: 15,
+          }}>
+          <Status
+            title="My invantory"
+            Color={CUSTOM_COLOR.Black}
+            onPress={() => {
+              setWait(false), setinventory(true);
+            }}
+            countProduct={dataInventory.length}
+          />
+          <Status
+            onPress={() => {
+              setWait(false), setOut(true);
+            }}
+            Color={CUSTOM_COLOR.Black}
+            title="Out of Stock"
+            countProduct={dataOutOfStock.length}
+          />
+          <Status
+            botwidth={2}
+            borderColor={CUSTOM_COLOR.Red}
+            Color={CUSTOM_COLOR.DarkOrange}
+            title="Hidđen"
+            countProduct={dataOnWait.length}
+          />
+        </View>
+        <View
+          style={{
+            width: '100%',
+            height: 10,
+            backgroundColor: CUSTOM_COLOR.LightGray,
+          }}
+        />
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: CUSTOM_COLOR.White,
+          }}>
+          <FlatList
+            horizontal="true"
+            data={dataOnWait}
+            renderItem={({ item }) => {
+              return (
+                <MyProduct1
+                  source={item.HinhAnhSP[0]}
+                  title={item.TenSP}
+                  price={item.GiaSP}
+                  soluongtonkho={item.SoLuongSP}
+                  soluonglove={item.SoLuotYeuThich}
+                  soluongview={item.SoLuotXem}
+                  soluongban={item.SoLuongDaBan}
+                  type="Hidden"
+                  show={() => ShowSanPham(item)}
 
+                />
+              );
+            }}
+          />
+        </View>
 
-        });
-
-        getDadaOnWait()
-        getDadaOutOfStock()
-        getDadaInventory()
-
-        //const interval = setInterval(() => getDadaOnWait(), 5000); // Lặp lại phương thức lấy dữ liệu sau mỗi 5 giây
-        // return () => clearInterval(interval); // Xóa interval khi component bị unmount
-
-    }, [dataOnWait.length, dataInventory.length, dataOutOfStock.length])
-
-
-    if (inventory == true) {
-        return (
-            <SafeAreaView>
-                <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 15 }}>
-                    <BackTo
-                        onPress={() => navigation.goBack()}
-                        Info='My Product'
-                    ></BackTo>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('Search')}
-                    >
-                        <Image
-                            source={SearchIcon}
-                            style={{ width: 20, height: 20, marginLeft: '70%', marginTop: 10 }}
-                            resizeMode='contain'
-                        ></Image>
-                    </TouchableOpacity>
-                </View>
-                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <Status
-                        title='My invantory'
-                        Color={CUSTOM_COLOR.DarkOrange}
-                        botwidth={2}
-                        borderColor={CUSTOM_COLOR.Red}
-                        countProduct={dataInventory.length}
-                    ></Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setOut(true), setinventory(false) }}
-                        title='Out of Stock'
-                        countProduct={dataOutOfStock.length}
-                    >
-
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setWait(true), setinventory(false) }}
-                        title='On Wait'
-                        countProduct={dataOnWait.length}
-                    >
-                    </Status>
-                </View>
-                <View style={{ flexDirection: 'row', width: '100%', height: 450, marginTop: 10 }}>
-                    <View>
-                        <FlatList
-                            horizontal='true'
-                            data={dataInventory}
-                            renderItem={({ item }) => {
-                                return (
-                                    <MyProduct1
-                                        source={item.HinhAnhSP}
-                                        title={item.TenSP}
-                                        price={item.GiaSP}
-                                        soluongtonkho={item.SoLuongSP}
-                                        soluonglove={item.SoLuotYeuThich}
-                                        soluongview={item.SoLuotXem}
-                                        soluongban={item.SoLuongDaBan}
-                                        edit={() => navigation.navigate('EditProduct', { item })}
-                                    ></MyProduct1>
-                                )
-                            }
-                            }
-                        ></FlatList>
-                    </View>
-                </View>
-                <View style={{ width: '100%', marginTop: 15 }}>
-                    <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                        <ButtonDetail
-                            style={{ width: 250 }}
-                            color={CUSTOM_COLOR.DarkOrange}
-                            title='ADD A NEW PRODUCT'
-                            onPress={() => navigation.navigate('AddProduct')}
-                        ></ButtonDetail>
-                    </View>
-                </View>
-
-            </SafeAreaView>
-        )
-    }
-    if (Out == true) {
-        return (
-            <SafeAreaView>
-                <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 15 }}>
-                    <BackTo
-                        onPress={() => navigation.navigate('AdminOverView')}
-                        Info='My Product'
-                    ></BackTo>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('Search')}
-                    >
-                        <Image
-                            source={SearchIcon}
-                            style={{ width: 20, height: 20, marginLeft: '70%', marginTop: 10 }}
-                            resizeMode='contain'
-                        ></Image>
-                    </TouchableOpacity>
-                </View>
-                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <Status
-                        title='My invantory'
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setOut(false), setinventory(true) }}
-                        countProduct={dataInventory.length}
-                    ></Status>
-                    <Status
-                        botwidth={2}
-                        borderColor={CUSTOM_COLOR.Red}
-                        Color={CUSTOM_COLOR.DarkOrange}
-                        title='Out of Stock'
-                        countProduct={dataOutOfStock.length}>
-
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setWait(true), setOut(false) }}
-                        title='On Wait'
-                        countProduct={dataOnWait.length}>
-                    </Status>
-                </View>
-                <View style={{ flexDirection: 'row', width: '100%', height: 450, marginTop: 10 }}>
-                    <View>
-                        <FlatList
-                            horizontal='true'
-                            data={dataOutOfStock}
-                            renderItem={({ item }) => {
-                                return (
-                                    <MyProduct1
-                                        source={item.HinhAnhSP}
-                                        title={item.TenSP}
-                                        price={item.GiaSP}
-                                        soluongtonkho={item.SoLuongSP}
-                                        soluonglove={item.SoLuotYeuThich}
-                                        soluongview={item.SoLuotXem}
-                                        soluongban={item.SoLuongDaBan}
-                                        edit={() => navigation.navigate('EditProduct')}
-                                    ></MyProduct1>
-                                )
-                            }
-                            }
-                        ></FlatList>
-                    </View>
-                </View>
-                <View style={{ width: '100%', marginTop: 15 }}>
-                    <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                        <ButtonDetail
-                            style={{ width: 250 }}
-                            color={CUSTOM_COLOR.DarkOrange}
-                            title='ADD A NEW PRODUCT'
-                            onPress={() => navigation.navigate('AddProduct')}
-                        ></ButtonDetail>
-                    </View>
-                </View>
-            </SafeAreaView>
-        )
-    }
-    if (Wait == true) {
-        return (
-            <SafeAreaView>
-                <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 15 }}>
-                    <BackTo
-                        onPress={() => navigation.navigate('AdminOverView')}
-                        Info='My Product'
-                    ></BackTo>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('Search')}
-                    >
-                        <Image
-                            source={SearchIcon}
-                            style={{ width: 20, height: 20, marginLeft: '70%', marginTop: 10 }}
-                            resizeMode='contain'
-                        ></Image>
-                    </TouchableOpacity>
-                </View>
-                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <Status
-                        title='My invantory'
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setWait(false), setinventory(true) }}
-                        countProduct={dataInventory.length}
-                    ></Status>
-                    <Status
-                        onPress={() => { setWait(false), setOut(true) }}
-                        Color={CUSTOM_COLOR.Black}
-                        title='Out of Stock'
-                        countProduct={dataOutOfStock.length}
-                    >
-                    </Status>
-                    <Status
-                        botwidth={2}
-                        borderColor={CUSTOM_COLOR.Red}
-                        Color={CUSTOM_COLOR.DarkOrange}
-                        title='On Wait'
-                        countProduct={dataOnWait.length}>
-                    </Status>
-                </View>
-                <View style={{ flexDirection: 'row', width: '100%', height: 450, marginTop: 10 }}>
-                    <View>
-                        <FlatList
-                            horizontal='true'
-                            data={dataOnWait}
-                            renderItem={({ item }) => {
-                                return (
-                                    <MyProduct1
-                                        source={item.HinhAnhSP}
-                                        title={item.TenSP}
-                                        price={item.GiaSP}
-                                        soluongtonkho={item.SoLuongSP}
-                                        soluonglove={item.SoLuotYeuThich}
-                                        soluongview={item.SoLuotXem}
-                                        soluongban={item.SoLuongDaBan}
-                                        type='OnWait'
-                                        edit={() => navigation.navigate('EditProduct')}
-                                        confirm={() => ConfirmProduct(item)}
-                                    ></MyProduct1>
-                                )
-                            }
-                            }
-                        ></FlatList>
-                    </View>
-                </View>
-            </SafeAreaView>
-        )
-    }
+        <View style={{ width: '100%', height: 10 }} />
+        <>
+          <View
+            style={{
+              width: '100%',
+              height: 60,
+              backgroundColor: CUSTOM_COLOR.White,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                width: '90%',
+                height: 55,
+                flexDirection: 'row',
+                marginHorizontal: '5%',
+              }}>
+              <ButtonDetail
+                style={{ width: '100%', height: '90%' }}
+                color={CUSTOM_COLOR.DarkOrange}
+                title="ADD A NEW PRODUCT"
+                onPress={() => navigation.navigate('AddProduct')}
+              />
+            </View>
+          </View>
+        </>
+      </SafeAreaView>
+    );
+  }
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

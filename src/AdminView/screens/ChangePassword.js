@@ -91,11 +91,24 @@ const ChangePassword = props => {
           </View>
         </View>
 
-        <View style={[styles.botContainer, styles.unitContainer]}>
-          <View style={{flex: 1, alignItems: 'center'}}>
+        <View
+          style={{
+            width: '80%',
+            height: 60,
+            marginHorizontal: '10%',
+            marginTop: 15,
+          }}>
+          <View
+            style={{
+              width: '200%',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              left: '-50%',
+            }}>
             <CustomButton
               type="primary"
-              text="Continue"
+              text="Save"
               onPress={() => {
                 if (!reauthenticate(oldPassword)) {
                   Alert.alert(

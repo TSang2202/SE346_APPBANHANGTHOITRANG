@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FlatList,
   Image,
@@ -16,59 +16,109 @@ import {
   IC_User,
   IC_financial,
   IC_logout,
-  IC_messenger,
   IC_order,
   IC_product,
   IC_promotions,
   IC_user,
+  IC_messenger,
+  IC_User,
+  IC_Review,
+  IC_Catgory,
 } from '../assets/icons/index.js';
 import FunctionCard from '../components/FunctionCard.js';
 import LoadingComponent from '../components/Loading';
 import MenuIcon from '../components/MenuIcon.js';
-
-export const Acount = {
-  name: 'Nguyen Trung Tinh',
-  avartar:
-    'https://icdn.dantri.com.vn/thumb_w/660/2021/09/24/lucasweibo-1632498824939.jpeg',
-  id: '21520115',
-  address: 'Binh Tan, Ho Chi Minh',
-  phone: '0704408389',
-  sex: 'male',
-  day: '16/12/2003',
-  background:
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9z5m7BtaVEQCqDkL5UI2QrBqr1EiCI6-YXA&usqp=CAU',
-};
-const Order = [
-  {
-    id: '1',
-    number: 10,
-    status: 'Wait',
-  },
-  {
-    id: '2',
-    number: 10,
-    status: 'Cancel',
-  },
-  {
-    id: '3',
-    number: 10,
-    status: 'Request',
-  },
-  {
-    id: '4',
-    number: 10,
-    status: 'Review',
-  },
-];
+import { Firestore } from '../../../Firebase/firebase';
+import LoadingComponent from '../components/Loading';
+import {
+  collection,
+  onSnapshot,
+  query,
+  doc,
+  getDoc,
+  querySnapshot,
+  getDocs,
+  where,
+  updateDoc,
+} from 'firebase/firestore';
 
 const AdminOverView = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
+  const [donHangConfirm, setDonHangConfirm] = useState([]);
+  const [donHangOnWait, setDonHangOnWait] = useState([]);
+  const [donHangDelivering, setDonHangDelivering] = useState([]);
+  const [donHangDelivered, setDonHangDelivered] = useState([]);
+
+  const getDonHangConfirm = () => {
+
+    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Confirm"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setDonHangConfirm(data)
+    });
+
+    return unsubscribe;
+  };
+
+  const getDonHangOnWait = () => {
+    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "OnWait"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setDonHangOnWait(data)
+    });
+
+    return unsubscribe;
+
+  };
+
+  const getDonHangDelivering = () => {
+    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivering"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setDonHangDelivering(data)
+    });
+
+    return unsubscribe;
+
+
+  };
+
+  const getDonHangDelivered = () => {
+    const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivered"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setDonHangDelivered(data)
+    });
+
+    return unsubscribe;
+  };
+
+
+
   useEffect(() => {
+
+    getDonHangConfirm()
+    getDonHangOnWait()
+    getDonHangDelivering()
+    getDonHangDelivered()
+
     setTimeout(() => {
       // Assume data is fetched here
       const fetchedData = 'Sample Data';
@@ -120,28 +170,28 @@ const AdminOverView = props => {
         <>
           <>
             <View style={styles.menuContainer}>
-              <View style={{width: 32, height: 37}}>
+              <View style={{ width: 32, height: 37 }}>
                 <MenuIcon
                   onPress={() => navigation.navigate('ChangeProfile')}
                   source={IC_User}
                 />
               </View>
-              <View style={{width: 10, height: '100%'}} />
-              <View style={{width: 30, height: 30}}>
+              <View style={{ width: 10, height: '100%' }} />
+              <View style={{ width: 30, height: 30 }}>
                 <MenuIcon
                   onPress={() => navigation.navigate('Chat')}
                   source={IC_messenger}
                 />
               </View>
               {/* <View style={{width: 5, height: '100%'}} />
-          <View style={{width: 35, height: 35}}>
-            <MenuIcon
-              onPress={() => navigation.navigate('Notification')}
-              source={IC_notification}
-            />
-          </View> */}
-              <View style={{width: 5, height: '100%'}} />
-              <View style={{width: 32, height: 32}}>
+                <View style={{width: 35, height: 35}}>
+                  <MenuIcon
+                    onPress={() => navigation.navigate('Notification')}
+                    source={IC_notification}
+                  />
+                </View> */}
+              <View style={{ width: 5, height: '100%' }} />
+              <View style={{ width: 32, height: 32, marginHorizontal: 5 }}>
                 <MenuIcon
                   onPress={() => {
                     firebase.auth().signOut();
@@ -149,7 +199,7 @@ const AdminOverView = props => {
                   source={IC_logout}
                 />
               </View>
-              <View style={{width: 10, height: '100%'}} />
+              <View style={{ width: 10, height: '100%' }} />
             </View>
           </>
 
@@ -158,16 +208,16 @@ const AdminOverView = props => {
           <>
             <View style={styles.accountContainer}>
               <View style={styles.infoContainer}>
-                <View style={{width: 10, height: '100%'}} />
+                <View style={{ width: 10, height: '100%' }} />
                 <View style={styles.avataContainer}>
                   {imageUrl ? (
                     <Image
-                      source={{uri: imageUrl}}
+                      source={{ uri: imageUrl }}
                       style={{
                         width: '100%',
                         height: '100%',
                         aspectRatio: 1,
-                        borderRadius: 50,
+                        borderRadius: 60,
                         resizeMode: 'center',
                         borderColor: CUSTOM_COLOR.Black,
                         borderWidth: 1,
@@ -180,7 +230,7 @@ const AdminOverView = props => {
                         width: '100%',
                         height: '100%',
                         aspectRatio: 1,
-                        borderRadius: 50,
+                        borderRadius: 60,
                         resizeMode: 'center',
                         borderColor: CUSTOM_COLOR.Black,
                         borderWidth: 1,
@@ -188,14 +238,14 @@ const AdminOverView = props => {
                     />
                   )}
                 </View>
-                <View style={{width: 15, height: '100%'}} />
+                <View style={{ width: 15, height: '100%' }} />
                 <View
-                  style={{flexDirection: 'column', justifyContent: 'center'}}>
-                  <Text style={[styles.textViewStyles, {fontSize: 20}]}>
+                  style={{ flexDirection: 'column', justifyContent: 'center' }}>
+                  <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
                     {userData.TenND}
                   </Text>
-                  <View style={{width: '100%', height: 5}} />
-                  <Text style={[styles.textViewStyles, {fontSize: 15}]}>
+                  <View style={{ width: '100%', height: 5 }} />
+                  <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
                     {userData.LoaiND}
                   </Text>
                 </View>
@@ -203,7 +253,7 @@ const AdminOverView = props => {
               <View style={styles.viewShopContainer}>
                 <TouchableOpacity style={styles.butViewShopContainer}>
                   <Text
-                    style={{color: CUSTOM_COLOR.Red}}
+                    style={{ color: CUSTOM_COLOR.Red }}
                     onPress={() => navigation.navigate('ViewShop1')}>
                     View Shop
                   </Text>
@@ -216,7 +266,7 @@ const AdminOverView = props => {
 
           <>
             <View style={styles.oderContainer}>
-              <View style={{width: '100%', height: '5%'}} />
+              <View style={{ width: '100%', height: '5%' }} />
               <View style={styles.textContainer}>
                 <View
                   style={{
@@ -240,16 +290,21 @@ const AdminOverView = props => {
                 </TouchableOpacity>
               </View>
               <View style={styles.listOderConatiner}>
-                <FlatList
+                {/* <FlatList
                   horizontal={true}
                   data={Order}
                   keyExtractor={item => item.id}
-                  renderItem={({item}) => {
+                  renderItem={({ item }) => {
                     return (
                       <ViewNow number={item.number} status={item.status} />
                     );
                   }}
-                />
+                /> */}
+
+                <ViewNow number={donHangConfirm.length} status={"Confirm"} />
+                <ViewNow number={donHangOnWait.length} status={"On wait"} />
+                <ViewNow number={donHangDelivering.length} status={"Delovering"} />
+                <ViewNow number={donHangDelivered.length} status={"Delivered"} />
               </View>
             </View>
           </>
@@ -259,6 +314,13 @@ const AdminOverView = props => {
           <>
             <View style={styles.functionContainer}>
               <View style={styles.unitContainer}>
+                <View style={styles.unitContainer}>
+                  <FunctionCard
+                    onPress={() => navigation.navigate('Categories')}
+                    source={IC_Catgory}
+                    text="Categories"
+                  />
+                </View>
                 <View style={styles.unitContainer}>
                   <FunctionCard
                     onPress={() => navigation.navigate('MyProduct')}
@@ -273,6 +335,9 @@ const AdminOverView = props => {
                     text="My Order"
                   />
                 </View>
+
+              </View>
+              <View style={styles.unitContainer}>
                 <View style={styles.unitContainer}>
                   <FunctionCard
                     onPress={() => navigation.navigate('Promotion')}
@@ -280,8 +345,6 @@ const AdminOverView = props => {
                     text="Promotions"
                   />
                 </View>
-              </View>
-              <View style={styles.unitContainer}>
                 <View style={styles.unitContainer}>
                   <FunctionCard
                     onPress={() => navigation.navigate('Report')}
@@ -296,13 +359,7 @@ const AdminOverView = props => {
                     text="Manage User"
                   />
                 </View>
-                <View style={styles.unitContainer}>
-                  {/* <FunctionCard
-                    onPress={() => navigation.navigate('ReviewScreen')}
-                    source={IC_Review}
-                    text="Manage Review"
-                  /> */}
-                </View>
+
               </View>
             </View>
           </>
@@ -344,6 +401,7 @@ const styles = StyleSheet.create({
     height: '80%',
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 10,
   },
   textViewStyles: {
     fontFamily: FONT_FAMILY.Semibold,
@@ -357,13 +415,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   butViewShopContainer: {
-    width: '90%',
-    height: '35%',
+    width: 100,
+    height: 40,
     borderColor: CUSTOM_COLOR.FlushOrange,
     borderRadius: 5,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginEnd: 20,
   },
   oderContainer: {
     flex: 4,

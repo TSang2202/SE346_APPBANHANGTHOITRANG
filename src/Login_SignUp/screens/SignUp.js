@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import CheckBox from '@react-native-community/checkbox';
+
 import {
   Alert,
   ImageBackground,
@@ -8,9 +9,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { IMG_Rectangle182 } from '../assets/images/index.js';
+import {IMG_Rectangle182} from '../assets/images/index.js';
 import CustomButton from '../components/Buttons/CustomButton.js';
 import PasswordCard from '../components/Cards/PasswordCard.js';
 import TextInputCard from '../components/Cards/TextInputCard.js';
@@ -25,9 +26,9 @@ import {
   collection,
   doc,
   Timestamp,
-  updateDoc
+  updateDoc,
 } from 'firebase/firestore';
-import { firebase, Firestore } from '../../../Firebase/firebase.js';
+import {firebase, Firestore} from '../../../Firebase/firebase.js';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -273,7 +274,16 @@ const SignUp = props => {
                 onPress={() => {
                   setShowPicker(true);
                 }}>
-                <Text> {birth}</Text>
+                <Text
+                  style={{
+                    fontFamily: FONT_FAMILY.Semibold,
+                    fontSize: 15,
+                    color: CUSTOM_COLOR.Black,
+                    justifyContent: 'center',
+                  }}>
+                  {' '}
+                  {birth}
+                </Text>
               </TouchableOpacity>
               {showPicker && (
                 <DateTimePicker
@@ -370,7 +380,7 @@ const styles = StyleSheet.create({
     left: '3%',
   },
   bodyContainer: {
-    height: 550,
+    height: 570,
     top: '0%',
   },
   checkContainer: {
@@ -383,14 +393,16 @@ const styles = StyleSheet.create({
   },
   containerBot: {
     width: '100%',
-    height: '10%',
-    bottom: '-1%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: 55,
+    // marginHorizontal: '10%',
+    marginTop: 10,
   },
   button: {
-    width: '80%',
+    width: '200%',
     height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: '-50%',
   },
   policyStyles: {
     fontSize: 15,

@@ -1,12 +1,15 @@
 import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from 'react';
 import {
-  FlatList,
-  Image,
-  SafeAreaView,
+  View,
   Text,
+  SafeAreaView,
+  StyleSheet,
+  Image,
   TouchableOpacity,
-  View
+  FlatList,
+  ScrollView,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { Firestore } from "../../../Firebase/firebase";
 import ProductView from "../components/ProductView";
@@ -145,40 +148,89 @@ function ViewShop1({navigation}){
   if(product == true && detail == false)
   {
     return (
-      <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
-        <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
-          <View style={{width: '100%', height: 10}}/>
-            <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
-              <Search onSearch={handleSearch} />
-            </View>
-            <Image
-              style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
-              source={{uri: Acount.avartar}}
-              resizeMode='contain'
-            ></Image>
-            <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
-              >FAUGET</Text>
+      <SafeAreaView
+        style={{
+          backgroundColor: CUSTOM_COLOR.White,
+          width: '100%',
+          height: '100%',
+        }}>
+        <View
+          style={{
+            width: '100%',
+            height: 180,
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor: CUSTOM_COLOR.LavenderBlush,
+          }}>
+          <View style={{width: '100%', height: 10}} />
+          <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
+            <Search
+              placeholder="Search in the Shop"
+              style={{
+                width: '80%',
+                height: 35,
+                backgroundColor: CUSTOM_COLOR.White,
+              }}
+            />
           </View>
-        <View style = {{width: '100%', height:40, flexDirection: 'row'}}>
-          <TouchableOpacity style = {{width: '50%',height:'100%',borderBottomWidth: 2, borderColor: CUSTOM_COLOR.Red,alignItems: 'center'}}>
-            <Text style = {{marginTop: 5, color: CUSTOM_COLOR.DarkOrange, fontSize: 20 }}>Product</Text>
+          <Image
+            style={{
+              width: scale(72),
+              height: scale(72),
+              aspectRatio: 1,
+              borderRadius: 55,
+              marginTop: 5,
+            }}
+            source={{uri: Acount.avartar}}
+            resizeMode="contain"
+          />
+          <Text
+            style={{
+              color: CUSTOM_COLOR.Black,
+              fontSize: 20,
+              fontWeight: 'bold',
+              marginTop: 2,
+            }}>
+            FAUGET
+          </Text>
+        </View>
+        <View style={{width: '100%', height: 40, flexDirection: 'row'}}>
+          <TouchableOpacity
+            style={{
+              width: '50%',
+              height: '100%',
+              borderBottomWidth: 2,
+              borderColor: CUSTOM_COLOR.Red,
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                marginTop: 5,
+                color: CUSTOM_COLOR.DarkOrange,
+                fontSize: 20,
+              }}>
+              Product
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity 
-          onPress={()=> setproduct(false)}
-          style = {{width: '50%', height: '100%', alignItems: 'center', color: CUSTOM_COLOR.Black}}>
-          <Text style = {{marginTop: 5, fontSize: 20}}>List Item</Text>
+          <TouchableOpacity
+            onPress={() => setproduct(false)}
+            style={{
+              width: '50%',
+              height: '100%',
+              alignItems: 'center',
+              color: CUSTOM_COLOR.Black,
+            }}>
+            <Text style={{marginTop: 5, fontSize: 20}}>List Item</Text>
           </TouchableOpacity>
         </View>
-  <SortDropdown
-    onSelectSort = {handleSort }/>
-    <View style = {{
-                flexDirection: 'row',
-                marginBottom: 10,
-                justifyContent: 'space-between', 
-                marginHorizontal: 10,
-                marginTop: 14,
-          }}>
-          
+        <View
+          style={{
+            flexDirection: 'row',
+            marginBottom: 10,
+            justifyContent: 'space-between',
+            marginHorizontal: 10,
+            marginTop: 14,
+          }}>          
     </View>
     <View style = {{width: '100%', height: 300}}>
                 <FlatList
@@ -204,32 +256,71 @@ function ViewShop1({navigation}){
                     }}
                     numColumns = {2}
                 />
-    </View>
-    </SafeAreaView>
-    )
-  }        
-    else{
-      if(product == false && detail == false){
-      return(
-        <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White,width: '100%', height: '100%'}}>
-        <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
-        <View style={{width: '100%', height: 10}}/>
-        <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
-        <Search onSearch={handleSearch}/>
+                //</View> </TouchableOpacity>
+              );
+            }}
+            numColumns={2}
+          />
         </View>
-        <Image
-          style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
-          source={{uri: Acount.avartar}}
-          resizeMode='contain'
-        ></Image>
-        <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
-        >FAUGET</Text>
-      </View>
-        <View style = {{width: '100%', height:40, flexDirection: 'row'}}>
-            <TouchableOpacity 
-            onPress={()=> setproduct(true)}
-            style = {{width: '50%',height:'100%',alignItems: 'center'}}>
-            <Text style = {{marginTop: 5,  fontSize: 20, color: CUSTOM_COLOR.Black }}>Product</Text>
+      </SafeAreaView>
+    );
+  } else {
+    if (product == false && detail == false) {
+      return (
+        <SafeAreaView
+          style={{
+            backgroundColor: CUSTOM_COLOR.White,
+            width: '100%',
+            height: '100%',
+          }}>
+          <View
+            style={{
+              width: '100%',
+              height: 180,
+              flexDirection: 'column',
+              alignItems: 'center',
+              backgroundColor: CUSTOM_COLOR.LavenderBlush,
+            }}>
+            <View style={{width: '100%', height: 10}} />
+            <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
+              <Search
+                placeholder="Search in the Shop"
+                style={{
+                  width: '80%',
+                  height: 35,
+                  backgroundColor: CUSTOM_COLOR.White,
+                }}
+              />
+            </View>
+            <Image
+              style={{
+                width: scale(72),
+                height: scale(72),
+                aspectRatio: 1,
+                borderRadius: 55,
+                marginTop: 5,
+              }}
+              source={{uri: Acount.avartar}}
+              resizeMode="contain"
+            />
+            <Text
+              style={{
+                color: CUSTOM_COLOR.Black,
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginTop: 2,
+              }}>
+              FAUGET
+            </Text>
+          </View>
+          <View style={{width: '100%', height: 40, flexDirection: 'row'}}>
+            <TouchableOpacity
+              onPress={() => setproduct(true)}
+              style={{width: '50%', height: '100%', alignItems: 'center'}}>
+              <Text
+                style={{marginTop: 5, fontSize: 20, color: CUSTOM_COLOR.Black}}>
+                Product
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity 
             style = {{width: '50%', height: '100%',borderBottomWidth: 2, borderColor: CUSTOM_COLOR.Red, alignItems: 'center'}}>
@@ -265,30 +356,67 @@ function ViewShop1({navigation}){
                 />
     </View>
         </SafeAreaView>
-      )
-      }
-      else{
-          return(
-            <SafeAreaView style = {{backgroundColor: CUSTOM_COLOR.White, width: '100%', height: '100%'}}>
-            <View style = {{width: '100%',height:180,flexDirection: 'column', alignItems: 'center',backgroundColor: CUSTOM_COLOR.LavenderBlush}}>
-            <Search onSearch={handleSearch}/>
+      );
+    } else {
+      return (
+        <SafeAreaView
+          style={{
+            backgroundColor: CUSTOM_COLOR.White,
+            width: '100%',
+            height: '100%',
+          }}>
+          <View
+            style={{
+              width: '100%',
+              height: 180,
+              flexDirection: 'column',
+              alignItems: 'center',
+              backgroundColor: CUSTOM_COLOR.LavenderBlush,
+            }}>
+            <Search
+              placeholder="Search in the Shop"
+              style={{
+                width: '80%',
+                height: 35,
+                backgroundColor: CUSTOM_COLOR.White,
+              }}
+            />
             <Image
-              style = {{width: scale(72), height:scale(72),aspectRatio: 1, borderRadius: 55, marginTop: 5}}
+              style={{
+                width: scale(72),
+                height: scale(72),
+                aspectRatio: 1,
+                borderRadius: 55,
+                marginTop: 5,
+              }}
               source={{uri: Acount.avartar}}
-              resizeMode='contain'
-            ></Image>
-            <Text style={{color: CUSTOM_COLOR.Black, fontSize: 20, fontWeight: 'bold', marginTop: 2}}
-            >FAUGET</Text>
-            </View>
-            <View style = {{width: '100%', height: 30, flexDirection: 'row', marginTop: 20}}>
-            <TouchableOpacity 
-            onPress={()=> setdetail(false)}
-            style = {{width: 17, height: 17, marginLeft: 18, marginTop: 5}}>
+              resizeMode="contain"
+            />
+            <Text
+              style={{
+                color: CUSTOM_COLOR.Black,
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginTop: 2,
+              }}>
+              FAUGET
+            </Text>
+          </View>
+          <View
+            style={{
+              width: '100%',
+              height: 30,
+              flexDirection: 'row',
+              marginTop: 20,
+            }}>
+            <TouchableOpacity
+              onPress={() => setdetail(false)}
+              style={{width: 17, height: 17, marginLeft: 18, marginTop: 5}}>
               <Image
-                  resizeMode='contain'
-                  source={backto}
-                  style={{width:'100%',height:'100%'}}
-              ></Image>
+                resizeMode="contain"
+                source={backto}
+                style={{width: '100%', height: '100%'}}
+              />
             </TouchableOpacity>
             <Text style = {{color: CUSTOM_COLOR.Black, fontSize: 18, marginLeft: 10}}>List Item</Text>
             </View>
@@ -317,4 +445,5 @@ function ViewShop1({navigation}){
       }
     }
   }
-export default ViewShop1
+}
+export default ViewShop1;
