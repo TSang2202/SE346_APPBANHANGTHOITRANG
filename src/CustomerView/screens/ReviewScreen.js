@@ -17,7 +17,6 @@ import { IC_StartFull, IC_StartCorner } from "../assets/icons";
 const ImagePicker = require('react-native-image-picker');
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { ref, uploadBytes, put, getDownloadURL } from "firebase/storage";
-
 function ReviewScreen({navigation, route}) {
     const {item} = route.params
     const [image, setImage] = useState('')
@@ -113,7 +112,6 @@ function ReviewScreen({navigation, route}) {
         }catch(error){
             console.log(error)
         }
-        
     }
     const selectImage = () => {
         const options = {
@@ -193,7 +191,6 @@ function ReviewScreen({navigation, route}) {
                         resizeMode = 'stretch'
                     />  
                 </TouchableOpacity>
-                    
               
                 <Text style ={{
                     fontSize: 20,
@@ -229,7 +226,6 @@ function ReviewScreen({navigation, route}) {
                     </View>
                 </View>
 
-                
                 <View>
                     <TouchableOpacity style ={{
                         flexDirection: 'row',

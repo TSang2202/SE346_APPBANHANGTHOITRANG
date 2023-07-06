@@ -16,6 +16,7 @@ import ProductView from '../components/ProductView';
 import Search from '../components/Search';
 import SortDropdown from '../components/SortDropDown';
 import scale from '../constants/responsive.js';
+import { Acount } from '../../StaffView/screens/OverView';
 function ViewShop1({navigation}) {
   const [detail, setdetail] = useState(false);
   const [product, setproduct] = useState(true);
@@ -27,7 +28,7 @@ function ViewShop1({navigation}) {
   const [selectedDanhMuc, setSelectedDanhMuc] = useState('');
   const [imageUrl, setImageUrl] = useState(null);
   const [userData, setUserData] = useState(null);
-
+  
   const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
   };
@@ -128,7 +129,6 @@ function ViewShop1({navigation}) {
     setDataCategories(filteredItems);
   };
 
-
   useEffect(() => {
     getItems();
     getDataCategories();
@@ -168,7 +168,7 @@ function ViewShop1({navigation}) {
               borderRadius: 55,
               marginTop: 5,
             }}
-            //source={{uri: Acount.avartar}}
+            source={{uri: Acount.avartar}}
             resizeMode="contain"
           />
           <Text
@@ -224,6 +224,7 @@ function ViewShop1({navigation}) {
           <FlatList
             nestedScrollEnabled={true}
             data={items}
+            numColumns={2}
             renderItem={({item}) => {
               return (
                 //<TouchableOpacity
@@ -241,7 +242,7 @@ function ViewShop1({navigation}) {
                   price={item.GiaSP}
                 />
               )
-            }
+             }
             }
             />
             </View>
@@ -277,7 +278,7 @@ function ViewShop1({navigation}) {
                 borderRadius: 55,
                 marginTop: 5,
               }}
-              //source={{uri: Acount.avartar}}
+              source={{uri: Acount.avartar}}
               resizeMode="contain"
             />
             <Text
@@ -339,7 +340,7 @@ function ViewShop1({navigation}) {
                         )
                     }}
                 />
-    </View>
+        </View>
         </SafeAreaView>
       );
     } else {
