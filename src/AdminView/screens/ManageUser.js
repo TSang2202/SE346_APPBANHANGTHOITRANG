@@ -41,9 +41,15 @@ const ManageUser = props => {
   const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
   const [searchTerm, setSearchTerm] = useState();
-  const handleSearch = (searchTerm) =>{
+  const [filteredItems, setFilteredItems] = useState([]);
+  const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
-  }
+    const filteredItems = users.filter(item =>
+      item.TenND.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredItems(filteredItems);
+  };
+  
 
   useEffect(() => {
     setTimeout(() => {
@@ -241,7 +247,7 @@ const ManageUser = props => {
               {/* Lay list nguoi dung ve hien thi */}
               {/* <AccountCard onPress={() => navigation.navigate('EditAccount')} /> */}
               <FlatList
-                data={users}
+                data={searchTerm ? filteredItems : users}
                 renderItem={renderUser}
                 keyExtractor={item => item.id}
               />
