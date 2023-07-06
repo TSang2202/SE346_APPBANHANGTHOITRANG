@@ -1,7 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-function Report(navigation) {
+import { FlatList, Text, View } from 'react-native';
+import { Firestore } from '../../../Firebase/firebase';
+
+const Report = () => {
   const [financialData, setFinancialData] = useState([]);
 
   useEffect(() => {
@@ -14,35 +15,29 @@ function Report(navigation) {
         const startOfMonth = new Date(currentYear, currentMonth - 1, 1);
         const endOfMonth = new Date(currentYear, currentMonth, 0, 23, 59, 59);
 
-        // Lấy các đơn hàng có trạng thái "Delivered"
-        const deliveredOrdersSnapshot = await db
-          .collection('DONHANG')
+        const deliveredOrdersSnapshot = await Firestore.collection('DONHANG')
           .where('trangThai', '==', 'Delivered')
           .where('ngayGiaoHang', '>=', startOfMonth)
           .where('ngayGiaoHang', '<=', endOfMonth)
           .get();
 
-        // Chuyển các đơn hàng sang collection "BAOCAO"
-        const batch = db.batch();
+        const batch = Firestore.batch();
         const deliveredOrders = [];
         deliveredOrdersSnapshot.forEach((doc) => {
           const orderData = doc.data();
           deliveredOrders.push(orderData);
-          const newDocRef = db.collection('BAOCAO').doc();
+          const newDocRef = Firestore.collection('BAOCAO').doc();
           batch.set(newDocRef, orderData);
           batch.delete(doc.ref);
         });
         await batch.commit();
 
-        // Tính tổng doanh thu trong tháng
         const totalRevenue = deliveredOrders.reduce(
           (sum, order) => sum + order.doanhThu,
           0
         );
 
-        // Lấy dữ liệu từ collection "BAOCAO"
-        const financialReportSnapshot = await db
-          .collection('BAOCAO')
+        const financialReportSnapshot = await Firestore.collection('BAOCAO')
           .orderBy('ngayGiaoHang')
           .get();
         const financialReportData = financialReportSnapshot.docs.map((doc) =>
@@ -81,5 +76,4 @@ function Report(navigation) {
   );
 };
 
-const styles = StyleSheet.create({})
-export default Report
+export default Report;
