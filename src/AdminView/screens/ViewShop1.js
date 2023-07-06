@@ -1,82 +1,86 @@
-import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
+import React, {useEffect, useState} from 'react';
+import {
   FlatList,
-  ScrollView,
-  TouchableWithoutFeedback,
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Firestore } from "../../../Firebase/firebase";
-import ProductView from "../components/ProductView";
-
+import {Firestore} from '../../../Firebase/firebase';
+import ProductView from '../components/ProductView';
+import {firebase} from '../../../Firebase/firebase';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import { backto } from '../assets/icons/index.js';
+import {backto} from '../assets/icons/index.js';
 import ItemList from '../components/ItemList';
 import Search from '../components/Search';
 import SortDropdown from '../components/SortDropDown';
 import scale from '../constants/responsive.js';
-import { Acount } from './AdminOverView';
+import {Acount} from './AdminOverView';
 
-
-function ViewShop1({navigation}){
-  
-  const [detail ,setdetail] = useState(false)
-  const [product, setproduct] = useState(true)
+function ViewShop1({navigation}) {
+  const [detail, setdetail] = useState(false);
+  const [product, setproduct] = useState(true);
   const [items, setItems] = useState([]);
-  const [dataCategory,setDataCategory] = useState([]);
+  const [dataCategory, setDataCategory] = useState([]);
   const [dataCategories, setDataCategories] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("")
-  const [sortType, setSortType] = useState("")
-  const [selectedDanhMuc, setSelectedDanhMuc] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortType, setSortType] = useState('');
+  const [selectedDanhMuc, setSelectedDanhMuc] = useState('');
+  const [imageUrl, setImageUrl] = useState(null);
+  const [userData, setUserData] = useState(null);
 
-  const handleSearch = (searchTerm) => {
+  const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
   };
-  const handleSort = (type) => {
-      setSortType(type);
+  const handleSort = type => {
+    setSortType(type);
   };
   // Lấy MaDM khi người dùng click vào danh mục
-  const handleDanhMucClick = (MaDM) => {
+  const handleDanhMucClick = MaDM => {
     setSelectedDanhMuc(MaDM);
   };
   const getItems = async () => {
-    const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "Inventory"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const q = query(
+      collection(Firestore, 'SANPHAM'),
+      where('TrangThai', '==', 'Inventory'),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
       const data = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(doc => {
         data.push(doc.data());
       });
       let sortedItems = data;
 
-      if (sortType === "a-z") {
-          sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
-      } else if (sortType === "z-a") {
-          sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
-      } else if (sortType === "low-to-high") {
-          sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
-      } else if (sortType === "high-to-low") {
-          sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
+      if (sortType === 'a-z') {
+        sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+      } else if (sortType === 'z-a') {
+        sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+      } else if (sortType === 'low-to-high') {
+        sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
+      } else if (sortType === 'high-to-low') {
+        sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
       }
       let filteredItems = data;
       if (searchTerm != null) {
-          filteredItems = data.filter((itemData)=>
-          itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase())); 
+        filteredItems = data.filter(itemData =>
+          itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+      } else {
+        setItems(data);
       }
-      else {
-        setItems(data)
-      }
-      setItems(filteredItems)
-      
+      setItems(filteredItems);
     });
-  
-  }
-  const getDataCategory = async() => {
-    const q = query(collection(Firestore, "DANHMUC"))
+  };
+  const getDataCategory = async () => {
+    const q = query(collection(Firestore, 'DANHMUC'));
 
     const querySnapshot = await getDocs(q);
 
@@ -89,51 +93,90 @@ function ViewShop1({navigation}){
       });
     });
     setDataCategory(items);
-  }
+  };
   const getDataCategories = async () => {
-    const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==",selectedDanhMuc ));
-        const querySnapshot = await getDocs(q);
-        const data = [];
-        querySnapshot.forEach(documentSnapshot => {
-            data.push({
-            ...documentSnapshot.data(),
-            });
-        });
-        let sortedItems = data;
+    const q = query(
+      collection(Firestore, 'SANPHAM'),
+      where('MaDM', '==', selectedDanhMuc),
+    );
+    const querySnapshot = await getDocs(q);
+    const data = [];
+    querySnapshot.forEach(documentSnapshot => {
+      data.push({
+        ...documentSnapshot.data(),
+      });
+    });
+    let sortedItems = data;
 
-        if (sortType === "a-z") {
-            sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
-        } else if (sortType === "z-a") {
-            sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
-        } else if (sortType === "low-to-high") {
-            sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
-        } else if (sortType === "high-to-low") {
-            sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
-        }
-        
-        let filteredItems = data;
-        if (searchTerm != null) {
-            filteredItems = data.filter((itemData) =>
-            itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
-            ); 
-        }
-        else {
-            setDataCategories(data);
-        }
-        setDataCategories(filteredItems);
+    if (sortType === 'a-z') {
+      sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+    } else if (sortType === 'z-a') {
+      sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+    } else if (sortType === 'low-to-high') {
+      sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
+    } else if (sortType === 'high-to-low') {
+      sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
+    }
+
+    let filteredItems = data;
+    if (searchTerm != null) {
+      filteredItems = data.filter(itemData =>
+        itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    } else {
+      setDataCategories(data);
+    }
+    setDataCategories(filteredItems);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const categoryItems = await getDataCategory();
+      if (categoryItems.length > 0) {
+        const firstCategory = categoryItems[0]; // Assuming you want to select the first category by default
+        handleDanhMucClick(firstCategory.MaDM);
+      }
     };
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        const categoryItems = await getDataCategory();
-        if (categoryItems.length > 0) {
-          const firstCategory = categoryItems[0]; // Assuming you want to select the first category by default
-          handleDanhMucClick(firstCategory.MaDM);
-        }
-      };
-    
-      fetchData();
-    }, []);
+
+    fetchData();
+    fetchUserData(firebase.auth().currentUser.uid);
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
+      setImageUrl(url),
+    );
+  }, []);
+
+  const fetchUserData = async userId => {
+    try {
+      const userRef = firebase.firestore().collection('NGUOIDUNG').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setUserData(userData);
+      } else {
+        console.log('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const fetchImageUrl = async (documentId, fieldName) => {
+    try {
+      const documentSnapshot = await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .get();
+      const data = documentSnapshot.data();
+      const imageUrl = data[fieldName];
+      return imageUrl;
+    } catch (error) {
+      console.error('Error fetching image URL:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     getItems();
     getDataCategories();
@@ -145,8 +188,7 @@ function ViewShop1({navigation}){
     getDataCategories();
     getDataCategory();
   }, [searchTerm, sortType, selectedDanhMuc]); // Gọi lại hàm getDataCategory mỗi khi searchTerm thay đổi
-  if(product == true && detail == false)
-  {
+  if (product == true && detail == false) {
     return (
       <SafeAreaView
         style={{
@@ -164,14 +206,7 @@ function ViewShop1({navigation}){
           }}>
           <View style={{width: '100%', height: 10}} />
           <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
-            <Search
-              placeholder="Search in the Shop"
-              style={{
-                width: '80%',
-                height: 35,
-                backgroundColor: CUSTOM_COLOR.White,
-              }}
-            />
+            <Search onSearch={handleSearch} />
           </View>
           <Image
             style={{
@@ -181,7 +216,7 @@ function ViewShop1({navigation}){
               borderRadius: 55,
               marginTop: 5,
             }}
-            source={{uri: Acount.avartar}}
+            source={{uri: imageUrl}}
             resizeMode="contain"
           />
           <Text
@@ -223,6 +258,7 @@ function ViewShop1({navigation}){
             <Text style={{marginTop: 5, fontSize: 20}}>List Item</Text>
           </TouchableOpacity>
         </View>
+        <SortDropdown onSelectSort={handleSort} />
         <View
           style={{
             flexDirection: 'row',
@@ -230,32 +266,29 @@ function ViewShop1({navigation}){
             justifyContent: 'space-between',
             marginHorizontal: 10,
             marginTop: 14,
-          }}>          
-    </View>
-    <View style = {{width: '100%', height: 300}}>
-                <FlatList
-                    nestedScrollEnabled={true}
-                    data={items}
-                    renderItem = {({item}) => {
-                        return(
-                            //<TouchableOpacity
-                              //  onPress={() => navigation.navigate('ViewShop2')}
-                                //style = {{
-                                //flexDirection: 'row',
-                                //justifyContent: 'space-around'
-                           // }}>
-                                <ProductView
-                                    onPress={() => { navigation.navigate('ViewShop2', { item }) }}
-                                    source={item.HinhAnhSP[0]}
-                                    title={item.TenSP}
-                                    price={item.GiaSP}
-                                />
-                              
-                           //</View> </TouchableOpacity>
-                        )
-                    }}
-                    numColumns = {2}
+          }}
+        />
+        <View style={{width: '100%', height: '90%'}}>
+          <FlatList
+            nestedScrollEnabled={true}
+            data={items}
+            renderItem={({item}) => {
+              return (
+                //<TouchableOpacity
+                //  onPress={() => navigation.navigate('ViewShop2')}
+                //style = {{
+                //flexDirection: 'row',
+                //justifyContent: 'space-around'
+                // }}>
+                <ProductView
+                  onPress={() => {
+                    navigation.navigate('ViewShop2', {item});
+                  }}
+                  source={item.HinhAnhSP[0]}
+                  title={item.TenSP}
+                  price={item.GiaSP}
                 />
+
                 //</View> </TouchableOpacity>
               );
             }}
@@ -283,14 +316,7 @@ function ViewShop1({navigation}){
             }}>
             <View style={{width: '100%', height: 10}} />
             <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
-              <Search
-                placeholder="Search in the Shop"
-                style={{
-                  width: '80%',
-                  height: 35,
-                  backgroundColor: CUSTOM_COLOR.White,
-                }}
-              />
+              <Search onSearch={handleSearch} />
             </View>
             <Image
               style={{
@@ -300,7 +326,7 @@ function ViewShop1({navigation}){
                 borderRadius: 55,
                 marginTop: 5,
               }}
-              source={{uri: Acount.avartar}}
+              source={{uri: imageUrl}}
               resizeMode="contain"
             />
             <Text
@@ -322,39 +348,43 @@ function ViewShop1({navigation}){
                 Product
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity 
-            style = {{width: '50%', height: '100%',borderBottomWidth: 2, borderColor: CUSTOM_COLOR.Red, alignItems: 'center'}}>
-            <Text style = {{marginTop: 5,color: CUSTOM_COLOR.DarkOrange, fontSize: 20}}>List Item</Text>
-            
+            <TouchableOpacity
+              style={{
+                width: '50%',
+                height: '100%',
+                borderBottomWidth: 2,
+                borderColor: CUSTOM_COLOR.Red,
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  marginTop: 5,
+                  color: CUSTOM_COLOR.DarkOrange,
+                  fontSize: 20,
+                }}>
+                List Item
+              </Text>
             </TouchableOpacity>
-      </View>
-      <View style={{width: '100%', height: '65%'}}>
-      
-                <FlatList
-                    data={dataCategory}
-                    renderItem = {({item}) => {
-                        return(
-                            <TouchableOpacity
-                            onPress={handleDanhMucClick(item.MaDM)}
-                            >
-                            <TouchableOpacity
-                            
-                                onPress={() => setdetail(true) }
-                                style = {{
-                                flexDirection: 'row',
-                                //justifyContent: 'space-around'
-                            }}>
-                                <ItemList
-                                
-                                source = {item.AnhDM}
-                                title = {item.TenDM}
-                                ></ItemList>
-                            </TouchableOpacity>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
-    </View>
+          </View>
+          <View style={{width: '100%', height: '65%'}}>
+            <FlatList
+              data={dataCategory}
+              renderItem={({item}) => {
+                return (
+                  <TouchableOpacity onPress={handleDanhMucClick(item.MaDM)}>
+                    <TouchableOpacity
+                      onPress={() => setdetail(true)}
+                      style={{
+                        flexDirection: 'row',
+                        //justifyContent: 'space-around'
+                      }}>
+                      <ItemList source={item.AnhDM} title={item.TenDM} />
+                    </TouchableOpacity>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          </View>
         </SafeAreaView>
       );
     } else {
@@ -373,14 +403,7 @@ function ViewShop1({navigation}){
               alignItems: 'center',
               backgroundColor: CUSTOM_COLOR.LavenderBlush,
             }}>
-            <Search
-              placeholder="Search in the Shop"
-              style={{
-                width: '80%',
-                height: 35,
-                backgroundColor: CUSTOM_COLOR.White,
-              }}
-            />
+            <Search onSearch={handleSearch} />
             <Image
               style={{
                 width: scale(72),
@@ -389,7 +412,7 @@ function ViewShop1({navigation}){
                 borderRadius: 55,
                 marginTop: 5,
               }}
-              source={{uri: Acount.avartar}}
+              source={{uri: imageUrl}}
               resizeMode="contain"
             />
             <Text
@@ -418,31 +441,35 @@ function ViewShop1({navigation}){
                 style={{width: '100%', height: '100%'}}
               />
             </TouchableOpacity>
-            <Text style = {{color: CUSTOM_COLOR.Black, fontSize: 18, marginLeft: 10}}>List Item</Text>
-            </View>
-            <SortDropdown onSelectSort={handleSort}/>
-            <View>
-              <FlatList
-                    horizontal={false} 
-                    data={dataCategories}
-                    key = {2}
-                    numColumns={2}
-                    renderItem = {({item}) => {
-                        return(
-                                <ProductView
-                                    onPress={() => { navigation.navigate('ViewShop2', { item }) }}
-                                    source = {item.HinhAnhSP[0]}
-                                    title = {item.TenSP}
-                                    price = {item.GiaSP}
-                                />
-                           //</View> </TouchableOpacity>
-                        )
+            <Text
+              style={{color: CUSTOM_COLOR.Black, fontSize: 18, marginLeft: 10}}>
+              List Item
+            </Text>
+          </View>
+          <SortDropdown onSelectSort={handleSort} />
+          <View>
+            <FlatList
+              horizontal={false}
+              data={dataCategories}
+              key={2}
+              numColumns={2}
+              renderItem={({item}) => {
+                return (
+                  <ProductView
+                    onPress={() => {
+                      navigation.navigate('ViewShop2', {item});
                     }}
-                />
-            </View>
-            </SafeAreaView>
-            )
-      }
+                    source={item.HinhAnhSP[0]}
+                    title={item.TenSP}
+                    price={item.GiaSP}
+                  />
+                  //</View> </TouchableOpacity>
+                );
+              }}
+            />
+          </View>
+        </SafeAreaView>
+      );
     }
   }
 }

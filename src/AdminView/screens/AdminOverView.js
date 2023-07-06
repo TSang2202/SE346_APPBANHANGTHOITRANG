@@ -1,33 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import {
-  FlatList,
-  Image,
+  View,
+  Text,
   SafeAreaView,
   StyleSheet,
-  Text,
+  Image,
   TouchableOpacity,
-  View,
+  FlatList,
 } from 'react-native';
-import {firebase} from '../../../Firebase/firebase.js';
-import ViewNow from '../../StaffView/components/ViewNow';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
+import ViewNow from '../../StaffView/components/ViewNow';
+import {firebase} from '../../../Firebase/firebase.js';
 import {
-  IC_User,
-  IC_financial,
-  IC_logout,
-  IC_order,
   IC_product,
+  IC_order,
+  IC_logout,
   IC_promotions,
+  IC_financial,
   IC_user,
   IC_messenger,
+  IC_User,
   IC_Review,
   IC_Catgory,
 } from '../assets/icons/index.js';
-import FunctionCard from '../components/FunctionCard.js';
-import LoadingComponent from '../components/Loading';
 import MenuIcon from '../components/MenuIcon.js';
+import FunctionCard from '../components/FunctionCard.js';
 import {Firestore} from '../../../Firebase/firebase';
+import LoadingComponent from '../components/Loading';
 import {
   collection,
   onSnapshot,

@@ -18,6 +18,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Firestore} from '../../../Firebase/firebase';
 import BackTo from '../components/BackTo';
 import CUSTOM_COLOR from '../constants/colors';
+import CustomHeader from '../components/CustomHeader';
 
 const Report = navigation => {
   const [totalRevenue, setTotalRevenue] = useState(0);
