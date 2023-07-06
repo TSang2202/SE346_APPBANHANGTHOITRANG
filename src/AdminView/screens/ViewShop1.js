@@ -15,7 +15,6 @@ import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import FONT_FAMILY from '../../StaffView/constants/fonts.js';
 import Search from '../components/Search';
 import scale from '../constants/responsive.js';
-import {Acount} from './AdminOverView';
 import Product from '../../StaffView/components/Product';
 import ItemList from '../components/ItemList';
 import {
@@ -26,6 +25,7 @@ import {
 } from '../assets/images/index.js';
 import Size from '../constants/size.js';
 import {backto} from '../assets/icons/index.js';
+import { Acount } from '../../StaffView/screens/OverView.js';
 const datasdetail = [
   {
     id: '1',

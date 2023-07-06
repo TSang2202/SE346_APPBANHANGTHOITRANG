@@ -20,7 +20,7 @@ const Review = (props: any) => {
                 <View style={{
                     ...styles.flexRow
                 }}>
-                    <Image source={props.avatar}
+                    <Image source={{uri: props.avatar}}
                         style={{
                             width: 45,
                             height: 45,

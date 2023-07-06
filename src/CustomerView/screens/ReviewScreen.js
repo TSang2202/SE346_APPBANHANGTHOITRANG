@@ -35,7 +35,6 @@ function ReviewScreen({navigation, route}) {
 
     const getdataReview = () =>{
         try{
-            console.log(item.MaSP + 'kkkkkkkkkk');
             const q = query(collection(Firestore, "DANHGIA"), where("MaSP", "==", item.MaSP));
             const querySnapshot = onSnapshot(q, async (snapshot) => {
             const items = [];
@@ -46,7 +45,6 @@ function ReviewScreen({navigation, route}) {
                 key: documentSnapshot.id,
             });
             });
-            console.log("DuLieu" + items.length);
             let sum = 0;
             if(items.length != 0){
                 for(let i = 0; i < items.length; i++){
