@@ -32,7 +32,6 @@ function ReviewScreen({navigation, route}) {
     const [click, setClick] = useState(false);
   // To set the max number of Stars
     const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
-
     const getdataReview = () =>{
         try{
             const q = query(collection(Firestore, "DANHGIA"), where("MaSP", "==", item.MaSP));
@@ -60,13 +59,12 @@ function ReviewScreen({navigation, route}) {
                 }
                 setdata(items);
                 settong(items.length);
-                settb((Math.round(sum/items.length * 100) / 100).toFixed(2));
+                settb((Math.round(sum/items.length * 100) / 100).toFixed(1));
             }
             })
         }catch(error){
             console.log(error);
         }
-        
     }
     const getUser = async () =>{
         const docRef = doc(Firestore, "NGUOIDUNG", firebase.auth().currentUser.uid);
@@ -211,6 +209,7 @@ function ReviewScreen({navigation, route}) {
             }}>
                 <View>
                     <Text style ={{
+                        fontWeight: 'bold',
                         fontSize: 17,
                         color: CUSTOM_COLOR.Black
                     }}>{tong} Reviews</Text>
@@ -218,6 +217,7 @@ function ReviewScreen({navigation, route}) {
                         flexDirection: 'row'
                     }}>
                         <Text style = {{
+                            fontWeight: 'bold',
                             fontSize: 17,
                             color: CUSTOM_COLOR.Black,
                             marginRight: '5%'

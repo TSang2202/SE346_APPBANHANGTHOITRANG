@@ -206,7 +206,7 @@ function ShoppingCartScreen({ navigation, route }) {
                 }}>Shopping Cart</Text>
             </View>
 
-<View style={{width:'100%', height: 20}}/>
+            <View style={{width:'100%', height: 20}}/>
 
             <FlatList
                 style={{

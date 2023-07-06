@@ -55,13 +55,11 @@ function HomeScreenCustomer({ navigation }) {
 
   const getDataTrending = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
-
     const q = query(
       collection(Firestore, 'SANPHAM'),
       where('Trending', '==', true),
       where('TrangThai', '==', "Inventory"),
     );
-
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const items = [];
       querySnapshot.forEach((doc) => {
@@ -181,9 +179,7 @@ function HomeScreenCustomer({ navigation }) {
             }}
           />
         </View>
-
         <View style={{ width: 10, height: '100%' }} />
-
         <TouchableOpacity
           style={{
             width: 45,
@@ -236,7 +232,6 @@ function HomeScreenCustomer({ navigation }) {
           <Image source={IC_ShoppingCart} />
         </TouchableOpacity>
       </View>
-
       <ScrollView style={{}}>
         <Text style={styles.textView}>On sale</Text>
 
