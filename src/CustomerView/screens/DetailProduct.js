@@ -16,10 +16,8 @@ import { Firestore, firebase } from "../../../Firebase/firebase";
 import Swiper from 'react-native-swiper'
 import { set } from "date-fns";
 import { da } from "date-fns/locale";
-
-
+import { Badge } from 'react-native-elements';
 function DetailProduct({ navigation, route }) {
-
     //
     const [love, setlove] = useState(false)
     //
@@ -27,16 +25,17 @@ function DetailProduct({ navigation, route }) {
     const [tb, settb] = useState()
     const { item } = route.params
     console.log(item);
+    const [badgeCart, setBadgeCart] = useState(0);
     const [dataSanPham, setDataSanPham] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [chooseStyle, setChooseStyle] = useState(false)
     const [numProduct, setNumProduct] = useState(1)
+    const [idUser, setIdUser] = useState()
     const [chooseColor, setChooseColor] = useState()
     const [chooseSize, setChooseSize] = useState()
     const [itemsCheckout, setItemsCheckout] = useState([])
     const [totalMoney, setTotalMoney] = useState()
     const [seeDetails, setSeeDetails] = useState(false)
-
     const getItemdata = () =>{
         try{
             const q = query(collection(Firestore, "SANPHAM"), where("MaSP", "==", item.MaSP));
@@ -54,9 +53,20 @@ function DetailProduct({ navigation, route }) {
         }catch(error){
             console.log(error)
         }
-        
     }
-
+    const getBadgeCart = () => {
+        const q = query(
+          collection(Firestore, 'GIOHANG'),
+          where('MaND', '==', firebase.auth().currentUser.uid),
+        );
+        const unsubscribe = onSnapshot(q, querySnapshot => {
+          const data = [];
+          querySnapshot.forEach(doc => {
+            data.push(doc.data());
+          });
+          setBadgeCart(data.length);
+        });
+    };
     const setDataGioHang = async () => {
         const docRef = await addDoc(collection(Firestore, "GIOHANG"), {
             MaND: firebase.auth().currentUser.uid,
@@ -89,7 +99,6 @@ function DetailProduct({ navigation, route }) {
         );
 
     }
-
     const setBuyNow = async () => {
         const docRef = await addDoc(collection(Firestore, "GIOHANG"), {
             MaND: firebase.auth().currentUser.uid,
@@ -113,13 +122,9 @@ function DetailProduct({ navigation, route }) {
             const data = []
             data.push(doc.data())
             setItemsCheckout(data)
-
             setTotalMoney(dataSanPham[0].GiaSP * numProduct)
 
         });
-
-
-
     }
 
     { itemsCheckout && totalMoney ? navigation.navigate('Checkout', { itemsCheckout, totalMoney }) : null }
@@ -206,7 +211,6 @@ function DetailProduct({ navigation, route }) {
         const q = query(collection(Firestore, "YEUTHICH"), where("MaND", "==", firebase.auth().currentUser.uid));
         const querySnapshot = await getDocs(q);
         const items = [];
-
         querySnapshot.forEach(documentSnapshot => {
             items.push({
                 ...documentSnapshot.data(),
@@ -220,19 +224,17 @@ function DetailProduct({ navigation, route }) {
         }
     }
     useEffect(() => {
+        setIdUser(firebase.auth().currentUser.uid);
         getItemdata();
         getstatusYeuThich();
         getdataReview();
-       
+        getBadgeCart();
     }, [])
     if(isLoading == true){
         return (
             <View style={{
                 ...styles.container,
             }}>
-    
-    
-    
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
     
                     <View style={{ flexDirection: "row", alignItems: 'center', }}>
@@ -245,7 +247,6 @@ function DetailProduct({ navigation, route }) {
                                     width: 10,
                                     height: 20,
                                     margin: 20,
-    
                                 }}
                                 resizeMode='stretch'
                             />
@@ -254,8 +255,7 @@ function DetailProduct({ navigation, route }) {
                         <Text style={{ height: 40, padding: 7, fontSize: 18, fontWeight: 'bold', color: CUSTOM_COLOR.Black }}>Product</Text>
                     </View>
     
-    
-                    <View style={{ flexDirection: "row", alignItems: 'center', }} >
+                    <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 10 }} >
                         <TouchableOpacity onPress={() => {
                             setDataYeuThich();
                         }}
@@ -281,21 +281,30 @@ function DetailProduct({ navigation, route }) {
                                 />)
                             }
                         </TouchableOpacity>
-    
-                        <Image
-                            source={IC_ShoppingCart}
-                            style={{
-                                margin: 10,
-    
-                            }}
-                            resizeMode='stretch'
-                        />
+                        <TouchableOpacity
+                                style={{
+                                    width: 45,
+                                    height: 45,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    // marginVertical: 10,
+                                    // padding: 8,
+                                    borderRadius: 10,
+                                }}
+                                onPress={() => {
+                                    navigation.navigate('ShoppingCard', { idUser });
+                                }}>
+                                {badgeCart != 0 ? (
+                                    <Badge
+                                    value={badgeCart}
+                                    status="error"
+                                    containerStyle={{ position: 'absolute', top: -5, right: -5 }}
+                                    />
+                                ) : null}
+                                <Image source={IC_ShoppingCart} />
+                        </TouchableOpacity>
                     </View>
-    
-    
                 </View>
-    
-    
                 <View style={{ width: '100%', height: '40%', alignItems: 'center', justifyContent: 'center' }}>
     
                     <Swiper
