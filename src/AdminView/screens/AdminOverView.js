@@ -284,8 +284,9 @@ const AdminOverView = props => {
               <View style={styles.unitContainer}>
                 <View style={styles.unitContainer}>
                   <FunctionCard
-                    onPress={() => navigation.navigate('Report.js')}
+                    onPress={() => navigation.navigate('Report')}
                     source={IC_financial}
+                    text = "Financial Report"
                   />
                 </View>
                 <View style={styles.unitContainer}>
