@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -12,19 +12,18 @@ import {
 import Search from '../components/Search';
 import ButtonDetail from '../components/ButtonDetail';
 import OneStaff from '../components/OneStaff';
-import { IM_AnhGiay1 } from '../../CustomerView/assets/images';
+import {IM_AnhGiay1} from '../../CustomerView/assets/images';
 import HeaderWithBack from '../components/HeaderWithBack';
 import CUSTOM_COLOR from '../constants/colors';
 import FONT_FAMILY from '../../Login_SignUp/constants/fonts';
 import AccountCard from '../components/AccountCard';
-import { firebase, Firestore } from '../../../Firebase/firebase';
+import {firebase, Firestore} from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 
-import { Storage } from '../../../Firebase/firebase';
-import { IC_User } from '../assets/icons';
-import { Avatar, ListItem } from 'react-native-elements';
-import { getAuth, deleteUser } from 'firebase/auth';
-
+import {Storage} from '../../../Firebase/firebase';
+import {IC_User} from '../assets/icons';
+import {Avatar, ListItem} from 'react-native-elements';
+import {getAuth, deleteUser} from 'firebase/auth';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -40,13 +39,12 @@ export const Acount = {
 };
 
 const ManageUser = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
-
 
   useEffect(() => {
     setTimeout(() => {
@@ -103,7 +101,6 @@ const ManageUser = props => {
 
         setUserData(userData);
       } else {
-
         console.log('User document does not exist');
       }
     } catch (error) {
@@ -129,7 +126,7 @@ const ManageUser = props => {
 
   const handleUserPress = user => {
     // Navigate to the edit screen with the selected user data
-    navigation.navigate('EditAccount', { user });
+    navigation.navigate('EditAccount', {user});
   };
 
   const handleDeleteUser = async uid => {
@@ -159,11 +156,11 @@ const ManageUser = props => {
       });
   };
 
-  const renderUser = ({ item }) => (
+  const renderUser = ({item}) => (
     <TouchableOpacity onPress={() => handleUserPress(item)}>
       <View style={{}}>
         <AccountCard
-          source={{ uri: item.Avatar }}
+          source={{uri: item.Avatar}}
           name={item.TenND}
           userType={item.LoaiND}
           onPress={() => handleResetPassword(item.Email)}
@@ -174,7 +171,7 @@ const ManageUser = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ width: '100%', height: 15 }} />
+      <View style={{width: '100%', height: 15}} />
 
       {userData ? (
         <>
@@ -182,7 +179,7 @@ const ManageUser = props => {
             <View style={styles.avataContainer}>
               {imageUrl ? (
                 <Image
-                  source={{ uri: imageUrl }}
+                  source={{uri: imageUrl}}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -208,13 +205,13 @@ const ManageUser = props => {
                 />
               )}
             </View>
-            <View style={{ width: 15, height: '100%' }} />
-            <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-              <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
+            <View style={{width: 15, height: '100%'}} />
+            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+              <Text style={[styles.textViewStyles, {fontSize: 20}]}>
                 {userData.TenND}
               </Text>
-              <View style={{ width: '100%', height: 5 }} />
-              <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
+              <View style={{width: '100%', height: 5}} />
+              <Text style={[styles.textViewStyles, {fontSize: 15}]}>
                 {userData.LoaiND}
               </Text>
             </View>
@@ -230,8 +227,7 @@ const ManageUser = props => {
 
           <>
             <View style={styles.searchContainer}>
-
-              <View style={{ width: '5%', height: '100%' }} />
+              <View style={{width: '5%', height: '100%'}} />
 
               <View style={styles.searchViewContainer}>
                 <Search
@@ -243,10 +239,10 @@ const ManageUser = props => {
                   }}
                 />
               </View>
-              <View style={{ width: '5%', height: '100%' }} />
+              <View style={{width: '5%', height: '100%'}} />
               <TouchableOpacity style={styles.butAddContainer}>
                 <Text
-                  style={{ color: CUSTOM_COLOR.White }}
+                  style={{color: CUSTOM_COLOR.White}}
                   onPress={() => navigation.navigate('AddAccount')}>
                   Add Account
                 </Text>
@@ -265,7 +261,7 @@ const ManageUser = props => {
               />
             </View>
           </>
-          <View style={{ width: '100%', height: 20 }} />
+          <View style={{width: '100%', height: 20}} />
         </>
       ) : (
         <LoadingComponent text="Loading data..." />
@@ -303,7 +299,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-
 
   searchViewContainer: {
     width: '60%',
