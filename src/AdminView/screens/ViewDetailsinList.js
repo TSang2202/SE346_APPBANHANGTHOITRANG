@@ -1,6 +1,6 @@
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, TouchableOpacity, View } from "react-native";
 import { Firestore } from "../../../Firebase/firebase";
 import { IC_Back, IC_ShoppingCart } from "../../CustomerView/assets/icons";
 
@@ -11,7 +11,7 @@ import CUSTOM_COLOR from "../constants/colors";
 
 function ViewDetailsinList({ navigation, route }) {
 
-    const { category } = route.params
+
 
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -34,17 +34,6 @@ function ViewDetailsinList({ navigation, route }) {
             querySnapshot.forEach((doc) => {
                 data.push(doc.data());
             });
-            // console.log("Current cities in CA: ", cities.join(", "));
-
-            // const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", category.MaDM));
-            // const querySnapshot = await getDocs(q);
-            // const data = [];
-
-            // querySnapshot.forEach(documentSnapshot => {
-            //     data.push({
-            //         ...documentSnapshot.data(),
-            //     });
-            // });
             let sortedItems = data;
 
             if (sortType === "a-z") {
@@ -121,19 +110,6 @@ function ViewDetailsinList({ navigation, route }) {
             <View style={{
                 flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
             }}>
-                <Text style={{
-                    fontSize: 20,
-                    marginHorizontal: 30,
-                    fontWeight: 'bold',
-                    marginBottom: 10
-                }}>{category.TenDM}</Text>
-
-                <Text style={{
-                    fontSize: 17,
-                    marginHorizontal: 20,
-                    fontWeight: 'bold',
-                    marginBottom: 0
-                }}>{items.length} sản phẩm</Text>
             </View>
             <SortDropDown
                 onSelectSort={handleSort}
@@ -147,9 +123,7 @@ function ViewDetailsinList({ navigation, route }) {
                         return (
                             <TouchableOpacity style={{
                                 flexDirection: 'row',
-                                //justifyContent: 'space-around'
                             }}
-                            // onPress={() => { navigation.navigate('DetailProduct', { item }) }}
                             >
                                 <ProductView
                                     source={item.HinhAnhSP[0]}

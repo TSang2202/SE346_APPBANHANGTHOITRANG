@@ -1,35 +1,35 @@
-import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
 import AddAccount from '../screens/AddAccount';
+import AddNewCategory from '../screens/AddNewCategory';
 import AddProduct from '../screens/AddProduct';
 import AddPromotion from '../screens/AddPromotion';
 import AdminOverView from '../screens/AdminOverView';
+import Categories from '../screens/Categories';
+import ChangePassword from '../screens/ChangePassword';
+import ChangeProfile from '../screens/ChangeProfile';
 import Chat from '../screens/Chat';
 import ChatScreenStaff from '../screens/ChatScreenStaff';
 import DeTailDelivery from '../screens/DeTailDelivery';
 import DeTailsChat from '../screens/DeTailsChat';
+import DetailCategory from '../screens/DetailsCategory';
 import EditAccount from '../screens/EditAccount';
 import EditProduct from '../screens/EditProduct';
+import EditPromotion from '../screens/EditPromotion';
 import ImportProduct from '../screens/ImportProduct';
 import ManageUser from '../screens/ManageUser';
 import MyProduct from '../screens/MyProduct';
 import Notification from '../screens/Notification';
 import Order from '../screens/Order';
 import Promotion from '../screens/Promotion';
-import Report from '../screens/Report';
 import ReviewScreen from '../screens/ReView';
+import Report from '../screens/Report';
 import SearchSrc from '../screens/Search';
 import Setting from '../screens/Setting';
+import ViewDetailsinList from '../screens/ViewDetailsinList';
 import ViewShop1 from '../screens/ViewShop1';
 import ViewShop2 from '../screens/ViewShop2';
-import ChangeProfile from '../screens/ChangeProfile';
-import ChangePassword from '../screens/ChangePassword';
-import EditPromotion from '../screens/EditPromotion';
-import Categories from '../screens/Categories';
-import DetailCategory from '../screens/DetailsCategory'
-import AddNewCategory from '../screens/AddNewCategory';
-
 
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
@@ -63,6 +63,7 @@ function StackNavigator() {
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="EditPromotion" component={EditPromotion} />
       <Stack.Screen name="Categories" component={Categories} />
+      <Stack.Screen name="ViewDetailsinList" component={ViewDetailsinList}/>
       <Stack.Screen name="DetailsCategory" component={DetailCategory} />
       <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
 
