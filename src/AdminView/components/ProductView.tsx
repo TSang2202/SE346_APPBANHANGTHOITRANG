@@ -1,7 +1,8 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import Size from '../constants/size';
-const Product = (props: any) => {
+
+const ProductView = (props: any) => {
   return (
     <View
       style={{
@@ -12,8 +13,7 @@ const Product = (props: any) => {
       }}>
       <TouchableOpacity onPress={props.onPress}>
         <Image
-          source={props.source}
-          resizeMode="contain"
+          source={{uri: props.source}}
           style={{
             width: 150,
             height: 165,
@@ -39,4 +39,4 @@ const Product = (props: any) => {
   );
 };
 
-export default Product;
+export default ProductView;

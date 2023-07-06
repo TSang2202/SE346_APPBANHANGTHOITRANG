@@ -1,130 +1,193 @@
 import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import React from 'react';
-import {useState} from 'react';
-import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import FONT_FAMILY from '../../StaffView/constants/fonts.js';
-import Search from '../components/Search';
-import scale from '../constants/responsive.js';
-import Product from '../../StaffView/components/Product';
-import ItemList from '../components/ItemList';
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
+import React, {useEffect, useState} from 'react';
 import {
-  IM_Giay1,
-  IM_Giay2,
-  IM_Giay3,
-  IM_Giay4,
-} from '../assets/images/index.js';
-import Size from '../constants/size.js';
+  FlatList,
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Firestore} from '../../../Firebase/firebase';
+import ProductView from '../components/ProductView';
+import {firebase} from '../../../Firebase/firebase';
+import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
 import {backto} from '../assets/icons/index.js';
-import { Acount } from '../../StaffView/screens/OverView.js';
-const datasdetail = [
-  {
-    id: '1',
-    source: IM_Giay1,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999,
-  },
-  {
-    id: '2',
-    source: IM_Giay2,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999,
-  },
-  {
-    id: '3',
-    source: IM_Giay3,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999,
-  },
-  {
-    id: '4',
-    source: IM_Giay4,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999,
-  },
-];
-const datas = [
-  {
-    id: '1',
-    source: IM_Giay1,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999,
-  },
-  {
-    id: '2',
-    source: IM_Giay2,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999,
-  },
-  {
-    id: '3',
-    source: IM_Giay3,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999,
-  },
-  {
-    id: '4',
-    source: IM_Giay4,
-    title: 'T-Shirt Black Blank - VSD343545D - New Elevent',
-    price: 399999,
-  },
-  {
-    id: '5',
-    source: IM_Giay3,
-    title: 'T-Shirt Black Blank-VSD343545D - New Elevent',
-    price: 399999,
-  },
-  {
-    id: '6',
-    source: IM_Giay1,
-    title: 'T-Shirt Black Blank-VSD343545D - New Elevent',
-    price: 399999,
-  },
-];
-export const ListItem = [
-  {
-    id: '1',
-    namelist: 'Limited Edition 2023',
-    numberitem: '4',
-    avartar: IM_Giay2,
-  },
-  {
-    id: '2',
-    namelist: 'Limited Edition 2023',
-    numberitem: '4',
-    avartar: IM_Giay2,
-  },
-  {
-    id: '3',
-    namelist: 'Limited Edition 2023',
-    numberitem: '4',
-    avartar: IM_Giay2,
-  },
-  {
-    id: '4',
-    namelist: 'Limited Edition 2023',
-    numberitem: '4',
-    avartar: IM_Giay2,
-  },
-  {
-    id: '5',
-    namelist: 'Limited Edition 2023',
-    numberitem: '4',
-    avartar: IM_Giay2,
-  },
-];
+import ItemList from '../components/ItemList';
+import Search from '../components/Search';
+import SortDropdown from '../components/SortDropDown';
+import scale from '../constants/responsive.js';
+import {Acount} from './AdminOverView';
+
 function ViewShop1({navigation}) {
   const [detail, setdetail] = useState(false);
   const [product, setproduct] = useState(true);
+  const [items, setItems] = useState([]);
+  const [dataCategory, setDataCategory] = useState([]);
+  const [dataCategories, setDataCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortType, setSortType] = useState('');
+  const [selectedDanhMuc, setSelectedDanhMuc] = useState('');
+  const [imageUrl, setImageUrl] = useState(null);
+  const [userData, setUserData] = useState(null);
+
+  const handleSearch = searchTerm => {
+    setSearchTerm(searchTerm);
+  };
+  const handleSort = type => {
+    setSortType(type);
+  };
+  // Lấy MaDM khi người dùng click vào danh mục
+  const handleDanhMucClick = MaDM => {
+    setSelectedDanhMuc(MaDM);
+  };
+  const getItems = async () => {
+    const q = query(
+      collection(Firestore, 'SANPHAM'),
+      where('TrangThai', '==', 'Inventory'),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
+      const data = [];
+      querySnapshot.forEach(doc => {
+        data.push(doc.data());
+      });
+      let sortedItems = data;
+
+      if (sortType === 'a-z') {
+        sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+      } else if (sortType === 'z-a') {
+        sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+      } else if (sortType === 'low-to-high') {
+        sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
+      } else if (sortType === 'high-to-low') {
+        sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
+      }
+      let filteredItems = data;
+      if (searchTerm != null) {
+        filteredItems = data.filter(itemData =>
+          itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+      } else {
+        setItems(data);
+      }
+      setItems(filteredItems);
+    });
+  };
+  const getDataCategory = async () => {
+    const q = query(collection(Firestore, 'DANHMUC'));
+
+    const querySnapshot = await getDocs(q);
+
+    const items = [];
+
+    querySnapshot.forEach(documentSnapshot => {
+      items.push({
+        ...documentSnapshot.data(),
+        key: documentSnapshot.id,
+      });
+    });
+    setDataCategory(items);
+  };
+  const getDataCategories = async () => {
+    const q = query(
+      collection(Firestore, 'SANPHAM'),
+      where('MaDM', '==', selectedDanhMuc),
+    );
+    const querySnapshot = await getDocs(q);
+    const data = [];
+    querySnapshot.forEach(documentSnapshot => {
+      data.push({
+        ...documentSnapshot.data(),
+      });
+    });
+    let sortedItems = data;
+
+    if (sortType === 'a-z') {
+      sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+    } else if (sortType === 'z-a') {
+      sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+    } else if (sortType === 'low-to-high') {
+      sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
+    } else if (sortType === 'high-to-low') {
+      sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
+    }
+
+    let filteredItems = data;
+    if (searchTerm != null) {
+      filteredItems = data.filter(itemData =>
+        itemData.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    } else {
+      setDataCategories(data);
+    }
+    setDataCategories(filteredItems);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const categoryItems = await getDataCategory();
+      if (categoryItems.length > 0) {
+        const firstCategory = categoryItems[0]; // Assuming you want to select the first category by default
+        handleDanhMucClick(firstCategory.MaDM);
+      }
+    };
+
+    fetchData();
+    fetchUserData(firebase.auth().currentUser.uid);
+    fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
+      setImageUrl(url),
+    );
+  }, []);
+
+  const fetchUserData = async userId => {
+    try {
+      const userRef = firebase.firestore().collection('NGUOIDUNG').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setUserData(userData);
+      } else {
+        console.log('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const fetchImageUrl = async (documentId, fieldName) => {
+    try {
+      const documentSnapshot = await firebase
+        .firestore()
+        .collection('NGUOIDUNG')
+        .doc(documentId)
+        .get();
+      const data = documentSnapshot.data();
+      const imageUrl = data[fieldName];
+      return imageUrl;
+    } catch (error) {
+      console.error('Error fetching image URL:', error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    getItems();
+    getDataCategories();
+    getDataCategory();
+  }, []); // Gọi lại hàm getDataCategory khi component được tạo lần đầu
+
+  useEffect(() => {
+    getItems();
+    getDataCategories();
+    getDataCategory();
+  }, [searchTerm, sortType, selectedDanhMuc]); // Gọi lại hàm getDataCategory mỗi khi searchTerm thay đổi
   if (product == true && detail == false) {
     return (
       <SafeAreaView
@@ -143,14 +206,7 @@ function ViewShop1({navigation}) {
           }}>
           <View style={{width: '100%', height: 10}} />
           <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
-            <Search
-              placeholder="Search in the Shop"
-              style={{
-                width: '80%',
-                height: 35,
-                backgroundColor: CUSTOM_COLOR.White,
-              }}
-            />
+            <Search onSearch={handleSearch} />
           </View>
           <Image
             style={{
@@ -160,7 +216,7 @@ function ViewShop1({navigation}) {
               borderRadius: 55,
               marginTop: 5,
             }}
-            source={{uri: Acount.avartar}}
+            source={{uri: imageUrl}}
             resizeMode="contain"
           />
           <Text
@@ -202,6 +258,7 @@ function ViewShop1({navigation}) {
             <Text style={{marginTop: 5, fontSize: 20}}>List Item</Text>
           </TouchableOpacity>
         </View>
+        <SortDropdown onSelectSort={handleSort} />
         <View
           style={{
             flexDirection: 'row',
@@ -209,139 +266,12 @@ function ViewShop1({navigation}) {
             justifyContent: 'space-between',
             marginHorizontal: 10,
             marginTop: 14,
-          }}>
-          <View
-            style={{
-              elevation: 3,
-              shadowColor: CUSTOM_COLOR.Black,
-              width: 90,
-              borderRadius: 20,
-              backgroundColor: CUSTOM_COLOR.White,
-              padding: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                fontSize: 15,
-                color: CUSTOM_COLOR.Black,
-              }}>
-              Related
-            </Text>
-          </View>
-
-          <View
-            style={{
-              elevation: 3,
-              shadowColor: CUSTOM_COLOR.Black,
-              width: 90,
-              borderRadius: 20,
-              backgroundColor: CUSTOM_COLOR.White,
-              padding: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                fontSize: 15,
-                color: CUSTOM_COLOR.Black,
-              }}>
-              Newest
-            </Text>
-          </View>
-
-          <View
-            style={{
-              elevation: 3,
-              shadowColor: CUSTOM_COLOR.Black,
-              width: 90,
-              borderRadius: 20,
-              backgroundColor: CUSTOM_COLOR.White,
-              padding: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                fontSize: 15,
-                color: CUSTOM_COLOR.Black,
-              }}>
-              Top seller
-            </Text>
-          </View>
-
-          <View
-            style={{
-              elevation: 3,
-              shadowColor: CUSTOM_COLOR.Black,
-              width: 90,
-              borderRadius: 20,
-              backgroundColor: CUSTOM_COLOR.White,
-              padding: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                fontSize: 15,
-                color: CUSTOM_COLOR.Black,
-              }}>
-              Price
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 10,
-            alignItems: 'center',
-            marginHorizontal: 10,
-            justifyContent: 'space-evenly',
-            marginTop: 3,
-          }}>
-          <View
-            style={{
-              elevation: 3,
-              shadowColor: CUSTOM_COLOR.Black,
-              width: 90,
-              borderRadius: 20,
-              backgroundColor: CUSTOM_COLOR.White,
-              padding: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                fontSize: 15,
-                color: CUSTOM_COLOR.Black,
-              }}>
-              Rating
-            </Text>
-          </View>
-          <View
-            style={{
-              elevation: 3,
-              shadowColor: CUSTOM_COLOR.Black,
-              width: 90,
-              borderRadius: 20,
-              backgroundColor: CUSTOM_COLOR.White,
-              padding: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                fontSize: 15,
-                color: CUSTOM_COLOR.Black,
-              }}>
-              Discount
-            </Text>
-          </View>
-        </View>
-        <View style={{width: '100%', height: 300}}>
+          }}
+        />
+        <View style={{width: '100%', height: '90%'}}>
           <FlatList
             nestedScrollEnabled={true}
-            data={datas}
+            data={items}
             renderItem={({item}) => {
               return (
                 //<TouchableOpacity
@@ -350,12 +280,15 @@ function ViewShop1({navigation}) {
                 //flexDirection: 'row',
                 //justifyContent: 'space-around'
                 // }}>
-                <Product
-                  onPress={() => navigation.navigate('ViewShop2')}
-                  source={item.source}
-                  title={item.title}
-                  price={item.price}
+                <ProductView
+                  onPress={() => {
+                    navigation.navigate('ViewShop2', {item});
+                  }}
+                  source={item.HinhAnhSP[0]}
+                  title={item.TenSP}
+                  price={item.GiaSP}
                 />
+
                 //</View> </TouchableOpacity>
               );
             }}
@@ -383,14 +316,7 @@ function ViewShop1({navigation}) {
             }}>
             <View style={{width: '100%', height: 10}} />
             <View style={{width: '90%', height: 50, marginHorizontal: '5%'}}>
-              <Search
-                placeholder="Search in the Shop"
-                style={{
-                  width: '80%',
-                  height: 35,
-                  backgroundColor: CUSTOM_COLOR.White,
-                }}
-              />
+              <Search onSearch={handleSearch} />
             </View>
             <Image
               style={{
@@ -400,7 +326,7 @@ function ViewShop1({navigation}) {
                 borderRadius: 55,
                 marginTop: 5,
               }}
-              source={{uri: Acount.avartar}}
+              source={{uri: imageUrl}}
               resizeMode="contain"
             />
             <Text
@@ -442,20 +368,18 @@ function ViewShop1({navigation}) {
           </View>
           <View style={{width: '100%', height: '65%'}}>
             <FlatList
-              data={ListItem}
+              data={dataCategory}
               renderItem={({item}) => {
                 return (
-                  <TouchableOpacity
-                    onPress={() => setdetail(true)}
-                    style={{
-                      flexDirection: 'row',
-                      //justifyContent: 'space-around'
-                    }}>
-                    <ItemList
-                      source={item.avartar}
-                      namelist={item.namelist}
-                      numberitem={item.numberitem}
-                    />
+                  <TouchableOpacity onPress={handleDanhMucClick(item.MaDM)}>
+                    <TouchableOpacity
+                      onPress={() => setdetail(true)}
+                      style={{
+                        flexDirection: 'row',
+                        //justifyContent: 'space-around'
+                      }}>
+                      <ItemList source={item.AnhDM} title={item.TenDM} />
+                    </TouchableOpacity>
                   </TouchableOpacity>
                 );
               }}
@@ -479,14 +403,7 @@ function ViewShop1({navigation}) {
               alignItems: 'center',
               backgroundColor: CUSTOM_COLOR.LavenderBlush,
             }}>
-            <Search
-              placeholder="Search in the Shop"
-              style={{
-                width: '80%',
-                height: 35,
-                backgroundColor: CUSTOM_COLOR.White,
-              }}
-            />
+            <Search onSearch={handleSearch} />
             <Image
               style={{
                 width: scale(72),
@@ -495,7 +412,7 @@ function ViewShop1({navigation}) {
                 borderRadius: 55,
                 marginTop: 5,
               }}
-              source={{uri: Acount.avartar}}
+              source={{uri: imageUrl}}
               resizeMode="contain"
             />
             <Text
@@ -526,22 +443,25 @@ function ViewShop1({navigation}) {
             </TouchableOpacity>
             <Text
               style={{color: CUSTOM_COLOR.Black, fontSize: 18, marginLeft: 10}}>
-              List Item/ {ListItem[0].namelist}
+              List Item
             </Text>
           </View>
+          <SortDropdown onSelectSort={handleSort} />
           <View>
             <FlatList
               horizontal={false}
-              data={datasdetail}
-              numColumns={2}
+              data={dataCategories}
               key={2}
+              numColumns={2}
               renderItem={({item}) => {
                 return (
-                  <Product
-                    onPress={() => navigation.navigate('ViewShop2')}
-                    source={item.source}
-                    title={item.title}
-                    price={item.price}
+                  <ProductView
+                    onPress={() => {
+                      navigation.navigate('ViewShop2', {item});
+                    }}
+                    source={item.HinhAnhSP[0]}
+                    title={item.TenSP}
+                    price={item.GiaSP}
                   />
                   //</View> </TouchableOpacity>
                 );
