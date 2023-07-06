@@ -1,29 +1,41 @@
-import { StyleSheet, Text, View ,Image, TouchableOpacity} from 'react-native'
-import React from 'react'
-import CUSTOM_COLOR from '../constants/colors'
-import { back } from '../assets/icons'
+import React from "react";
+import { Image, Text, View } from "react-native";
+import Size from "../constants/size";
+
+
 const ItemList = (props: any) => {
   return (
-    <View style = {{marginTop: 9,flexDirection: 'row', width: '100%',height: 70, elevation: 3,
-    shadowColor: CUSTOM_COLOR.Black,backgroundColor: CUSTOM_COLOR.White}}>
-      <Image
-        resizeMode='contain'
-        source={props.source} 
-        style ={{height: 65, width: 65, marginLeft: 20}}
-      ></Image>
-      <View style = {{flexDirection: 'column', marginTop: 10, marginLeft: 30}}>
-            <Text style = {{color: CUSTOM_COLOR.Black}}>{props.namelist}</Text>
-            <Text style = {{marginTop: 5, fontStyle: 'italic'}}>{props.numberitem} Product</Text>
-        </View>
-      <Image
-        resizeMode='contain'
-        source={back}
-        style={{marginTop: 23,marginLeft: 130,width:10, height:10}}>
-      </Image>
+    <View
+      style={{
+        width: Size.DeviceWidth / 2 - 65,
+        height: 80,
+        marginHorizontal: 30,
+        marginVertical: 5,
+        flexDirection: "row", // Thêm thuộc tính flexDirection với giá trị "row"
+        alignItems: "center" // Đảm bảo căn giữa theo chiều dọc
+      }}
+    >
+
+        <Image
+          source={{ uri: props.source }}
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 20
+          }}
+        />
+      <Text
+        style={{
+          fontWeight: "bold",
+          fontSize:20,
+          marginVertical: 4,
+          marginLeft: 10 // Khoảng cách giữa ảnh và chữ
+        }}
+      >
+        {props.title}
+      </Text>
     </View>
-  )
-}
+  );
+};
 
-export default ItemList
-
-const styles = StyleSheet.create({})
+export default ItemList;
