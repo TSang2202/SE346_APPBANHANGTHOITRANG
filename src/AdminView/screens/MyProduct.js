@@ -5,7 +5,6 @@ import {
   query,
   updateDoc,
   where,
-  onSnapshot,
 } from 'firebase/firestore';
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
