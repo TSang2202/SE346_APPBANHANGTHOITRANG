@@ -254,9 +254,9 @@ export default function EditProduct({ navigation, route }) {
               {image ? (
 
                 <ScrollView horizontal={true}>
-                  {image.map(img => (
+                  {image.map((img, index) => (
                     <Image
-                      key={img.uri}
+                      key={index}
                       source={typeof img === 'string' ? { uri: img } : { uri: img.uri }}
                       style={{ height: 90, width: 90, margin: 5 }}
                     />

@@ -17,7 +17,6 @@ import { IC_StartFull, IC_StartCorner } from "../assets/icons";
 const ImagePicker = require('react-native-image-picker');
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { ref, uploadBytes, put, getDownloadURL } from "firebase/storage";
-
 function ReviewScreen({navigation, route}) {
     const {item} = route.params
     const [image, setImage] = useState('')
@@ -32,7 +31,6 @@ function ReviewScreen({navigation, route}) {
     const [click, setClick] = useState(false);
   // To set the max number of Stars
     const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
-
     const getdataReview = () =>{
         try{
             const q = query(collection(Firestore, "DANHGIA"), where("MaSP", "==", item.MaSP));
@@ -60,13 +58,12 @@ function ReviewScreen({navigation, route}) {
                 }
                 setdata(items);
                 settong(items.length);
-                settb((Math.round(sum/items.length * 100) / 100).toFixed(2));
+                settb((Math.round(sum/items.length * 100) / 100).toFixed(1));
             }
             })
         }catch(error){
             console.log(error);
         }
-        
     }
     const getUser = async () =>{
         const docRef = doc(Firestore, "NGUOIDUNG", firebase.auth().currentUser.uid);
@@ -87,21 +84,37 @@ function ReviewScreen({navigation, route}) {
     const addDataReView = async ()=>{
         try{
             setAddReview(false);
-            const imageUri = await UploadFile()
-            const docRef = await addDoc(collection(Firestore, "DANHGIA"), {
-                MaND: firebase.auth().currentUser.uid,
-                MaSP: item.MaSP,
-                NgayDG: ngayDG,
-                Rating: defaultRating,
-                NDDG: ndDG,
-                AnhDG: imageUri,
-            });
-    
-            const updateRef = doc(Firestore, "DANHGIA", docRef.id);
-            await updateDoc(updateRef, {
-                MaDG: docRef.id
-            });
-            setClick(false);
+            if(click == true){
+                const imageUri = await UploadFile()
+                const docRef = await addDoc(collection(Firestore, "DANHGIA"), {
+                    MaND: firebase.auth().currentUser.uid,
+                    MaSP: item.MaSP,
+                    NgayDG: ngayDG,
+                    Rating: defaultRating,
+                    NDDG: ndDG,
+                    AnhDG: imageUri,
+                });
+                const updateRef = doc(Firestore, "DANHGIA", docRef.id);
+                await updateDoc(updateRef, {
+                    MaDG: docRef.id
+                });
+                setImage(null);
+                setClick(false);
+            }else{
+                const docRef = await addDoc(collection(Firestore, "DANHGIA"), {
+                    MaND: firebase.auth().currentUser.uid,
+                    MaSP: item.MaSP,
+                    NgayDG: ngayDG,
+                    Rating: defaultRating,
+                    NDDG: ndDG,
+                });
+                const updateRef = doc(Firestore, "DANHGIA", docRef.id);
+                await updateDoc(updateRef, {
+                    MaDG: docRef.id
+                });
+                setImage(null);
+                setClick(false);
+            }
             Alert.alert(
                 'Notification',
                 'Add to Review successfully',
@@ -115,7 +128,6 @@ function ReviewScreen({navigation, route}) {
         }catch(error){
             console.log(error)
         }
-        
     }
     const selectImage = () => {
         const options = {
@@ -156,7 +168,7 @@ function ReviewScreen({navigation, route}) {
             xhr.open("GET", image.uri, true);
             xhr.send(null);
           });
-          const storageRef = ref(Storage, `images/users/image-${Date.now()}`);
+          const storageRef = ref(Storage, `images/review/image-${Date.now()}`);
           const snapshot = await uploadBytes(storageRef, blob);
           console.log("Upload successfully!");
           const url = await getDownloadURL(snapshot.ref);
@@ -195,7 +207,6 @@ function ReviewScreen({navigation, route}) {
                         resizeMode = 'stretch'
                     />  
                 </TouchableOpacity>
-                    
               
                 <Text style ={{
                     fontSize: 20,
@@ -211,6 +222,7 @@ function ReviewScreen({navigation, route}) {
             }}>
                 <View>
                     <Text style ={{
+                        fontWeight: 'bold',
                         fontSize: 17,
                         color: CUSTOM_COLOR.Black
                     }}>{tong} Reviews</Text>
@@ -218,6 +230,7 @@ function ReviewScreen({navigation, route}) {
                         flexDirection: 'row'
                     }}>
                         <Text style = {{
+                            fontWeight: 'bold',
                             fontSize: 17,
                             color: CUSTOM_COLOR.Black,
                             marginRight: '5%'
@@ -229,7 +242,6 @@ function ReviewScreen({navigation, route}) {
                     </View>
                 </View>
 
-                
                 <View>
                     <TouchableOpacity style ={{
                         flexDirection: 'row',
@@ -272,7 +284,6 @@ function ReviewScreen({navigation, route}) {
                             content = {review.NDDG}
                             image = {review.AnhDG}
                         />
-
                     </View>
                 ))}
             </ScrollView>

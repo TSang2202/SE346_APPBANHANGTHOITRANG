@@ -23,19 +23,18 @@ const DataDelivery = {
   CTY: 'Fast Delivery VietNam',
   Code: '#JHGUJHCFJG'
 }
-export default function DeTailDelivery({navigation, route}) {
+export default function DeTailDelivery({ navigation, route }) {
 
   const { item } = route.params
   const [chatUser, setChatUser] = useState();
   const [address, setAddress] = useState()
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState('');
-  const getStatus = () =>{
-    if(item.TrangThai == 'Cancel')
-    {
+  const getStatus = () => {
+    if (item.TrangThai == 'Cancel') {
       setStatus = 'ReOrder'
     }
-    if(item.TrangThai == 'Confirm'){
+    if (item.TrangThai == 'Confirm') {
       setStatus = 'Cancel'
     }
   }
@@ -52,22 +51,22 @@ export default function DeTailDelivery({navigation, route}) {
     setIsLoading(false)
   }
   const getDataChatUser = async () => {
-    try{
+    try {
       const q = query(
         collection(Firestore, 'CHAT'),
         where('MaND', '==', firebase.auth().currentUser.uid),
       );
-  
+
       const unsubscribe = onSnapshot(q, async querySnapshot => {
         querySnapshot.forEach(doc => {
           setChatUser(doc.data());
           console.log(doc.data());
         });
       });
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
-    
+
   };
 
   useEffect(() => {
@@ -102,9 +101,7 @@ export default function DeTailDelivery({navigation, route}) {
             </Image>
             <Text style={{ color: CUSTOM_COLOR.Black, marginLeft: 5, fontSize: 20 }}>Address</Text>
           </View>
-          <TouchableOpacity>
-            <Text style={{ color: CUSTOM_COLOR.DarkBlue, marginRight: 20, fontSize: 20, fontWeight: 'bold' }}>COPY</Text>
-          </TouchableOpacity>
+
         </View>
         <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
           <Text>{item.TenND}</Text>
@@ -114,27 +111,8 @@ export default function DeTailDelivery({navigation, route}) {
         </View>
       </View>
       <View style={{ width: '100%', height: 10, marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-      <View style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
-        <View style={{ width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between' }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Image
-              source={Delivery}
-              style={{ width: 26, height: 26, marginLeft: 18 }}
-              resizeMode='contain'
-            >
-            </Image>
-            <Text style={{ color: CUSTOM_COLOR.Black, marginLeft: 5, fontSize: 20 }}>Delivery</Text>
-          </View>
-          <TouchableOpacity>
-            <Text style={{ color: CUSTOM_COLOR.DarkBlue, marginRight: 20, fontSize: 20, fontWeight: 'bold' }}>SEE</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ marginLeft: 50, marginTop: 5, marginRight: 20 }}>
-          <Text>{DataDelivery.CTY}</Text>
-          <Text>Delivery Code: {DataDelivery.Code}</Text>
-        </View>
-      </View>
-      <View style={{ width: '100%', height: 10, marginTop: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
+
+
       <View style={{ width: '100%', flexDirection: 'column', marginTop: 10 }}>
         <View style={{ width: '100%', flexDirection: 'row', height: 30, justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row' }}>
@@ -149,20 +127,20 @@ export default function DeTailDelivery({navigation, route}) {
         </View>
         <View style={{ marginLeft: 30, marginTop: 5, marginRight: 20 }}>
           <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                          <Text style={{color: CUSTOM_COLOR.Black,fontWeight: 'bold', marginLeft: 20 }}>Provisional:</Text>
-                                          <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginRight: 10 }}>{item.TamTinh} VND</Text>
+            <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginLeft: 20 }}>Provisional:</Text>
+            <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginRight: 10 }}>{item.TamTinh} VND</Text>
           </View>
           <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginLeft: 20 }}>Delivery fee:</Text>
-                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginRight: 10 }}>{item.PhiVanChuyen} VND</Text>
+            <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginLeft: 20 }}>Delivery fee:</Text>
+            <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginRight: 10 }}>{item.PhiVanChuyen} VND</Text>
           </View>
           <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginLeft: 20 }}>Discount:</Text>
-                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginRight: 10 }}>{item.GiamGia} VND</Text>
+            <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginLeft: 20 }}>Discount:</Text>
+            <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginRight: 10 }}>{item.GiamGia} VND</Text>
           </View>
           <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black,fontWeight: 'bold', marginLeft: 20 }}>Total: </Text>
-                                        <Text style={{color: CUSTOM_COLOR.Black, fontWeight: 'bold',marginRight: 10 }}>{item.TongTien} VND</Text>
+            <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginLeft: 20 }}>Total: </Text>
+            <Text style={{ color: CUSTOM_COLOR.Black, fontWeight: 'bold', marginRight: 10 }}>{item.TongTien} VND</Text>
           </View>
         </View>
       </View>
@@ -200,10 +178,10 @@ export default function DeTailDelivery({navigation, route}) {
           />
         </View>
         <View style={{ width: '100%', marginTop: 20, height: 50, flexDirection: 'row', justifyContent: 'center' }}>
-          
+
           <TouchableOpacity
-            onPress={() => {navigation.navigate('Chat', {chatUser}) }}
-            style={{ width: '40%', height: '80%', borderRadius: 25,justifyContent: 'center', marginLeft: 20, alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
+            onPress={() => { navigation.navigate('Chat', { chatUser }) }}
+            style={{ width: '40%', height: '80%', borderRadius: 25, justifyContent: 'center', marginLeft: 20, alignItems: 'center', backgroundColor: CUSTOM_COLOR.DarkOrange }}
           >
             <Text style={{ color: CUSTOM_COLOR.White, fontSize: 20 }}>Contact Seller</Text>
           </TouchableOpacity>

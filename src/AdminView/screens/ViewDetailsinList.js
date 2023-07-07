@@ -11,7 +11,7 @@ import CUSTOM_COLOR from "../constants/colors";
 
 function ViewDetailsinList({ navigation, route }) {
 
-    const { category } = route.params
+    const { item } = route.params
 
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +28,7 @@ function ViewDetailsinList({ navigation, route }) {
 
     const getDataCategory = async () => {
 
-        const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", category.MaDM));
+        const q = query(collection(Firestore, "SANPHAM"), where("MaDM", "==", item.MaDM));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const data = [];
             querySnapshot.forEach((doc) => {
@@ -56,7 +56,6 @@ function ViewDetailsinList({ navigation, route }) {
             } else if (sortType === "high-to-low") {
                 sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
             }
-
 
             let filteredItems = data;
             if (searchTerm != null) {
@@ -103,7 +102,6 @@ function ViewDetailsinList({ navigation, route }) {
                 <SearchInput
                     onSearch={handleSearch}
                 />
-
                 <TouchableOpacity style={{
                     backgroundColor: CUSTOM_COLOR.Mercury,
                     alignItems: 'center',
@@ -126,7 +124,7 @@ function ViewDetailsinList({ navigation, route }) {
                     marginHorizontal: 30,
                     fontWeight: 'bold',
                     marginBottom: 10
-                }}>{category.TenDM}</Text>
+                }}>{item.TenDM}</Text>
 
                 <Text style={{
                     fontSize: 17,
@@ -149,7 +147,7 @@ function ViewDetailsinList({ navigation, route }) {
                                 flexDirection: 'row',
                                 //justifyContent: 'space-around'
                             }}
-                            // onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+                             onPress={() => { navigation.navigate('ViewShop2', { item }) }}
                             >
                                 <ProductView
                                     source={item.HinhAnhSP[0]}
@@ -162,10 +160,8 @@ function ViewDetailsinList({ navigation, route }) {
                     numColumns={2}
                 //keyExtractor={(item) => item.MASP}
                 />
-
             </View>
         </View>
-
     )
 }
 export default ViewDetailsinList

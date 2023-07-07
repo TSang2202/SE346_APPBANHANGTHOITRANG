@@ -663,7 +663,9 @@ const ChangeProfile = props => {
                 <View style={{width: '100%', height: 15}} />
 
                 <>
-                  <View style={{width: '100%', height: 65}}>
+                </>
+              </ScrollView>
+              <View style={{width: '100%', height: 65}}>
                     <View style={styles.buttonContainer}>
                       <CustomButton
                         type="primary"
@@ -701,8 +703,6 @@ const ChangeProfile = props => {
                       />
                     </View>
                   </View>
-                </>
-              </ScrollView>
             </View>
           </>
         </>

@@ -227,7 +227,6 @@ const ChangeProfile = props => {
   const updateAvatar = async (documentId, avatar) => {
     const urlImage = image ? await UploadFile() : imageUrl;
     console.log(urlImage);
-
     try {
       await firebase
         .firestore()
@@ -603,11 +602,11 @@ const ChangeProfile = props => {
                     </View>
                   </View>
                 </>
-
                 <View style={{width: '100%', height: 15}} />
-
                 <>
-                  <View style={{width: '100%', height: 65}}>
+                </>
+              </ScrollView>
+              <View style={{width: '100%', height: 65}}>
                     <View style={styles.buttonContainer}>
                       <CustomButton
                         type="primary"
@@ -645,8 +644,6 @@ const ChangeProfile = props => {
                       />
                     </View>
                   </View>
-                </>
-              </ScrollView>
             </View>
           </>
         </>
