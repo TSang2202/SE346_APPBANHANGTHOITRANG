@@ -1,18 +1,16 @@
 import {
   collection,
   doc,
-  getDocs,
+  onSnapshot,
   query,
   updateDoc,
-  where,
-  onSnapshot
+  where
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Firestore } from '../../../Firebase/firebase';
-import { SearchIcon } from '../../CustomerView/assets/icons';
 import BackTo from '../components/BackTo';
 import ButtonDetail from '../components/ButtonDetail';
 import MyProduct1 from '../components/MyProductOne';
@@ -29,9 +27,14 @@ export default function MyProduct({ navigation }) {
   const [dataOnWait, setDataOnWait] = useState([]);
   const [dataOutOfStock, setDataOutOfStock] = useState([]);
   const [dataInventory, setDataInventory] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
 
-  const handleSearch = searchTerm => {
+  const handleSearch = (searchTerm, data) => {
     setSearchTerm(searchTerm);
+    const filteredItems = data.filter(item =>
+      item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredItems(filteredItems);
   };
   const ConfirmProduct = item => {
     const confirmRef = doc(Firestore, 'SANPHAM', item.MaSP);
@@ -132,7 +135,7 @@ export default function MyProduct({ navigation }) {
           />
           <View
             style={{ width: 20, height: 20, marginLeft: '55%', marginTop: 10 }}>
-            <SearchButton onSearch={handleSearch} />
+            <SearchButton onSearch={(searchTerm)=>handleSearch(searchTerm, dataInventory)} />
           </View>
         </View>
         <View
@@ -181,7 +184,7 @@ export default function MyProduct({ navigation }) {
           }}>
           <FlatList
             horizontal="true"
-            data={dataInventory}
+            data={searchTerm ? filteredItems : dataInventory}
             renderItem={({ item }) => {
               return (
                 <MyProduct1
@@ -246,7 +249,7 @@ export default function MyProduct({ navigation }) {
           />
           <View
             style={{ width: 20, height: 20, marginLeft: '55%', marginTop: 10 }}>
-            <SearchButton onSearch={handleSearch} />
+            <SearchButton onSearch={(searchTerm)=>handleSearch(searchTerm, dataInventory)} />
           </View>
 
           {/* <TouchableOpacity onPress={() => navigation.navigate('Search')}>
@@ -303,7 +306,7 @@ export default function MyProduct({ navigation }) {
           }}>
           <FlatList
             horizontal="true"
-            data={dataOutOfStock}
+            data={searchTerm ? filteredItems : dataOutOfStock}
             renderItem={({ item }) => {
               return (
                 <MyProduct1
@@ -366,7 +369,7 @@ export default function MyProduct({ navigation }) {
           />
           <View
             style={{ width: 20, height: 20, marginLeft: '55%', marginTop: 10 }}>
-            <SearchButton onSearch={handleSearch} />
+            <SearchButton onSearch={(searchTerm)=>handleSearch(searchTerm, dataInventory)} />
           </View>
 
           {/* <TouchableOpacity onPress={() => navigation.navigate('Search')}>
@@ -423,7 +426,7 @@ export default function MyProduct({ navigation }) {
           }}>
           <FlatList
             horizontal="true"
-            data={dataOnWait}
+            data={searchTerm ? filteredItems : dataOnWait}
             renderItem={({ item }) => {
               return (
                 <MyProduct1
