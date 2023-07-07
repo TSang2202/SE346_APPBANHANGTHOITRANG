@@ -26,6 +26,7 @@ import DetailCategory from '../screens/DetailsCategory';
 import AddNewCategory from '../screens/AddNewCategory';
 import ViewDetailsinList from '../screens/ViewDetailsinList';
 import StaffOverView from '../screens/StaffOverView';
+import Report from '../screens/Report';
 
 const Stack = createNativeStackNavigator();
 function StackNavigator() {
@@ -58,6 +59,7 @@ function StackNavigator() {
       <Stack.Screen name="DetailsCategory" component={DetailCategory} />
       <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
       <Stack.Screen name="ViewDetailsinList" component={ViewDetailsinList} />
+      <Stack.Screen name="Report" component={Report} />
     </Stack.Navigator>
   );
 }

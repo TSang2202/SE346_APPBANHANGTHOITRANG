@@ -166,8 +166,9 @@ function DetailCategory({navigation, route}) {
                   flexDirection: 'row',
                   //justifyContent: 'space-around'
                 }}
-                // onPress={() => { navigation.navigate('DetailProduct', { item }) }}
-              >
+                onPress={() => {
+                  navigation.navigate('ViewShop2', {item});
+                }}>
                 <ProductView
                   source={item.HinhAnhSP[0]}
                   title={item.TenSP}

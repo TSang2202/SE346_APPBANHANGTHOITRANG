@@ -334,14 +334,14 @@ const StaffOverView = props => {
                   <FunctionCard
                     onPress={() => navigation.navigate('MyProduct')}
                     source={IC_product}
-                    text="My Product"
+                    text="Products"
                   />
                 </View>
                 <View style={styles.unitContainer}>
                   <FunctionCard
                     onPress={() => navigation.navigate('Order')}
                     source={IC_order}
-                    text="My Order"
+                    text="Orders"
                   />
                 </View>
               </View>
@@ -354,11 +354,11 @@ const StaffOverView = props => {
                   />
                 </View>
                 <View style={styles.unitContainer}>
-                  {/* <FunctionCard
+                  <FunctionCard
                     onPress={() => navigation.navigate('Report')}
                     source={IC_financial}
                     text="Financial Report"
-                  /> */}
+                  />
                 </View>
                 <View style={styles.unitContainer}>
                   {/* <FunctionCard

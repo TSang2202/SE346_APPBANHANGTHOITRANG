@@ -123,7 +123,7 @@ function AddNewCategory({navigation}) {
       MaDM: docRef.id,
     });
 
-    Alert.alert('Notification', 'Successfully added new promotions!', [
+    Alert.alert('Notification', 'Successfully added new category!', [
       {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
     ]);
   };

@@ -100,6 +100,7 @@ function ReviewScreen({navigation, route}) {
                 });
                 setImage(null);
                 setClick(false);
+                setND('');
             }else{
                 const docRef = await addDoc(collection(Firestore, "DANHGIA"), {
                     MaND: firebase.auth().currentUser.uid,
@@ -114,6 +115,7 @@ function ReviewScreen({navigation, route}) {
                 });
                 setImage(null);
                 setClick(false);
+                setND('');
             }
             Alert.alert(
                 'Notification',
