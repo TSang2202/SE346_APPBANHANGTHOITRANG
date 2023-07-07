@@ -1,10 +1,10 @@
 import {
+  Timestamp,
   collection,
   getDocs,
   query,
   where
 } from '@firebase/firestore';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'react-native-elements';
@@ -18,17 +18,19 @@ import CUSTOM_COLOR from '../constants/colors';
 const Report = ({navigation}) => {
   const [total, setTotal] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState(null);
-  const [selectedYear, setSelectedYear] = useState(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const [error, setError] = useState('');
+  const [hasInput, setHasInput] = useState(false);
+
   const isValidDay = (day) => {
-    return day > 0 && day <= 31;
+    return day > 0 && day <= 31 ;
   };
 
   // Hàm kiểm tra tính hợp lệ của tháng
   const isValidMonth = (month) => {
-    return month > 0 && month <= 12;
+    return month > 0 && month <= 12 ;
   };
 
   // Hàm kiểm tra tính hợp lệ của năm
@@ -63,24 +65,148 @@ const Report = ({navigation}) => {
 
     fetchFinancialData();
   }, []);
-  const handleDateChange = () => {
-    
-  }
-  const handleSearchDateTime = () => {
-    if (
-      !isValidDay(selectedDate) ||
-      !isValidMonth(selectedMonth) ||
-      !isValidYear(selectedYear)
-    ) {
-      // Hiển thị thông báo lỗi nếu ngày, tháng hoặc năm không hợp lệ
-      console.log('Ngày, tháng hoặc năm không hợp lệ');
+
+  const handleSearchDateTime = async () => {
+    const parsedYear = parseInt(selectedYear);
+    const parsedMonth = parseInt(selectedMonth);
+    const parsedDate = parseInt(selectedDate);
+
+    if (!selectedDate && !selectedMonth && !selectedYear) {
+      // Không có trường nào được nhập
+      try {
+        let q = query(
+          collection(Firestore, 'DONHANG'),
+          where('TrangThai', '==', 'Delivered'),
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        let total = 0;
+        let count = 0;
+
+        querySnapshot.forEach(doc => {
+          const {TongTien} = doc.data();
+          total += TongTien;
+          count +=1;
+        });
+
+        setTotalRevenue(total);
+        setTotal(count);
+      } catch (error) {
+        console.log('Error fetching data:', error);
+      }
+      setHasInput(false);
+      setError('');
       return;
     }
-  
-    // Tiếp tục thực hiện truy vấn dữ liệu hoặc các tác vụ khác
-  };
-  
 
+    setHasInput(true);
+
+    if (isNaN(parsedMonth) && isNaN(parsedDate)) {
+      // Người dùng chỉ nhập năm
+      if (isValidYear(parsedYear)) {
+        setError('');
+        const startOfYear = new Date(parsedYear, 0, 1);
+        const endOfYear = new Date(parsedYear + 1, 0, 1);
+
+        const q = query(
+          collection(Firestore, 'DONHANG'),
+          where('TrangThai', '==', 'Delivered'),
+          where('NgayDatHang', '>=', Timestamp.fromDate(startOfYear)),
+          where('NgayDatHang', '<', Timestamp.fromDate(endOfYear))
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        let total = 0;
+        let count = 0;
+
+        querySnapshot.forEach((doc) => {
+          const { TongTien } = doc.data();
+          total += TongTien;
+          count += 1;
+        });
+
+        setTotalRevenue(total);
+        setTotal(count);
+      } else {
+        setError('Năm không hợp lệ (Năm phải lớn hơn 2020)');
+        setTotalRevenue(0);
+        setTotal(0);
+      }
+    } else if (!isNaN(parsedMonth) && isNaN(parsedDate)) {
+      // Người dùng đã nhập năm và tháng
+      if (isValidYear(parsedYear) && isValidMonth(parsedMonth)) {
+        setError('');
+        const startOfMonth = new Date(parsedYear, parsedMonth - 1, 1);
+        const endOfMonth = new Date(parsedYear, parsedMonth, 1);
+
+        const q = query(
+          collection(Firestore, 'DONHANG'),
+          where('TrangThai', '==', 'Delivered'),
+          where('NgayDatHang', '>=', Timestamp.fromDate(startOfMonth)),
+          where('NgayDatHang', '<', Timestamp.fromDate(endOfMonth))
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        let total = 0;
+        let count = 0;
+
+        querySnapshot.forEach((doc) => {
+          const { TongTien } = doc.data();
+          total += TongTien;
+          count += 1;
+        });
+
+        setTotalRevenue(total);
+        setTotal(count);
+      } else {
+        setError('Tháng hoặc năm không hợp lệ');
+        setTotalRevenue(0);
+        setTotal(0);
+      }
+    } else if (!isNaN(parsedMonth) && !isNaN(parsedDate)) {
+      // Người dùng đã nhập đầy đủ ngày, tháng và năm
+      if (isValidYear(parsedYear) && isValidMonth(parsedMonth) && isValidDay(parsedDate)) {
+        setError('');
+        const selectedDay = new Date(parsedYear, parsedMonth - 1, parsedDate);
+        const nextDay = new Date(parsedYear, parsedMonth - 1, parsedDate + 1);
+
+        const q = query(
+          collection(Firestore, 'DONHANG'),
+          where('TrangThai', '==', 'Delivered'),
+          where('NgayDatHang', '>=', Timestamp.fromDate(selectedDay)),
+          where('NgayDatHang', '<', Timestamp.fromDate(nextDay))
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        let total = 0;
+        let count = 0;
+
+        querySnapshot.forEach((doc) => {
+          const { TongTien } = doc.data();
+          total += TongTien;
+          count += 1;
+        });
+
+        setTotalRevenue(total);
+        setTotal(count);
+      } else {
+        setError('Ngày, tháng hoặc năm không hợp lệ (Năm phải lớn hơn 2020)');
+        setTotalRevenue(0);
+        setTotal(0);
+      }
+    } else {
+      setError('Vui lòng nhập ngày, tháng hoặc năm');
+      setTotalRevenue(0);
+      setTotal(0);
+    }
+  };
+    
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -96,17 +222,17 @@ const Report = ({navigation}) => {
             <TextInput
               placeholder="Chọn ngày"
               style = {styles.textinput}
-              onChangeText = {(text) => selectedDate(text)}
+              onChangeText = {(text) => setSelectedDate(text)}
             />
             <TextInput
               placeholder='Chọn tháng'
               style = {styles.textinput}
-              onChangeText={(text) => setSelectedMonth(text)}
+              onChangeText ={(text) => setSelectedMonth(text)}
             />
             <TextInput
               placeholder='Chọn năm'
               style = {styles.textinput}
-              onChangeText={(text) => setSelectedYear(text)}
+              onChangeText ={(text) => setSelectedYear(text)}
             />
             <TouchableOpacity
               onPress={handleSearchDateTime}
@@ -114,40 +240,50 @@ const Report = ({navigation}) => {
             >
               <Image
                 source={SearchIcon}
+                onPress={handleSearchDateTime}
                 style = {styles.icon}
               />
             </TouchableOpacity>
-            {showDatePicker && (
-              <DateTimePicker
-                value={selectedDate || new Date()}
-                mode="date"
-                display="default"
-                onChange={handleDateChange}
-              />
-            )}
+          
           </View>
           
         </View>
-        <View style={styles.title}>
-        <Text style ={styles.tieude}>BÁO CÁO DOANH THU</Text>
-          <Text style = {styles.minibutton}>Tổng</Text>
-          <Text style = {styles.report}>{totalRevenue.toLocaleString()} VNĐ</Text>
+        {error ? (
+        <><Text style={styles.errorText}>{error}</Text><View>
+            <View style={styles.title}>
+              <Text style={styles.tieude}>BÁO CÁO DOANH THU</Text>
+              <Text style={styles.minibutton}>Tổng</Text>
+              <Text style={styles.report}>{totalRevenue.toLocaleString()} VNĐ</Text>
+            </View>
+            <View style={styles.title}>
+              <Text style={styles.tieude}>SỐ ĐƠN HÀNG ĐÃ BÁN</Text>
+              <Text style={styles.minibutton}>Tổng</Text>
+              <Text style={styles.report}>{total}</Text>
+            </View>
+          </View></>
+      ) : (
+        <View>
+          <View style={styles.title}>
+            <Text style={styles.tieude}>BÁO CÁO DOANH THU</Text>
+            <Text style={styles.minibutton}>Tổng</Text>
+            <Text style={styles.report}>{totalRevenue.toLocaleString()} VNĐ</Text>
+          </View>
+          <View style={styles.title}>
+            <Text style={styles.tieude}>SỐ ĐƠN HÀNG ĐÃ BÁN</Text>
+            <Text style={styles.minibutton}>Tổng</Text>
+            <Text style={styles.report}>{total}</Text>
+          </View>
         </View>
-        <View style={styles.title}>
-        <Text style= {styles.tieude}>SỐ ĐƠN HÀNG ĐÃ BÁN</Text>
-          <Text style = {styles.minibutton}>Tổng</Text>
-          <Text style = {styles.report}>{total}</Text>
+        )}
         </View>
-        
-      </View>
     </SafeAreaView>
   );
-};
+      }     
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: CUSTOM_COLOR.White,
   },
   backgroundHeader: {
     backgroundColor: CUSTOM_COLOR.FlushOrange,
@@ -238,7 +374,12 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
 
   },
-
+  errorText: {
+    fontSize: 18,
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 10,
+  },
 });
 
 export default Report;
