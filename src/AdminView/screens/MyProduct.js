@@ -4,13 +4,14 @@ import {
   onSnapshot,
   query,
   updateDoc,
-  where
+  where,
 } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Firestore } from '../../../Firebase/firebase';
+import React, {useEffect, useState} from 'react';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Firestore} from '../../../Firebase/firebase';
+import {SearchIcon} from '../../CustomerView/assets/icons';
 import BackTo from '../components/BackTo';
 import ButtonDetail from '../components/ButtonDetail';
 import MyProduct1 from '../components/MyProductOne';
@@ -18,8 +19,7 @@ import SearchButton from '../components/SearchButton';
 import Status from '../components/Status';
 import CUSTOM_COLOR from '../constants/colors';
 
-
-export default function MyProduct({ navigation }) {
+export default function MyProduct({navigation}) {
   const [inventory, setinventory] = useState(true);
   const [Out, setOut] = useState(false);
   const [Wait, setWait] = useState(false);
@@ -32,7 +32,7 @@ export default function MyProduct({ navigation }) {
   const handleSearch = (searchTerm, data) => {
     setSearchTerm(searchTerm);
     const filteredItems = data.filter(item =>
-      item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+      item.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
     );
     setFilteredItems(filteredItems);
   };
@@ -51,57 +51,59 @@ export default function MyProduct({ navigation }) {
     updateDoc(confirmRef, {
       TrangThai: 'Hidden',
     });
-
-  }
+  };
   const ShowSanPham = item => {
     const confirmRef = doc(Firestore, 'SANPHAM', item.MaSP);
     updateDoc(confirmRef, {
       TrangThai: 'Inventory',
     });
-
-  }
+  };
 
   const getDadaOnWait = async () => {
-    const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "Hidden"));
+    const q = query(
+      collection(Firestore, 'SANPHAM'),
+      where('TrangThai', '==', 'Hidden'),
+    );
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const unsubscribe = onSnapshot(q, querySnapshot => {
       const data = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(doc => {
         data.push(doc.data());
       });
 
-      setDataOnWait(data)
+      setDataOnWait(data);
     });
-
-
-  }
+  };
 
   const getDadaOutOfStock = async () => {
-    const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "OutOfStock"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const q = query(
+      collection(Firestore, 'SANPHAM'),
+      where('TrangThai', '==', 'OutOfStock'),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
       const data = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(doc => {
         data.push(doc.data());
       });
 
-      setDataOutOfStock(data)
+      setDataOutOfStock(data);
     });
-
-  }
+  };
 
   const getDadaInventory = async () => {
-    const q = query(collection(Firestore, "SANPHAM"), where("TrangThai", "==", "Inventory"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const q = query(
+      collection(Firestore, 'SANPHAM'),
+      where('TrangThai', '==', 'Inventory'),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
       const data = [];
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(doc => {
         data.push(doc.data());
       });
 
-      setDataInventory(data)
+      setDataInventory(data);
     });
-
-  }
-
+  };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -121,7 +123,7 @@ export default function MyProduct({ navigation }) {
   }, [searchTerm]);
   if (inventory == true) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: CUSTOM_COLOR.White }}>
+      <SafeAreaView style={{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
         <View
           style={{
             width: '100%',
@@ -129,13 +131,12 @@ export default function MyProduct({ navigation }) {
             flexDirection: 'row',
             marginTop: 15,
           }}>
-          <BackTo
-            onPress={() => navigation.navigate('AdminOverView')}
-            Info="My Product"
-          />
+          <BackTo onPress={() => navigation.goBack()} Info="My Product" />
           <View
-            style={{ width: 20, height: 20, marginLeft: '55%', marginTop: 10 }}>
-            <SearchButton onSearch={(searchTerm)=>handleSearch(searchTerm, dataInventory)} />
+            style={{width: 20, height: 20, marginLeft: '55%', marginTop: 10}}>
+            <SearchButton
+              onSearch={searchTerm => handleSearch(searchTerm, dataInventory)}
+            />
           </View>
         </View>
         <View
@@ -185,7 +186,7 @@ export default function MyProduct({ navigation }) {
           <FlatList
             horizontal="true"
             data={searchTerm ? filteredItems : dataInventory}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               return (
                 <MyProduct1
                   source={item.HinhAnhSP[0]}
@@ -195,16 +196,16 @@ export default function MyProduct({ navigation }) {
                   soluonglove={item.SoLuotYeuThich}
                   soluongview={item.SoLuotXem}
                   soluongban={item.SoLuongDaBan}
-                  edit={() => navigation.navigate('EditProduct', { item })}
+                  edit={() => navigation.navigate('EditProduct', {item})}
                   hide={() => HideSanPham(item)}
-                  AddAmount={() => navigation.navigate('ImportProduct', { item })}
+                  AddAmount={() => navigation.navigate('ImportProduct', {item})}
                 />
               );
             }}
           />
         </View>
 
-        <View style={{ width: '100%', height: 10 }} />
+        <View style={{width: '100%', height: 10}} />
         <>
           <View
             style={{
@@ -220,9 +221,10 @@ export default function MyProduct({ navigation }) {
                 height: 55,
                 flexDirection: 'row',
                 marginHorizontal: '5%',
+                backgroundColor: CUSTOM_COLOR.White,
               }}>
               <ButtonDetail
-                style={{ width: '100%', height: '90%' }}
+                style={{width: '100%', height: '90%'}}
                 color={CUSTOM_COLOR.DarkOrange}
                 title="ADD A NEW PRODUCT"
                 onPress={() => navigation.navigate('AddProduct')}
@@ -235,7 +237,7 @@ export default function MyProduct({ navigation }) {
   }
   if (Out == true) {
     return (
-      <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, flex: 1 }}>
+      <SafeAreaView style={{backgroundColor: CUSTOM_COLOR.White, flex: 1}}>
         <View
           style={{
             width: '100%',
@@ -243,13 +245,12 @@ export default function MyProduct({ navigation }) {
             flexDirection: 'row',
             marginTop: 15,
           }}>
-          <BackTo
-            onPress={() => navigation.navigate('AdminOverView')}
-            Info="My Product"
-          />
+          <BackTo onPress={() => navigation.goBack()} Info="My Product" />
           <View
-            style={{ width: 20, height: 20, marginLeft: '55%', marginTop: 10 }}>
-            <SearchButton onSearch={(searchTerm)=>handleSearch(searchTerm, dataInventory)} />
+            style={{width: 20, height: 20, marginLeft: '55%', marginTop: 10}}>
+            <SearchButton
+              onSearch={searchTerm => handleSearch(searchTerm, dataOutOfStock)}
+            />
           </View>
 
           {/* <TouchableOpacity onPress={() => navigation.navigate('Search')}>
@@ -307,7 +308,7 @@ export default function MyProduct({ navigation }) {
           <FlatList
             horizontal="true"
             data={searchTerm ? filteredItems : dataOutOfStock}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               return (
                 <MyProduct1
                   source={item.HinhAnhSP[0]}
@@ -324,7 +325,7 @@ export default function MyProduct({ navigation }) {
           />
         </View>
 
-        <View style={{ width: '100%', height: 10 }} />
+        <View style={{width: '100%', height: 10}} />
         <>
           <View
             style={{
@@ -340,9 +341,10 @@ export default function MyProduct({ navigation }) {
                 height: 55,
                 flexDirection: 'row',
                 marginHorizontal: '5%',
+                backgroundColor: CUSTOM_COLOR.White,
               }}>
               <ButtonDetail
-                style={{ width: '100%', height: '90%' }}
+                style={{width: '100%', height: '90%'}}
                 color={CUSTOM_COLOR.DarkOrange}
                 title="ADD A NEW PRODUCT"
                 onPress={() => navigation.navigate('AddProduct')}
@@ -355,7 +357,7 @@ export default function MyProduct({ navigation }) {
   }
   if (Wait == true) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: CUSTOM_COLOR.White }}>
+      <SafeAreaView style={{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
         <View
           style={{
             width: '100%',
@@ -363,13 +365,12 @@ export default function MyProduct({ navigation }) {
             flexDirection: 'row',
             marginTop: 15,
           }}>
-          <BackTo
-            onPress={() => navigation.navigate('AdminOverView')}
-            Info="My Product"
-          />
+          <BackTo onPress={() => navigation.goBack()} Info="My Product" />
           <View
-            style={{ width: 20, height: 20, marginLeft: '55%', marginTop: 10 }}>
-            <SearchButton onSearch={(searchTerm)=>handleSearch(searchTerm, dataInventory)} />
+            style={{width: 20, height: 20, marginLeft: '55%', marginTop: 10}}>
+            <SearchButton
+              onSearch={searchTerm => handleSearch(searchTerm, dataOnWait)}
+            />
           </View>
 
           {/* <TouchableOpacity onPress={() => navigation.navigate('Search')}>
@@ -427,7 +428,7 @@ export default function MyProduct({ navigation }) {
           <FlatList
             horizontal="true"
             data={searchTerm ? filteredItems : dataOnWait}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               return (
                 <MyProduct1
                   source={item.HinhAnhSP[0]}
@@ -439,14 +440,13 @@ export default function MyProduct({ navigation }) {
                   soluongban={item.SoLuongDaBan}
                   type="Hidden"
                   show={() => ShowSanPham(item)}
-
                 />
               );
             }}
           />
         </View>
 
-        <View style={{ width: '100%', height: 10 }} />
+        <View style={{width: '100%', height: 10}} />
         <>
           <View
             style={{
@@ -462,9 +462,10 @@ export default function MyProduct({ navigation }) {
                 height: 55,
                 flexDirection: 'row',
                 marginHorizontal: '5%',
+                backgroundColor: CUSTOM_COLOR.White,
               }}>
               <ButtonDetail
-                style={{ width: '100%', height: '90%' }}
+                style={{width: '100%', height: '90%'}}
                 color={CUSTOM_COLOR.DarkOrange}
                 title="ADD A NEW PRODUCT"
                 onPress={() => navigation.navigate('AddProduct')}

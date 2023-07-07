@@ -687,17 +687,17 @@ function EditPromotion({navigation, route}) {
               <View style={styles.buttonContainer}>
                 <PromotionButton
                   type="secondary"
-                  text="Save"
+                  text="Delete"
                   onPress={() => {
-                    updateData();
+                    deleteData();
                   }}
                 />
                 <View style={{width: 20, height: '100%'}} />
                 <PromotionButton
                   type="secondary"
-                  text="Delete"
+                  text="Save"
                   onPress={() => {
-                    deleteData();
+                    updateData();
                   }}
                 />
               </View>

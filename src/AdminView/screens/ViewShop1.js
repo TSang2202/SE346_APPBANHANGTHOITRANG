@@ -1,22 +1,28 @@
-import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
-import { React, useEffect, useState } from 'react';
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
+import {React, useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
   SafeAreaView,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { Firestore } from '../../../Firebase/firebase';
+import {Firestore} from '../../../Firebase/firebase';
 import CUSTOM_COLOR from '../../StaffView/constants/colors.js';
-import { backto } from '../assets/icons/index.js';
+import {backto} from '../assets/icons/index.js';
 import ItemList from '../components/ItemList';
 import ProductView from '../components/ProductView';
 import Search from '../components/Search';
 import SortDropdown from '../components/SortDropDown';
 import scale from '../constants/responsive.js';
-import { Acount } from '../../StaffView/screens/OverView';
+import {Acount} from '../../StaffView/screens/OverView';
 function ViewShop1({navigation}) {
   const [detail, setdetail] = useState(false);
   const [product, setproduct] = useState(true);
@@ -28,7 +34,7 @@ function ViewShop1({navigation}) {
   const [selectedDanhMuc, setSelectedDanhMuc] = useState('');
   const [imageUrl, setImageUrl] = useState(null);
   const [userData, setUserData] = useState(null);
-  
+
   const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
   };
@@ -220,7 +226,7 @@ function ViewShop1({navigation}) {
             marginTop: 14,
           }}
         />
-        <View style={{width: '100%', height: '90%' ,flex:1}}>
+        <View style={{width: '100%', height: '90%', flex: 1}}>
           <FlatList
             nestedScrollEnabled={true}
             data={items}
@@ -241,15 +247,13 @@ function ViewShop1({navigation}) {
                   title={item.TenSP}
                   price={item.GiaSP}
                 />
-              )
-             }
-            }
-            />
-            </View>
-            </SafeAreaView>
-      );
-  } 
-  else {
+              );
+            }}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  } else {
     if (product == false && detail == false) {
       return (
         <SafeAreaView
@@ -317,30 +321,30 @@ function ViewShop1({navigation}) {
                 List Item
               </Text>
             </TouchableOpacity>
-      </View>
-      <View style={{width: '100%', height: '65%'}}>
-      
-                <FlatList
-                    data={dataCategory}
-                    renderItem = {({item}) => {
-                        return(
-                          
-                            <TouchableOpacity
-                                style = {{
-                                flexDirection: 'row',
-                                //justifyContent: 'space-around'
-                            }}>
-                                <ItemList
-                                source = {item.AnhDM}
-                                namelist = {item.TenDM}
-                                numberitem = {item.SoLuongSP}
-                                onPress={() => navigation.navigate('ViewDetailsinList', { item })}
-                                ></ItemList>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
-        </View>
+          </View>
+          <View style={{width: '100%', height: '65%'}}>
+            <FlatList
+              data={dataCategory}
+              renderItem={({item}) => {
+                return (
+                  <TouchableOpacity
+                    style={{
+                      flexDirection: 'row',
+                      //justifyContent: 'space-around'
+                    }}>
+                    <ItemList
+                      source={item.AnhDM}
+                      namelist={item.TenDM}
+                      numberitem={item.SoLuongSP}
+                      onPress={() =>
+                        navigation.navigate('ViewDetailsinList', {item})
+                      }
+                    />
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          </View>
         </SafeAreaView>
       );
     } else {

@@ -3,15 +3,15 @@ import {
   collection,
   getDocs,
   query,
-  where
+  where,
 } from '@firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Image } from 'react-native-elements';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Firestore } from '../../../Firebase/firebase';
-import { SearchIcon } from '../../CustomerView/assets/icons';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {Image} from 'react-native-elements';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Firestore} from '../../../Firebase/firebase';
+import {SearchIcon} from '../../CustomerView/assets/icons';
 import BackTo from '../components/BackTo';
 import CUSTOM_COLOR from '../constants/colors';
 
@@ -24,17 +24,17 @@ const Report = ({navigation}) => {
   const [error, setError] = useState('');
   const [hasInput, setHasInput] = useState(false);
 
-  const isValidDay = (day) => {
-    return day > 0 && day <= 31 ;
+  const isValidDay = day => {
+    return day > 0 && day <= 31;
   };
 
   // Hàm kiểm tra tính hợp lệ của tháng
-  const isValidMonth = (month) => {
-    return month > 0 && month <= 12 ;
+  const isValidMonth = month => {
+    return month > 0 && month <= 12;
   };
 
   // Hàm kiểm tra tính hợp lệ của năm
-  const isValidYear = (year) => {
+  const isValidYear = year => {
     return year > 2020;
   };
   useEffect(() => {
@@ -53,7 +53,7 @@ const Report = ({navigation}) => {
         querySnapshot.forEach(doc => {
           const {TongTien} = doc.data();
           total += TongTien;
-          count +=1;
+          count += 1;
         });
 
         setTotalRevenue(total);
@@ -87,7 +87,7 @@ const Report = ({navigation}) => {
         querySnapshot.forEach(doc => {
           const {TongTien} = doc.data();
           total += TongTien;
-          count +=1;
+          count += 1;
         });
 
         setTotalRevenue(total);
@@ -113,7 +113,7 @@ const Report = ({navigation}) => {
           collection(Firestore, 'DONHANG'),
           where('TrangThai', '==', 'Delivered'),
           where('NgayDatHang', '>=', Timestamp.fromDate(startOfYear)),
-          where('NgayDatHang', '<', Timestamp.fromDate(endOfYear))
+          where('NgayDatHang', '<', Timestamp.fromDate(endOfYear)),
         );
 
         const querySnapshot = await getDocs(q);
@@ -121,8 +121,8 @@ const Report = ({navigation}) => {
         let total = 0;
         let count = 0;
 
-        querySnapshot.forEach((doc) => {
-          const { TongTien } = doc.data();
+        querySnapshot.forEach(doc => {
+          const {TongTien} = doc.data();
           total += TongTien;
           count += 1;
         });
@@ -145,7 +145,7 @@ const Report = ({navigation}) => {
           collection(Firestore, 'DONHANG'),
           where('TrangThai', '==', 'Delivered'),
           where('NgayDatHang', '>=', Timestamp.fromDate(startOfMonth)),
-          where('NgayDatHang', '<', Timestamp.fromDate(endOfMonth))
+          where('NgayDatHang', '<', Timestamp.fromDate(endOfMonth)),
         );
 
         const querySnapshot = await getDocs(q);
@@ -153,8 +153,8 @@ const Report = ({navigation}) => {
         let total = 0;
         let count = 0;
 
-        querySnapshot.forEach((doc) => {
-          const { TongTien } = doc.data();
+        querySnapshot.forEach(doc => {
+          const {TongTien} = doc.data();
           total += TongTien;
           count += 1;
         });
@@ -168,7 +168,11 @@ const Report = ({navigation}) => {
       }
     } else if (!isNaN(parsedMonth) && !isNaN(parsedDate)) {
       // Người dùng đã nhập đầy đủ ngày, tháng và năm
-      if (isValidYear(parsedYear) && isValidMonth(parsedMonth) && isValidDay(parsedDate)) {
+      if (
+        isValidYear(parsedYear) &&
+        isValidMonth(parsedMonth) &&
+        isValidDay(parsedDate)
+      ) {
         setError('');
         const selectedDay = new Date(parsedYear, parsedMonth - 1, parsedDate);
         const nextDay = new Date(parsedYear, parsedMonth - 1, parsedDate + 1);
@@ -177,7 +181,7 @@ const Report = ({navigation}) => {
           collection(Firestore, 'DONHANG'),
           where('TrangThai', '==', 'Delivered'),
           where('NgayDatHang', '>=', Timestamp.fromDate(selectedDay)),
-          where('NgayDatHang', '<', Timestamp.fromDate(nextDay))
+          where('NgayDatHang', '<', Timestamp.fromDate(nextDay)),
         );
 
         const querySnapshot = await getDocs(q);
@@ -185,8 +189,8 @@ const Report = ({navigation}) => {
         let total = 0;
         let count = 0;
 
-        querySnapshot.forEach((doc) => {
-          const { TongTien } = doc.data();
+        querySnapshot.forEach(doc => {
+          const {TongTien} = doc.data();
           total += TongTien;
           count += 1;
         });
@@ -204,81 +208,80 @@ const Report = ({navigation}) => {
       setTotal(0);
     }
   };
-    
-  
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-      <BackTo
-            onPress={() => navigation.navigate('AdminOverView')}
-            Info = 'Financial Report'
-          />
+        <BackTo onPress={() => navigation.goBack()} Info="Financial Report" />
       </View>
       <View style={styles.content}>
         <View style={styles.backgroundHeader}>
           <Text style={styles.Heading}>Quá trình hoạt động</Text>
-          <View style = {styles.buttonGroup}>
+          <View style={styles.buttonGroup}>
             <TextInput
               placeholder="Chọn ngày"
-              style = {styles.textinput}
-              onChangeText = {(text) => setSelectedDate(text)}
+              style={styles.textinput}
+              onChangeText={text => setSelectedDate(text)}
             />
             <TextInput
-              placeholder='Chọn tháng'
-              style = {styles.textinput}
-              onChangeText ={(text) => setSelectedMonth(text)}
+              placeholder="Chọn tháng"
+              style={styles.textinput}
+              onChangeText={text => setSelectedMonth(text)}
             />
             <TextInput
-              placeholder='Chọn năm'
-              style = {styles.textinput}
-              onChangeText ={(text) => setSelectedYear(text)}
+              placeholder="Chọn năm"
+              style={styles.textinput}
+              onChangeText={text => setSelectedYear(text)}
             />
             <TouchableOpacity
               onPress={handleSearchDateTime}
-              style = {styles.button}
-            >
+              style={styles.button}>
               <Image
                 source={SearchIcon}
                 onPress={handleSearchDateTime}
-                style = {styles.icon}
+                style={styles.icon}
               />
             </TouchableOpacity>
-          
           </View>
-          
         </View>
         {error ? (
-        <><Text style={styles.errorText}>{error}</Text><View>
+          <>
+            <Text style={styles.errorText}>{error}</Text>
+            <View>
+              <View style={styles.title}>
+                <Text style={styles.tieude}>BÁO CÁO DOANH THU</Text>
+                <Text style={styles.minibutton}>Tổng</Text>
+                <Text style={styles.report}>
+                  {totalRevenue.toLocaleString()} VNĐ
+                </Text>
+              </View>
+              <View style={styles.title}>
+                <Text style={styles.tieude}>SỐ ĐƠN HÀNG ĐÃ BÁN</Text>
+                <Text style={styles.minibutton}>Tổng</Text>
+                <Text style={styles.report}>{total}</Text>
+              </View>
+            </View>
+          </>
+        ) : (
+          <View>
             <View style={styles.title}>
               <Text style={styles.tieude}>BÁO CÁO DOANH THU</Text>
               <Text style={styles.minibutton}>Tổng</Text>
-              <Text style={styles.report}>{totalRevenue.toLocaleString()} VNĐ</Text>
+              <Text style={styles.report}>
+                {totalRevenue.toLocaleString()} VNĐ
+              </Text>
             </View>
             <View style={styles.title}>
               <Text style={styles.tieude}>SỐ ĐƠN HÀNG ĐÃ BÁN</Text>
               <Text style={styles.minibutton}>Tổng</Text>
               <Text style={styles.report}>{total}</Text>
             </View>
-          </View></>
-      ) : (
-        <View>
-          <View style={styles.title}>
-            <Text style={styles.tieude}>BÁO CÁO DOANH THU</Text>
-            <Text style={styles.minibutton}>Tổng</Text>
-            <Text style={styles.report}>{totalRevenue.toLocaleString()} VNĐ</Text>
           </View>
-          <View style={styles.title}>
-            <Text style={styles.tieude}>SỐ ĐƠN HÀNG ĐÃ BÁN</Text>
-            <Text style={styles.minibutton}>Tổng</Text>
-            <Text style={styles.report}>{total}</Text>
-          </View>
-        </View>
         )}
-        </View>
+      </View>
     </SafeAreaView>
   );
-      }     
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -303,7 +306,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   Heading: {
-    color:CUSTOM_COLOR.White,
+    color: CUSTOM_COLOR.White,
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
@@ -328,19 +331,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  tieude:{
+  tieude: {
     fontSize: 30,
     fontStyle: 'normal',
     color: CUSTOM_COLOR.Black,
-  },  
+  },
   textinput: {
-    textAlign:'center',
+    textAlign: 'center',
     color: CUSTOM_COLOR.Black,
-    backgroundColor:CUSTOM_COLOR.White,
-    borderRadius:10,
+    backgroundColor: CUSTOM_COLOR.White,
+    borderRadius: 10,
     width: 80,
     height: 40,
-    marginRight:10,
+    marginRight: 10,
   },
   button: {
     padding: 10,
@@ -354,25 +357,24 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: 'row',
     marginTop: 10,
-    marginLeft:18,
+    marginLeft: 18,
   },
-  minibutton:{
+  minibutton: {
     marginBottom: 10,
-    marginTop:10,
+    marginTop: 10,
     color: CUSTOM_COLOR.White,
-    backgroundColor:CUSTOM_COLOR.Purple,
+    backgroundColor: CUSTOM_COLOR.Purple,
     padding: 8,
     width: 60,
-    height:40,
-    borderRadius:10,
-    fontSize:18,
-    textAlign:'left',
+    height: 40,
+    borderRadius: 10,
+    fontSize: 18,
+    textAlign: 'left',
   },
   report: {
     color: CUSTOM_COLOR.Black,
     fontSize: 32,
     fontStyle: 'italic',
-
   },
   errorText: {
     fontSize: 18,
