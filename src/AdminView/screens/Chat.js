@@ -9,16 +9,16 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import React, {useEffect, useState} from 'react';
-import {FlatList, Image, Text, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Firestore, firebase} from '../../../Firebase/firebase';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Firestore, firebase } from '../../../Firebase/firebase';
 import LoadingComponent from '../components/Loading';
 import Search from '../components/Search';
 import UserChat from '../components/UserChat';
 import CUSTOM_COLOR from '../constants/colors';
 import Size from '../constants/size';
-export default function Chat({navigation}) {
+export default function Chat({ navigation }) {
   const [users, setUser] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -57,7 +57,7 @@ export default function Chat({navigation}) {
       const promises = querySnapshot.docs.map(doc => {
         return getUser(doc.data());
       });
-      console.log(promises);
+
       const dataUser = await Promise.all(promises);
       dataUser.map((user, index) => {
         const documentSnapshot = querySnapshot.docs[index];
@@ -75,7 +75,7 @@ export default function Chat({navigation}) {
         setUser(data);
       }
       setUser(filteredItems);
-      console.log(users);
+
     });
   };
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function Chat({navigation}) {
       getDataChat();
     });
     getDataChat();
-    // console.log(users)
+
     fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
       setImageUrl(url),
     );
@@ -116,7 +116,7 @@ export default function Chat({navigation}) {
 
   return (
     <SafeAreaView
-      style={{backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight}}>
+      style={{ backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight }}>
       {imageUrl ? (
         <>
           <View
@@ -128,7 +128,7 @@ export default function Chat({navigation}) {
             }}>
             {imageUrl ? (
               <Image
-                source={{uri: imageUrl}}
+                source={{ uri: imageUrl }}
                 style={{
                   aspectRatio: 1,
                   borderRadius: 55,
@@ -158,16 +158,16 @@ export default function Chat({navigation}) {
               Chat
             </Text>
           </View>
-          <View style={{width: '100%', height: 10}} />
-          <View style={{width: '90%', height: 45, marginHorizontal: '5%'}}>
+          <View style={{ width: '100%', height: 10 }} />
+          <View style={{ width: '90%', height: 45, marginHorizontal: '5%' }}>
             <Search placeholder="Search" onSearch={handleSearch} />
           </View>
-          <View style={{width: '100%', height: 10}} />
-          <View style={{width: '100%', height: '73%'}}>
+          <View style={{ width: '100%', height: 10 }} />
+          <View style={{ width: '100%', height: '73%' }}>
             <FlatList
               data={users}
-              renderItem={({item}) => {
-                console.log(item.NoiDungMessageMoi);
+              renderItem={({ item }) => {
+
 
                 const hour = item.NoiDungMessageMoi
                   ? item.ThoiGian.toDate().getHours()
@@ -189,7 +189,7 @@ export default function Chat({navigation}) {
                     onPress={() => {
                       setSoLuongChuaDoc(item);
 
-                      navigation.navigate('ChatScreenStaff', {item});
+                      navigation.navigate('ChatScreenStaff', { item });
                     }}
                     time={!item.NoiDungMessageMoi ? null : `${hour}:${minute}`}
                     notification={

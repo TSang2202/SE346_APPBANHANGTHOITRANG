@@ -29,7 +29,7 @@ import CUSTOM_COLOR from '../constants/colors';
 
 //import { get } from "firebase/database";
 
-function HomeScreenCustomer({navigation}) {
+function HomeScreenCustomer({ navigation }) {
   const [trending, setTrending] = useState([]);
   const [danhmuc, setDanhMuc] = useState([]);
   const [chatUser, setChatUser] = useState();
@@ -37,9 +37,9 @@ function HomeScreenCustomer({navigation}) {
   const [idUser, setIdUser] = useState();
   const [badgeCart, setBadgeCart] = useState(0);
   const [dataPromotion, setDataPromotion] = useState([]);
-  const [search, setSearch] =useState(false);
+  const [search, setSearch] = useState(false);
   const [sanpham, setSanPham] = useState([]);
-  const getSanPham= async () => {
+  const getSanPham = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
     const q = query(
       collection(Firestore, 'SANPHAM'),
@@ -57,7 +57,7 @@ function HomeScreenCustomer({navigation}) {
     });
   };
 
-  
+
   const getDataTrending = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
     const q = query(
@@ -155,8 +155,7 @@ function HomeScreenCustomer({navigation}) {
   const [filteredItems, setFilteredItems] = useState([]);
 
   const handleSearch = (searchTerm, data) => {
-    if(searchTerm === '')
-    {
+    if (searchTerm === '') {
       setSearch(true);
     }
     else {
@@ -167,12 +166,12 @@ function HomeScreenCustomer({navigation}) {
       );
       setFilteredItems(filteredItems);
     }
-    
+
   };
 
   return (
     <View
-      style={{backgroundColor: CUSTOM_COLOR.White, flex: 1}}
+      style={{ backgroundColor: CUSTOM_COLOR.White, flex: 1 }}
       nestedScrollEnabled={true}>
       <View
         style={{
@@ -181,10 +180,10 @@ function HomeScreenCustomer({navigation}) {
           alignItems: 'center',
           flexDirection: 'row',
         }}>
-        <View style={{width: '5%', height: '100%'}} />
+        <View style={{ width: '5%', height: '100%' }} />
 
-        <View style={{width: '65%', height: 45}}>
-        
+        <View style={{ width: '65%', height: 45 }}>
+
           <SearchInput
             placeholder="Search product"
             style={{
@@ -195,7 +194,7 @@ function HomeScreenCustomer({navigation}) {
 
           />
         </View>
-        <View style={{width: 10, height: '100%'}} />
+        <View style={{ width: 10, height: '100%' }} />
         <TouchableOpacity
           style={{
             width: 45,
@@ -209,20 +208,20 @@ function HomeScreenCustomer({navigation}) {
           }}
           onPress={() => {
             setSoLuongChuaDocCuaCustomer();
-            navigation.navigate('Chat', {chatUser});
+            navigation.navigate('Chat', { chatUser });
           }}>
           {chatUser && chatUser.SoLuongChuaDocCuaCustomer != 0 ? (
             <Badge
               value={chatUser.SoLuongChuaDocCuaCustomer}
               status="error"
-              containerStyle={{position: 'absolute', top: -5, right: -5}}
+              containerStyle={{ position: 'absolute', top: -5, right: -5 }}
             />
           ) : null}
 
           <Image source={IC_Chat} />
         </TouchableOpacity>
 
-        <View style={{width: 10, height: '100%'}} />
+        <View style={{ width: 10, height: '100%' }} />
 
         <TouchableOpacity
           style={{
@@ -236,75 +235,75 @@ function HomeScreenCustomer({navigation}) {
             borderRadius: 10,
           }}
           onPress={() => {
-            navigation.navigate('ShoppingCard', {idUser});
+            navigation.navigate('ShoppingCard', { idUser });
           }}>
           {badgeCart != 0 ? (
             <Badge
               value={badgeCart}
               status="error"
-              containerStyle={{position: 'absolute', top: -5, right: -5}}
+              containerStyle={{ position: 'absolute', top: -5, right: -5 }}
             />
           ) : null}
           <Image source={IC_ShoppingCart} />
         </TouchableOpacity>
       </View>
-      
-      {search ? (
+
+      {!search ? (
         <>
-        <ScrollView>
-        <Text style={styles.textView}>On sale</Text><View
-            style={{
-              height: 175,
-            }}>
-            <Swiper
-              autoplay
-              loop
+          <ScrollView>
+            <Text style={styles.textView}>On sale</Text><View
+              style={{
+                height: 175,
+              }}>
+              <Swiper
+                autoplay
+                loop
+                style={{
+                  flexDirection: 'row',
+
+                  height: '90%',
+                }}>
+                {dataPromotion
+                  ? dataPromotion.map((promotion, index) => {
+                    const timestampBD = promotion.NgayBatDau.toDate();
+                    const dateBD = dayjs(timestampBD);
+
+                    const dayBD = dateBD.date();
+                    const monthBD = dateBD.month();
+                    const yearBD = dateBD.year();
+
+                    const timestampKT = promotion.NgayKetThuc.toDate();
+                    const dateKT = dayjs(timestampKT);
+
+                    const dayKT = dateKT.date();
+                    const monthKT = dateKT.month();
+                    const yearKT = dateKT.year();
+
+                    return (
+                      <PromotionCard
+                        source={promotion.HinhAnhKM}
+                        name={promotion.TenKM}
+                        discount={promotion.TiLe * 100}
+                        minimum={promotion.DonToiThieu}
+                        start={`${dayBD}/${monthBD}/${yearBD}`}
+                        end={`${dayKT}/${monthKT}/${yearKT}`}
+                        type={promotion.Loai}
+                        key={index} />
+                    );
+                  })
+                  : null}
+              </Swiper>
+            </View><View
               style={{
                 flexDirection: 'row',
-
-                height: '90%',
+                justifyContent: 'space-between',
+                marginTop: -40,
               }}>
-              {dataPromotion
-                ? dataPromotion.map((promotion, index) => {
-                  const timestampBD = promotion.NgayBatDau.toDate();
-                  const dateBD = dayjs(timestampBD);
-
-                  const dayBD = dateBD.date();
-                  const monthBD = dateBD.month();
-                  const yearBD = dateBD.year();
-
-                  const timestampKT = promotion.NgayKetThuc.toDate();
-                  const dateKT = dayjs(timestampKT);
-
-                  const dayKT = dateKT.date();
-                  const monthKT = dateKT.month();
-                  const yearKT = dateKT.year();
-
-                  return (
-                    <PromotionCard
-                      source={promotion.HinhAnhKM}
-                      name={promotion.TenKM}
-                      discount={promotion.TiLe * 100}
-                      minimum={promotion.DonToiThieu}
-                      start={`${dayBD}/${monthBD}/${yearBD}`}
-                      end={`${dayKT}/${monthKT}/${yearKT}`}
-                      type={promotion.Loai}
-                      key={index} />
-                  );
-                })
-                : null}
-            </Swiper>
-          </View><View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: -40,
-            }}>
               <Text style={styles.textView}>Trending now</Text>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('Trending');
-                } }>
+                }}>
                 <Text style={{ margin: 20 }}>See all</Text>
               </TouchableOpacity>
             </View><View style={{}}>
@@ -319,7 +318,7 @@ function HomeScreenCustomer({navigation}) {
                     }}
                     onPress={() => {
                       navigation.navigate('DetailProduct', { item });
-                    } }>
+                    }}>
                     <ProductView
                       source={item.HinhAnhSP[0]}
                       title={item.TenSP}
@@ -333,7 +332,7 @@ function HomeScreenCustomer({navigation}) {
                 <Text style={{ margin: 20 }}>Explore now</Text>
               </TouchableOpacity>
             </View>
-          {/*
+            {/*
           <FlatList
 
 
@@ -353,8 +352,8 @@ function HomeScreenCustomer({navigation}) {
           }
           keyExtractor={item => item.MaDM}
           /> */}
-          {danhmuc
-            ? danhmuc.map(item => (
+            {danhmuc
+              ? danhmuc.map(item => (
                 <TouchableOpacity
                   style={{
                     width: '100%',
@@ -362,45 +361,45 @@ function HomeScreenCustomer({navigation}) {
                     alignItems: 'center',
                   }}
                   onPress={() => {
-                    navigation.navigate('DetailCategory', {item});
+                    navigation.navigate('DetailCategory', { item });
                   }}
                   key={item.MaDM}>
                   <Categories source={item.AnhDM} title={item.TenDM} />
                 </TouchableOpacity>
               ))
-            : null}
-            </ScrollView>
-            </>
-            ):(
-                  <View style = {{flex: 1}}>
-                  <FlatList
-                    data={searchTerm ? filteredItems : sanpham}
-                    renderItem={({ item }) => {
-                        return (
-                            <TouchableOpacity style={{
-                                flexDirection: 'row',
-                                //justifyContent: 'space-around'
-                            }}
-                                onPress={() => { navigation.navigate('DetailProduct', { item }) }}
-                            >
-                                <ProductView
-                                    source={item.HinhAnhSP[0]}
-                                    title={item.TenSP}
-                                    price={item.GiaSP}
-                                />
-                            </TouchableOpacity>
-                        )
-                    }}
-                    
-                    numColumns={2}
-                //keyExtractor={(item) => item.MASP}
-                />
-                  </View>
-              )}
-                  
-              </View>
-            );
-          }
+              : null}
+          </ScrollView>
+        </>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <FlatList
+            data={searchTerm ? filteredItems : sanpham}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity style={{
+                  flexDirection: 'row',
+                  //justifyContent: 'space-around'
+                }}
+                  onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+                >
+                  <ProductView
+                    source={item.HinhAnhSP[0]}
+                    title={item.TenSP}
+                    price={item.GiaSP}
+                  />
+                </TouchableOpacity>
+              )
+            }}
+
+            numColumns={2}
+          //keyExtractor={(item) => item.MASP}
+          />
+        </View>
+      )}
+
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   textView: {

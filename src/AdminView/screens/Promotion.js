@@ -6,12 +6,13 @@ import {
   View,
   Image,
   FlatList,
+  TouchableOpacity
 } from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
 import PromotionCard from '../components/PromotionCard';
-import { IC_Momo } from '../../CustomerView/assets/icons';
+import { IC_Back, IC_Momo } from '../../CustomerView/assets/icons';
 import { IM_MauAo } from '../assets/images';
 import { Firestore, Storage } from '../../../Firebase/firebase';
 import {
@@ -52,8 +53,36 @@ const Promotion = props => {
       <View style={{ width: '100%', height: 10 }} />
 
       <>
-        <View style={styles.headerContainer}>
-          <CustomHeader onPress={() => navigation.goBack()} title="Promotion" />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: CUSTOM_COLOR.White,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <Image
+              source={IC_Back}
+              style={{
+                width: 10,
+                height: 20,
+                marginHorizontal: 20,
+                marginVertical: 15,
+              }}
+              resizeMode="stretch"
+            />
+          </TouchableOpacity>
+
+          <Text
+            style={{
+              fontSize: 20,
+              color: CUSTOM_COLOR.Black,
+              fontWeight: 'bold',
+            }}>
+            Promotions
+          </Text>
         </View>
       </>
 
