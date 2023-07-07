@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -15,14 +15,14 @@ import {
 import CUSTOM_COLOR from '../constants/colors';
 import CustomHeader from '../components/CustomHeader';
 import PromotionButton from '../components/PromotionButton';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {border_add} from '../assets/images';
+import { border_add } from '../assets/images';
 import FONT_FAMILY from '../constants/fonts';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import moment from 'moment';
-import {isBefore} from 'date-fns';
-import {async} from '@firebase/util';
+import { isBefore } from 'date-fns';
+import { async } from '@firebase/util';
 import {
   collection,
   doc,
@@ -34,12 +34,13 @@ import {
   updateDoc,
   deleteDoc,
 } from 'firebase/firestore';
-import {ref, uploadBytes, put, getDownloadURL} from 'firebase/storage';
-import {Firestore, Storage} from '../../../Firebase/firebase';
+import { ref, uploadBytes, put, getDownloadURL } from 'firebase/storage';
+import { Firestore, Storage } from '../../../Firebase/firebase';
 import dayjs from 'dayjs';
+import { IC_Back } from '../../CustomerView/assets/icons';
 
-function EditPromotion({navigation, route}) {
-  const {item} = route.params;
+function EditPromotion({ navigation, route }) {
+  const { item } = route.params;
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -52,9 +53,9 @@ function EditPromotion({navigation, route}) {
   const [lengthName, setLengthName] = useState(0);
   const [lengthDescription, setLengthDescription] = useState(0);
   const [typeOfPromotion, setTpyeOfPromotion] = useState();
-  const [discount, setDiscount] = useState(0);
+  const [discount, setDiscount] = useState();
   const [pickerType, setPickerType] = useState('');
-  const [minimumOrder, setMinimumOrder] = useState(0);
+  const [minimumOrder, setMinimumOrder] = useState();
 
   const dataTypePromotion = [
     {
@@ -126,7 +127,7 @@ function EditPromotion({navigation, route}) {
       Alert.alert(
         'Notification',
         'Please fill in the information completely and accurately!',
-        [{text: 'OK', style: 'cancel'}],
+        [{ text: 'OK', style: 'cancel' }],
       );
       return;
     }
@@ -141,12 +142,12 @@ function EditPromotion({navigation, route}) {
       Loai: typeOfPromotion,
       NgayBatDau: startDate,
       NgayKetThuc: endDate,
-      TiLe: discount / 100,
-      DonToiThieu: minimumOrder,
+      TiLe: Number(discount) / 100,
+      DonToiThieu: Number(minimumOrder),
     });
 
     Alert.alert('Notification', 'Successfully update promotions!', [
-      {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
+      { text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' },
     ]);
   };
 
@@ -154,7 +155,7 @@ function EditPromotion({navigation, route}) {
     await deleteDoc(doc(Firestore, 'KHUYENMAI', item.MaKM));
 
     Alert.alert('Notification', 'Successfully delete promotions!', [
-      {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
+      { text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' },
     ]);
   };
 
@@ -285,14 +286,39 @@ function EditPromotion({navigation, route}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
       <>
-        <View style={styles.headerContainer}>
-          <CustomHeader
-            onPress={() => navigation.goBack()}
-            title="Promotion/ Edit promotion"
-          />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: CUSTOM_COLOR.White,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <Image
+              source={IC_Back}
+              style={{
+                width: 10,
+                height: 20,
+                marginHorizontal: 20,
+                marginVertical: 15,
+              }}
+              resizeMode="stretch"
+            />
+          </TouchableOpacity>
+
+          <Text
+            style={{
+              fontSize: 20,
+              color: CUSTOM_COLOR.Black,
+              fontWeight: 'bold',
+            }}>
+            Edit promotion
+          </Text>
         </View>
       </>
 
@@ -300,12 +326,12 @@ function EditPromotion({navigation, route}) {
 
       <>
         <View style={styles.bodyContainer}>
-          <ScrollView style={{width: '100%', height: '100%'}}>
+          <ScrollView style={{ width: '100%', height: '100%' }}>
             <>
               <View style={styles.addImageContainer}>
-                <View style={{width: 25, height: '100%'}} />
+                <View style={{ width: 25, height: '100%' }} />
                 <TouchableOpacity
-                  style={{width: 75, height: 75}}
+                  style={{ width: 75, height: 75 }}
                   onPress={selectImage}>
                   <ImageBackground
                     style={{
@@ -319,11 +345,11 @@ function EditPromotion({navigation, route}) {
                     <Text style={styles.icAddStyle}>+</Text>
                   </ImageBackground>
                 </TouchableOpacity>
-                <View style={{width: 25, height: '100%'}} />
+                <View style={{ width: 25, height: '100%' }} />
 
                 {image ? (
                   <Image
-                    source={typeof image === 'string' ? {uri: image} : image}
+                    source={typeof image === 'string' ? { uri: image } : image}
                     style={{
                       height: 75,
                       width: 75,
@@ -340,22 +366,22 @@ function EditPromotion({navigation, route}) {
             <View style={styles.spaceContainer} />
 
             <>
-              <View style={[styles.inputContainer, {height: 90}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={[styles.inputContainer, { height: 90 }]}>
+                <View style={{ width: '100%', height: 10 }} />
+                <View style={{ flex: 1, flexDirection: 'row' }}>
                   <View
                     style={[
                       styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
+                      { justifyContent: 'flex-start' },
                     ]}>
-                    <View style={{width: '10%', height: '100%'}} />
+                    <View style={{ width: '10%', height: '100%' }} />
                     <Text style={styles.titleInputStyle}>
                       Name Of Promotions
                     </Text>
                     <Text
                       style={[
                         styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        { color: CUSTOM_COLOR.Red },
                       ]}>
                       {' '}
                       *
@@ -364,17 +390,17 @@ function EditPromotion({navigation, route}) {
                   <View
                     style={[
                       styles.unitTitleContainer,
-                      {justifyContent: 'flex-end'},
+                      { justifyContent: 'flex-end' },
                     ]}>
                     <Text style={styles.titleInputStyle}>{lengthName}/100</Text>
-                    <View style={{width: '10%', height: '100%'}} />
+                    <View style={{ width: '10%', height: '100%' }} />
                   </View>
                 </View>
                 {/* <View style={{width: '100%', height: 5}} /> */}
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
+                <View style={{ flex: 2, flexDirection: 'row' }}>
+                  <View style={{ width: '5%', height: '100%' }} />
                   <TextInput
-                    style={{flex: 1, fontSize: 17}}
+                    style={{ flex: 1, fontSize: 17 }}
                     onChangeText={text => {
                       if (text.length < 100) {
                         setName(text);
@@ -383,7 +409,7 @@ function EditPromotion({navigation, route}) {
                     }}
                     value={name}
                   />
-                  <View style={{width: '5%', height: '100%'}} />
+                  <View style={{ width: '5%', height: '100%' }} />
                 </View>
               </View>
             </>
@@ -391,20 +417,20 @@ function EditPromotion({navigation, route}) {
             <View style={styles.spaceContainer} />
 
             <>
-              <View style={[styles.inputContainer, {height: 120}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={[styles.inputContainer, { height: 120 }]}>
+                <View style={{ width: '100%', height: 10 }} />
+                <View style={{ flex: 1, flexDirection: 'row' }}>
                   <View
                     style={[
                       styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
+                      { justifyContent: 'flex-start' },
                     ]}>
-                    <View style={{width: '10%', height: '100%'}} />
+                    <View style={{ width: '10%', height: '100%' }} />
                     <Text style={styles.titleInputStyle}>Description</Text>
                     <Text
                       style={[
                         styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        { color: CUSTOM_COLOR.Red },
                       ]}>
                       {' '}
                       *
@@ -413,19 +439,19 @@ function EditPromotion({navigation, route}) {
                   <View
                     style={[
                       styles.unitTitleContainer,
-                      {justifyContent: 'flex-end'},
+                      { justifyContent: 'flex-end' },
                     ]}>
                     <Text style={styles.titleInputStyle}>
                       {lengthDescription}/200
                     </Text>
-                    <View style={{width: '10%', height: '100%'}} />
+                    <View style={{ width: '10%', height: '100%' }} />
                   </View>
                 </View>
                 {/* <View style={{width: '100%', height: 5}} /> */}
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
+                <View style={{ flex: 2, flexDirection: 'row' }}>
+                  <View style={{ width: '5%', height: '100%' }} />
                   <TextInput
-                    style={{flex: 1, fontSize: 17}}
+                    style={{ flex: 1, fontSize: 17 }}
                     onChangeText={text => {
                       if (text.length <= 200) {
                         setDescription(text);
@@ -435,7 +461,7 @@ function EditPromotion({navigation, route}) {
                     value={description}
                     multiline={true}
                   />
-                  <View style={{width: '5%', height: '100%'}} />
+                  <View style={{ width: '5%', height: '100%' }} />
                 </View>
               </View>
             </>
@@ -443,16 +469,16 @@ function EditPromotion({navigation, route}) {
             <View style={styles.spaceContainer} />
 
             <>
-              <View style={[styles.comboxContainer, {height: 60}]}>
+              <View style={[styles.comboxContainer, { height: 60 }]}>
                 <View
                   style={[
                     styles.unitComboContainer,
-                    {justifyContent: 'flex-start', width: '40%'},
+                    { justifyContent: 'flex-start', width: '40%' },
                   ]}>
-                  <View style={{width: '12%', height: '100%'}} />
+                  <View style={{ width: '12%', height: '100%' }} />
                   <Text style={styles.titleInputStyle}>Type of promotion</Text>
                   <Text
-                    style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                    style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                     {' '}
                     *
                   </Text>
@@ -466,7 +492,7 @@ function EditPromotion({navigation, route}) {
                     },
                   ]}>
                   <Dropdown
-                    style={[styles.comboType, isFocus && {borderColor: 'blue'}]}
+                    style={[styles.comboType, isFocus && { borderColor: 'blue' }]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
@@ -487,25 +513,25 @@ function EditPromotion({navigation, route}) {
                       setTpyeOfPromotion(item.id);
                     }}
                   />
-                  <View style={{width: '8%', height: '100%'}} />
+                  <View style={{ width: '8%', height: '100%' }} />
                 </View>
               </View>
             </>
 
             <>
               {typeOfPromotion && typeOfPromotion === 'GiamGia' ? (
-                <View style={[styles.comboxContainer, {height: 60}]}>
+                <View style={[styles.comboxContainer, { height: 60 }]}>
                   <View
                     style={[
                       styles.unitComboContainer,
-                      {justifyContent: 'flex-start', width: '40%'},
+                      { justifyContent: 'flex-start', width: '40%' },
                     ]}>
-                    <View style={{width: '12%', height: '100%'}} />
+                    <View style={{ width: '12%', height: '100%' }} />
                     <Text style={styles.titleInputStyle}>Discount</Text>
                     <Text
                       style={[
                         styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        { color: CUSTOM_COLOR.Red },
                       ]}>
                       {' '}
                       *
@@ -525,15 +551,15 @@ function EditPromotion({navigation, route}) {
                       value={discount}
                       keyboardType="numeric"
                     />
-                    <View style={{width: '8%', height: '100%'}} />
+                    <View style={{ width: '8%', height: '100%' }} />
                   </View>
 
                   <View
                     style={[
                       styles.unitComboContainer,
-                      {justifyContent: 'flex-start', width: '40%'},
+                      { justifyContent: 'flex-start', width: '40%' },
                     ]}>
-                    <Text style={[styles.titleInputStyle, {fontSize: 15}]}>
+                    <Text style={[styles.titleInputStyle, { fontSize: 15 }]}>
                       %
                     </Text>
                   </View>
@@ -541,16 +567,16 @@ function EditPromotion({navigation, route}) {
               ) : null}
             </>
 
-            <View style={[styles.comboxContainer, {height: 60}]}>
+            <View style={[styles.comboxContainer, { height: 60 }]}>
               <View
                 style={[
                   styles.unitComboContainer,
-                  {justifyContent: 'flex-start', width: '40%'},
+                  { justifyContent: 'flex-start', width: '40%' },
                 ]}>
-                <View style={{width: '12%', height: '100%'}} />
+                <View style={{ width: '12%', height: '100%' }} />
                 <Text style={styles.titleInputStyle}>Minimum Order </Text>
                 <Text
-                  style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                  style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
                   {' '}
                   *
                 </Text>
@@ -569,15 +595,15 @@ function EditPromotion({navigation, route}) {
                   value={minimumOrder}
                   keyboardType="numeric"
                 />
-                <View style={{width: '8%', height: '100%'}} />
+                <View style={{ width: '8%', height: '100%' }} />
               </View>
 
               <View
                 style={[
                   styles.unitComboContainer,
-                  {justifyContent: 'flex-start', width: '40%'},
+                  { justifyContent: 'flex-start', width: '40%' },
                 ]}>
-                <Text style={[styles.titleInputStyle, {fontSize: 15}]}>
+                <Text style={[styles.titleInputStyle, { fontSize: 15 }]}>
                   VNĐ
                 </Text>
               </View>
@@ -586,19 +612,19 @@ function EditPromotion({navigation, route}) {
             <View style={styles.spaceContainer} />
 
             <>
-              <View style={[styles.dateContainer, {height: 120}]}>
+              <View style={[styles.dateContainer, { height: 120 }]}>
                 <View style={styles.unitDateContainer}>
                   <View
                     style={[
                       styles.unitComboContainer,
-                      {justifyContent: 'flex-start', width: '40%'},
+                      { justifyContent: 'flex-start', width: '40%' },
                     ]}>
-                    <View style={{width: '12%', height: '100%'}} />
+                    <View style={{ width: '12%', height: '100%' }} />
                     <Text style={styles.titleInputStyle}>Start date</Text>
                     <Text
                       style={[
                         styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        { color: CUSTOM_COLOR.Red },
                       ]}>
                       {' '}
                       *
@@ -628,7 +654,7 @@ function EditPromotion({navigation, route}) {
                         onChange={handleDateChange}
                       />
                     )} */}
-                    <View style={{width: '8%', height: '100%'}} />
+                    <View style={{ width: '8%', height: '100%' }} />
                   </View>
                 </View>
 
@@ -636,14 +662,14 @@ function EditPromotion({navigation, route}) {
                   <View
                     style={[
                       styles.unitComboContainer,
-                      {justifyContent: 'flex-start', width: '40%'},
+                      { justifyContent: 'flex-start', width: '40%' },
                     ]}>
-                    <View style={{width: '12%', height: '100%'}} />
+                    <View style={{ width: '12%', height: '100%' }} />
                     <Text style={styles.titleInputStyle}>End date</Text>
                     <Text
                       style={[
                         styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
+                        { color: CUSTOM_COLOR.Red },
                       ]}>
                       {' '}
                       *
@@ -673,7 +699,7 @@ function EditPromotion({navigation, route}) {
                         onChange={handleDateChange}
                       />
                     )}
-                    <View style={{width: '8%', height: '100%'}} />
+                    <View style={{ width: '8%', height: '100%' }} />
                   </View>
                 </View>
               </View>
@@ -692,7 +718,7 @@ function EditPromotion({navigation, route}) {
                     deleteData();
                   }}
                 />
-                <View style={{width: 20, height: '100%'}} />
+                <View style={{ width: 20, height: '100%' }} />
                 <PromotionButton
                   type="secondary"
                   text="Save"
@@ -703,7 +729,7 @@ function EditPromotion({navigation, route}) {
               </View>
             </>
 
-            <View style={{width: '100%', height: 10}} />
+            <View style={{ width: '100%', height: 10 }} />
           </ScrollView>
         </View>
       </>
