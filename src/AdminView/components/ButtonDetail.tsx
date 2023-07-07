@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import CUSTOM_COLOR from '../constants/colors';
 
 const ButtonDetail = (props: any) => {
