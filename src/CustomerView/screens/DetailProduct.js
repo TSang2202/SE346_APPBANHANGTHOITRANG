@@ -36,35 +36,35 @@ function DetailProduct({ navigation, route }) {
     const [itemsCheckout, setItemsCheckout] = useState([])
     const [totalMoney, setTotalMoney] = useState()
     const [seeDetails, setSeeDetails] = useState(false)
-    const getItemdata = () =>{
-        try{
+    const getItemdata = () => {
+        try {
             const q = query(collection(Firestore, "SANPHAM"), where("MaSP", "==", item.MaSP));
-            const querySnapshot = onSnapshot(q, async(snapshot) => {
-            const items = [];
-            snapshot.forEach(documentSnapshot => {
-            items.push({
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-            });
-            });
-            await setDataSanPham(items)
-            setIsLoading(true)
+            const querySnapshot = onSnapshot(q, async (snapshot) => {
+                const items = [];
+                snapshot.forEach(documentSnapshot => {
+                    items.push({
+                        ...documentSnapshot.data(),
+                        key: documentSnapshot.id,
+                    });
+                });
+                await setDataSanPham(items)
+                setIsLoading(true)
             })
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }
     const getBadgeCart = () => {
         const q = query(
-          collection(Firestore, 'GIOHANG'),
-          where('MaND', '==', firebase.auth().currentUser.uid),
+            collection(Firestore, 'GIOHANG'),
+            where('MaND', '==', firebase.auth().currentUser.uid),
         );
         const unsubscribe = onSnapshot(q, querySnapshot => {
-          const data = [];
-          querySnapshot.forEach(doc => {
-            data.push(doc.data());
-          });
-          setBadgeCart(data.length);
+            const data = [];
+            querySnapshot.forEach(doc => {
+                data.push(doc.data());
+            });
+            setBadgeCart(data.length);
         });
     };
     const setDataGioHang = async () => {
@@ -151,7 +151,7 @@ function DetailProduct({ navigation, route }) {
                 , where('MaND', '==', firebase.auth().currentUser.uid)
                 , where('MaSP', '==', item.MaSP));
             const querySnapshot = await getDocs(q);
-           // console.log(querySnapshot);
+            // console.log(querySnapshot);
             querySnapshot.forEach((doc) => {
                 deleteDoc(doc.ref).then(() => {
                     console.log('Xóa tài liệu thành công');
@@ -163,44 +163,44 @@ function DetailProduct({ navigation, route }) {
             await updateDoc(updateRef, {
                 SoLuotYeuThich: dataSanPham[0].SoLuotYeuThich - 1,
             });
-            } catch(error){
-                console.log(error);
-            }
-   }
-   const getdataReview = () =>{
-    try{
-        const q = query(collection(Firestore, "DANHGIA"), where("MaSP", "==", item.MaSP));
-        const querySnapshot = onSnapshot(q, async (snapshot) => {
-        const items = [];
-        snapshot.forEach(documentSnapshot => {
-        items.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-        });
-        });
-        let sum = 0;
-        if(items.length != 0){
-            for(let i = 0; i < items.length; i++){
-                sum += items[i].Rating;
-            }
-            settong(items.length);
-            console.log(tong);
-            settb((Math.round(sum/items.length * 100) / 100).toFixed(1));
-            console.log(tb);
+        } catch (error) {
+            console.log(error);
         }
-        })
-    }catch(error){
-        console.log(error);
     }
-}
-   const SetLove = async () =>{
+    const getdataReview = () => {
+        try {
+            const q = query(collection(Firestore, "DANHGIA"), where("MaSP", "==", item.MaSP));
+            const querySnapshot = onSnapshot(q, async (snapshot) => {
+                const items = [];
+                snapshot.forEach(documentSnapshot => {
+                    items.push({
+                        ...documentSnapshot.data(),
+                        key: documentSnapshot.id,
+                    });
+                });
+                let sum = 0;
+                if (items.length != 0) {
+                    for (let i = 0; i < items.length; i++) {
+                        sum += items[i].Rating;
+                    }
+                    settong(items.length);
+                    console.log(tong);
+                    settb((Math.round(sum / items.length * 100) / 100).toFixed(1));
+                    console.log(tb);
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const SetLove = async () => {
 
         setlove(!love);
     }
     const setDataYeuThich = async () => {
         await SetLove();
         let check = love;
-        if(check == false){
+        if (check == false) {
             addYeuThich()
         }
         else {
@@ -230,13 +230,13 @@ function DetailProduct({ navigation, route }) {
         getdataReview();
         getBadgeCart();
     }, [])
-    if(isLoading == true){
+    if (isLoading == true) {
         return (
             <View style={{
                 ...styles.container,
             }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-    
+
                     <View style={{ flexDirection: "row", alignItems: 'center', }}>
                         <TouchableOpacity onPress={() => {
                             navigation.goBack();
@@ -251,10 +251,10 @@ function DetailProduct({ navigation, route }) {
                                 resizeMode='stretch'
                             />
                         </TouchableOpacity>
-    
+
                         <Text style={{ height: 40, padding: 7, fontSize: 18, fontWeight: 'bold', color: CUSTOM_COLOR.Black }}>Product</Text>
                     </View>
-    
+
                     <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 10 }} >
                         <TouchableOpacity onPress={() => {
                             setDataYeuThich();
@@ -266,7 +266,7 @@ function DetailProduct({ navigation, route }) {
                                     margin: 10,
                                     width: 33,
                                     height: 33,
-    
+
                                 }}
                                 resizeMode='contain'
                             />) :
@@ -282,42 +282,42 @@ function DetailProduct({ navigation, route }) {
                             }
                         </TouchableOpacity>
                         <TouchableOpacity
-                                style={{
-                                    width: 45,
-                                    height: 45,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    // marginVertical: 10,
-                                    // padding: 8,
-                                    borderRadius: 10,
-                                }}
-                                onPress={() => {
-                                    navigation.navigate('ShoppingCard', { idUser });
-                                }}>
-                                {badgeCart != 0 ? (
-                                    <Badge
+                            style={{
+                                width: 45,
+                                height: 45,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                // marginVertical: 10,
+                                // padding: 8,
+                                borderRadius: 10,
+                            }}
+                            onPress={() => {
+                                navigation.navigate('ShoppingCard', { idUser });
+                            }}>
+                            {badgeCart != 0 ? (
+                                <Badge
                                     value={badgeCart}
                                     status="error"
                                     containerStyle={{ position: 'absolute', top: -5, right: -5 }}
-                                    />
-                                ) : null}
-                                <Image source={IC_ShoppingCart} />
+                                />
+                            ) : null}
+                            <Image source={IC_ShoppingCart} />
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{ width: '100%', height: '40%', alignItems: 'center', justifyContent: 'center' }}>
-    
+
                     <Swiper
                         loop
                         autoplay
                     >
-                        {dataSanPham[0].HinhAnhSP.map((image) => (
-    
+                        {dataSanPham[0].HinhAnhSP.map((image, index) => (
+
                             <View style={{
                                 flexDirection: 'row',
                                 justifyContent: 'center'
                             }}
-                                key={image}
+                                key={index}
                             >
                                 <Image
                                     source={{ uri: image }}
@@ -326,14 +326,14 @@ function DetailProduct({ navigation, route }) {
                                         height: 300, borderRadius: 20
                                     }}
                                 />
-    
+
                             </View>
                         ))}
-    
+
                     </Swiper>
-    
+
                 </View>
-    
+
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -347,9 +347,9 @@ function DetailProduct({ navigation, route }) {
                             fontSize: 20,
                             marginLeft: 40,
                             width: '50%'
-    
+
                         }}>{dataSanPham[0].TenSP}</Text>
-    
+
                     <Text
                         style={{
                             marginHorizontal: 10,
@@ -357,25 +357,25 @@ function DetailProduct({ navigation, route }) {
                             color: CUSTOM_COLOR.Sunglow,
                             fontWeight: 'bold',
                             width: '30%'
-    
+
                         }}
                     >{dataSanPham[0].GiaSP * numProduct} đ</Text>
-    
+
                 </View>
-    
+
                 <View style={{
                     flexDirection: 'row',
                     marginVertical: 20,
                     marginHorizontal: 40,
                     alignItems: 'center'
                 }}>
-                    <Text style = {{marginRight: 10}}>{tb}</Text>
+                    <Text style={{ marginRight: 10 }}>{tb}</Text>
                     <StarRating
                         nums={5}
                         fill={tb}
                     />
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Review', {item})}
+                        onPress={() => navigation.navigate('Review', { item })}
                     >
                         <Text style={{
                             marginHorizontal: 40,
@@ -385,39 +385,39 @@ function DetailProduct({ navigation, route }) {
                         </Text>
                     </TouchableOpacity>
                 </View>
-    
+
                 <View
                     style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}
                 >
-    
-    
+
+
                 </View>
-    
+
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     marginVertical: '1%'
-    
+
                 }}>
-    
+
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center'
                     }}>
-    
+
                         <Text style={{
                             marginLeft: 35,
                             marginRight: 20,
                             ...styles.textLarge
-    
+
                         }}>Color</Text>
-    
-    
-    
+
+
+
                         {dataSanPham[0].MauSac.filter(color => color.checked == true).map(color => (
                             <View style={{
                                 ...styles.colorCicle,
@@ -435,27 +435,27 @@ function DetailProduct({ navigation, route }) {
                                         backgroundColor: CUSTOM_COLOR.White,
                                         borderWidth: 0
                                     }}>
-    
+
                                     </View> : null}
-    
+
                             </View>
                         ))}
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
                     </View>
-    
-    
+
+
                     <View
                         style={{
                             flexDirection: 'row',
                             alignItems: 'center'
                         }}
                     >
-    
+
                         <TouchableOpacity style={{
                             ...styles.btnCount
                         }}
@@ -465,11 +465,11 @@ function DetailProduct({ navigation, route }) {
                                 fontSize: 20,
                                 fontWeight: 'bold'
                             }}>-</Text>
-    
+
                         </TouchableOpacity>
-    
+
                         <Text>{numProduct}</Text>
-    
+
                         <TouchableOpacity style={{
                             ...styles.btnCount
                         }}
@@ -479,13 +479,13 @@ function DetailProduct({ navigation, route }) {
                                 fontSize: 20,
                                 fontWeight: 'bold'
                             }}>+</Text>
-    
+
                         </TouchableOpacity>
                     </View>
-    
+
                 </View>
-    
-    
+
+
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -496,36 +496,38 @@ function DetailProduct({ navigation, route }) {
                     <Text style={{
                         ...styles.textLarge,
                         marginLeft: 35
-    
+
                     }}>Size</Text>
-    
+
                     <View style={{
                         flexDirection: 'row',
-    
+
                     }}>
-                        {dataSanPham[0].Size.filter(size => size.checked == true).map(size => (
+                        {dataSanPham[0].Size.filter(size => size.checked == true).map((size, index) => (
                             <TouchableWithoutFeedback style={{
                                 ...styles.sizeCircle,
                                 width: 45,
                                 marginHorizontal: 5,
                                 borderWidth: chooseSize === size.title ? 1 : 0
-                            }}>
+                            }}
+                                key={index}
+                            >
                                 <Text>{size.title}</Text>
                             </TouchableWithoutFeedback>
                         ))}
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
                     </View>
-    
-    
+
+
                 </View>
-    
+
                 <TouchableOpacity
                     onPress={() => setChooseStyle(true)}
                     style={{ alignSelf: 'flex-end', marginHorizontal: 20 }}
@@ -534,7 +536,7 @@ function DetailProduct({ navigation, route }) {
                         fontStyle: 'italic'
                     }}>How can I choose my size?</Text>
                 </TouchableOpacity>
-    
+
                 <View
                     style={{
                         flexDirection: 'row',
@@ -547,9 +549,9 @@ function DetailProduct({ navigation, route }) {
                     }}>
                         See product details
                     </Text>
-    
+
                     <TouchableOpacity styles={{
-    
+
                     }}
                         onPress={() => setSeeDetails(!seeDetails)}
                     >
@@ -576,18 +578,18 @@ function DetailProduct({ navigation, route }) {
                         }}
                         onPress={() => setDataGioHang()}
                     />
-    
+
                     <Button
                         color={CUSTOM_COLOR.Sunshade}
                         title='BUY NOW'
                         onPress={() => setBuyNow()}
                     />
                 </View>
-    
-    
-    
+
+
+
                 {chooseStyle ?
-    
+
                     <View style={{
                         position: 'absolute',
                         width: '80%',
@@ -598,7 +600,7 @@ function DetailProduct({ navigation, route }) {
                         borderRadius: 30,
                         borderWidth: 1
                     }}>
-    
+
                         <View style={{
                             flexDirection: 'row',
                             alignItems: 'center',
@@ -611,7 +613,7 @@ function DetailProduct({ navigation, route }) {
                                 fontWeight: 'bold',
                                 color: CUSTOM_COLOR.Black
                             }}>Choose your style</Text>
-    
+
                             <TouchableOpacity
                                 onPress={() => setChooseStyle(false)}
                             >
@@ -621,19 +623,19 @@ function DetailProduct({ navigation, route }) {
                                 }}
                                     source={IC_Cancle}
                                 />
-    
+
                             </TouchableOpacity>
                         </View>
-    
+
                         <View style={{
                             ...styles.flexRow,
                             marginHorizontal: '10%',
                             marginVertical: '3%'
                         }}>
                             <Text style={{ ...styles.textLarge, fontWeight: 'normal' }}>Color</Text>
-    
+
                             <View>
-    
+
                                 <FlatList
                                     data={dataSanPham[0].MauSac}
                                     keyExtractor={(item, index) => index}
@@ -643,16 +645,16 @@ function DetailProduct({ navigation, route }) {
                                                 ...styles.flexRow,
                                                 marginHorizontal: '5%',
                                                 marginVertical: 3
-    
+
                                             }}>
                                                 <TouchableOpacity style={{
                                                     ...styles.colorCicle,
                                                     backgroundColor: item.MaMau,
                                                     borderWidth: 1,
-    
+
                                                     justifyContent: 'center',
                                                     alignItems: 'center'
-    
+
                                                 }}
                                                     onPress={() => setChooseColor(item.TenMau)}
                                                 >
@@ -664,12 +666,12 @@ function DetailProduct({ navigation, route }) {
                                                             backgroundColor: CUSTOM_COLOR.White,
                                                             borderWidth: 0
                                                         }}>
-    
+
                                                         </View> : null}
-    
+
                                                 </TouchableOpacity>
                                                 <Text style={{ ...styles.textSmall }}>{item.TenMau}</Text>
-    
+
                                             </View>
                                         ) :
                                             <View></View>
@@ -677,15 +679,15 @@ function DetailProduct({ navigation, route }) {
                                     }
                                     numColumns={2}
                                 />
-    
-    
-    
-    
+
+
+
+
                             </View>
-    
-    
+
+
                         </View>
-    
+
                         <View style={{ ...styles.flexRow }}>
                             <Text style={{
                                 ...styles.textLarge,
@@ -693,10 +695,10 @@ function DetailProduct({ navigation, route }) {
                                 marginHorizontal: '10%',
                                 marginVertical: '3%'
                             }}>Size</Text>
-    
+
                             <View>
                                 <FlatList
-    
+
                                     data={dataSanPham[0].Size}
                                     numColumns={3}
                                     keyExtractor={(item, index) => index}
@@ -706,9 +708,9 @@ function DetailProduct({ navigation, route }) {
                                                 ...styles.sizeCircle,
                                                 width: 45,
                                                 marginVertical: 5,
-    
+
                                                 borderWidth: chooseSize === item.title ? 1 : 0
-    
+
                                             }}
                                                 onPress={() => setChooseSize(item.title)}
                                             >
@@ -716,14 +718,14 @@ function DetailProduct({ navigation, route }) {
                                             </TouchableOpacity>
                                             : <View></View>
                                     }}
-    
+
                                 />
-    
+
                             </View>
-    
-    
+
+
                         </View>
-    
+
                         <View style={{
                             ...styles.flexRow,
                             justifyContent: 'center',
@@ -734,16 +736,16 @@ function DetailProduct({ navigation, route }) {
                                 color={CUSTOM_COLOR.Carnation}
                                 onPress={() => setChooseStyle(false)}
                             />
-    
+
                         </View>
-    
+
                     </View> : null}
-    
+
             </View>
-    
+
         )
     }
-    
+
 }
 
 const styles = StyleSheet.create({
