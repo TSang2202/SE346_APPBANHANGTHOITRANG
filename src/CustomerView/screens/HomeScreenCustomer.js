@@ -1,46 +1,31 @@
-import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import {Badge} from 'react-native-elements';
-import {Firestore, firebase} from '../../../Firebase/firebase';
-import {IC_Chat, IC_ShoppingCart} from '../assets/icons';
-import {
-  IM_GiayNam,
-  IM_MauAo,
-  IM_PhuKien,
-  IM_SaleImage,
-  IM_ThoiTrangNam,
-  IM_ThoiTrangNu,
-} from '../assets/images';
-import Categories from '../components/Categories';
-import ProductCard from '../components/ProductCard';
-import SearchInput from '../components/SearchInput';
-import CUSTOM_COLOR from '../constants/colors';
+import dayjs from 'dayjs';
 import {
   collection,
   doc,
-  setDoc,
-  getDocs,
-  query,
-  where,
-  addDoc,
-  updateDoc,
   onSnapshot,
-  Timestamp,
+  query,
+  updateDoc,
+  where
 } from 'firebase/firestore';
-import {async} from '@firebase/util';
-import ProductView from '../components/ProductView';
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { Badge } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
 import Swiper from 'react-native-swiper';
+import { Firestore, firebase } from '../../../Firebase/firebase';
 import PromotionCard from '../../AdminView/components/PromotionCard';
-import dayjs from 'dayjs';
+import { IC_Chat, IC_ShoppingCart } from '../assets/icons';
+import Categories from '../components/Categories';
+import ProductView from '../components/ProductView';
+import SearchInput from '../components/SearchInput';
+import CUSTOM_COLOR from '../constants/colors';
 
 //import { get } from "firebase/database";
 
@@ -52,7 +37,27 @@ function HomeScreenCustomer({navigation}) {
   const [idUser, setIdUser] = useState();
   const [badgeCart, setBadgeCart] = useState(0);
   const [dataPromotion, setDataPromotion] = useState([]);
+  const [search, setSearch] =useState(false);
+  const [sanpham, setSanPham] = useState([]);
+  const getSanPham= async () => {
+    //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
+    const q = query(
+      collection(Firestore, 'SANPHAM'),
+      where('TrangThai', '==', 'Inventory'),
+    );
+    const unsubscribe = onSnapshot(q, querySnapshot => {
+      const items = [];
+      querySnapshot.forEach(doc => {
+        items.push({
+          ...doc.data(),
+          key: doc.id,
+        });
+      });
+      setSanPham(items);
+    });
+  };
 
+  
   const getDataTrending = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));
     const q = query(
@@ -134,7 +139,7 @@ function HomeScreenCustomer({navigation}) {
     setIdUser(firebase.auth().currentUser.uid);
     getBadgeCart();
     getDataPromotion();
-
+    getSanPham();
     console.log(chatUser);
   }, [loadingChatUser]);
 
@@ -150,11 +155,19 @@ function HomeScreenCustomer({navigation}) {
   const [filteredItems, setFilteredItems] = useState([]);
 
   const handleSearch = (searchTerm, data) => {
-    setSearchTerm(searchTerm);
-    const filteredItems = data.filter(item =>
-      item.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-    setFilteredItems(filteredItems);
+    if(searchTerm === '')
+    {
+      setSearch(true);
+    }
+    else {
+      setSearch(false);
+      setSearchTerm(searchTerm);
+      const filteredItems = data.filter(item =>
+        item.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      setFilteredItems(filteredItems);
+    }
+    
   };
 
   return (
@@ -171,18 +184,15 @@ function HomeScreenCustomer({navigation}) {
         <View style={{width: '5%', height: '100%'}} />
 
         <View style={{width: '65%', height: 45}}>
+        
           <SearchInput
             placeholder="Search product"
             style={{
               width: '70%',
               margin: 10,
             }}
-            onSearch={searchTerm => {
-              handleSearch(searchTerm, trending);
-            }}
-            onPressIn={() => {
-              navigation.navigate('Searching');
-            }}
+            onSearch={(searchTerm) => handleSearch(searchTerm, sanpham)}
+
           />
         </View>
         <View style={{width: 10, height: '100%'}} />
@@ -238,27 +248,24 @@ function HomeScreenCustomer({navigation}) {
           <Image source={IC_ShoppingCart} />
         </TouchableOpacity>
       </View>
-      <ScrollView style={{}}>
-        <Text style={styles.textView}>On sale</Text>
-
-        {/* <Image style={{ marginHorizontal: 30, height: 120, width: 380 }}
-          source={IM_SaleImage}
-        /> */}
-
-        <View
-          style={{
-            height: 175,
-          }}>
-          <Swiper
-            autoplay
-            loop
+      
+      {search ? (
+        <>
+        <ScrollView>
+        <Text style={styles.textView}>On sale</Text><View
             style={{
-              flexDirection: 'row',
-
-              height: '90%',
+              height: 175,
             }}>
-            {dataPromotion
-              ? dataPromotion.map((promotion, index) => {
+            <Swiper
+              autoplay
+              loop
+              style={{
+                flexDirection: 'row',
+
+                height: '90%',
+              }}>
+              {dataPromotion
+                ? dataPromotion.map((promotion, index) => {
                   const timestampBD = promotion.NgayBatDau.toDate();
                   const dateBD = dayjs(timestampBD);
 
@@ -282,102 +289,118 @@ function HomeScreenCustomer({navigation}) {
                       start={`${dayBD}/${monthBD}/${yearBD}`}
                       end={`${dayKT}/${monthKT}/${yearKT}`}
                       type={promotion.Loai}
-                      key={index}
-                      // onPress={() => navigation.navigate("EditPromotion", { item })}
-                    />
+                      key={index} />
                   );
                 })
-              : null}
-          </Swiper>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: -40,
-          }}>
-          <Text style={styles.textView}>Trending now</Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Trending');
+                : null}
+            </Swiper>
+          </View><View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: -40,
             }}>
-            <Text style={{margin: 20}}>See all</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{}}>
+              <Text style={styles.textView}>Trending now</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Trending');
+                } }>
+                <Text style={{ margin: 20 }}>See all</Text>
+              </TouchableOpacity>
+            </View><View style={{}}>
+              <FlatList
+                windowSize={10}
+                horizontal={true}
+                data={trending}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={{
+                      marginHorizontal: -10,
+                    }}
+                    onPress={() => {
+                      navigation.navigate('DetailProduct', { item });
+                    } }>
+                    <ProductView
+                      source={item.HinhAnhSP[0]}
+                      title={item.TenSP}
+                      price={item.GiaSP} />
+                  </TouchableOpacity>
+                )}
+                keyExtractor={item => item.MaSP} />
+            </View><View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.textView}>Orther categories</Text>
+              <TouchableOpacity>
+                <Text style={{ margin: 20 }}>Explore now</Text>
+              </TouchableOpacity>
+            </View>
+          {/*
           <FlatList
-            windowSize={10}
-            horizontal={true}
-            data={trending}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={{
-                  marginHorizontal: -10,
-                }}
-                onPress={() => {
-                  navigation.navigate('DetailProduct', {item});
-                }}>
-                <ProductView
-                  source={item.HinhAnhSP[0]}
-                  title={item.TenSP}
-                  price={item.GiaSP}
+
+
+          data={danhmuc}
+
+          renderItem={({ item }) =>
+            <TouchableOpacity style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}
+              onPress={() => { navigation.navigate('DetailCategory', { item }) }}
+            >
+              <Categories
+                source={item.AnhDM}
+                title={item.TenDM}
+              />
+            </TouchableOpacity>
+
+
+          }
+          keyExtractor={item => item.MaDM}
+          /> */}
+          {danhmuc
+            ? danhmuc.map(item => (
+                <TouchableOpacity
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    navigation.navigate('DetailCategory', {item});
+                  }}
+                  key={item.MaDM}>
+                  <Categories source={item.AnhDM} title={item.TenDM} />
+                </TouchableOpacity>
+              ))
+            : null}
+            </ScrollView>
+            </>
+            ):(
+                  <View style = {{flex: 1}}>
+                  <FlatList
+                    data={searchTerm ? filteredItems : sanpham}
+                    renderItem={({ item }) => {
+                        return (
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                //justifyContent: 'space-around'
+                            }}
+                                onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+                            >
+                                <ProductView
+                                    source={item.HinhAnhSP[0]}
+                                    title={item.TenSP}
+                                    price={item.GiaSP}
+                                />
+                            </TouchableOpacity>
+                        )
+                    }}
+                    
+                    numColumns={2}
+                //keyExtractor={(item) => item.MASP}
                 />
-              </TouchableOpacity>
-            )}
-            keyExtractor={item => item.MaSP}
-          />
-        </View>
-
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.textView}>Orther categories</Text>
-          <TouchableOpacity>
-            <Text style={{margin: 20}}>Explore now</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/*
-      <FlatList
-
-
-        data={danhmuc}
-
-        renderItem={({ item }) =>
-          <TouchableOpacity style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => { navigation.navigate('DetailCategory', { item }) }}
-          >
-            <Categories
-              source={item.AnhDM}
-              title={item.TenDM}
-            />
-          </TouchableOpacity>
-
-
-        }
-        keyExtractor={item => item.MaDM}
-      /> */}
-
-        {danhmuc
-          ? danhmuc.map(item => (
-              <TouchableOpacity
-                style={{
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                  navigation.navigate('DetailCategory', {item});
-                }}
-                key={item.MaDM}>
-                <Categories source={item.AnhDM} title={item.TenDM} />
-              </TouchableOpacity>
-            ))
-          : null}
-      </ScrollView>
-    </View>
-  );
-}
+                  </View>
+              )}
+                  
+              </View>
+            );
+          }
 
 const styles = StyleSheet.create({
   textView: {
