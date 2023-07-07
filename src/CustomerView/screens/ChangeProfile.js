@@ -227,7 +227,6 @@ const ChangeProfile = props => {
   const updateAvatar = async (documentId, avatar) => {
     const urlImage = image ? await UploadFile() : imageUrl;
     console.log(urlImage);
-
     try {
       await firebase
         .firestore()

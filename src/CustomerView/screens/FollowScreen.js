@@ -1,42 +1,50 @@
-import React, {useEffect, useState} from 'react';
+import { query } from 'firebase/database';
 import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
-import {IC_Chat, IC_Heart, IC_Heart3X} from '../assets/icons';
-import {IC_ShoppingCart} from '../assets/icons';
-import Button from '../components/Button';
-import CUSTOM_COLOR from '../constants/colors';
-import {
-  collection,
   addDoc,
+  collection,
   doc,
-  updateDoc,
-  onSnapshot,
   getDocs,
+  onSnapshot,
+  updateDoc,
   where,
 } from 'firebase/firestore';
-import {async} from '@firebase/util';
-import {Firestore, firebase} from '../../../Firebase/firebase';
-import {query} from 'firebase/database';
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { Badge } from 'react-native-elements';
+import { Firestore, firebase } from '../../../Firebase/firebase';
+import { IC_Chat, IC_Heart3X, IC_ShoppingCart } from '../assets/icons';
+import Button from '../components/Button';
 import ProductView from '../components/ProductView';
 import SearchInput from '../components/SearchInput';
-import {Badge} from 'react-native-elements';
+import CUSTOM_COLOR from '../constants/colors';
 function FollowScreen({navigation}) {
   //
   const [chatUser, setChatUser] = useState();
   const [loadingChatUser, setLoadingChatUser] = useState(false);
   const [idUser, setIdUser] = useState();
   const [badgeCart, setBadgeCart] = useState(0);
-
+  const [searchTerm, setSearchTerm] = useState('');
   //
   const [data, setdata] = useState([]);
   const [sanpham, setSanPham] = useState([]);
+  //
+
+  const [filteredItems, setFilteredItems] = useState([]);
+  const handleSearch = searchTerm => {
+    setSearchTerm(searchTerm);
+    const filteredItems = data.filter(item =>
+      item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredItems(filteredItems);
+  };
+  
   const getDataYeuThich = async () => {
     const q = query(
       collection(Firestore, 'YEUTHICH'),
@@ -72,7 +80,6 @@ function FollowScreen({navigation}) {
 
         datatest = datatest.concat(teap);
       }
-
       setdata(datatest);
     });
     // Trả về querySnapshot để sử dụng trong hàm useEffect được nếu cần thiết
@@ -185,6 +192,7 @@ function FollowScreen({navigation}) {
               onPressIn={() => {
                 navigation.navigate('Searching');
               }}
+              onSearch={handleSearch}
             />
           </View>
 
@@ -254,7 +262,7 @@ function FollowScreen({navigation}) {
         </Text>
         <View style={{marginTop: 20}}>
           <FlatList
-            data={data}
+            data={searchTerm ? filteredItems : data}
             renderItem={({item}) => {
               return (
                 <TouchableOpacity

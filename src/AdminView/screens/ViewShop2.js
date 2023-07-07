@@ -325,14 +325,14 @@ function ViewShop2({ navigation, route }) {
 
             </View>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 onPress={() => setChooseStyle(true)}
                 style={{ alignSelf: 'flex-end', marginHorizontal: 20 }}
             >
                 <Text style={{
                     fontStyle: 'italic'
                 }}>How can I choose my size?</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <View
                 style={{
@@ -364,18 +364,23 @@ function ViewShop2({ navigation, route }) {
                 :
                 null}
 
-            <View style={{
-                flexDirection: 'row', justifyContent: 'center',
-                marginVertical: '3%'
-            }}>
-                <ButtonDetail
-                    color={CUSTOM_COLOR.Carnation}
-                    title='EDIT NOW'
-                    style={{
-                        paddingVertical: '3%'
-                    }}
-                    onPress={() => { navigation.navigate('EditProduct', { item }) }}
-                />
+    <View style={{width: '100%', height: 10}}/>
+        <View style = {{
+            flexDirection: 'row', justifyContent: 'center',
+            marginVertical: '3%'
+        }}>
+            <ButtonDetail
+                color = {CUSTOM_COLOR.Carnation}
+                title = 'EDIT NOW'
+                style = {{
+                    // paddingVertical: '3%',
+                    width: '90%',
+                    height: 55,
+                    marginHorizontal: '5%',
+                }}
+                onPress = {() =>{navigation.navigate('EditProduct', {item})}}
+            />
+
 
             </View>
             {chooseStyle ?

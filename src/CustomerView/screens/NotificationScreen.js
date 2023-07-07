@@ -141,51 +141,7 @@ function NotificationScreen({ navigation }) {
           fontWeight: 'bold'
         }}>Notification</Text>
       </View>
-
-      <View style={{
-        flexDirection: 'row',
-        marginVertical: 10
-      }}>
-        <TouchableWithoutFeedback
-
-          onPress={() => setIsCeneral(1)}>
-
-          <View style={{
-            marginHorizontal: 10,
-            marginLeft: 15,
-
-            borderBottomWidth: isGeneral ? 1 : 0
-
-          }}>
-            <Text style={{
-              fontSize: 17,
-              color: CUSTOM_COLOR.Black
-            }}>General</Text>
-          </View>
-
-        </TouchableWithoutFeedback>
-
-        <TouchableWithoutFeedback
-          onPress={() => setIsCeneral(0)}
-        >
-          <View style={{
-            marginHorizontal: 10,
-            borderBottomWidth: isGeneral ? 0 : 1
-          }}
-          >
-            <Text
-              style={{
-                fontSize: 17,
-                color: CUSTOM_COLOR.Black
-              }}
-            >Recomanded</Text>
-          </View>
-
-        </TouchableWithoutFeedback>
-      </View>
-
-      {isGeneral ?
-
+      <View style={{width: '100%', height: 10}}/>
         <FlatList
           data={notificationPromotion}
           renderItem={({ item }) => {
@@ -213,8 +169,6 @@ function NotificationScreen({ navigation }) {
             )
           }}
         />
-        : null
-      }
 
 
     </View>

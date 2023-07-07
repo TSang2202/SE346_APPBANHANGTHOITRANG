@@ -4,6 +4,7 @@ import MainNavigator from './src/Login_SignUp/navigation/navigation';
 import CustomerBottomTab from './src/CustomerView/navigation/CustomerBottomTab';
 import StackNavigator from './src/StaffView/navigation/navigation';
 import AdminNavigationContainer from './src/AdminView/navigation/admin_navigation';
+import StaffNavigationContainer from './src/AdminView/navigation/staff_navigation';
 
 function App() {
   const [userType, setUserType] = useState('');
@@ -60,7 +61,7 @@ function App() {
   } else if (userType === 'admin') {
     return <AdminNavigationContainer />;
   } else if (userType === 'staff') {
-    return <StackNavigator />;
+    return <StaffNavigationContainer />;
   }
 
   // return <AdminNavigationContainer />;

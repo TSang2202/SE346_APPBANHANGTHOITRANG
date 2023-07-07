@@ -84,21 +84,39 @@ function ReviewScreen({navigation, route}) {
     const addDataReView = async ()=>{
         try{
             setAddReview(false);
-            const imageUri = await UploadFile()
-            const docRef = await addDoc(collection(Firestore, "DANHGIA"), {
-                MaND: firebase.auth().currentUser.uid,
-                MaSP: item.MaSP,
-                NgayDG: ngayDG,
-                Rating: defaultRating,
-                NDDG: ndDG,
-                AnhDG: imageUri,
-            });
-    
-            const updateRef = doc(Firestore, "DANHGIA", docRef.id);
-            await updateDoc(updateRef, {
-                MaDG: docRef.id
-            });
-            setClick(false);
+            if(click == true){
+                const imageUri = await UploadFile()
+                const docRef = await addDoc(collection(Firestore, "DANHGIA"), {
+                    MaND: firebase.auth().currentUser.uid,
+                    MaSP: item.MaSP,
+                    NgayDG: ngayDG,
+                    Rating: defaultRating,
+                    NDDG: ndDG,
+                    AnhDG: imageUri,
+                });
+                const updateRef = doc(Firestore, "DANHGIA", docRef.id);
+                await updateDoc(updateRef, {
+                    MaDG: docRef.id
+                });
+                setImage(null);
+                setClick(false);
+                setND('');
+            }else{
+                const docRef = await addDoc(collection(Firestore, "DANHGIA"), {
+                    MaND: firebase.auth().currentUser.uid,
+                    MaSP: item.MaSP,
+                    NgayDG: ngayDG,
+                    Rating: defaultRating,
+                    NDDG: ndDG,
+                });
+                const updateRef = doc(Firestore, "DANHGIA", docRef.id);
+                await updateDoc(updateRef, {
+                    MaDG: docRef.id
+                });
+                setImage(null);
+                setClick(false);
+                setND('');
+            }
             Alert.alert(
                 'Notification',
                 'Add to Review successfully',
@@ -152,7 +170,7 @@ function ReviewScreen({navigation, route}) {
             xhr.open("GET", image.uri, true);
             xhr.send(null);
           });
-          const storageRef = ref(Storage, `images/users/image-${Date.now()}`);
+          const storageRef = ref(Storage, `images/review/image-${Date.now()}`);
           const snapshot = await uploadBytes(storageRef, blob);
           console.log("Upload successfully!");
           const url = await getDownloadURL(snapshot.ref);
@@ -268,7 +286,6 @@ function ReviewScreen({navigation, route}) {
                             content = {review.NDDG}
                             image = {review.AnhDG}
                         />
-
                     </View>
                 ))}
             </ScrollView>
