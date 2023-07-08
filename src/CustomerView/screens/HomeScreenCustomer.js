@@ -248,7 +248,7 @@ function HomeScreenCustomer({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {!search ? (
+      {search ? (
         <>
           <ScrollView>
             <Text style={styles.textView}>On sale</Text><View
