@@ -585,7 +585,7 @@ function DetailProduct({ navigation, route }) {
                         onPress={() => setBuyNow()}
                     />
                 </View>
-
+                
 
 
                 {chooseStyle ?

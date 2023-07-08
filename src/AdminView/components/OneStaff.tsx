@@ -3,7 +3,6 @@ import React from 'react';
 import {IM_AnhGiay1} from '../../CustomerView/assets/images';
 import ButtonDetail from './ButtonDetail';
 import CUSTOM_COLOR from '../constants/colors';
-
 const OneStaff = (props: any) => {
   return (
     //Loan xu ly phan doi mau nha, tui set san no mau xam
