@@ -37,7 +37,7 @@ function HomeScreenCustomer({ navigation }) {
   const [idUser, setIdUser] = useState();
   const [badgeCart, setBadgeCart] = useState(0);
   const [dataPromotion, setDataPromotion] = useState([]);
-  const [search, setSearch] = useState(true);
+  const [search, setSearch] = useState(false);
   const [sanpham, setSanPham] = useState([]);
   const getSanPham = async () => {
     //const querySnapshot = await getDocs(collection(Firestore, "MATHANG"));

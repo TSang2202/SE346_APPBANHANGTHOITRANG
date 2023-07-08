@@ -22,6 +22,12 @@ function ViewShop2({ navigation, route }) {
     //  "MauSac": [{"MaMS": "J9e6EkiNPM6zJmDc2DV8", "MaMau": "#D73C2D", "TenMau": "Đỏ", "checked": true, "key": "J9e6EkiNPM6zJmDc2DV8"}, {"MaMS": "KeDTyP7uAAfU04hzqruV", "MaMau": "#EC65CF", "TenMau": "Hồng", "checked": true, "key": "KeDTyP7uAAfU04hzqruV"}, {"MaMS": "k8SlzWonYLXHBriMadH5", "MaMau": "#2D38D7", "TenMau": "Xanh", "checked": true, "key": "k8SlzWonYLXHBriMadH5"}], "MoTaSP": "Váy nữ cực đẹp mùa hè", 
     //  "Size": [{"checked": true, "id": "sizeS", "title": "S"}, {"checked": true, "id": "sizeM", "title": "M"}, {"checked": true, "id": "sizeL", "title": "L"}, {"checked": false, "id": "sizeXL", "title": "XL"}, {"checked": false, "id": "sizeXXL", "title": "XXL"}, {"checked": false, "id": "sizeXXXL", "title": "XXXL"}], "SoLuongDaBan": 0, "SoLuongSP": 40, "SoLuotXem": 0, "SoLuotYeuThich": 0, "TenSP": "Váy nữ", "TrangThai": "Inventory",
     //   "Trending": true, "key": "NtRoJWsfk1tH7niUcYu9"}
+    const setTrending = async () => {
+        const confirmRef = doc(Firestore, "SANPHAM", item.MaSP)
+        await updateDoc(confirmRef, {
+            Trending: true
+        })
+    }
     const { item } = route.params
     const [chooseStyle, setChooseStyle] = useState(false)
     const [tong, settong] = useState()
@@ -364,23 +370,33 @@ function ViewShop2({ navigation, route }) {
                 :
                 null}
 
-    <View style={{width: '100%', height: 10}}/>
-        <View style = {{
-            flexDirection: 'row', justifyContent: 'center',
-            marginVertical: '3%'
-        }}>
-            <ButtonDetail
-                color = {CUSTOM_COLOR.Carnation}
-                title = 'EDIT NOW'
-                style = {{
-                    // paddingVertical: '3%',
-                    width: '90%',
-                    height: 55,
-                    marginHorizontal: '5%',
-                }}
-                onPress = {() =>{navigation.navigate('EditProduct', {item})}}
-            />
-
+            <View style={{ width: '100%', height: 10 }} />
+            <View style={{
+                flexDirection: 'row', justifyContent: 'center',
+                marginVertical: '3%'
+            }}>
+                <ButtonDetail
+                    color={CUSTOM_COLOR.Carnation}
+                    title='EDIT NOW'
+                    style={{
+                        // paddingVertical: '3%',
+                        width: '40%',
+                        height: 55,
+                        marginHorizontal: '5%',
+                    }}
+                    onPress={() => { navigation.navigate('EditProduct', { item }) }}
+                />
+                <ButtonDetail
+                    color={CUSTOM_COLOR.Carnation}
+                    title='TRENDING'
+                    style={{
+                        // paddingVertical: '3%',
+                        width: '40%',
+                        height: 55,
+                        marginHorizontal: '5%',
+                    }}
+                    onPress={setTrending}
+                />
 
             </View>
             {chooseStyle ?

@@ -1,14 +1,14 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import BackTo from '../components/BackTo';
-import {SearchIcon} from '../../CustomerView/assets/icons';
-import {FlatList, ScrollView} from 'react-native-gesture-handler';
+import { SearchIcon } from '../../CustomerView/assets/icons';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import CUSTOM_COLOR from '../constants/colors';
 import Status from '../components/Status';
-import {Acount} from './OverView';
+import { Acount } from './OverView';
 import PerSon from '../components/PerSon';
-import {IM_MauAo} from '../assets/images';
+import { IM_MauAo } from '../assets/images';
 import OneOrder from '../components/OneOrder';
 import {
   collection,
@@ -21,11 +21,11 @@ import {
   where,
   updateDoc,
 } from 'firebase/firestore';
-import {Firestore} from '../../../Firebase/firebase';
-import {async} from '@firebase/util';
+import { Firestore } from '../../../Firebase/firebase';
+import { async } from '@firebase/util';
 import CustomHeader from '../components/CustomHeader';
 
-export default function Order({navigation}) {
+export default function Order({ navigation }) {
   const [confirm, setConfirm] = useState(true);
   const [onWait, setOnWait] = useState(false);
   const [delivering, setDelivering] = useState(false);
@@ -361,7 +361,7 @@ export default function Order({navigation}) {
 
   if (confirm == true) {
     return (
-      <SafeAreaView style={{backgroundColor: CUSTOM_COLOR.White, flex: 1}}>
+      <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, flex: 1 }}>
         <View
           style={{
             width: '100%',
@@ -426,14 +426,14 @@ export default function Order({navigation}) {
           }}>
           <FlatList
             data={donHangConfirm}
-            contentContainerStyle={{paddingBottom: 50}}
-            keyExtractor={item => item.MaDH}
-            renderItem={({item}) => {
+            contentContainerStyle={{ paddingBottom: 50 }}
+            keyExtractor={(item, index) => index}
+            renderItem={({ item }) => {
               //console.log(item)
               return (
-                <View style={{width: '100%'}}>
+                <View style={{ width: '100%' }}>
                   <View
-                    style={{width: '100%', height: 60, flexDirection: 'row'}}>
+                    style={{ width: '100%', height: 60, flexDirection: 'row' }}>
                     <View
                       style={{
                         width: '75%',
@@ -457,7 +457,7 @@ export default function Order({navigation}) {
                       }}>
                       <TouchableOpacity
                         onPress={() => {
-                          navigation.navigate('DeTailsDelivery', {item});
+                          navigation.navigate('DeTailsDelivery', { item });
                         }}
                         style={{
                           backgroundColor: CUSTOM_COLOR.White,
@@ -483,8 +483,8 @@ export default function Order({navigation}) {
 
                   <FlatList
                     data={item.DatHang}
-                    keyExtractor={item => item.MaSP}
-                    renderItem={({item}) => {
+                    keyExtractor={(item, index) => index}
+                    renderItem={({ item }) => {
                       console.log(item);
                       return (
                         <View>
@@ -500,7 +500,7 @@ export default function Order({navigation}) {
                             onPress={() => {
                               navigation.navigate('DeTailsDelivery');
                             }}
-                            PressConfirm={() => {}}
+                            PressConfirm={() => { }}
                           />
                         </View>
                       );
@@ -561,7 +561,7 @@ export default function Order({navigation}) {
   }
   if (onWait == true) {
     return (
-      <SafeAreaView style={{backgroundColor: CUSTOM_COLOR.White, flex: 1}}>
+      <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, flex: 1 }}>
         <View
           style={{
             width: '100%',
@@ -626,12 +626,12 @@ export default function Order({navigation}) {
           <FlatList
             data={donHangOnWait}
             keyExtractor={item => item.MaDH}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               //console.log(item)
               return (
-                <View style={{width: '100%'}}>
+                <View style={{ width: '100%' }}>
                   <View
-                    style={{width: '100%', height: 60, flexDirection: 'row'}}>
+                    style={{ width: '100%', height: 60, flexDirection: 'row' }}>
                     <View
                       style={{
                         width: '75%',
@@ -655,7 +655,7 @@ export default function Order({navigation}) {
                       }}>
                       <TouchableOpacity
                         onPress={() => {
-                          navigation.navigate('DeTailsDelivery', {item});
+                          navigation.navigate('DeTailsDelivery', { item });
                         }}
                         style={{
                           backgroundColor: CUSTOM_COLOR.White,
@@ -678,11 +678,11 @@ export default function Order({navigation}) {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{width: '100%', height: 10}} />
+                  <View style={{ width: '100%', height: 10 }} />
                   <FlatList
                     data={item.DatHang}
-                    keyExtractor={item => item.MaSP}
-                    renderItem={({item}) => {
+                    keyExtractor={(item, index) => index}
+                    renderItem={({ item }) => {
                       console.log(item);
                       return (
                         <View>
@@ -696,7 +696,7 @@ export default function Order({navigation}) {
                             onPress={() => {
                               navigation.navigate('DeTailsDelivery');
                             }}
-                            PressConfirm={() => {}}
+                            PressConfirm={() => { }}
                           />
                         </View>
                       );
@@ -755,7 +755,7 @@ export default function Order({navigation}) {
   }
   if (delivering == true) {
     return (
-      <SafeAreaView style={{backgroundColor: CUSTOM_COLOR.White, flex: 1}}>
+      <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, flex: 1 }}>
         <View
           style={{
             width: '100%',
@@ -820,12 +820,12 @@ export default function Order({navigation}) {
           <FlatList
             data={donHangDelivering}
             keyExtractor={item => item.MaDH}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               //console.log(item)
               return (
-                <View style={{width: '100%'}}>
+                <View style={{ width: '100%' }}>
                   <View
-                    style={{width: '100%', height: 60, flexDirection: 'row'}}>
+                    style={{ width: '100%', height: 60, flexDirection: 'row' }}>
                     <View
                       style={{
                         width: '75%',
@@ -849,7 +849,7 @@ export default function Order({navigation}) {
                       }}>
                       <TouchableOpacity
                         onPress={() => {
-                          navigation.navigate('DeTailsDelivery', {item});
+                          navigation.navigate('DeTailsDelivery', { item });
                         }}
                         style={{
                           backgroundColor: CUSTOM_COLOR.White,
@@ -872,11 +872,11 @@ export default function Order({navigation}) {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{width: '100%', height: 10}} />
+                  <View style={{ width: '100%', height: 10 }} />
                   <FlatList
                     data={item.DatHang}
-                    keyExtractor={item => item.MaSP}
-                    renderItem={({item}) => {
+                    keyExtractor={(item, index) => index}
+                    renderItem={({ item }) => {
                       console.log(item);
                       return (
                         <View>
@@ -890,7 +890,7 @@ export default function Order({navigation}) {
                             onPress={() => {
                               navigation.navigate('DeTailsDelivery');
                             }}
-                            PressConfirm={() => {}}
+                            PressConfirm={() => { }}
                           />
                         </View>
                       );
@@ -949,7 +949,7 @@ export default function Order({navigation}) {
   }
   if (delivered == true) {
     return (
-      <SafeAreaView style={{backgroundColor: CUSTOM_COLOR.White, flex: 1}}>
+      <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White, flex: 1 }}>
         <View
           style={{
             width: '100%',
@@ -1014,12 +1014,12 @@ export default function Order({navigation}) {
           <FlatList
             data={donHangDelivered}
             keyExtractor={item => item.MaDH}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               //console.log(item)
               return (
-                <View style={{width: '100%'}}>
+                <View style={{ width: '100%' }}>
                   <View
-                    style={{width: '100%', height: 60, flexDirection: 'row'}}>
+                    style={{ width: '100%', height: 60, flexDirection: 'row' }}>
                     <View
                       style={{
                         width: '75%',
@@ -1043,7 +1043,7 @@ export default function Order({navigation}) {
                       }}>
                       <TouchableOpacity
                         onPress={() => {
-                          navigation.navigate('DeTailsDelivery', {item});
+                          navigation.navigate('DeTailsDelivery', { item });
                         }}
                         style={{
                           backgroundColor: CUSTOM_COLOR.White,
@@ -1066,12 +1066,12 @@ export default function Order({navigation}) {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{width: '100%', height: 10}} />
+                  <View style={{ width: '100%', height: 10 }} />
 
                   <FlatList
                     data={item.DatHang}
-                    keyExtractor={item => item.MaSP}
-                    renderItem={({item}) => {
+                    keyExtractor={(item, index) => index}
+                    renderItem={({ item }) => {
                       console.log(item);
                       return (
                         <View>
