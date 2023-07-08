@@ -356,7 +356,7 @@ const ChangeProfile = props => {
           <View style={{width: '100%', height: '3%'}} />
           <>
             <View style={styles.bodyContainer}>
-              <ScrollView style={{width: '100%', height: '100%'}}>
+              <ScrollView style={{width: '100%'}}>
                 <>
                   <View style={[styles.inputContainer, {height: 90}]}>
                     <View style={{width: '100%', height: 10}} />
@@ -697,7 +697,7 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     width: '90%',
-    height: 450,
+    //height: 450,
     marginHorizontal: '5%',
   },
   inputContainer: {

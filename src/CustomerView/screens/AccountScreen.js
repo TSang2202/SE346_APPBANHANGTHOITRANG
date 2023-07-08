@@ -168,13 +168,7 @@ function AccountScreen() {
                 </View>
               </View>
 
-              <Text
-                style={{
-                  marginHorizontal: '5%',
-                  color: CUSTOM_COLOR.White,
-                }}>
-                Following: 3
-              </Text>
+              
             </View>
 
             <TouchableOpacity

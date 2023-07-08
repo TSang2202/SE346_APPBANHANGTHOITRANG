@@ -756,7 +756,7 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     width: '90%',
-    height: 450,
+    //height: 450,
     marginHorizontal: '5%',
   },
   inputContainer: {
