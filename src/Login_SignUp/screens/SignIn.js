@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -36,6 +36,46 @@ const SignIn = props => {
       console.log('Error signing in:', error.message);
       Alert.alert('Error', error.message);
     }
+  };
+
+  useEffect(() => {
+    setEmail('');
+    setPassword('');
+  }, []);
+
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const isValidEmail = email => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPassword = password => {
+    // Password validation criteria
+    // Add your own password validation logic here
+    return password.length >= 8;
+  };
+
+  const isValidForm = (email, password) => {
+    let isValid = true;
+
+    if (email === '' && password === '') {
+      isValid = false;
+      setErrorMessage('Please enter your information then click sign in');
+    } else if (email === '') {
+      isValid = false;
+      setErrorMessage('Please enter your email');
+    } else if (password === '') {
+      isValid = false;
+      setErrorMessage('Please enter your password');
+    } else if (!isValidEmail(email)) {
+      isValid = false;
+      setErrorMessage('Your email is not valid');
+    } else if (!isValidPassword(password)) {
+      isValid = false;
+      setErrorMessage('Your password must be longer than 8 characters');
+    }
+    return isValid;
   };
 
   return (
@@ -85,7 +125,11 @@ const SignIn = props => {
                 type="primary"
                 text="Sign in"
                 onPress={() => {
-                  loginUser(email, password);
+                  if (isValidForm(email, password)) {
+                    loginUser(email, password);
+                  } else {
+                    Alert.alert('Error', errorMessage);
+                  }
                 }}
               />
             </View>
