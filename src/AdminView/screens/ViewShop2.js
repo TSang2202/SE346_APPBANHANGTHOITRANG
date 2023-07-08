@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, Alert } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { CurvedTransition } from "react-native-reanimated";
@@ -23,10 +23,15 @@ function ViewShop2({ navigation, route }) {
     //  "Size": [{"checked": true, "id": "sizeS", "title": "S"}, {"checked": true, "id": "sizeM", "title": "M"}, {"checked": true, "id": "sizeL", "title": "L"}, {"checked": false, "id": "sizeXL", "title": "XL"}, {"checked": false, "id": "sizeXXL", "title": "XXL"}, {"checked": false, "id": "sizeXXXL", "title": "XXXL"}], "SoLuongDaBan": 0, "SoLuongSP": 40, "SoLuotXem": 0, "SoLuotYeuThich": 0, "TenSP": "Váy nữ", "TrangThai": "Inventory",
     //   "Trending": true, "key": "NtRoJWsfk1tH7niUcYu9"}
     const setTrending = async () => {
-        const confirmRef = doc(Firestore, "SANPHAM", item.MaSP)
-        await updateDoc(confirmRef, {
-            Trending: true
-        })
+        try {
+            const confirmRef = doc(Firestore, "SANPHAM", item.MaSP)
+            await updateDoc(confirmRef, {
+                Trending: true
+            })
+            Alert.alert('Notification', 'Set trending sucessful');
+        } catch (error) {
+            Alert.alert('Error', error.message);
+        }
     }
     const { item } = route.params
     const [chooseStyle, setChooseStyle] = useState(false)
