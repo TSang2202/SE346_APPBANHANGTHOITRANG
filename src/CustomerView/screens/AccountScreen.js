@@ -20,6 +20,7 @@ import {
   IC_Theme,
   IC_Wallet,
 } from '../assets/icons';
+//Test App
 import {IC_User} from '../assets/icons';
 import {IM_AnhGiay2} from '../assets/images';
 import CUSTOM_COLOR from '../constants/colors';
