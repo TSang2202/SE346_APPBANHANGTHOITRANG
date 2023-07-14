@@ -440,7 +440,10 @@ const ChangeProfile = props => {
                       <TouchableOpacity
                         style={styles.dateStyle}
                         onPress={showDateTimePicker}>
-                        <Text style={{fontSize: 17, color: CUSTOM_COLOR.Black}}> {birth}</Text>
+                        <Text style={{fontSize: 17, color: CUSTOM_COLOR.Black}}>
+                          {' '}
+                          {birth}
+                        </Text>
                       </TouchableOpacity>
                       {showPicker && (
                         <DateTimePicker
@@ -662,47 +665,40 @@ const ChangeProfile = props => {
 
                 <View style={{width: '100%', height: 15}} />
 
-                <>
-                </>
+                <></>
               </ScrollView>
               <View style={{width: '100%', height: 65}}>
-                    <View style={styles.buttonContainer}>
-                      <CustomButton
-                        type="primary"
-                        text="Save"
-                        onPress={() => {
-                          navigation.goBack();
-                          updateFullname(
-                            firebase.auth().currentUser.uid,
-                            fullName,
-                          );
-                          updateGender(firebase.auth().currentUser.uid, gender);
-                          updatePhoneNumber(
-                            firebase.auth().currentUser.uid,
-                            phoneNumber,
-                          );
-                          {
-                            address
-                              ? updateAddress(
-                                  firebase.auth().currentUser.uid,
-                                  address,
-                                )
-                              : null;
-                          }
-                          updateBirth(firebase.auth().currentUser.uid, birth);
+                <View style={styles.buttonContainer}>
+                  <CustomButton
+                    type="primary"
+                    text="Save"
+                    onPress={() => {
+                      navigation.goBack();
+                      updateFullname(firebase.auth().currentUser.uid, fullName);
+                      updateGender(firebase.auth().currentUser.uid, gender);
+                      updatePhoneNumber(
+                        firebase.auth().currentUser.uid,
+                        phoneNumber,
+                      );
+                      {
+                        address
+                          ? updateAddress(
+                              firebase.auth().currentUser.uid,
+                              address,
+                            )
+                          : null;
+                      }
+                      updateBirth(firebase.auth().currentUser.uid, birth);
 
-                          {
-                            image
-                              ? updateAvatar(
-                                  firebase.auth().currentUser.uid,
-                                  image,
-                                )
-                              : null;
-                          }
-                        }}
-                      />
-                    </View>
-                  </View>
+                      {
+                        image
+                          ? updateAvatar(firebase.auth().currentUser.uid, image)
+                          : null;
+                      }
+                    }}
+                  />
+                </View>
+              </View>
             </View>
           </>
         </>
